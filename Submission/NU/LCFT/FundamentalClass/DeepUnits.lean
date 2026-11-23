@@ -1230,7 +1230,7 @@ private theorem deepUnitFiltrationData_exists (π : Uniformizer K) :
             (pow_ne_zero n (by simp [hϖL]))) ''
               (RingOfIntegers L : Set L) := by
         ext x
-        simp only [Set.mem_setOf_eq, Set.mem_image, SetLike.mem_coe]
+        simp only [Set.mem_ofPred_eq, Set.mem_image, SetLike.mem_coe]
         constructor
         · rintro ⟨y, rfl⟩
           exact ⟨y, y.2, rfl⟩

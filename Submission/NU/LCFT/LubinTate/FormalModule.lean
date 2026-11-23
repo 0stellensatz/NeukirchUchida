@@ -244,13 +244,13 @@ private theorem lubinTateCorrection_coeff {σ : Type*} [Finite σ]
     (n : ℕ) (hn : 2 ≤ n) (d : σ →₀ ℕ) (hd : d.degree = n) :
     coeff d (lubinTateCorrection K π A n) =
       lubinTateCorrectionCoeff K π A d (hd ▸ hn) := by
-  rw [coeff_apply, lubinTateCorrection, dif_pos ⟨hd ▸ hn, hd⟩]
+  rw [coeff_apply, lubinTateCorrection, dite_eq_left ⟨hd ▸ hn, hd⟩]
 
 private theorem lubinTateCorrection_coeff_of_degree_ne {σ : Type*} [Finite σ]
     (π : Uniformizer K) (A : MvPowerSeries σ (RingOfIntegers K))
     (n : ℕ) (d : σ →₀ ℕ) (hd : d.degree ≠ n) :
     coeff d (lubinTateCorrection K π A n) = 0 := by
-  rw [coeff_apply, lubinTateCorrection, dif_neg]
+  rw [coeff_apply, lubinTateCorrection, dite_eq_right]
   exact fun h => hd h.2
 
 private theorem lubinTateCorrection_isHomogeneous {σ : Type*} [Finite σ]
@@ -275,10 +275,10 @@ private theorem homogeneousComponent_pow_of_one_le_order
       ext d
       rw [coeff_homogeneousComponent]
       by_cases hd : d.degree = 0
-      · rw [if_pos hd, (Finsupp.degree_eq_zero_iff d).mp hd]
+      · rw [ite_eq_left hd, (Finsupp.degree_eq_zero_iff d).mp hd]
         simp
       · have hd0 : d ≠ 0 := fun h => hd (by rw [h]; simp)
-        rw [if_neg hd, pow_zero, coeff_one, if_neg hd0]
+        rw [ite_eq_right hd, pow_zero, coeff_one, ite_eq_right hd0]
   | succ m ih =>
       rw [pow_succ, pow_succ, ← ih]
       apply homogeneousComponent_mul_of_le_order
@@ -299,9 +299,9 @@ private theorem homogeneousComponent_finsuppProd
       ext d
       simp only [Finset.sum_empty, Finset.prod_empty, coeff_homogeneousComponent]
       by_cases hd : d.degree = 0
-      · rw [if_pos hd, (Finsupp.degree_eq_zero_iff d).mp hd]
+      · rw [ite_eq_left hd, (Finsupp.degree_eq_zero_iff d).mp hd]
       · have hd0 : d ≠ 0 := fun h => hd (by rw [h]; simp)
-        rw [if_neg hd, coeff_one, if_neg hd0]
+        rw [ite_eq_right hd, coeff_one, ite_eq_right hd0]
   | @insert a s ha ih =>
       rw [Finset.prod_insert ha, Finset.sum_insert ha, Finset.prod_insert ha, ← ih,
         ← homogeneousComponent_pow_of_one_le_order (g a) (hg a) (e a)]
@@ -332,7 +332,7 @@ private theorem coeff_finsuppProd_of_linear_part
     e.prod fun i m => (g i).homogeneousComponent 1 ^ m at H
   have hd : coeff d (e.prod fun i m => g i ^ m) =
       coeff d ((e.prod fun i m => g i ^ m).homogeneousComponent d.degree) := by
-    rw [coeff_homogeneousComponent, if_pos rfl]
+    rw [coeff_homogeneousComponent, ite_eq_left rfl]
   rw [hd, ← he, H]
   simp_rw [hlin]
   rw [← MvPowerSeries.monomial_smul_const e p, coeff_monomial]
@@ -356,7 +356,7 @@ private theorem lubinTateVariable_linearComponent {σ : Type*}
   ext d
   rw [lubinTateVariable, coeff_homogeneousComponent]
   by_cases hd : d.degree = 1
-  · rw [if_pos hd]
+  · rw [ite_eq_left hd]
     simp only [map_add, coeff_C_mul, coeff_X, coeff_X_pow, coeff_smul]
     split_ifs with hdi hdi'
     · have heq := DFunLike.congr_fun (hdi.symm.trans hdi') i
@@ -367,7 +367,7 @@ private theorem lubinTateVariable_linearComponent {σ : Type*}
       rw [Finsupp.degree_single] at hd
       omega
     · simp
-  · rw [if_neg hd]
+  · rw [ite_eq_right hd]
     simp only [coeff_smul, coeff_X]
     split_ifs with hdi
     · subst d
@@ -391,7 +391,7 @@ private theorem coeff_subst_lubinTateVariable_of_isHomogeneous
   rw [finsum_eq_single _ d]
   · have hprod := coeff_finsuppProd_of_linear_part
       (uniformizerInteger K π) g d hg hlin d rfl
-    rw [if_pos rfl] at hprod
+    rw [ite_eq_left rfl] at hprod
     change coeff d P * coeff d (d.prod fun i m => g i ^ m) = _
     rw [hprod, hd]
     ring
@@ -399,7 +399,7 @@ private theorem coeff_subst_lubinTateVariable_of_isHomogeneous
     by_cases he : e.degree = n
     · have hprod := coeff_finsuppProd_of_linear_part
         (uniformizerInteger K π) g e hg hlin d (he.trans hd.symm)
-      rw [if_neg hed.symm] at hprod
+      rw [ite_eq_right hed.symm] at hprod
       change coeff e P * coeff d (e.prod fun i m => g i ^ m) = 0
       rw [hprod, mul_zero]
     · rw [hP.coeff_eq_zero he, zero_smul]
@@ -554,7 +554,7 @@ private theorem lubinTateCorrection_constantCoeff
     {σ : Type*} [Finite σ] (π : Uniformizer K)
     (A : MvPowerSeries σ (RingOfIntegers K)) (n : ℕ) :
     (lubinTateCorrection K π A n).constantCoeff = 0 := by
-  rw [← coeff_zero_eq_constantCoeff, coeff_apply, lubinTateCorrection, dif_neg]
+  rw [← coeff_zero_eq_constantCoeff, coeff_apply, lubinTateCorrection, dite_eq_right]
   simp
 
 private def lubinTateLinearSeries {σ : Type*} [Fintype σ]
@@ -591,7 +591,7 @@ private theorem lubinTateLinearSeries_coeff_single {σ : Type*}
   rw [lubinTateLinearSeries, map_sum, Finset.sum_eq_single i]
   · simp
   · intro j _ hji
-    rw [coeff_C_mul, coeff_index_single_X, if_neg (Ne.symm hji)]
+    rw [coeff_C_mul, coeff_index_single_X, ite_eq_right (Ne.symm hji)]
     simp
   · simp
 
@@ -801,8 +801,8 @@ private theorem coeff_subst_lubinTateVariable_of_le_order
     intro e he
     rw [map_sub, coeff_homogeneousComponent]
     by_cases hen : e.degree = n
-    · rw [if_pos hen, sub_self]
-    · rw [if_neg hen]
+    · rw [ite_eq_left hen, sub_self]
+    · rw [ite_eq_right hen]
       have helt : e.degree < n := by omega
       rw [coeff_of_lt_order (lt_of_lt_of_le (by exact_mod_cast helt) hP), sub_zero]
   have hQcoeff : coeff d (Q.subst (lubinTateVariable K π)) = 0 := by
@@ -825,7 +825,7 @@ private theorem coeff_subst_lubinTateVariable_of_le_order
       (Nat.zero_lt_one.trans (one_lt_residueCard K)).ne'])), map_add,
     coeff_subst_lubinTateVariable_of_isHomogeneous K π Pn hPn d hd, hQcoeff,
     add_zero]
-  rw [coeff_homogeneousComponent, if_pos hd]
+  rw [coeff_homogeneousComponent, ite_eq_left hd]
   rw [← hdecomp]
 
 private theorem lubinTateDiscrepancy_sub
@@ -1136,7 +1136,7 @@ private theorem lubinTateSeries_coeff_one (π : Uniformizer K) :
   rw [lubinTateSeries_eq]
   simp only [map_add, PowerSeries.coeff_C_mul, PowerSeries.coeff_X,
     PowerSeries.coeff_X_pow,
-    if_neg (one_lt_residueCard K).ne]
+    ite_eq_right (one_lt_residueCard K).ne]
   simp
 
 private theorem lubinTateSeries_discrepancy (π : Uniformizer K) :

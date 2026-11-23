@@ -62,7 +62,7 @@ lemma coefficientSlope_le_M_f {K : Type*} [Field K]
   have himage : coefficientSlope v f i ∈
       (lowerSupport f).image (coefficientSlope v f) :=
     Finset.mem_image.mpr ⟨i, his, rfl⟩
-  rw [M_f, coefficientMax, dif_pos hne]
+  rw [M_f, coefficientMax, dite_eq_left hne]
   exact (Finset.le_max' _ _ himage).trans (le_max_right _ _)
 
 lemma coefficient_bound {K : Type*} [Field K]
@@ -190,7 +190,7 @@ lemma polynomialDistance_le_coefficient {K : Type*} [Field K]
     (v : RealValuation K) {n : ℕ} (hn : n ≠ 0) (f g : K[X])
     {i : ℕ} (hi : i < n) :
     polynomialDistance v n f g ≤ v ((g - f).coeff i) := by
-  rw [polynomialDistance, dif_pos hn]
+  rw [polynomialDistance, dite_eq_left hn]
   exact Finset.inf'_le _ (Finset.mem_range.mpr hi)
 
 /-- The repaired threshold `max {-M, nT + (n-1)M}`, with `M = M_f + 1`. -/
@@ -505,7 +505,7 @@ lemma le_krasnerRadius {Ω : Type*} [Field Ω] (w : RealValuation Ω)
     ((order w (a - x) : ℝ) : WithBot ℝ) ≤ krasnerRadius w a s := by
   classical
   have hs : s.Nonempty := ⟨x, hx⟩
-  rw [krasnerRadius, dif_pos hs, WithBot.coe_le_coe]
+  rw [krasnerRadius, dite_eq_left hs, WithBot.coe_le_coe]
   exact Finset.le_max'
     (s.image (fun y : Ω => order w (a - y))) (order w (a - x))
     (Finset.mem_image.mpr ⟨x, hx, rfl⟩)
@@ -610,8 +610,8 @@ lemma exists_switch_elements {F : Type*} [Field F]
       0 < order v₁ u ∧ order v₂ u ≤ 0 ∧
       0 < order v₂ u' ∧ order v₁ u' ≤ 0 := by
   have hinc := rank_one_incomparable h₁ h₂ hne
-  obtain ⟨x, hx₂, hx₁⟩ := SetLike.not_le_iff_exists.mp hinc.2
-  obtain ⟨y, hy₁, hy₂⟩ := SetLike.not_le_iff_exists.mp hinc.1
+  obtain ⟨x, hx₂, hx₁⟩ := IsConcreteLE.not_le_iff_exists.mp hinc.2
+  obtain ⟨y, hy₁, hy₂⟩ := IsConcreteLE.not_le_iff_exists.mp hinc.1
   have hx0 : x ≠ 0 := by
     intro hx
     subst x
@@ -847,20 +847,20 @@ theorem polynomial_approximation {F : Type*} [Field F]
     · exact Polynomial.degree_X_pow n
     · simpa [Polynomial.degree_X_pow] using hqdeg
   refine ⟨g, hg, by simpa [n] using hgdeg, ?_, ?_⟩
-  · rw [polynomialDistance, dif_pos (by simpa [n] using hn)]
+  · rw [polynomialDistance, dite_eq_left (by simpa [n] using hn)]
     apply Finset.le_inf'
     intro i hi
     have hiN : i < n := Finset.mem_range.mp hi
     let j : Fin n := ⟨i, hiN⟩
     have hcoeff : g.coeff i = c j := by
       simp only [g, q, Polynomial.coeff_add, Polynomial.coeff_X_pow,
-        if_neg hiN.ne, zero_add]
+        ite_eq_right hiN.ne, zero_add]
       rw [coeff_finset_sum]
       simp only [Polynomial.coeff_C_mul_X_pow]
       rw [Fintype.sum_eq_single j]
       · simp [j]
       · intro k hkj
-        rw [if_neg]
+        rw [ite_eq_right]
         intro hik
         apply hkj
         apply Fin.ext
@@ -869,20 +869,20 @@ theorem polynomial_approximation {F : Type*} [Field F]
     refine (show ((T₁ : ℝ) : RealValue) ≤
       ((max T₁ T₂ : ℝ) : RealValue) by exact_mod_cast le_max_left T₁ T₂).trans ?_
     simpa [j] using hc₁ j
-  · rw [polynomialDistance, dif_pos (by simpa [n] using hn)]
+  · rw [polynomialDistance, dite_eq_left (by simpa [n] using hn)]
     apply Finset.le_inf'
     intro i hi
     have hiN : i < n := Finset.mem_range.mp hi
     let j : Fin n := ⟨i, hiN⟩
     have hcoeff : g.coeff i = c j := by
       simp only [g, q, Polynomial.coeff_add, Polynomial.coeff_X_pow,
-        if_neg hiN.ne, zero_add]
+        ite_eq_right hiN.ne, zero_add]
       rw [coeff_finset_sum]
       simp only [Polynomial.coeff_C_mul_X_pow]
       rw [Fintype.sum_eq_single j]
       · simp [j]
       · intro k hkj
-        rw [if_neg]
+        rw [ite_eq_right]
         intro hik
         apply hkj
         apply Fin.ext
@@ -957,7 +957,7 @@ lemma center_coefficient_bound {F : Type*} [Field F] {n : ℕ}
   rw [← coe_order_of_ne v hci, WithTop.coe_le_coe]
   have hne : (Finset.univ : Finset (Fin n)).Nonempty := ⟨i, Finset.mem_univ i⟩
   have hle : -order v (c i) ≤ centerBound v c := by
-    rw [centerBound, dif_pos hne]
+    rw [centerBound, dite_eq_left hne]
     exact (Finset.le_max'
       (Finset.univ.image fun j : Fin n => -order v (c j))
       (-order v (c i))
@@ -1232,7 +1232,7 @@ def finiteMax (s : Finset ℝ) : ℝ :=
 lemma le_finiteMax_of_mem {s : Finset ℝ} {x : ℝ} (hx : x ∈ s) :
     x ≤ finiteMax s := by
   have hs : s.Nonempty := ⟨x, hx⟩
-  rw [finiteMax, dif_pos hs]
+  rw [finiteMax, dite_eq_left hs]
   exact Finset.le_max' s x hx
 
 /-- Values of all ordered pairs of distinct points in a finite family. -/
@@ -1459,7 +1459,7 @@ theorem realValuation_rank_one {F : Type*} [Field F]
     have hnot : ¬ D ≤ realValuationSubring v := by
       intro hle
       exact hDA (le_antisymm hle hAD)
-    obtain ⟨x, hxD, hxA⟩ := SetLike.not_le_iff_exists.mp hnot
+    obtain ⟨x, hxD, hxA⟩ := IsConcreteLE.not_le_iff_exists.mp hnot
     have hx0 : x ≠ 0 := by
       intro hx
       subst x

@@ -535,7 +535,7 @@ private theorem characterFieldValue_neg {F : Type*} [Field F] {ℓ : ℕ}
   by_cases ha : a = 0
   · simp [ha, characterFieldValue]
   have hna : -a ≠ 0 := neg_ne_zero.mpr ha
-  rw [characterFieldValue, dif_neg hna, characterFieldValue, dif_neg ha]
+  rw [characterFieldValue, dite_eq_right hna, characterFieldValue, dite_eq_right ha]
   have hu : Units.mk0 (-a) hna = (-1 : Fˣ) * Units.mk0 a ha := by
     apply Units.ext
     simp
@@ -660,8 +660,8 @@ private theorem normalized_reconstruct_first {F : Type*} [Field F] {ℓ : ℕ}
           q (Additive.ofMul x) * p (Additive.ofMul u))) =
     p (Additive.ofMul u)
   field_simp [hdet]
-  <;> unfold characterDet
-  <;> ring
+  unfold characterDet
+  ring
 
 private theorem normalized_reconstruct_second {F : Type*} [Field F] {ℓ : ℕ}
     [Fact ℓ.Prime] (p q : MulCharacter F ℓ) (x y u : Fˣ)
@@ -677,8 +677,8 @@ private theorem normalized_reconstruct_second {F : Type*} [Field F] {ℓ : ℕ}
           q (Additive.ofMul x) * p (Additive.ofMul u))) =
     q (Additive.ofMul u)
   field_simp [hdet]
-  <;> unfold characterDet
-  <;> ring
+  unfold characterDet
+  ring
 
 private theorem normalized_pair_zero_iff {F : Type*} [Field F] {ℓ : ℕ}
     [Fact ℓ.Prime] (p q : MulCharacter F ℓ) (x y u : Fˣ)
@@ -1034,7 +1034,7 @@ private theorem characterDet_eq_zero_of_nonrigid
     · convert (projectivelyEqual_axis_second (A * B * (A - 1))
           (mul_ne_zero (mul_ne_zero hA hB) hA1)) using 1;
         simp [characterProjectiveMap, A, hqxsum,
-          projectiveTransform, projectiveCoord] <;> ring
+          projectiveTransform, projectiveCoord]
     · convert (projectivelyEqual_axis_third (B * A * (B - 1))
           (mul_ne_zero (mul_ne_zero hB hA) hB1)) using 1;
         simp [characterProjectiveMap, B, hpysum,

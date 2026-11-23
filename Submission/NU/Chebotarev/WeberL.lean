@@ -113,7 +113,7 @@ private theorem weberPrivateCoeff_sum (m : RayModulus K) (c : RayClassGroup m) (
       (s := {a : Ideal O | Ideal.absNorm a = k})
       (f := fun a : {a : Ideal O // a ≠ 0 ∧ IsCoprime a m.finite ∧
         RayClassGroup.IsClassOfIdeal m a c} => a.1)
-      Subtype.val_injective.injOn (Ideal.finite_setOf_absNorm_eq k)
+      Subtype.val_injective.injOn (Ring.HasFiniteQuotients.finite_absNorm_eq k)
 
 private noncomputable def weberPrivateErrorCoeff (m : RayModulus K)
     (c : RayClassGroup m) (ρ : ℝ) (n : ℕ) : ℂ := (weberPrivateCoeff m c n : ℂ) - ρ
@@ -205,7 +205,7 @@ private theorem weberPrivatePartialZeta_eq_LSeries (m : RayModulus K)
     Set.Finite.fintype (Set.Finite.preimage
       (s := {a : Ideal O | Ideal.absNorm a = n})
       (f := fun a : A => a.1) Subtype.val_injective.injOn
-      (Ideal.finite_setOf_absNorm_eq n))
+      (Ring.HasFiniteQuotients.finite_absNorm_eq n))
   let f : A → ℂ := fun a => Complex.cpow (Ideal.absNorm a.1 : ℂ) (-s)
   have hL := weberPrivateCoeff_LSeriesSummable m c ρ hO s hs
   have hnorm : Summable (fun z : Σ n, B n => ‖f z.2.1‖) := by
@@ -222,7 +222,7 @@ private theorem weberPrivatePartialZeta_eq_LSeries (m : RayModulus K)
         have hempty : IsEmpty {a : A // Ideal.absNorm a.1 = 0} :=
           ⟨fun a => (a.1.2.1 (Ideal.absNorm_eq_zero_iff.mp a.2))⟩
         simp
-      · rw [if_neg hn]
+      · rw [ite_eq_right hn]
         simp_rw [f, show ∀ a : B n, Ideal.absNorm a.1.1 = n from fun a => a.2]
         rw [Finset.sum_const, nsmul_eq_mul, Complex.norm_natCast]
         have hcp : ‖Complex.cpow (n : ℂ) (-s)‖ =
@@ -254,11 +254,11 @@ private theorem weberPrivatePartialZeta_eq_LSeries (m : RayModulus K)
     funext a
     by_cases ha : a ≠ 0 ∧ IsCoprime a m.finite ∧
       RayClassGroup.IsClassOfIdeal m a c
-    · rw [if_pos ha, Set.indicator_apply,
-        if_pos (by exact ha : a ∈ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
+    · rw [ite_eq_left ha, Set.indicator_apply,
+        ite_eq_left (by exact ha : a ∈ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
           RayClassGroup.IsClassOfIdeal m a c})]
-    · rw [if_neg ha, Set.indicator_apply,
-        if_neg (by exact ha : a ∉ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
+    · rw [ite_eq_right ha, Set.indicator_apply,
+        ite_eq_right (by exact ha : a ∉ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
           RayClassGroup.IsClassOfIdeal m a c})]]
   rw [← tsum_subtype]
   change (∑' a : A, f a) = _
@@ -277,7 +277,7 @@ private theorem weberPrivatePartialZeta_eq_LSeries (m : RayModulus K)
     have hempty : IsEmpty (B 0) :=
       ⟨fun a => (a.1.2.1 (Ideal.absNorm_eq_zero_iff.mp a.2))⟩
     simp [LSeries.term_def]
-  · rw [LSeries.term_def, if_neg hn, Finset.sum_const, nsmul_eq_mul,
+  · rw [LSeries.term_def, ite_eq_right hn, Finset.sum_const, nsmul_eq_mul,
       Finset.card_univ, weberPrivateCoeff, show Fintype.card (B n) = Nat.card (B n) by
         exact Fintype.card_eq_nat_card]
     simp only [B]
@@ -314,7 +314,7 @@ private theorem weberPrivatePartialZeta_summable (m : RayModulus K)
     Set.Finite.fintype (Set.Finite.preimage
       (s := {a : Ideal O | Ideal.absNorm a = n})
       (f := fun a : A => a.1) Subtype.val_injective.injOn
-      (Ideal.finite_setOf_absNorm_eq n))
+      (Ring.HasFiniteQuotients.finite_absNorm_eq n))
   let f : A → ℂ := fun a => Complex.cpow (Ideal.absNorm a.1 : ℂ) (-s)
   have hL := weberPrivateCoeff_LSeriesSummable m c ρ hO s hs
   have hnorm : Summable (fun z : Σ n, B n => ‖f z.2.1‖) := by
@@ -331,7 +331,7 @@ private theorem weberPrivatePartialZeta_summable (m : RayModulus K)
         have hempty : IsEmpty {a : A // Ideal.absNorm a.1 = 0} :=
           ⟨fun a => (a.1.2.1 (Ideal.absNorm_eq_zero_iff.mp a.2))⟩
         simp
-      · rw [if_neg hn]
+      · rw [ite_eq_right hn]
         simp_rw [f, show ∀ a : B n, Ideal.absNorm a.1.1 = n from fun a => a.2]
         rw [Finset.sum_const, nsmul_eq_mul, Complex.norm_natCast]
         have hcp : ‖Complex.cpow (n : ℂ) (-s)‖ =
@@ -363,11 +363,11 @@ private theorem weberPrivatePartialZeta_summable (m : RayModulus K)
   by_cases ha : a ≠ 0 ∧ IsCoprime a m.finite ∧
       RayClassGroup.IsClassOfIdeal m a c
   · rw [Set.indicator_apply,
-      if_pos (by exact ha : a ∈ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
-        RayClassGroup.IsClassOfIdeal m a c}), if_pos ha]
+      ite_eq_left (by exact ha : a ∈ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
+        RayClassGroup.IsClassOfIdeal m a c}), ite_eq_left ha]
   · rw [Set.indicator_apply,
-      if_neg (by exact ha : a ∉ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
-        RayClassGroup.IsClassOfIdeal m a c}), if_neg ha]
+      ite_eq_right (by exact ha : a ∉ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
+        RayClassGroup.IsClassOfIdeal m a c}), ite_eq_right ha]
 
 private theorem weberPrivateError_LSeriesSummable (m : RayModulus K)
     (c : RayClassGroup m) (ρ : ℝ)
@@ -445,8 +445,7 @@ private theorem weberPrivateErrorContinuation_differentiableAt (m : RayModulus K
       (weberPrivateErrorStep_locallyIntegrable m c ρ)
       (a := -q) (b := (-s).re - 1)
     · simpa [q] using weberPrivateErrorStep_bigO m c ρ hO
-    · change (-s).re < -q
-      dsimp [q] at hs ⊢
+    · dsimp [q] at hs ⊢
       linarith
     · exact weberPrivateErrorStep_bigO_zero m c ρ ((-s).re - 1)
     · simp
@@ -569,7 +568,7 @@ private theorem weberPrivate_count_eq_zero_of_isCoprime
     {a M : Ideal O} (ha : a ≠ 0) (hcop : IsCoprime a M)
     (p : PrimeIdeal K) (hp : p.asIdeal ∣ M) :
     FractionalIdeal.count K p (a : FractionalIdeal O⁰ K) = 0 := by
-  rw [FractionalIdeal.count_coe K p ha, Int.ofNat_eq_zero]
+  rw [FractionalIdeal.count_coeIdeal K p ha, Int.ofNat_eq_zero]
   by_contra hc
   have hpa : p.asIdeal ∣ a :=
     (Associates.count_ne_zero_iff_dvd ha p.irreducible).mp hc
@@ -627,12 +626,12 @@ private theorem weberPrivate_trivialCharacterValue (m : RayModulus K)
   have hac : RayClassGroup.IsClassOfIdeal m a c :=
     weberPrivate_isClassOfIdeal m a ha hcop
   rw [rayClassCharacterValue, tsum_fintype, Finset.sum_eq_single c]
-  · rw [if_pos hac, MulChar.one_apply (Group.isUnit c)]
+  · rw [ite_eq_left hac, MulChar.one_apply (Group.isUnit c)]
   · intro d hd hdc
     have had : ¬RayClassGroup.IsClassOfIdeal m a d := by
       intro had
       exact hdc (weberPrivate_isClassOfIdeal_unique m a had hac)
-    rw [if_neg had]
+    rw [ite_eq_right had]
   · simp
 
 private theorem weberPrivateErrorContinuation_analytic (m : RayModulus K)
@@ -796,7 +795,7 @@ private theorem weberPrivateEulerProduct_hasProd {ι : Type*} [DecidableEq ι]
     filter_upwards [eventually_ge_atTop e.support] with t ht
     have ht' : e.support ⊆ t := ht
     dsimp only [f]
-    rw [if_pos ht']
+    rw [ite_eq_left ht']
   have hbound : ∀ᶠ t : Finset ι in atTop, ∀ e,
       ‖f t e‖ ≤ ‖weberPrivateFactorTerm x e‖ := by
     filter_upwards [] with t e
@@ -815,7 +814,7 @@ private theorem weberPrivateEulerProduct_hasProd {ι : Type*} [DecidableEq ι]
           ∑' e, A.indicator (weberPrivateFactorTerm x) e := by
         apply tsum_congr
         intro e
-        simp only [f, A, Set.indicator_apply, Set.mem_setOf_eq]
+        simp only [f, A, Set.indicator_apply, Set.mem_ofPred_eq]
       _ = ∑' e : A, weberPrivateFactorTerm x e.1 :=
         (tsum_subtype A (weberPrivateFactorTerm x)).symm
       _ = _ := (hfinite t).2.tsum_eq
@@ -834,7 +833,7 @@ private noncomputable def weberPrivateIdealFactorization
       rw [h.mem_toFinset]
       change FractionalIdeal.count K p (a.1 : FractionalIdeal O⁰ K) ≠ 0 ↔
         (FractionalIdeal.count K p (a.1 : FractionalIdeal O⁰ K)).toNat ≠ 0
-      have hp := FractionalIdeal.count_coe_nonneg K p a.1
+      have hp := FractionalIdeal.count_coeIdeal_nonneg K p a.1
       constructor
       · intro hc hto
         apply hc
@@ -915,7 +914,7 @@ private noncomputable def weberPrivateIdealFactorEquiv :
     congr 1
     rw [weberPrivate_count_idealOfFactorization,
       weberPrivateIdealFactorization_apply]
-    exact Int.toNat_of_nonneg (FractionalIdeal.count_coe_nonneg K p a.1)
+    exact Int.toNat_of_nonneg (FractionalIdeal.count_coeIdeal_nonneg K p a.1)
   right_inv e := by
     ext p
     rw [weberPrivateIdealFactorization_apply,
@@ -1026,12 +1025,12 @@ private theorem weberPrivate_characterValue_eq (m : RayModulus K)
   have hac : RayClassGroup.IsClassOfIdeal m a c :=
     weberPrivate_isClassOfIdeal m a ha hcop
   rw [rayClassCharacterValue, tsum_fintype, Finset.sum_eq_single c]
-  · rw [if_pos hac]
+  · rw [ite_eq_left hac]
   · intro d hd hdc
     have had : ¬RayClassGroup.IsClassOfIdeal m a d := by
       intro had
       exact hdc (weberPrivate_isClassOfIdeal_unique m a had hac)
-    rw [if_neg had]
+    rw [ite_eq_right had]
   · simp
 
 private theorem weberPrivate_rayIdealClass_mul (m : RayModulus K)
@@ -1080,7 +1079,7 @@ private theorem weberPrivateIdealTerm_one (m : RayModulus K)
     weberPrivateIdealTerm m ψ s 1 = 1 := by
   have hone : (1 : Ideal O) ≠ 0 := one_ne_zero
   have hcop : IsCoprime (1 : Ideal O) m.finite := isCoprime_one_left
-  rw [weberPrivateIdealTerm, dif_pos hone, dif_pos hcop,
+  rw [weberPrivateIdealTerm, dite_eq_left hone, dite_eq_left hcop,
     weberPrivate_characterValue_eq m ψ 1 hone hcop]
   have hRay : weberPrivateRayIdealOfCoprime m 1 hone hcop = 1 := by
     apply Subtype.ext
@@ -1101,11 +1100,11 @@ private theorem weberPrivateIdealTerm_mul (m : RayModulus K)
   by_cases hb : b = 0
   · subst b
     simp [weberPrivateIdealTerm]
-  rw [weberPrivateIdealTerm, dif_pos (mul_ne_zero ha hb)]
-  simp only [weberPrivateIdealTerm, dif_pos ha, dif_pos hb]
+  rw [weberPrivateIdealTerm, dite_eq_left (mul_ne_zero ha hb)]
+  simp only [weberPrivateIdealTerm, dite_eq_left ha, dite_eq_left hb]
   by_cases hca : IsCoprime a m.finite <;>
     by_cases hcb : IsCoprime b m.finite
-  · rw [dif_pos (hca.mul_left hcb), dif_pos hca, dif_pos hcb,
+  · rw [dite_eq_left (hca.mul_left hcb), dite_eq_left hca, dite_eq_left hcb,
       weberPrivate_characterValue_mul m ψ a b ha hb hca hcb,
       Ideal.absNorm.map_mul]
     have hpow : Complex.cpow ((Ideal.absNorm a * Ideal.absNorm b : ℕ) : ℂ) (-s) =
@@ -1117,12 +1116,12 @@ private theorem weberPrivateIdealTerm_mul (m : RayModulus K)
           (Nat.cast_nonneg (Ideal.absNorm b)) (-s)
     rw [hpow]
     ring
-  · rw [dif_neg (fun h => hcb (IsCoprime.of_mul_left_right h)),
-      dif_pos hca, dif_neg hcb, mul_zero]
-  · rw [dif_neg (fun h => hca (IsCoprime.of_mul_left_left h)),
-      dif_neg hca, zero_mul]
-  · rw [dif_neg (fun h => hca (IsCoprime.of_mul_left_left h)),
-      dif_neg hca, zero_mul]
+  · rw [dite_eq_right (fun h => hcb (IsCoprime.of_mul_left_right h)),
+      dite_eq_left hca, dite_eq_right hcb, mul_zero]
+  · rw [dite_eq_right (fun h => hca (IsCoprime.of_mul_left_left h)),
+      dite_eq_right hca, zero_mul]
+  · rw [dite_eq_right (fun h => hca (IsCoprime.of_mul_left_left h)),
+      dite_eq_right hca, zero_mul]
 
 private noncomputable def weberPrivateIdealTermHom (m : RayModulus K)
     (ψ : RayClassCharacter m) (s : ℂ) : Ideal O →*₀ ℂ where
@@ -1140,16 +1139,16 @@ private theorem weberPrivateIdealTerm_prime (m : RayModulus K)
           Complex.cpow (PrimeIdeal.norm p : ℂ) (-s) := by
   classical
   have hp0 : p.asIdeal ≠ (0 : Ideal O) := p.ne_bot
-  simp only [weberPrivateIdealTerm, dif_pos hp0]
+  simp only [weberPrivateIdealTerm, dite_eq_left hp0]
   by_cases hp : p.asIdeal ∣ m.finite
-  · rw [if_pos hp]
-    apply dif_neg
+  · rw [ite_eq_left hp]
+    apply dite_eq_right
     intro hcop
     have htop : (⊤ : Ideal O) ≤ p.asIdeal := by
       rw [← hcop.sup_eq]
       exact sup_le le_rfl (Ideal.dvd_iff_le.mp hp)
     exact p.isPrime.ne_top (top_unique htop)
-  · rw [if_neg hp, dif_pos (weberPrivate_prime_isCoprime m p hp)]
+  · rw [ite_eq_right hp, dite_eq_left (weberPrivate_prime_isCoprime m p hp)]
     rfl
 
 private theorem weberPrivateFactorTerm_eq_idealTerm
@@ -1179,26 +1178,26 @@ private theorem weberPrivateIdealTerm_eq_classSum (m : RayModulus K)
       RayClassGroup.mk m (weberPrivateRayIdealOfCoprime m a ha.1 ha.2)
     have hac : RayClassGroup.IsClassOfIdeal m a c :=
       weberPrivate_isClassOfIdeal m a ha.1 ha.2
-    rw [weberPrivateIdealTerm, dif_pos ha.1, dif_pos ha.2,
+    rw [weberPrivateIdealTerm, dite_eq_left ha.1, dite_eq_left ha.2,
       weberPrivate_characterValue_eq m ψ a ha.1 ha.2,
       Finset.sum_eq_single c]
-    · rw [weberPrivatePartialTerm, if_pos ⟨ha.1, ha.2, hac⟩]
+    · rw [weberPrivatePartialTerm, ite_eq_left ⟨ha.1, ha.2, hac⟩]
     · intro d hd hdc
       have had : ¬RayClassGroup.IsClassOfIdeal m a d := by
         intro had
         exact hdc (weberPrivate_isClassOfIdeal_unique m a had hac)
-      rw [weberPrivatePartialTerm, if_neg (fun h => had h.2.2), mul_zero]
+      rw [weberPrivatePartialTerm, ite_eq_right (fun h => had h.2.2), mul_zero]
     · simp
   · have hz : weberPrivateIdealTerm m ψ s a = 0 := by
       rw [weberPrivateIdealTerm]
       by_cases hane : a ≠ 0
-      · rw [dif_pos hane, dif_neg (fun hcop => ha ⟨hane, hcop⟩)]
-      · rw [dif_neg hane]
+      · rw [dite_eq_left hane, dite_eq_right (fun hcop => ha ⟨hane, hcop⟩)]
+      · rw [dite_eq_right hane]
     rw [hz]
     symm
     apply Finset.sum_eq_zero
     intro c hc
-    rw [weberPrivatePartialTerm, if_neg (fun h => ha ⟨h.1, h.2.1⟩), mul_zero]
+    rw [weberPrivatePartialTerm, ite_eq_right (fun h => ha ⟨h.1, h.2.1⟩), mul_zero]
 
 private theorem weberPrivateIdealTerm_summable (m : RayModulus K)
     (ψ : RayClassCharacter m) (s : ℂ) (hs : 1 < s.re) :
@@ -1311,8 +1310,8 @@ theorem weberLSeries_eq_eulerProduct (m : RayModulus K)
       intro p
       simp only [x]
       by_cases hp : p.asIdeal ∣ m.finite
-      · rw [if_pos hp, if_pos hp, sub_zero, inv_one]
-      · rw [if_neg hp, if_neg hp]
+      · rw [ite_eq_left hp, ite_eq_left hp, sub_zero, inv_one]
+      · rw [ite_eq_right hp, ite_eq_right hp]
 
 
 /-- Blueprint Corollary 5.4 (`weberLSeries_analytic_of_ne_one`): a nontrivial
@@ -1381,19 +1380,19 @@ theorem weberLSeries_trivial (m : RayModulus K) (s : ℂ) (hs : 1 < s.re) :
       RayClassGroup.mk m (weberPrivateRayIdealOfCoprime m a ha.1 ha.2)
     have hac : RayClassGroup.IsClassOfIdeal m a c :=
       weberPrivate_isClassOfIdeal m a ha.1 ha.2
-    rw [if_pos ha]
+    rw [ite_eq_left ha]
     rw [Finset.sum_eq_single c]
-    · rw [weberPrivatePartialTerm, if_pos ⟨ha.1, ha.2, hac⟩]
+    · rw [weberPrivatePartialTerm, ite_eq_left ⟨ha.1, ha.2, hac⟩]
     · intro d hd hdc
       have had : ¬ RayClassGroup.IsClassOfIdeal m a d := by
         intro had
         exact hdc (weberPrivate_isClassOfIdeal_unique m a had hac)
-      rw [weberPrivatePartialTerm, if_neg (fun h => had h.2.2)]
+      rw [weberPrivatePartialTerm, ite_eq_right (fun h => had h.2.2)]
     · simp
-  · rw [if_neg ha]
+  · rw [ite_eq_right ha]
     apply Finset.sum_eq_zero
     intro c hc
-    rw [weberPrivatePartialTerm, if_neg (fun h => ha ⟨h.1, h.2.1⟩)]
+    rw [weberPrivatePartialTerm, ite_eq_right (fun h => ha ⟨h.1, h.2.1⟩)]
 
 private theorem weberPrivateDedekindZeta_eq_idealTsum (s : ℂ)
     (hs : 1 < s.re) :
@@ -1413,16 +1412,16 @@ private theorem weberPrivateDedekindZeta_eq_idealTsum (s : ℂ)
         dsimp [m]
         rw [Ideal.isCoprime_iff_sup_eq]
         exact sup_top_eq a
-      rw [weberPrivateIdealTerm, dif_pos ha, dif_pos hcop,
+      rw [weberPrivateIdealTerm, dite_eq_left ha, dite_eq_left hcop,
         weberPrivate_trivialCharacterValue m a ha hcop, one_mul]
-      simp only [f, if_pos ha]
-    · rw [weberPrivateIdealTerm, dif_neg ha]
-      simp only [f, if_neg ha]
+      simp only [f, ite_eq_left ha]
+    · rw [weberPrivateIdealTerm, dite_eq_right ha]
+      simp only [f, ite_eq_right ha]
   have hsum : Summable f :=
     (weberPrivateIdealTerm_summable m 1 s hs).congr hterm
   let B : ℕ → Type _ := fun n => {a : Ideal O // Ideal.absNorm a = n}
   let (n : ℕ) : Fintype (B n) :=
-    Set.Finite.fintype (Ideal.finite_setOf_absNorm_eq n)
+    Set.Finite.fintype (Ring.HasFiniteQuotients.finite_absNorm_eq n)
   let e := Equiv.sigmaFiberEquiv (fun a : Ideal O => Ideal.absNorm a)
   have hsigma : Summable (fun z : Σ n, B n => f z.2.1) := by
     apply (e.summable_iff (f := f)).mpr hsum
@@ -1446,9 +1445,9 @@ private theorem weberPrivateDedekindZeta_eq_idealTsum (s : ℂ)
           intro a hzero
           apply hn
           simpa [hzero] using a.2.symm
-        simp_rw [f, if_pos (hne _)]
+        simp_rw [f, ite_eq_left (hne _)]
         simp_rw [show ∀ a : B n, Ideal.absNorm a.1 = n from fun a => a.2]
-        rw [Finset.sum_const, nsmul_eq_mul, LSeries.term_def, if_neg hn,
+        rw [Finset.sum_const, nsmul_eq_mul, LSeries.term_def, ite_eq_right hn,
           Finset.card_univ, show Fintype.card (B n) = Nat.card (B n) by
             exact Fintype.card_eq_nat_card]
         rw [Complex.cpow_eq_pow, Complex.cpow_neg, div_eq_mul_inv]
@@ -1470,11 +1469,11 @@ theorem dedekindZeta_eulerProduct (s : ℂ) (hs : 1 < s.re) :
       apply tsum_congr
       intro a
       by_cases ha : a ≠ 0
-      · rw [if_pos ha, if_pos ⟨ha, by
+      · rw [ite_eq_left ha, ite_eq_left ⟨ha, by
           dsimp [m]
           rw [Ideal.isCoprime_iff_sup_eq]
           exact sup_top_eq a⟩]
-      · rw [if_neg ha, if_neg (fun h => ha h.1)]
+      · rw [ite_eq_right ha, ite_eq_right (fun h => ha h.1)]
     _ = weberLSeries m 1 s := (weberLSeries_trivial m s hs).symm
     _ = weberLEulerProduct m 1 s := weberLSeries_eq_eulerProduct m 1 s hs
     _ = ∏' p : PrimeIdeal K,
@@ -1486,7 +1485,7 @@ theorem dedekindZeta_eulerProduct (s : ℂ) (hs : 1 < s.re) :
         rw [Ideal.dvd_iff_le]
         intro h
         exact p.isPrime.ne_top (top_unique h)
-      rw [if_neg hp,
+      rw [ite_eq_right hp,
         weberPrivate_trivialCharacterValue m p.asIdeal p.ne_bot
           (weberPrivate_prime_isCoprime m p hp), one_mul]
 
@@ -1505,8 +1504,8 @@ theorem incompleteDedekindZeta_eulerProduct (m : RayModulus K)
       apply tprod_congr
       intro p
       by_cases hp : p.asIdeal ∣ m.finite
-      · rw [if_pos hp, if_pos hp]
-      · rw [if_neg hp, if_neg hp,
+      · rw [ite_eq_left hp, ite_eq_left hp]
+      · rw [ite_eq_right hp, ite_eq_right hp,
           weberPrivate_trivialCharacterValue m p.asIdeal p.ne_bot
             (weberPrivate_prime_isCoprime m p hp), one_mul]
 

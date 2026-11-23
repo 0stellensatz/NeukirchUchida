@@ -77,7 +77,7 @@ theorem higherDegreePrimes_hasDirichletDensity_zero
     change absoluteResidueDegree L v ≠ 1 ↔
       2 ≤ (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal
     rw [absoluteResidueDegree_eq_inertiaDeg,
-      ← Ideal.inertiaDeg_eq_inertiaDeg'
+      ← Ideal.inertiaDeg'_eq_inertiaDeg
         (Ideal.under (𝓞 ℚ) v.asIdeal) v.asIdeal]
     have hpos : 0 < (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal :=
       Ideal.inertiaDeg'_pos (Ideal.under (𝓞 ℚ) v.asIdeal) v.asIdeal
@@ -141,8 +141,8 @@ theorem chebotarev_containment
     apply IntermediateField.lift_injective M.field
     rw [IntermediateField.lift_sup, IntermediateField.lift_restrict,
       IntermediateField.lift_restrict, IntermediateField.lift_top]
-  let eK := IntermediateField.restrict_algEquiv hKM
-  let eL := IntermediateField.restrict_algEquiv hLM
+  let eK := IntermediateField.restrictAlgEquiv hKM
+  let eL := IntermediateField.restrictAlgEquiv hLM
   have hK' : IsGalois ℚ K' := by
     apply IsGalois.of_equiv_equiv (h := hK0)
       (f := RingEquiv.refl ℚ) (g := eK.toRingEquiv)
@@ -399,7 +399,7 @@ theorem chebotarev_containment
     let : Algebra.IsUnramifiedAt (𝓞 ℚ) v.asIdeal := hunrv
     have he : absoluteRamificationIndex L v = 1 := by
       change v.asIdeal.ramificationIdx (𝓞 ℚ) = 1
-      rw [← Ideal.ramificationIdx_eq_ramificationIdx'
+      rw [← Ideal.ramificationIdx'_eq_ramificationIdx
         (rationalPrime L v).asIdeal v.asIdeal (rationalPrime L v).ne_bot]
       exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt
         (R := 𝓞 ℚ) v.ne_bot
@@ -423,7 +423,7 @@ theorem chebotarev_containment
           (M.field ≃ₐ[L.field] M.field)]
         exact heIn
       have heW' : v.asIdeal.ramificationIdx' W.asIdeal = 1 := by
-        rw [Ideal.ramificationIdx_eq_ramificationIdx'
+        rw [Ideal.ramificationIdx'_eq_ramificationIdx
           v.asIdeal W.asIdeal v.ne_bot]
         exact heW
       apply (Algebra.isUnramifiedAt_iff_of_isDedekindDomain' W.ne_bot).mpr
@@ -463,7 +463,7 @@ theorem chebotarev_containment
     obtain ⟨n : ℕ, hn⟩ := exists_nat_ge x
     apply Set.Finite.of_finite_image
       (f := fun v : NU.Chebotarev.PrimeIdeal L.field => v.asIdeal)
-    · apply (Ideal.finite_setOf_absNorm_le (S := 𝓞 L.field) n).subset
+    · apply (Ring.HasFiniteQuotients.finite_absNorm_le (S := 𝓞 L.field) n).subset
       rintro I ⟨v, hv, rfl⟩
       change Ideal.absNorm v.asIdeal ≤ n
       exact_mod_cast hv.2.trans hn
@@ -490,7 +490,7 @@ theorem chebotarev_containment
     let : v.asIdeal.LiesOver (Ideal.under (𝓞 ℚ) v.asIdeal) := ⟨rfl⟩
     change absoluteResidueDegree L v ≠ 1 ↔
       2 ≤ (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal
-    rw [hresidue, ← Ideal.inertiaDeg_eq_inertiaDeg'
+    rw [hresidue, ← Ideal.inertiaDeg'_eq_inertiaDeg
       (Ideal.under (𝓞 ℚ) v.asIdeal) v.asIdeal]
     have hpos : 0 < (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal :=
       Ideal.inertiaDeg'_pos (Ideal.under (𝓞 ℚ) v.asIdeal) v.asIdeal
@@ -714,8 +714,8 @@ theorem galois_of_degreeOnePrime_splitsCompletely
         (absoluteRamificationIndex L v * absoluteResidueDegree L v) *
           Nat.card Dl := by
       rw [hcardq, hcardl, he, hf,
-        Ideal.ramificationIdx'_tower' v.asIdeal w.asIdeal,
-        Ideal.inertiaDeg'_tower v.asIdeal w.asIdeal]
+        Ideal.ramificationIdx_tower' v.asIdeal w.asIdeal,
+        Ideal.inertiaDeg_tower v.asIdeal w.asIdeal]
       ring
     constructor
     · intro hlocal sigma hsigma

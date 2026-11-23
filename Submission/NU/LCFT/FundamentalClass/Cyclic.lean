@@ -461,12 +461,12 @@ private noncomputable def cyclicPeriodicHom
       rintro i j ⟨rfl⟩
       by_cases hi : Even i
       · simp only [Rep.FiniteCyclicGroup.moduleCatCochainComplex,
-          HomologicalComplex.alternatingConst, if_pos (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
+          HomologicalComplex.alternatingConst, ite_eq_left (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
         ext x
         change B.ρ g (f.hom x) - f.hom x = f.hom (A.ρ g x - x)
         rw [map_sub, Rep.hom_comm_apply]
       · simp only [Rep.FiniteCyclicGroup.moduleCatCochainComplex,
-          HomologicalComplex.alternatingConst, if_pos (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
+          HomologicalComplex.alternatingConst, ite_eq_left (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
         ext x
         exact Rep.norm_comm_apply f x }
 

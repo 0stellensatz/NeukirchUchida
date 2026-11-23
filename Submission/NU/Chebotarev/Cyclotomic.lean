@@ -227,7 +227,7 @@ private theorem cyclotomic_facNorm_nat {K : Type*} [Field K] [NumberField K]
       apply Nat.cast_injective (R := ℚ)
       simpa using hx) (fun p : PrimeIdeal K => PrimeIdeal.norm p ^ e p)
   have hq := cyclotomic_facNorm J hJ
-  simp_rw [FractionalIdeal.count_coe K _ hJ, zpow_natCast] at hq
+  simp_rw [FractionalIdeal.count_coeIdeal K _ hJ, zpow_natCast] at hq
   change (∏ᶠ p : PrimeIdeal K, (PrimeIdeal.norm p : ℚ) ^ e p) =
     (Ideal.absNorm J : ℚ) at hq
   apply Nat.cast_injective (R := ℚ)
@@ -242,7 +242,7 @@ private theorem cyclotomic_facNorm_zmod {K : Type*} [Field K] [NumberField K]
   let e : PrimeIdeal K → ℕ := fun p =>
     (Associates.mk p.asIdeal).count (Associates.mk J).factors
   have hevent : ∀ᶠ p : PrimeIdeal K in Filter.cofinite, e p = 0 := by
-    simpa [e, FractionalIdeal.count_coe K _ hJ] using
+    simpa [e, FractionalIdeal.count_coeIdeal K _ hJ] using
       (FractionalIdeal.finite_factors
         (J : FractionalIdeal (NumberField.RingOfIntegers K)⁰ K))
   have hsupp : Function.HasFiniteMulSupport
@@ -273,7 +273,7 @@ private theorem cyclotomic_unit_facNorm {K : Type*} [Field K] [NumberField K]
   have heq (p : PrimeIdeal K) :
       FractionalIdeal.count K p
         (J : FractionalIdeal (NumberField.RingOfIntegers K)⁰ K) = (e p : ℤ) := by
-    exact FractionalIdeal.count_coe K p hJ
+    exact FractionalIdeal.count_coeIdeal K p hJ
   have hevent : ∀ᶠ p : PrimeIdeal K in Filter.cofinite, e p = 0 := by
     simpa [e, heq] using (FractionalIdeal.finite_factors
       (J : FractionalIdeal (NumberField.RingOfIntegers K)⁰ K))
@@ -369,18 +369,14 @@ private theorem algebraNorm_pos_of_pos_at_real {K : Type*} [Field K] [NumberFiel
       ((∏ w : {w : InfinitePlace K // InfinitePlace.IsReal w},
         (InfinitePlace.embedding_of_isReal w.2) x : ℝ) : ℂ) := by
     symm
-    simpa using Complex.ofReal_prod (Finset.univ :
-      Finset {w : InfinitePlace K // InfinitePlace.IsReal w})
-      (fun w => (InfinitePlace.embedding_of_isReal w.2) x)
+    simp
   have hcprod :
       (∏ w : {w : InfinitePlace K // InfinitePlace.IsComplex w},
         (Complex.normSq (w.1.embedding x) : ℂ)) =
       ((∏ w : {w : InfinitePlace K // InfinitePlace.IsComplex w},
         Complex.normSq (w.1.embedding x) : ℝ) : ℂ) := by
     symm
-    simpa using Complex.ofReal_prod (Finset.univ :
-      Finset {w : InfinitePlace K // InfinitePlace.IsComplex w})
-      (fun w => Complex.normSq (w.1.embedding x))
+    simp
   have hre := congrArg Complex.re hnorm
   have hre' : ((Algebra.norm ℚ x : ℚ) : ℝ) =
       (∏ w : {w : InfinitePlace K // InfinitePlace.IsReal w},
@@ -668,7 +664,7 @@ private theorem cyclotomicFreeFrobenius_kills
       (u p : ZMod n) = (PrimeIdeal.norm p : ZMod n) := by
     intro p hp
     dsimp [u, prime, cyclotomicPrimeFrobAway]
-    rw [if_neg hp]
+    rw [ite_eq_right hp]
     exact cyclotomicPrimeUnit_eq_norm n m hn hmod p hp
   change Subgroup.closure _ ≤ _
   rw [Subgroup.closure_le]
@@ -702,7 +698,7 @@ private theorem cyclotomicFreeFrobenius_kills
         (NumberField.RingOfIntegers K)⁰ K)⁻¹
     simp only [FractionalIdeal.coeIdeal_span_singleton]
     rw [FractionalIdeal.spanSingleton_inv,
-      FractionalIdeal.spanSingleton_mul_spanSingleton]
+      ← map_mul (FractionalIdeal.spanSingleton _)]
     rw [← hfrac]
     simp only [div_eq_mul_inv]
   have hBnorm := cyclotomic_unit_facNorm n m u hu (Ideal.span {β})
@@ -990,7 +986,7 @@ private noncomputable def cyclotomicPrimeRayIdeal {K : Type*} [Field K] [NumberF
   change FractionalIdeal.count K q
     (p.asIdeal : FractionalIdeal (NumberField.RingOfIntegers K)⁰ K) = 0
   rw [FractionalIdeal.count_maximal]
-  rw [if_neg]
+  rw [ite_eq_right]
   intro h
   apply hp
   simpa [h] using hq
@@ -1012,9 +1008,9 @@ private theorem cyclotomicTrivialPrimeCharacterValue {K : Type*} [Field K] [Numb
   have hc : RayClassGroup.IsClassOfIdeal m p.asIdeal c :=
     ⟨I, cyclotomicPrimeRayIdeal_val m p hp, rfl⟩
   rw [rayClassCharacterValue, tsum_fintype, Finset.sum_eq_single c]
-  · rw [if_pos hc, MulChar.one_apply (Group.isUnit c)]
+  · rw [ite_eq_left hc, MulChar.one_apply (Group.isUnit c)]
   · intro d hd hdc
-    rw [if_neg]
+    rw [ite_eq_right]
     intro had
     exact hdc (cyclotomicClassOfIdeal_unique m p.asIdeal had hc)
   · simp
@@ -1068,7 +1064,7 @@ private theorem cyclotomicIncompleteZeta_eq_weber
   rw [cyclotomicLiftedModulus_dvd_iff]
   by_cases hQ : Q.asIdeal.under (NumberField.RingOfIntegers K) ∣ m.finite
   · simp [hQ]
-  · rw [if_neg hQ, if_neg hQ,
+  · rw [ite_eq_right hQ, ite_eq_right hQ,
       cyclotomicTrivialPrimeCharacterValue _ Q (fun h => hQ ((cyclotomicLiftedModulus_dvd_iff m Q).mp h)),
       one_mul]
 
@@ -1160,9 +1156,9 @@ private noncomputable def cyclotomicCharEvalEquivRoots
 private theorem cyclotomic_prod_rootsOfUnity_one_sub (d : ℕ) [NeZero d] [Fintype (rootsOfUnity d ℂ)] (z : ℂ) :
     (∏ r : rootsOfUnity d ℂ, (1 - ((r : ℂˣ) : ℂ) * z)) = 1 - z ^ d := by
   classical
-  let ζ : ℂ := (HasEnoughRootsOfUnity.exists_primitiveRoot ℂ d).choose
+  let ζ : ℂ := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot ℂ d).choose
   have hζ : IsPrimitiveRoot ζ d :=
-    (HasEnoughRootsOfUnity.exists_primitiveRoot ℂ d).choose_spec
+    (HasEnoughRootsOfUnity.exists_isPrimitiveRoot ℂ d).choose_spec
   let ζu : ℂˣ := (hζ.isUnit (NeZero.ne d)).unit
   have hζu : IsPrimitiveRoot ζu d := hζ.isUnit_unit (NeZero.ne d)
   let f : Fin d → rootsOfUnity d ℂ := fun i =>
@@ -1240,7 +1236,7 @@ private theorem cyclotomic_prod_characters_one_sub
   let b : B := ⟨a, Subgroup.mem_zpowers a⟩
   let res : UnitCharacter G →* UnitCharacter B := MonoidHom.domRestrictHom B ℂˣ
   have hres : Function.Surjective res :=
-    MonoidHom.restrict_surjective (M := ℂ) B
+    MonoidHom.domRestrict_surjective (M := ℂ) B
   have hcard (ψ : UnitCharacter B) :
       Fintype.card {χ : UnitCharacter G // res χ = ψ} = B.index := by
     obtain ⟨χ₀, hχ₀⟩ := hres ψ
@@ -1331,9 +1327,9 @@ private theorem cyclotomicPrimeCharacterValue {K : Type*} [Field K] [NumberField
   have hc : RayClassGroup.IsClassOfIdeal m p.asIdeal c :=
     ⟨I, cyclotomicPrimeRayIdeal_val m p hp, rfl⟩
   rw [rayClassCharacterValue, tsum_fintype, Finset.sum_eq_single c]
-  · rw [if_pos hc]
+  · rw [ite_eq_left hc]
   · intro d hd hdc
-    rw [if_neg]
+    rw [ite_eq_right]
     intro had
     exact hdc (cyclotomicClassOfIdeal_unique m p.asIdeal had hc)
   · simp
@@ -1373,13 +1369,13 @@ private theorem cyclotomicLocalEulerFactor
   dsimp only
   rw [tprod_fintype, tprod_fintype]
   by_cases hp : p.asIdeal ∣ m.finite
-  · simp only [hp, if_pos, Finset.prod_const_one, one_pow]
+  · simp only [hp, ite_eq_left, Finset.prod_const_one, one_pow]
     apply Finset.prod_eq_one
     intro Q hQ
-    rw [if_pos]
+    rw [ite_eq_left]
     rw [← cyclotomicContractPrime_asIdeal, Q.2]
     exact hp
-  · simp only [hp, if_false]
+  · simp only [hp, ite_false]
     let I := cyclotomicPrimeRayIdeal m p hp
     let c := RayClassGroup.mk m I
     have hc : RayClassGroup.IsClassOfIdeal m p.asIdeal c :=
@@ -1412,8 +1408,8 @@ private theorem cyclotomicLocalEulerFactor
       rw [PrimeIdeal.norm_pow_inertiaDeg Q.1 p hQp, haorder]
       let : Q.1.asIdeal.LiesOver p.asIdeal := hQp
       let : Q₀.asIdeal.LiesOver p.asIdeal := hQ₀p
-      rw [Ideal.inertiaDeg_eq_inertiaDeg' p.asIdeal Q.1.asIdeal,
-        Ideal.inertiaDeg_eq_inertiaDeg'
+      rw [Ideal.inertiaDeg'_eq_inertiaDeg p.asIdeal Q.1.asIdeal,
+        Ideal.inertiaDeg'_eq_inertiaDeg
           (Q₀.asIdeal.under (NumberField.RingOfIntegers K)) Q₀.asIdeal,
         Ideal.inertiaDeg_eq_of_isGaloisGroup p.asIdeal Q.1.asIdeal Q₀.asIdeal
           (Gal(M/K))]
@@ -1435,7 +1431,7 @@ private theorem cyclotomicLocalEulerFactor
       have hramidx : p.asIdeal.ramificationIdxIn
           (NumberField.RingOfIntegers M) = 1 := by
         rw [Ideal.ramificationIdxIn_eq_ramificationIdx p.asIdeal Q₀.asIdeal (Gal(M/K)),
-          ← Ideal.ramificationIdx_eq_ramificationIdx'
+          ← Ideal.ramificationIdx'_eq_ramificationIdx
             (Q₀.asIdeal.under (NumberField.RingOfIntegers K)) Q₀.asIdeal
             (Ideal.under_ne_bot (NumberField.RingOfIntegers K) Q₀.ne_bot)]
         let : Algebra.IsUnramifiedAt
@@ -1444,7 +1440,7 @@ private theorem cyclotomicLocalEulerFactor
       have hinertia : p.asIdeal.inertiaDegIn
           (NumberField.RingOfIntegers M) = orderOf a := by
         rw [Ideal.inertiaDegIn_eq_inertiaDeg p.asIdeal Q₀.asIdeal (Gal(M/K)),
-          ← Ideal.inertiaDeg_eq_inertiaDeg'
+          ← Ideal.inertiaDeg'_eq_inertiaDeg
             (Q₀.asIdeal.under (NumberField.RingOfIntegers K)) Q₀.asIdeal,
           haorder]
       rw [hramidx, hinertia, one_mul] at hfund
@@ -1487,7 +1483,7 @@ private theorem cyclotomicLocalEulerFactor
             (1 - Complex.cpow (PrimeIdeal.norm p : ℂ) (-s) ^ orderOf a)⁻¹ := by
         apply Finset.prod_congr rfl
         intro Q hQ
-        rw [if_neg]
+        rw [ite_eq_right]
         · rw [hnormQ Q, ← hzpow]
         · intro hd
           apply hp
@@ -1504,7 +1500,7 @@ private theorem cyclotomicFactorCoeffSum (n : ℕ) :
     Nat.card {I : Ideal (NumberField.RingOfIntegers K) //
       I ≠ 0 ∧ Ideal.absNorm I ≤ n} := by
   rw [← Finset.card_preimage_eq_sum_card_image_eq
-    (fun k _ => Ideal.finite_setOf_absNorm_eq k)]
+    (fun k _ => Ring.HasFiniteQuotients.finite_absNorm_eq k)]
   apply Nat.card_congr
   refine
     { toFun := fun I => ⟨I.1, ?_⟩
@@ -1549,11 +1545,11 @@ private theorem cyclotomicFactorSummableIdealRpow (s : ℝ) (hs : 1 < s) :
     rw [LSeries.norm_term_eq]
     by_cases hn : n = 0
     · subst n
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       simp only [Nat.cast_zero]
       rw [show Real.rpow 0 (-s) = (0 : ℝ) ^ (-s) from rfl,
         Real.zero_rpow (by linarith : -s ≠ 0), mul_zero]
-    · rw [if_neg hn]
+    · rw [ite_eq_right hn]
       have han : 0 ≤ a n := Nat.cast_nonneg _
       simp only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg han,
         Complex.ofReal_re]
@@ -1561,7 +1557,7 @@ private theorem cyclotomicFactorSummableIdealRpow (s : ℝ) (hs : 1 < s) :
       exact congrArg (a n * ·) (Real.rpow_neg (Nat.cast_nonneg n) s).symm
   let (n : ℕ) : Fintype
       {I : Ideal (NumberField.RingOfIntegers K) // Ideal.absNorm I = n} :=
-    (Ideal.finite_setOf_absNorm_eq n).fintype
+    (Ring.HasFiniteQuotients.finite_absNorm_eq n).fintype
   have hsigma : Summable (fun z : Σ n : ℕ,
       {I : Ideal (NumberField.RingOfIntegers K) // Ideal.absNorm I = n} =>
       Real.rpow (Ideal.absNorm z.2.1 : ℝ) (-s)) := by
@@ -1709,7 +1705,7 @@ theorem cyclotomic_zeta_eq_prod_weberL
     by_cases hp : p.asIdeal ∣ m.finite
     · simp [uBase, hp]
     · dsimp [uBase]
-      rw [if_neg hp, cyclotomicPrimeCharacterValue m _ p hp,
+      rw [ite_eq_right hp, cyclotomicPrimeCharacterValue m _ p hp,
         cyclotomicPullbackCharacter_apply]
       exact le_of_eq (((Units.coeHom ℂ).comp χ).isOfFinOrder
         (isOfFinOrder_of_finite (νA (RayClassGroup.mk m (cyclotomicPrimeRayIdeal m p hp))))).norm_eq_one
@@ -1724,8 +1720,7 @@ theorem cyclotomic_zeta_eq_prod_weberL
     have haux (t : Finset (UnitCharacter A)) :
         Multipliable (fun p : PrimeIdeal K => ∏ χ ∈ t, base χ p) := by
       induction t using Finset.induction with
-      | empty => simpa using (multipliable_one :
-          Multipliable (fun _p : PrimeIdeal K => (1 : ℂ)))
+      | empty => simp
       | @insert χ t hχ ih =>
           simpa only [Finset.prod_insert hχ] using (hBase χ).mul ih
     simpa [P, chars] using haux chars
@@ -2206,11 +2201,11 @@ theorem cyclotomic_weberL_ne_zero_at_one
           (𝓝[>] (1 : ℝ)) (𝓝 (b η)) := by
       by_cases hη : η = 1
       · subst η
-        simp only [V, b, Wf, if_pos, dif_pos]
+        simp only [V, b, Wf, ite_eq_left, dite_eq_left]
         exact (hTres.comp hcoe).congr'
           (Filter.Eventually.of_forall fun _ => rfl)
       · have ht := (hWfCont η hη).tendsto.comp hcoeNhds
-        simp only [V, b, if_neg hη]
+        simp only [V, b, ite_eq_right hη]
         exact ht.congr' (Filter.Eventually.of_forall fun _ => rfl)
     have hprod := tendsto_finsetProd Finset.univ
       (fun η _ => hV η)
@@ -2228,7 +2223,7 @@ theorem cyclotomic_weberL_ne_zero_at_one
           (Finset.mem_univ (1 : UnitCharacter A)),
         ← Finset.mul_prod_erase Finset.univ (fun η => Wf η s)
           (Finset.mem_univ (1 : UnitCharacter A))]
-      simp only [V, if_pos]
+      simp only [V, ite_eq_left]
       rw [mul_assoc]
       congr 2
       apply Finset.prod_congr rfl
@@ -2284,9 +2279,9 @@ private theorem cyclotomicDensity_characterValue
   have hc : RayClassGroup.IsClassOfIdeal m p.asIdeal c :=
     cyclotomicDensityPrimeClass_isClass m p hp
   rw [rayClassCharacterValue, tsum_fintype, Finset.sum_eq_single c]
-  · rw [if_pos hc, cyclotomicPullbackCharacter_apply]
+  · rw [ite_eq_left hc, cyclotomicPullbackCharacter_apply]
   · intro d hd hdc
-    rw [if_neg]
+    rw [ite_eq_right]
     intro had
     exact hdc (cyclotomicClassOfIdeal_unique m p.asIdeal had hc)
   · simp
@@ -2438,7 +2433,7 @@ private theorem cyclotomicDensity_exp_log
   classical
   by_cases hp : p.asIdeal ∣ m.finite
   · simp [cyclotomicDensityEulerTerm, hp]
-  · rw [if_neg hp, cyclotomicDensityEulerTerm, dif_neg hp,
+  · rw [ite_eq_right hp, cyclotomicDensityEulerTerm, dite_eq_right hp,
       cyclotomicDensity_characterValue m ν χ p hp]
     have hpow :
         (Real.rpow (PrimeIdeal.norm p : ℝ) (-s) : ℂ) =
@@ -2462,7 +2457,7 @@ private theorem cyclotomicDensity_weberLogEulerSeries_eq
   intro p
   by_cases hp : p.asIdeal ∣ m.finite
   · simp [hp, cyclotomicDensityEulerTerm]
-  · rw [if_neg hp]
+  · rw [ite_eq_right hp]
     let a : ℂ := (χ (ν (cyclotomicDensityPrimeClass m p hp)) : ℂ)
     let q : ℝ := Real.rpow (PrimeIdeal.norm p : ℝ) (-s)
     let x : ℂ := a * q
@@ -2507,7 +2502,7 @@ private theorem cyclotomicDensity_weberLogEulerSeries_eq
         Complex.mem_slitPlane_of_norm_lt_one (z := -x) (by simpa)
     have hlog : Complex.log (1 - x)⁻¹ = -Complex.log (1 - x) :=
       Complex.log_inv _ (Complex.slitPlane_arg_ne_pi hslit)
-    rw [cyclotomicDensityEulerTerm, dif_neg hp]
+    rw [cyclotomicDensityEulerTerm, dite_eq_right hp]
     change (∑' r : ℕ,
       rayClassCharacterValue m (cyclotomicPullbackCharacter m ν χ) p.asIdeal ^ (r + 1) /
         ((r + 1 : ℂ) * Complex.cpow (PrimeIdeal.norm p : ℂ)
@@ -2706,7 +2701,7 @@ private theorem cyclotomicDensity_exp_one_locallyConstant
   rw [IsLocallyConstant.iff_eventually_eq]
   intro x
   have hcont : ContinuousAt (fun s : S => d s) x :=
-    (continuousOn_iff_continuous_restrict.mp hd).continuousAt
+    (continuousOn_iff_continuous_domRestrict.mp hd).continuousAt
   have hev : ∀ᶠ y : S in 𝓝 x, ‖d y - d x‖ < 2 * Real.pi := by
     have ht := hcont.tendsto
     rw [Metric.tendsto_nhds] at ht
@@ -2973,11 +2968,11 @@ private theorem cyclotomicDensity_character_orthogonality
   classical
   by_cases hx : x = 1
   · subst x
-    simp only [map_one, Units.val_one, if_pos]
+    simp only [map_one, Units.val_one, ite_eq_left]
     rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, mul_one,
       Fintype.card_eq_nat_card,
       CommGroup.card_monoidHom_of_hasEnoughRootsOfUnity]
-  · rw [if_neg hx]
+  · rw [ite_eq_right hx]
     obtain ⟨ψ : UnitCharacter G, hψ⟩ :=
       CommGroup.exists_apply_ne_one_of_hasEnoughRootsOfUnity G ℂ hx
     let e : UnitCharacter G ≃ UnitCharacter G := Equiv.mulLeft ψ
@@ -3035,7 +3030,7 @@ private theorem cyclotomicDensity_orthogonality_series
         (χ g : ℂ)⁻¹ * cyclotomicDensityEulerTerm m ν χ s p =
           (χ (g⁻¹ * ν c) : ℂ) *
             (Real.rpow (PrimeIdeal.norm p : ℝ) (-s) : ℂ) := by
-      rw [cyclotomicDensityEulerTerm, dif_neg hp]
+      rw [cyclotomicDensityEulerTerm, dite_eq_right hp]
       dsimp [c]
       rw [map_mul, map_inv, Units.val_mul]
       change (↑(χ g) : ℂ)⁻¹ *
@@ -3050,20 +3045,20 @@ private theorem cyclotomicDensity_orthogonality_series
     rw [cyclotomicDensity_character_orthogonality]
     by_cases heq : ν c = g
     · have hone : g⁻¹ * ν c = 1 := by simp [heq]
-      rw [if_pos hone]
+      rw [ite_eq_left hone]
       have hmem : p ∈ cyclotomicDensityGoodPrimeSet m ν g := ⟨hp, heq⟩
-      rw [if_pos hmem]
+      rw [ite_eq_left hmem]
     · have hne : g⁻¹ * ν c ≠ 1 := by
         intro h
         apply heq
         exact (inv_mul_eq_one.mp h).symm
-      rw [if_neg hne]
+      rw [ite_eq_right hne]
       have hnot : p ∉ cyclotomicDensityGoodPrimeSet m ν g := by
         rintro ⟨hp', heq'⟩
         have hproof : hp' = hp := Subsingleton.elim _ _
         subst hp'
         exact heq heq'
-      rw [if_neg hnot]
+      rw [ite_eq_right hnot]
       simp
 
 private theorem cyclotomicDensity_bounded_re_div_normalizer
@@ -3318,7 +3313,7 @@ theorem allPrimes_dirichletDensity_one :
   have hset :
       frobeniusElementPrimeSet (K := K) (L := K) (1 : Gal(K/K)) = Set.univ := by
     ext p
-    simp only [frobeniusElementPrimeSet, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    simp only [frobeniusElementPrimeSet, Set.mem_ofPred_eq, Set.mem_univ, iff_true]
     constructor
     · intro P hP
       change Algebra.FormallyUnramified (NumberField.RingOfIntegers K)

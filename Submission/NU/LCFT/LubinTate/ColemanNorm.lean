@@ -78,7 +78,7 @@ private lemma colemanRemainderPolynomial_degree_lt (q : ℕ) (a : Fin q → R) :
   apply Finset.sum_eq_zero
   intro i hi
   have hne : n ≠ (i : ℕ) := fun h => (not_lt_of_ge hn) (h ▸ i.isLt)
-  rw [if_neg hne]
+  rw [ite_eq_right hne]
 
 private lemma colemanRemainderPolynomial_coeff (q : ℕ) (a : Fin q → R) (i : Fin q) :
     (colemanRemainderPolynomial q a).coeff i = a i := by
@@ -94,14 +94,13 @@ private lemma colemanRemainderPolynomial_coeff (q : ℕ) (a : Fin q → R) (i : 
   · simp
   · intro j hj hji
     have hne : (i : ℕ) ≠ (j : ℕ) := fun h => hji (Fin.ext h.symm)
-    rw [if_neg hne]
+    rw [ite_eq_right hne]
   · simp
 
 private lemma colemanRemainderPolynomial_eq_of_degree_lt (q : ℕ) (r : Polynomial R)
     (hr : r.degree < q) :
     colemanRemainderPolynomial q (fun i => r.coeff i) = r := by
-  apply Polynomial.ext
-  intro n
+  ext n
   by_cases hn : n < q
   · simpa using colemanRemainderPolynomial_coeff q (fun i : Fin q => r.coeff i) ⟨n, hn⟩
   · have hrn : r.coeff n = 0 := by
@@ -132,18 +131,18 @@ private lemma colemanTruncatedSeries_eq_sum (a : ℕ → R) (N : ℕ) :
   rw [colemanTruncatedSeries, coeff_mk]
   simp only [map_sum, coeff_C_mul_X_pow]
   by_cases hd : d < N
-  · rw [if_pos hd, Finset.sum_eq_single d]
+  · rw [ite_eq_left hd, Finset.sum_eq_single d]
     · simp
     · intro b hb hbd
       have hne : d ≠ b := fun h => hbd h.symm
-      rw [if_neg hne]
+      rw [ite_eq_right hne]
     · simp [hd]
-  · rw [if_neg hd]
+  · rw [ite_eq_right hd]
     symm
     apply Finset.sum_eq_zero
     intro n hn
     have hne : d ≠ n := fun h => hd (h ▸ Finset.mem_range.mp hn)
-    rw [if_neg hne]
+    rw [ite_eq_right hne]
 
 private lemma coleman_subst_trunc (f : PowerSeries R) (hf0 : f.constantCoeff = 0)
     (a : ℕ → R) (N : ℕ) :
@@ -343,7 +342,7 @@ private lemma coleman_raw_coord (hf0 : f.constantCoeff = 0) (q : ℕ)
     · apply coleman_coeff_subst_congr f hf0
       intro n hn
       simp only [colemanCoordinates, coeff_mk, truncCoord, colemanTruncatedSeries]
-      rw [if_pos]
+      rw [ite_eq_left]
       omega
     · rfl
   have htail : coeff d
@@ -1061,7 +1060,7 @@ private theorem colemanNorm_diagonal_coeff (π : Uniformizer K) (D : ColemanNorm
       rw [PowerSeries.coeff_mul_X_pow']
       split_ifs with hid
       · rw [PowerSeries.coeff_subst_X_pow (S := LocalResidueField K) hq]
-        rw [if_neg]
+        rw [ite_eq_right]
         intro hdvd
         obtain ⟨c, hcdiv⟩ := hdvd
         have heqnat : q * n + (j : ℕ) = q * c + (i : ℕ) := by
@@ -1350,7 +1349,7 @@ private theorem test_summable
     ((IsValuativeTopology.hasBasis_nhds_zero L).mem_iff.mpr ⟨γ, trivial, Set.Subset.rfl⟩)
   filter_upwards [hp] with n hn
   apply hγs
-  dsimp only [Set.mem_setOf_eq] at hn ⊢
+  dsimp only [Set.mem_ofPred_eq] at hn ⊢
   have hcK : ((PowerSeries.coeff n g : RingOfIntegers K) : K) ≤ᵥ (1 : K) := by
     apply (Valuation.Compatible.vle_iff_le (v := ValuativeRel.valuation K) _ _).mpr
     exact (Valuation.mem_integer_iff (ValuativeRel.valuation K) _).mp

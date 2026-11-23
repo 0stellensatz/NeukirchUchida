@@ -215,7 +215,7 @@ private noncomputable def packetActionOfRoot
     change ((packetCyclotomicCharacter K M ℓ ζ hζ (σ * τ) :
         (ZMod ℓ)ˣ) : ZMod ℓ) •
           normalizedPacketActionOfRoot K M ℓ ζ hζ (σ * τ) x = _
-    rw [map_mul, map_mul, LinearEquiv.mul_apply]
+    rw [map_mul, map_mul, mul_apply_eq_comp]
     change (((packetCyclotomicCharacter K M ℓ ζ hζ σ : (ZMod ℓ)ˣ) :
         ZMod ℓ) *
       ((packetCyclotomicCharacter K M ℓ ζ hζ τ : (ZMod ℓ)ˣ) : ZMod ℓ)) •
@@ -298,7 +298,7 @@ theorem kummerDualEquiv_packetAction_apply
             (((cyclotomicScalarActionOfRoot K M ℓ ξ hξ σ) *
               (normalizedPacketActionOfRoot K M ℓ ξ hξ σ)) x)
               (Additive.ofMul u) = _
-        rw [LinearEquiv.mul_apply]
+        rw [mul_apply_eq_comp]
         change kummerDualEquiv ξ hξ
             (((packetCyclotomicCharacter K M ℓ ξ hξ σ : (ZMod ℓ)ˣ) :
               ZMod ℓ) • normalizedPacketActionOfRoot K M ℓ ξ hξ σ x)
@@ -336,7 +336,7 @@ noncomputable def packetStabilizer (K : Type*) {M : Type*}
     simp [conjugatePacket]
   mul_mem' := by
     intro σ τ hσ hτ
-    simp only [Set.mem_setOf_eq] at hσ hτ ⊢
+    simp only [Set.mem_ofPred_eq] at hσ hτ ⊢
     change P.map (packetAction K M ℓ σ).toLinearMap = P at hσ
     change P.map (packetAction K M ℓ τ).toLinearMap = P at hτ
     calc
@@ -351,7 +351,7 @@ noncomputable def packetStabilizer (K : Type*) {M : Type*}
       _ = P := by rw [hτ, hσ]
   inv_mem' := by
     intro σ hσ
-    simp only [Set.mem_setOf_eq] at hσ ⊢
+    simp only [Set.mem_ofPred_eq] at hσ ⊢
     change P.map (packetAction K M ℓ σ).toLinearMap = P at hσ
     calc
       conjugatePacket K σ⁻¹ P =
@@ -555,7 +555,7 @@ private theorem packet_action_localPlane_core
   rw [groupLocalPlane_change_primitiveRoot ζ ξ hζ hξ w,
     groupLocalPlane_change_primitiveRoot ζ ξ hζ hξ
       (conjugateFinitePlace K σ w)]
-  rw [conjugatePacket, packetAction, dif_pos hex]
+  rw [conjugatePacket, packetAction, dite_eq_left hex]
   let N := normalizedPacketActionOfRoot K M ℓ ξ hξ σ
   let c := packetCyclotomicCharacter K M ℓ ξ hξ σ
   have hnormalized : (groupLocalPlane ξ hξ w).map N.toLinearMap =

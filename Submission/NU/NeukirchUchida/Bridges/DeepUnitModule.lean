@@ -93,7 +93,7 @@ private noncomputable def completionResidueEquiv
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
   letI : IsLocalHom f :=
-    ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
+    ((IsLocalRing.local_hom_tfae f).out 4 1).mp hfmax
   let rf : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
   have hrf : Function.Surjective rf := by
@@ -180,7 +180,7 @@ private theorem completionIsLocalField
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
-    simpa using vF.exists_setOf_restrict_le_iff 0 s
+    simpa using vF.exists_setOfPred_restrict_le_iff 0 s
   let : ValuativeRel.IsNontrivial (v.adicCompletion K) :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vF).2 inferInstance
   exact
@@ -445,7 +445,7 @@ private theorem rationalCompletionMap_hasExtension
     rw [show {y | y ∈ A ↔ f y ∈ B} =
         (A ∩ f ⁻¹' B) ∪ (Aᶜ ∩ f ⁻¹' Bᶜ) by
       ext y
-      simp only [Set.mem_setOf_eq, Set.mem_union, Set.mem_inter_iff,
+      simp only [Set.mem_ofPred_eq, Set.mem_union, Set.mem_inter_iff,
         Set.mem_preimage, Set.mem_compl_iff]
       tauto]
     exact ((hA.inter (hB.preimage hf)).union
@@ -676,7 +676,7 @@ private theorem rationalCompletion_finrank_eq_localDegree
     Module.natCard_eq_pow_finrank (K := A ⧸ pA) (V := B ⧸ pB)
   have hlocalPow : NU.Chebotarev.PrimeIdeal.norm q ^
         pA.inertiaDeg' pB = NU.Chebotarev.PrimeIdeal.norm v := by
-    rw [← hcardA, ← hcardB, Ideal.inertiaDeg_algebraMap]
+    rw [← hcardA, ← hcardB, Ideal.inertiaDeg'_algebraMap]
     exact hlocalCard.symm
   let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hglobalPow : NU.Chebotarev.PrimeIdeal.norm q ^
@@ -828,13 +828,13 @@ private theorem rationalCompletion_finrank_eq_localDegree
         IsDiscreteValuationRing.coheight_pow_maximalIdeal] at hc
       have : e = e + 1 := by exact_mod_cast hc
       omega
-    exact Ideal.ramificationIdx_spec hmap.le hnot
+    exact Ideal.ramificationIdx'_spec hmap.le hnot
   have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
     (S := B) Fb F (p := pA) hpA0
   change Module.finrank Fb F = finitePlaceLocalDegree v
   rw [← hdegree, hramification, hinertia,
-    Ideal.ramificationIdx_eq_ramificationIdx' q.asIdeal v.asIdeal q.ne_bot,
-    Ideal.inertiaDeg_eq_inertiaDeg' q.asIdeal v.asIdeal]
+    Ideal.ramificationIdx'_eq_ramificationIdx q.asIdeal v.asIdeal q.ne_bot,
+    Ideal.inertiaDeg'_eq_inertiaDeg q.asIdeal v.asIdeal]
   rfl
 
 set_option maxHeartbeats 200000
@@ -1089,7 +1089,7 @@ private theorem padicIntegerCompletion_module_finite_finrank
       have h := congrArg (fun z : B => (z : F)) hxy
       rw [padicIntegerPlaceMap_coe, padicIntegerPlaceMap_coe] at h
       exact Subtype.val_injective ((padicPlaceMap v p hp).injective h))
-  have hfrac := Algebra.IsAlgebraic.finrank_of_isFractionRing
+  have hfrac := IsFractionRing.finrank_eq
     ℤ_[p] ℚ_[p] B F
   have hsquareQ' : (algebraMap Fb F).comp eQ.toRingEquiv.toRingHom =
       (RingEquiv.refl F).toRingHom.comp (algebraMap ℚ_[p] F) := by
@@ -1648,6 +1648,7 @@ section TeichmullerSplitting
 variable (F : Type*) [Field F] [ValuativeRel F] [UniformSpace F]
   [IsUniformAddGroup F] [IsNonarchimedeanLocalField F]
 
+omit [IsUniformAddGroup F] in
 private theorem ringOfIntegers_isPrecomplete :
     IsPrecomplete (LocalMaximalIdeal F) (RingOfIntegers F) := by
   let R := RingOfIntegers F
@@ -1672,12 +1673,14 @@ private theorem ringOfIntegers_isPrecomplete :
     _ = (e (e.symm c)).value n := by rw [e.apply_symm_apply]
     _ = Ideal.Quotient.mk (I ^ n) (e.symm c) := he _ _
 
+omit [IsUniformAddGroup F] in
 private theorem ringOfIntegers_isAdicComplete :
     IsAdicComplete (LocalMaximalIdeal F) (RingOfIntegers F) := by
   let : IsPrecomplete (LocalMaximalIdeal F) (RingOfIntegers F) :=
     ringOfIntegers_isPrecomplete F
   exact { }
 
+omit [IsUniformAddGroup F] in
 private theorem ringOfIntegers_henselianLocalRing :
     HenselianLocalRing (RingOfIntegers F) := by
   let : IsAdicComplete (LocalMaximalIdeal F) (RingOfIntegers F) :=
@@ -1813,7 +1816,7 @@ private theorem principalUnitGroup_isOpen :
   convert hpre using 1
   ext u
   rw [SetLike.mem_coe, A.mem_principalUnitGroup_iff]
-  simpa only [Set.mem_setOf_eq, map_one] using
+  simpa only [Set.mem_ofPred_eq, map_one] using
     ((Valuation.isEquiv_valuation_valuationSubring
       (ValuativeRel.valuation F)).lt_iff_lt
         (x := ((u : F) - 1)) (y := (1 : F))).symm
@@ -2619,7 +2622,7 @@ private theorem completion_factorial_inv_norm_le
     Nat.mul_div_cancel' hpk
   have hmnot : ¬(p : ℕ) ∣ m := by
     intro hm
-    apply pow_succ_padicValNat_not_dvd (p := (p : ℕ)) hfact
+    apply pow_succ_multiplicity_not_dvd (p := (p : ℕ)) hfact
     obtain ⟨t, ht⟩ := hm
     have hd : (p : ℕ) ^ (k + 1) ∣ (p : ℕ) ^ k * m := by
       refine ⟨t, ?_⟩
@@ -2642,7 +2645,7 @@ private theorem completion_factorial_inv_norm_le
         (map_ne_zero (algebraMap K (v.adicCompletion K))).mpr hpK
     exact (one_le_inv₀ (norm_pos_iff.mpr hpF)).mpr
       (IsUltrametricDist.norm_natCast_le_one (v.adicCompletion K) (p : ℕ))
-  · exact padicValNat_factorial_le (p : ℕ) n
+  · exact multiplicity_factorial_le (p : ℕ) n
 
 set_option maxHeartbeats 800000 in
 /-- The exponential series has a nonzero convergence radius over the

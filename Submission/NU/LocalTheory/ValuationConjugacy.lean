@@ -449,7 +449,7 @@ theorem valuationSubring_eq_or_eq_top_of_algebraic
         fun h => hnot h.ge
       have hlt : valuationIntegralCenter B < valuationIntegralCenter A :=
         lt_of_le_of_ne hcenterLe hne
-      have hc := Ideal.IsIntegral.comap_lt_comap
+      have hc := Ideal.IsIntegral.under_lt_under
         (R := 𝓞 K) hlt
       exact (ne_of_lt hc) hcenterComap.symm
     · exact hcenterLe

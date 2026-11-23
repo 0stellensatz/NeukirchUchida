@@ -134,7 +134,7 @@ theorem lemma_3_1 (T H : Set F) (hT : IsMulSubgroup T)
       · exact hi
       · exact False.elim (hinvH hi.2.1)
     have hxyminus : x * y⁻¹ ∈ Ominus H T := by
-      convert hinvminus using 1; field_simp [hx0, hy0] <;> ring
+      convert hinvminus using 1; field_simp [hx0, hy0]
     have hvxy : A.valuation (x * y⁻¹) < 1 :=
       A.mem_nonunits_iff.mp (hobs.1 hxyminus)
     have hvy : A.valuation y < 1 :=
@@ -598,7 +598,7 @@ theorem proposition_3_5 (T : Set F) (hT : IsMulSubgroup T)
       rw [← div_eq_mul_inv]
       apply (div_eq_iff hzi1ne).2
       field_simp [hz0]
-      <;> ring
+      ring
     exact heq ▸ hm
   have hunit_general : ∀ (V W : ValuationSubring F),
       ValuationSubring.IsCompatible V T → ValuationSubring.IsCompatible W T →

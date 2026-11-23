@@ -30,7 +30,7 @@ private theorem count_coe_eq_multiplicity (p : PrimeIdeal K)
     {a : Ideal O} (ha : a ≠ 0) :
     FractionalIdeal.count K p (a : FractionalIdeal O⁰ K) =
       (multiplicity p.asIdeal a : ℤ) := by
-  rw [FractionalIdeal.count_coe K p ha,
+  rw [FractionalIdeal.count_coeIdeal K p ha,
     Ideal.count_associates_factors_eq ha p.isPrime p.ne_bot,
     IsDedekindDomain.HeightOneSpectrum.count_normalizedFactors_eq_multiplicity ha]
 
@@ -129,7 +129,7 @@ private theorem count_eq_zero_of_isCoprime {a M : Ideal O}
     (ha : a ≠ 0) (hcop : IsCoprime a M) (p : PrimeIdeal K)
     (hp : p.asIdeal ∣ M) :
     FractionalIdeal.count K p (a : FractionalIdeal O⁰ K) = 0 := by
-  rw [FractionalIdeal.count_coe K p ha, Int.ofNat_eq_zero]
+  rw [FractionalIdeal.count_coeIdeal K p ha, Int.ofNat_eq_zero]
   by_contra hc
   have hpa : p.asIdeal ∣ a :=
     (Associates.count_ne_zero_iff_dvd ha p.irreducible).mp hc
@@ -658,8 +658,8 @@ private theorem conePolarReconstruct_self (x : mixedSpace K)
     simp only [coneSignOf, decide_eq_true_eq]
     rw [normAtAllPlaces_apply, normAtPlace_apply_of_isReal w.prop, Real.norm_eq_abs]
     by_cases hw : x.1 w < 0
-    · rw [if_pos hw, abs_of_neg hw, neg_neg]
-    · rw [if_neg hw, abs_of_nonneg (le_of_not_gt hw)]
+    · rw [ite_eq_left hw, abs_of_neg hw, neg_neg]
+    · rw [ite_eq_right hw, abs_of_nonneg (le_of_not_gt hw)]
   · rw [conePolarReconstruct]
     simp only
     rw [normAtAllPlaces_apply, normAtPlace_apply_of_isComplex w.prop, hp w,
@@ -734,13 +734,13 @@ private theorem coneBoundaryCharts_cover :
       · intro q
         rcases q with i | w
         · have hi := hycl i.1
-          simp only [if_neg i.property] at hi
+          simp only [ite_eq_right i.property] at hi
           simpa [p] using hi.1
         · exact (conePhase_mem_Icc x w).1
       · intro q
         rcases q with i | w
         · have hi := hycl i.1
-          simp only [if_neg i.property] at hi
+          simp only [ite_eq_right i.property] at hi
           simpa [p] using hi.2
         · exact (conePhase_mem_Icc x w).2
     have hlog : coneFaceLog (K := K) (Sum.inr (Sum.inl ())) p = y := by
@@ -794,16 +794,16 @@ private theorem coneBoundaryCharts_cover :
         · by_cases hji : j = i
           · simp [p, hji, Real.exp_nonneg]
           · have hj := hycl j.1
-            simp only [if_neg j.property] at hj
+            simp only [ite_eq_right j.property] at hj
             simpa [p, hji] using hj.1
         · exact (conePhase_mem_Icc x v).1
       · intro q
         rcases q with j | v
         · by_cases hji : j = i
-          · simp only [p, hji, if_pos]
+          · simp only [p, hji, ite_eq_left]
             exact Real.exp_le_one_iff.mpr hy0neg.le
           · have hj := hycl j.1
-            simp only [if_neg j.property] at hj
+            simp only [ite_eq_right j.property] at hj
             simpa [p, hji] using hj.2
         · exact (conePhase_mem_Icc x v).2
     have hlog : coneFaceLog (K := K) (Sum.inr (Sum.inr (i, upper))) p =
@@ -1014,7 +1014,7 @@ private theorem raySignRegion_measureReal_pos (m : RayModulus K)
       change 0 < expMapBasis a (rayInfinitePlace σ.1)
       exact expMapBasis_pos _ _
     by_cases he : e σ = true
-    · rw [if_pos he]
+    · rw [ite_eq_left he]
       have hnot : (⟨rayInfinitePlace σ.1, rayInfinitePlace_isReal σ.1⟩ : ConeRealPlace K)
           ∉ signs := by
         rintro ⟨τ, hτ, heq⟩
@@ -1025,7 +1025,7 @@ private theorem raySignRegion_measureReal_pos (m : RayModulus K)
         ⟨rayInfinitePlace σ.1, rayInfinitePlace_isReal σ.1⟩
       rw [negAt_apply_isReal_and_notMem _ hnot]
       exact hz0pos
-    · rw [if_neg he]
+    · rw [ite_eq_right he]
       have hmem : (⟨rayInfinitePlace σ.1, rayInfinitePlace_isReal σ.1⟩ : ConeRealPlace K)
           ∈ signs := ⟨σ, Bool.eq_false_of_not_eq_true he, rfl⟩
       change (negAt signs z0).1

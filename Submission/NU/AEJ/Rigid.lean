@@ -380,14 +380,14 @@ theorem proposition_1_5_part1 (A : ValuationSubring F) (T : Set F)
         (A.valuation.pos_iff.mpr hat_ne)).mpr hlt
     · simp only [smul_eq_mul]
       field_simp
-      <;> ring
+      ring
   · left
     have hm := hT.mul_mem hs
       (one_add_mem_of_valuation_lt A T hcompat (x := (a * t) / s) (by
         rw [A.valuation.map_div]
         exact (div_lt_one₀ (a := A.valuation (a * t)) (b := A.valuation s)
           (A.valuation.pos_iff.mpr hs_ne)).mpr hgt))
-    convert hm using 1; field_simp <;> ring
+    convert hm using 1; field_simp
 
 /-- AEJ, Proposition 1.5(2), journal p. 451: a unit is `T`-rigid exactly when
 its residue is rigid for the image of `U_A ∩ T` in the residue field. -/
@@ -523,7 +523,7 @@ theorem proposition_1_5_part2 (A : ValuationSubring F) (T : Set F)
       rcases hnorm with hnorm | ⟨d, hd, hda⟩
       · left
         have hprod := hT.mul_mem hs hnorm
-        convert hprod using 1; field_simp <;> ring
+        convert hprod using 1; field_simp
       · right
         refine ⟨s * d, hT.mul_mem hs hd, ?_⟩
         simp only [smul_eq_mul] at hda ⊢
@@ -541,7 +541,7 @@ theorem proposition_1_5_part2 (A : ValuationSubring F) (T : Set F)
             (A.valuation.pos_iff.mpr hat0)).mpr hlt
         · simp only [smul_eq_mul]
           field_simp
-          <;> ring
+          ring
       · left
         have hm := hT.mul_mem hs
           (one_add_mem_of_valuation_lt A T hcompat
@@ -550,7 +550,7 @@ theorem proposition_1_5_part2 (A : ValuationSubring F) (T : Set F)
               exact (div_lt_one₀
                 (a := A.valuation (((a : Fˣ) : F) * t))
                 (b := A.valuation s) (A.valuation.pos_iff.mpr hs0)).mpr hgt))
-        convert hm using 1; field_simp <;> ring
+        convert hm using 1; field_simp
 
 /-- AEJ, Proposition 1.9(1), journal p. 452: for a `T`-compatible valuation,
 `B_F(T) ⊆ U_A · T`. -/

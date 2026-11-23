@@ -696,7 +696,7 @@ private theorem quotientToInvariants_shortExact_of_H1_zero
           (X.X₂.ρ (n * m) b - b) + (X.X₂.ρ n b - b) = 0
       rw [map_sub]
       let : Module ℤ X.X₂ := X.X₂.hV2
-      rw [← Module.End.mul_apply, ← map_mul]
+      rw [← mul_apply_eq_comp, ← map_mul]
       abel
     have hzNorm : z0 1 = 0 := by
       change c 1 = 0
@@ -1106,7 +1106,7 @@ private theorem quotient_isCyclic_of_coatom
     {G : Type} [Group G] (N : Subgroup G) [N.Normal] (hN : IsCoatom N) :
     IsCyclic (G ⧸ N) := by
   apply isCyclic_iff_exists_zpowers_eq_top.mpr
-  obtain ⟨g, -, hg⟩ := SetLike.exists_of_lt hN.lt_top
+  obtain ⟨g, -, hg⟩ := IsConcreteLE.exists_of_lt hN.lt_top
   let q : G ⧸ N := QuotientGroup.mk' N g
   refine ⟨q, ?_⟩
   let P : Subgroup G := Subgroup.comap (QuotientGroup.mk' N) (Subgroup.zpowers q)

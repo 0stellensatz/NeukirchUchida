@@ -1134,7 +1134,7 @@ private theorem exists_local_klein_level
     intro he
     have hlie := v.valuation_liesOver E w πK
     have he' : p.ramificationIdx' w.asIdeal = 1 := by
-      rw [Ideal.ramificationIdx_eq_ramificationIdx' p w.asIdeal v.ne_bot]
+      rw [Ideal.ramificationIdx'_eq_ramificationIdx p w.asIdeal v.ne_bot]
       exact he
     have hπw : w.valuation E (algebraMap K E πK) =
         WithZero.exp (-1 : ℤ) := by
@@ -1195,8 +1195,8 @@ private theorem exists_local_klein_level
     rw [hkres] at hktower
     omega
   have hf : 2 ≤ w.asIdeal.inertiaDeg (𝓞 K) := by
-    rw [← Ideal.inertiaDeg_eq_inertiaDeg' p w.asIdeal,
-      Ideal.inertiaDeg_algebraMap]
+    rw [← Ideal.inertiaDeg'_eq_inertiaDeg p w.asIdeal,
+      Ideal.inertiaDeg'_algebraMap]
     exact hfres
   let G := E ≃ₐ[K] E
   have hcardstab :
@@ -1317,7 +1317,7 @@ private theorem algEquiv_fiber_isOpen
     have heq : {g : Ω ≃ₐ[K] Ω | g x = y} =
         g₀ • (MulAction.stabilizer (Ω ≃ₐ[K] Ω) x : Set (Ω ≃ₐ[K] Ω)) := by
       ext g
-      rw [mem_leftCoset_iff, Set.mem_setOf_eq]
+      rw [mem_leftCoset_iff, Set.mem_ofPred_eq]
       change (g x = y) ↔ (g₀⁻¹ * g) x = x
       constructor
       · intro hg

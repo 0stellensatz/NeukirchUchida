@@ -25,7 +25,7 @@ private theorem d1_d0 (a : C0 M) : d1 M (d0 M a) = 0 := by
   ext g h
   let : Module ℤ M := M.hV2
   simp only [d1, d0, AddMonoidHom.coe_mk, ZeroHom.coe_mk, Pi.zero_apply]
-  rw [map_sub, ← Module.End.mul_apply, ← map_mul]
+  rw [map_sub, ← mul_apply_eq_comp, ← map_mul]
   abel
 
 private theorem d2_d1 (b : C1 M) : d2 M (d1 M b) = 0 := by
@@ -33,7 +33,7 @@ private theorem d2_d1 (b : C1 M) : d2 M (d1 M b) = 0 := by
   let : Module ℤ M := M.hV2
   simp only [d2, d1, AddMonoidHom.coe_mk, ZeroHom.coe_mk, Pi.zero_apply,
     map_add, map_sub]
-  rw [← Module.End.mul_apply, ← map_mul]
+  rw [← mul_apply_eq_comp, ← map_mul]
   simp only [mul_assoc]
   abel
 
@@ -922,7 +922,7 @@ private theorem conjugateC1_cocycle (g : G) (a : cocycles1 (Rep.res N.subtype M)
   have hng : (n : G) * g = g * (n' : G) := by
     dsimp [n', conjugateSubgroup]
     simp [mul_assoc]
-  rw [← Module.End.mul_apply, ← map_mul, hng, map_mul, Module.End.mul_apply]
+  rw [← mul_apply_eq_comp, ← map_mul, hng, map_mul, mul_apply_eq_comp]
   have hmul : conjugateSubgroup N g (n * h) = n' * h' := by
     ext
     simp [n', h', conjugateSubgroup, mul_assoc]
@@ -967,7 +967,7 @@ def conjugationH1 (g : G) :
         simp [conjugateSubgroup, mul_assoc]
       change M.ρ (conjugateSubgroup N g n) m - m =
         a.1 (conjugateSubgroup N g n) at hn
-      rw [← Module.End.mul_apply, ← map_mul, hng, map_mul, Module.End.mul_apply,
+      rw [← mul_apply_eq_comp, ← map_mul, hng, map_mul, mul_apply_eq_comp,
         ← map_sub, hn])
 
 /-- The usual fixed subgroup for the `G/N`-action on `H¹(N,M)`.  Requiring all `g : G`
@@ -1159,7 +1159,7 @@ private theorem fixedH1_le_quotientInvariantH1 : fixedH1 N M ≤ quotientInvaria
           (M.ρ n (a.1 k) + a.1 n) =
         M.ρ n (M.ρ (kernelPart N g) (corr (QuotientGroup.mk' N g))) +
           M.ρ n (a.1 (kernelPart N g)) + a.1 n
-      rw [map_mul, Module.End.mul_apply]
+      rw [map_mul, mul_apply_eq_comp]
       abel
     have hbright (g : G) (n : N) :
         bc (g * (n : G)) = M.ρ g (a.1 n) + bc g := by
@@ -1215,9 +1215,9 @@ private theorem fixedH1_le_quotientInvariantH1 : fixedH1 N M ≤ quotientInvaria
       change M.ρ ((k : G) * (ns : G)) (corr q) +
           (M.ρ k (a.1 ns) + a.1 k) =
         M.ρ g (a.1 n) + (M.ρ k (corr q) + a.1 k)
-      rw [map_mul, Module.End.mul_apply]
+      rw [map_mul, mul_apply_eq_comp]
       have hρ : M.ρ g (a.1 n) = M.ρ k (M.ρ s (a.1 n)) := by
-        rw [← Module.End.mul_apply, ← map_mul, hgs]
+        rw [← mul_apply_eq_comp, ← map_mul, hgs]
       calc
         M.ρ k (M.ρ ns (corr q)) + (M.ρ k (a.1 ns) + a.1 k) =
             M.ρ k (M.ρ ns (corr q) + a.1 ns) + a.1 k := by
@@ -1458,7 +1458,7 @@ theorem inflation_restrictionH2_exact_of_H1_zero
           M.ρ n (M.ρ (kernelPart N g) (corr (QuotientGroup.mk' N g)))
         rw [kernelPart_left N n g, quotient_mk_left_N N n g]
         let : Module ℤ M := M.hV2
-        rw [← Module.End.mul_apply, ← map_mul]
+        rw [← mul_apply_eq_comp, ← map_mul]
         rfl
       have he_section (q : G ⧸ N) : e (quotientSection N q) = corr q := by
         change M.ρ (kernelPart N (quotientSection N q))

@@ -77,13 +77,13 @@ private theorem frobenius_smul (P : PrimeIdeal L)
   let Q : PrimeIdeal L := ⟨s • P.asIdeal, inferInstance, hne⟩
   have hunrQ : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) Q.asIdeal := by
     rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain' Q.ne_bot]
-    rw [Ideal.ramificationIdx_eq_ramificationIdx'
+    rw [Ideal.ramificationIdx'_eq_ramificationIdx
       (Q.asIdeal.under (NumberField.RingOfIntegers K)) Q.asIdeal
       (Ideal.under_ne_bot (NumberField.RingOfIntegers K) Q.ne_bot)]
     dsimp [Q]
-    rw [Ideal.ramificationIdx'_smul]
+    rw [Ideal.ramificationIdx_smul]
     let : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) P.asIdeal := hunr
-    rw [← Ideal.ramificationIdx_eq_ramificationIdx'
+    rw [← Ideal.ramificationIdx'_eq_ramificationIdx
       (P.asIdeal.under (NumberField.RingOfIntegers K)) P.asIdeal
       (Ideal.under_ne_bot (NumberField.RingOfIntegers K) P.ne_bot)]
     exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt P.ne_bot
@@ -162,7 +162,7 @@ private theorem fixedField_contraction_degreeOne
     orderOf g at hfPK
   change q.asIdeal.inertiaDeg' P.asIdeal = orderOf g at hfPE
   have hqf : (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal = 1 := by
-    have ht := Ideal.inertiaDeg_algebra_tower
+    have ht := Ideal.inertiaDeg'_algebra_tower
       (q.asIdeal.under (NumberField.RingOfIntegers K)) q.asIdeal P.asIdeal
     rw [hfPK, hfPE] at ht
     apply Nat.eq_of_mul_eq_mul_right (orderOf_pos g)
@@ -477,7 +477,7 @@ private theorem boundedPrimeSet_finite
   obtain ⟨n : ℕ, hn⟩ := exists_nat_ge x
   refine Set.Finite.of_finite_image
     (f := fun p : PrimeIdeal E => p.asIdeal) ?_ ?_
-  · apply (Ideal.finite_setOf_absNorm_le
+  · apply (Ring.HasFiniteQuotients.finite_absNorm_le
       (S := NumberField.RingOfIntegers E) n).subset
     rintro I ⟨p, hp, rfl⟩
     change Ideal.absNorm p.asIdeal ≤ n
@@ -582,7 +582,7 @@ theorem deuring_exceptional_primeCounting (g : Gal(L/K)) :
       let : q.asIdeal.LiesOver
           (q.asIdeal.under (NumberField.RingOfIntegers K)) := ⟨rfl⟩
       rw [← Ideal.under_under (B := NumberField.RingOfIntegers E) P.asIdeal,
-        ← hPq.over, Ideal.ramificationIdx_algebra_tower'
+        ← hPq.over, Ideal.ramificationIdx'_algebra_tower'
           (q.asIdeal.under (NumberField.RingOfIntegers K)) q.asIdeal P.asIdeal,
         hePE, mul_one]
     change ¬ IsUnramifiedPrime (K := K) (L := L) (primeUnder (K := K) q)
@@ -709,10 +709,10 @@ private theorem degreeOne_contraction_mem
     have heQ : (Q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' Q.asIdeal = 1 := by
       let : P.asIdeal.LiesOver p.asIdeal := hPp
       let : Q.asIdeal.LiesOver p.asIdeal := hQp
-      rw [← hQp.over, Ideal.ramificationIdx_eq_ramificationIdx' p.asIdeal Q.asIdeal p.ne_bot,
+      rw [← hQp.over, Ideal.ramificationIdx'_eq_ramificationIdx p.asIdeal Q.asIdeal p.ne_bot,
         Ideal.ramificationIdx_eq_of_isGaloisGroup
           p.asIdeal Q.asIdeal P.asIdeal (Gal(L/K)),
-        ← Ideal.ramificationIdx_eq_ramificationIdx' p.asIdeal P.asIdeal p.ne_bot]
+        ← Ideal.ramificationIdx'_eq_ramificationIdx p.asIdeal P.asIdeal p.ne_bot]
       rw [← hPp.over] at heP
       exact heP
     rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain' Q.ne_bot]
@@ -1019,7 +1019,7 @@ theorem deuring_dirichletDensity (g : Gal(L/K)) (δ : ℝ) :
     have hset : {p : PrimeIdeal (deuringFixedField g) |
         p ∈ symmetricDifference A B ∧ (PrimeIdeal.norm p : ℝ) ≤ x} = AX \ BX := by
       ext p
-      simp only [symmetricDifference, Set.mem_union, Set.mem_diff, Set.mem_setOf_eq]
+      simp only [symmetricDifference, Set.mem_union, Set.mem_sdiff, Set.mem_ofPred_eq]
       constructor
       · rintro ⟨(⟨hpA, hpB⟩ | ⟨hpB, hpA⟩), hn⟩
         · exact ⟨⟨hpA, hn⟩, fun h => hpB h.1⟩
@@ -1031,7 +1031,7 @@ theorem deuring_dirichletDensity (g : Gal(L/K)) (δ : ℝ) :
       p ∈ symmetricDifference A B ∧ (PrimeIdeal.norm p : ℝ) ≤ x}).ncard =
         AX.ncard - BX.ncard
     rw [hset]
-    exact Set.ncard_diff hBX (boundedPrimeSet_finite B x)
+    exact Set.ncard_sdiff hBX (boundedPrimeSet_finite B x)
   have hsymO : Asymptotics.IsBigO atTop
       (fun x : ℝ => (primeCounting (symmetricDifference A B) x : ℝ))
       (fun x : ℝ => Real.sqrt x) := by
@@ -1094,7 +1094,7 @@ theorem deuring_dirichletDensity (g : Gal(L/K)) (δ : ℝ) :
     apply hB.congr_of_symmetricDifference_zero
     have heq : symmetricDifference B A = symmetricDifference A B := by
       ext p
-      simp only [symmetricDifference, Set.mem_union, Set.mem_diff]
+      simp only [symmetricDifference, Set.mem_union, Set.mem_sdiff]
       aesop
     rwa [heq]
 

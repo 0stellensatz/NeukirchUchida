@@ -593,7 +593,7 @@ theorem ramificationInvariants_exists :
       IsDiscreteValuationRing.coheight_pow_maximalIdeal] at hc
     have : e = e + 1 := by exact_mod_cast hc
     omega
-  have hram : p.ramificationIdx' P = e := Ideal.ramificationIdx_spec hmap.le hnot
+  have hram : p.ramificationIdx' P = e := Ideal.ramificationIdx'_spec hmap.le hnot
   have hp0 : p ≠ ⊥ := by
     rw [hp, ne_eq, Ideal.span_singleton_eq_bot]
     exact hϖKirr.ne_zero
@@ -736,14 +736,14 @@ theorem compactOpenLattices_commensurable
     change IsOpen {x : Λ | (x : V) ∈ Λ ∧ (x : V) ∈ Γ}
     convert hΓ.isOpen.preimage continuous_subtype_val using 1
     ext x
-    simp only [Set.mem_setOf_eq, Set.mem_preimage, SetLike.mem_coe]
+    simp only [Set.mem_ofPred_eq, Set.mem_preimage, SetLike.mem_coe]
     exact and_iff_right x.prop
   · let : CompactSpace Γ := isCompact_iff_compactSpace.mp hΓ.isCompact
     apply AddSubgroup.quotient_finite_of_isOpen
     change IsOpen {x : Γ | (x : V) ∈ Λ ∧ (x : V) ∈ Γ}
     convert hΛ.isOpen.preimage continuous_subtype_val using 1
     ext x
-    simp only [Set.mem_setOf_eq, Set.mem_preimage, SetLike.mem_coe]
+    simp only [Set.mem_ofPred_eq, Set.mem_preimage, SetLike.mem_coe]
     exact and_iff_left x.prop
 
 end Lattices
@@ -1037,19 +1037,21 @@ def IsUnramifiedIntermediateField (E : IntermediateField K Ksep)
         ContinuousSMul K E ∧ IsUnramifiedLocalExtension K E
 
 /-- The valuation relation selected by unramified intermediate-field evidence. -/
+@[instance_reducible]
 noncomputable def unramifiedIntermediateFieldValuativeRel
     (E : IntermediateField K Ksep) [FiniteDimensional K E]
     (hE : IsUnramifiedIntermediateField K Ksep E) : ValuativeRel E :=
   hE.choose
 
 /-- The topology selected compatibly with the unramified intermediate-field valuation. -/
+@[instance_reducible]
 noncomputable def unramifiedIntermediateFieldTopology
     (E : IntermediateField K Ksep) [FiniteDimensional K E]
     (hE : IsUnramifiedIntermediateField K Ksep E) : TopologicalSpace E :=
   hE.choose_spec.choose
 
 /-- The selected intermediate field is a nonarchimedean local field. -/
-noncomputable def unramifiedIntermediateFieldLocalField
+theorem unramifiedIntermediateFieldLocalField
     (E : IntermediateField K Ksep) [FiniteDimensional K E]
     (hE : IsUnramifiedIntermediateField K Ksep E) :
     letI : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
@@ -1058,7 +1060,7 @@ noncomputable def unramifiedIntermediateFieldLocalField
   hE.choose_spec.choose_spec.choose
 
 /-- The selected valuation on an unramified intermediate field extends the base valuation. -/
-noncomputable def unramifiedIntermediateFieldValuativeExtension
+theorem unramifiedIntermediateFieldValuativeExtension
     (E : IntermediateField K Ksep) [FiniteDimensional K E]
     (hE : IsUnramifiedIntermediateField K Ksep E) :
     letI : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
@@ -1069,7 +1071,7 @@ noncomputable def unramifiedIntermediateFieldValuativeExtension
   hE.choose_spec.choose_spec.choose_spec.choose
 
 /-- Scalar multiplication is continuous for the selected intermediate-field topology. -/
-noncomputable def unramifiedIntermediateFieldContinuousSMul
+theorem unramifiedIntermediateFieldContinuousSMul
     (E : IntermediateField K Ksep) [FiniteDimensional K E]
     (hE : IsUnramifiedIntermediateField K Ksep E) :
     letI : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
@@ -1082,7 +1084,7 @@ noncomputable def unramifiedIntermediateFieldContinuousSMul
   hE.choose_spec.choose_spec.choose_spec.choose_spec.1
 
 /-- The selected local-field extension has ramification index one. -/
-noncomputable def unramifiedIntermediateFieldIsUnramified
+theorem unramifiedIntermediateFieldIsUnramified
     (E : IntermediateField K Ksep) [FiniteDimensional K E]
     (hE : IsUnramifiedIntermediateField K Ksep E) :
     letI : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
@@ -1095,6 +1097,7 @@ noncomputable def unramifiedIntermediateFieldIsUnramified
   hE.choose_spec.choose_spec.choose_spec.choose_spec.2
 
 /-- The canonical algebra structure attached to an inclusion of intermediate fields. -/
+@[instance_reducible]
 def intermediateFieldInclusionAlgebra {E F : IntermediateField K Ksep} (h : E ≤ F) :
     Algebra E F :=
   (IntermediateField.inclusion h).toRingHom.toAlgebra
@@ -1312,7 +1315,7 @@ private theorem finiteExtension_localFieldData_exists
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
-      (Valued.v : Valuation L NNReal).exists_setOf_restrict_le_iff 0 s
+      (Valued.v : Valuation L NNReal).exists_setOfPred_restrict_le_iff 0 s
   have hloc : LocallyCompactSpace L :=
     LocallyCompactSpace.of_finiteDimensional_of_complete F L
   have hnontriv : ValuativeRel.IsNontrivial L := by
@@ -1533,14 +1536,14 @@ private theorem unramifiedLevelSeed_isUnramified [IsSepClosure K Ksep]
           simpa using hcx }
   have hupper : Module.finrank k kU ≤ Module.finrank K U := by
     have h := Ideal.inertiaDeg_le_finrank (S := 𝒪[U]) K U P hp0
-    rw [Ideal.inertiaDeg_algebraMap] at h
+    rw [Ideal.inertiaDeg'_algebraMap] at h
     exact h
   have hres : Module.finrank k kU = d := by
     apply le_antisymm
     · exact hupper.trans_eq (unramifiedLevelSeed_finrank K Ksep S)
     · exact hlower
   have hinertia : p.inertiaDeg' P = d := by
-    rw [Ideal.inertiaDeg_algebraMap]
+    rw [Ideal.inertiaDeg'_algebraMap]
     exact hres
   have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
     (S := 𝒪[U]) K U (p := p) hp0
@@ -1577,7 +1580,7 @@ private theorem unramifiedLevelSeed_isUnramified [IsSepClosure K Ksep]
     have : n = n + 1 := by exact_mod_cast hc
     omega
   have hnram : p.ramificationIdx' P = n :=
-    Ideal.ramificationIdx_spec hmap.le hnot
+    Ideal.ramificationIdx'_spec hmap.le hnot
   have hn : n = 1 := hnram ▸ hramification
   let xu : Units U := Units.map (algebraMap 𝒪[U] U) unit
   have hfacUnits : Units.map (algebraMap K U) (defaultUniformizer K).val =
@@ -1762,7 +1765,7 @@ private theorem residue_finrank_eq_finrank_of_unramified
       IsDiscreteValuationRing.coheight_pow_maximalIdeal] at hc
     norm_num at hc
   have hram : p.ramificationIdx' P = 1 := by
-    apply Ideal.ramificationIdx_spec (by simpa using hmap.le)
+    apply Ideal.ramificationIdx'_spec (by simpa using hmap.le)
     simpa only [one_add_one_eq_two] using hnot
   have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
     (S := 𝒪[E]) K E (p := p) (by
@@ -1771,7 +1774,7 @@ private theorem residue_finrank_eq_finrank_of_unramified
   rw [hram, one_mul] at hdegree
   calc
     Module.finrank (LocalResidueField K) (LocalResidueField E) = p.inertiaDeg' P := by
-      rw [Ideal.inertiaDeg_algebraMap]
+      rw [Ideal.inertiaDeg'_algebraMap]
       rfl
     _ = Module.finrank K E := hdegree
 
@@ -2379,7 +2382,7 @@ private theorem unramifiedLevelSeed_residueRingEquiv_injective [IsSepClosure K K
   have hO : σO og = τO og :=
     unramifiedLift_root_unique K Ksep S U hU (σO og) (τO og)
       hσroot hτroot hres
-  apply AlgEquiv.coe_algHom_injective
+  apply AlgEquiv.coe_toAlgHom_injective
   apply (IntermediateField.adjoin.powerBasis
     (Algebra.IsIntegral.isIntegral S.root)).algHom_ext
   exact congr_arg Subtype.val hO
@@ -2390,7 +2393,7 @@ private abbrev unramifiedLevelField {d : ℕ} (S : UnramifiedLevelSeed K Ksep d)
   IntermediateField.adjoin K {S.root}
 
 /-- The canonical finite-dimensional instance for a seeded level. -/
-private noncomputable def unramifiedLevelFieldFiniteDimensional [IsSepClosure K Ksep]
+private theorem unramifiedLevelFieldFiniteDimensional [IsSepClosure K Ksep]
     {d : ℕ} (S : UnramifiedLevelSeed K Ksep d) :
     FiniteDimensional K (unramifiedLevelField K Ksep S) :=
   IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)

@@ -110,7 +110,7 @@ private theorem idealNormSet_finite (x : ℝ) :
     {I : Ideal (NumberField.RingOfIntegers K) |
       (Ideal.absNorm I : ℝ) ≤ x}.Finite := by
   obtain ⟨n : ℕ, hn⟩ := exists_nat_ge x
-  apply (Ideal.finite_setOf_absNorm_le
+  apply (Ring.HasFiniteQuotients.finite_absNorm_le
     (S := NumberField.RingOfIntegers K) n).subset
   intro I hI
   exact_mod_cast hI.trans hn
@@ -201,7 +201,7 @@ private theorem coeff_sum (n : ℕ) :
     Nat.card {I : Ideal (NumberField.RingOfIntegers K) //
       I ≠ 0 ∧ Ideal.absNorm I ≤ n} := by
   rw [← Finset.card_preimage_eq_sum_card_image_eq
-    (fun k _ => Ideal.finite_setOf_absNorm_eq k)]
+    (fun k _ => Ring.HasFiniteQuotients.finite_absNorm_eq k)]
   apply Nat.card_congr
   refine
     { toFun := fun I => ⟨I.1, ?_⟩
@@ -246,11 +246,11 @@ private theorem summable_ideal_rpow (s : ℝ) (hs : 1 < s) :
     rw [LSeries.norm_term_eq]
     by_cases hn : n = 0
     · subst n
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       simp only [Nat.cast_zero]
       rw [show Real.rpow 0 (-s) = (0 : ℝ) ^ (-s) from rfl,
         Real.zero_rpow (by linarith : -s ≠ 0), mul_zero]
-    · rw [if_neg hn]
+    · rw [ite_eq_right hn]
       have han : 0 ≤ a n := Nat.cast_nonneg _
       simp only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg han,
         Complex.ofReal_re]
@@ -258,7 +258,7 @@ private theorem summable_ideal_rpow (s : ℝ) (hs : 1 < s) :
       exact congrArg (a n * ·) (Real.rpow_neg (Nat.cast_nonneg n) s).symm
   let (n : ℕ) : Fintype
       {I : Ideal (NumberField.RingOfIntegers K) // Ideal.absNorm I = n} :=
-    (Ideal.finite_setOf_absNorm_eq n).fintype
+    (Ring.HasFiniteQuotients.finite_absNorm_eq n).fintype
   have hsigma : Summable (fun z : Σ n : ℕ,
       {I : Ideal (NumberField.RingOfIntegers K) // Ideal.absNorm I = n} =>
       Real.rpow (Ideal.absNorm z.2.1 : ℝ) (-s)) := by
@@ -293,7 +293,7 @@ theorem PrimeIdeal.norm_pow_inertiaDeg
     PrimeIdeal.norm q = PrimeIdeal.norm p ^
       p.asIdeal.inertiaDeg' q.asIdeal := by
   let : q.asIdeal.LiesOver p.asIdeal := hqp
-  exact Ideal.absNorm_eq_pow_inertiaDeg_of_liesOver q.asIdeal p.asIdeal
+  exact Ideal.absNorm_eq_pow_inertiaDeg'_of_liesOver q.asIdeal p.asIdeal
     (inferInstance : p.asIdeal.IsPrime) p.ne_bot
 
 /-- Blueprint Lemma 2.2, proposed declaration
@@ -328,7 +328,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
   have hQfin : Q.Finite := by
     obtain ⟨n : ℕ, hn⟩ := exists_nat_ge x
     apply Set.Finite.of_finite_image (f := fun q : PrimeIdeal E => q.asIdeal)
-    · exact (Ideal.finite_setOf_absNorm_le
+    · exact (Ring.HasFiniteQuotients.finite_absNorm_le
           (S := NumberField.RingOfIntegers E) n).subset (by
         rintro I ⟨q, hq, rfl⟩
         exact_mod_cast hq.2.trans hn)
@@ -337,7 +337,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
   have hPfin : P.Finite := by
     obtain ⟨n : ℕ, hn⟩ := exists_nat_ge (Real.sqrt x)
     apply Set.Finite.of_finite_image (f := fun p : PrimeIdeal K => p.asIdeal)
-    · exact (Ideal.finite_setOf_absNorm_le
+    · exact (Ring.HasFiniteQuotients.finite_absNorm_le
           (S := NumberField.RingOfIntegers K) n).subset (by
         rintro I ⟨p, hp, rfl⟩
         exact_mod_cast hp.trans hn)
@@ -387,7 +387,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
   have hIfin : {a : Ideal (NumberField.RingOfIntegers K) |
       a ≠ 0 ∧ (Ideal.absNorm a : ℝ) ≤ Real.sqrt x}.Finite := by
     obtain ⟨n : ℕ, hn⟩ := exists_nat_ge (Real.sqrt x)
-    exact (Ideal.finite_setOf_absNorm_le
+    exact (Ring.HasFiniteQuotients.finite_absNorm_le
       (S := NumberField.RingOfIntegers K) n).subset (by
         intro a ha
         exact_mod_cast ha.2.trans hn)
@@ -514,7 +514,7 @@ theorem sqrt_bound_hasDirichletDensity_zero (S : Set (PrimeIdeal K))
     {p : S // PrimeIdeal.norm p.1 = n}
   have hfiber (k : ℕ) : {p : S | PrimeIdeal.norm p.1 = k}.Finite := by
     apply Set.Finite.of_finite_image (f := fun p : S => p.1.asIdeal)
-    · exact (Ideal.finite_setOf_absNorm_eq k).subset (by
+    · exact (Ring.HasFiniteQuotients.finite_absNorm_eq k).subset (by
         rintro I ⟨p, hp, hpI⟩
         rw [← hpI]
         exact hp)
@@ -564,11 +564,11 @@ theorem sqrt_bound_hasDirichletDensity_zero (S : Set (PrimeIdeal K))
     rw [LSeries.norm_term_eq]
     by_cases hn : n = 0
     · subst n
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       simp only [Nat.cast_zero]
       rw [show Real.rpow 0 (-(3 / 4 : ℝ)) = (0 : ℝ) ^ (-(3 / 4 : ℝ)) from rfl,
         Real.zero_rpow (by norm_num), mul_zero]
-    · rw [if_neg hn]
+    · rw [ite_eq_right hn]
       have han : 0 ≤ a n := Nat.cast_nonneg _
       simp only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg han,
         Complex.ofReal_re]
@@ -647,7 +647,7 @@ private theorem primeCountingSet_finite (S : Set (PrimeIdeal K)) (x : ℝ) :
   obtain ⟨n : ℕ, hn⟩ := exists_nat_ge x
   refine Set.Finite.of_finite_image
     (f := fun p : PrimeIdeal K => p.asIdeal) ?_ ?_
-  · apply (Ideal.finite_setOf_absNorm_le
+  · apply (Ring.HasFiniteQuotients.finite_absNorm_le
       (S := NumberField.RingOfIntegers K) n).subset
     rintro I ⟨p, hp, rfl⟩
     change Ideal.absNorm p.asIdeal ≤ n
@@ -738,18 +738,18 @@ theorem hasDirichletDensity_finite_iUnion
   by_cases hp : p ∈ ⋃ i, S i
   · simp only [Set.mem_iUnion] at hp
     obtain ⟨i, hi⟩ := hp
-    rw [if_pos (Set.mem_iUnion_of_mem i hi), Finset.sum_eq_single i]
-    · rw [if_pos hi]
+    rw [ite_eq_left (Set.mem_iUnion_of_mem i hi), Finset.sum_eq_single i]
+    · rw [ite_eq_left hi]
     · intro j hj hji
-      rw [if_neg]
+      rw [ite_eq_right]
       intro hjmem
       exact Set.disjoint_left.1
         (hdisj (Set.mem_univ i) (Set.mem_univ j) (Ne.symm hji)) hi hjmem
     · simp
-  · rw [if_neg hp]
+  · rw [ite_eq_right hp]
     apply Finset.sum_eq_zero
     intro i hi
-    rw [if_neg]
+    rw [ite_eq_right]
     intro hmem
     exact hp (Set.mem_iUnion_of_mem i hmem)
 
@@ -855,13 +855,13 @@ theorem HasDirichletDensity.congr_of_symmetricDifference_zero
       · exact hterm
       · exact le_rfl
     by_cases hp : p ∈ A
-    · rw [if_pos hp]
+    · rw [ite_eq_left hp]
       rcases h hp with hpB | hpC
-      · rw [if_pos hpB]
+      · rw [ite_eq_left hpB]
         exact le_add_of_nonneg_right (hite C)
-      · rw [if_pos hpC]
+      · rw [ite_eq_left hpC]
         exact le_add_of_nonneg_left (hite B)
-    · rw [if_neg hp]
+    · rw [ite_eq_right hp]
       exact add_nonneg (hite B) (hite C)
   have hdiff : ∀ s : ℝ, 1 < s →
       |dirichletPrimeSum T s - dirichletPrimeSum S s| ≤ dirichletPrimeSum D s := by
@@ -947,19 +947,19 @@ private theorem dirichletPrimeSum_iUnion_eq_sum
   by_cases hp : p ∈ ⋃ i, S i
   · simp only [Set.mem_iUnion] at hp
     obtain ⟨i, hi⟩ := hp
-    rw [if_pos (Set.mem_iUnion_of_mem i hi), Finset.sum_eq_single i]
-    · rw [if_pos hi]
+    rw [ite_eq_left (Set.mem_iUnion_of_mem i hi), Finset.sum_eq_single i]
+    · rw [ite_eq_left hi]
     · intro j hj hji
-      rw [if_neg]
+      rw [ite_eq_right]
       intro hjmem
       exact Set.disjoint_left.1
         (hdisj (Set.mem_univ i) (Set.mem_univ j) (Ne.symm hji)) hi hjmem
     · simp
-  · rw [if_neg hp]
+  · rw [ite_eq_right hp]
     symm
     apply Finset.sum_eq_zero
     intro i hi
-    rw [if_neg]
+    rw [ite_eq_right]
     intro hmem
     exact hp (Set.mem_iUnion_of_mem i hmem)
 

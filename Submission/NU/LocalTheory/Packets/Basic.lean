@@ -248,7 +248,7 @@ theorem packet_theorem {M : Type*} [Field M] [NumberField M]
       {P | ∃ v : FinitePlace M,
         residueCharacteristic v ≠ ℓ ∧ P = groupLocalPlane ζ hζ v} := by
   ext P
-  simp only [Set.mem_setOf_eq]
+  simp only [Set.mem_ofPred_eq]
   constructor
   · rintro ⟨x, y, hxy, hzero⟩
     let e := kummerDualEquiv ζ hζ

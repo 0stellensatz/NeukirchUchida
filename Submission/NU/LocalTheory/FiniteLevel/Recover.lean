@@ -165,7 +165,7 @@ theorem cyclotomicKernel_isOpen (K : Type*) [Field K] (p : OddPrime) :
         absoluteGaloisAlgEquiv σ ζ = ζ} := by
     ext σ
     simp only [cyclotomicKernel, FixesRootsOfUnity,
-      Set.mem_iInter, Set.mem_setOf_eq]
+      Set.mem_iInter, Set.mem_ofPred_eq]
     constructor
     · intro h ζ hζ
       apply h ζ
@@ -403,7 +403,7 @@ noncomputable def elementaryQuotientTransport
     modNTransport_comp_symm n a
   have hgf : g.comp f = LinearMap.id := by
     simpa [f, g] using modNTransport_comp_symm n a.symm
-  exact LinearEquiv.ofLinear f g hfg hgf
+  exact LinearEquiv.ofLinearMap f g hfg hgf
 
 /-- Defining equation for transport on elementary classes. -/
 @[simp]
@@ -514,7 +514,7 @@ private noncomputable def orientedPacketActionHom
     intro x
     obtain ⟨h, rfl⟩ := orientedElementaryClass_surjective (p : ℕ) x
     simp only [elementaryQuotientTransport_elementaryClass,
-      conjugationOnOrientedCyclotomicLevel_apply, LinearEquiv.mul_apply]
+      conjugationOnOrientedCyclotomicLevel_apply, mul_apply_eq_comp]
     congr 1
 
 set_option maxHeartbeats 8000000 in
@@ -588,7 +588,7 @@ noncomputable def orientedPacketStabilizer
     simp [conjugateOrientedPacket]
   mul_mem' := by
     intro σ τ hσ hτ
-    simp only [Set.mem_setOf_eq] at hσ hτ ⊢
+    simp only [Set.mem_ofPred_eq] at hσ hτ ⊢
     change P.map (orientedPacketAction orientation L p σ).toLinearMap = P at hσ
     change P.map (orientedPacketAction orientation L p τ).toLinearMap = P at hτ
     calc
@@ -603,7 +603,7 @@ noncomputable def orientedPacketStabilizer
       _ = P := by rw [hτ, hσ]
   inv_mem' := by
     intro σ hσ
-    simp only [Set.mem_setOf_eq] at hσ ⊢
+    simp only [Set.mem_ofPred_eq] at hσ ⊢
     change P.map (orientedPacketAction orientation L p σ).toLinearMap = P at hσ
     calc
       conjugateOrientedPacket orientation L p σ⁻¹ P =
@@ -700,7 +700,7 @@ theorem cyclotomicOverfield_isGalois_forComparison
       ∃ r : A, IsPrimitiveRoot r n := by
     intro n hn _
     subst n
-    exact HasEnoughRootsOfUnity.exists_primitiveRoot A (p : ℕ)
+    exact HasEnoughRootsOfUnity.exists_isPrimitiveRoot A (p : ℕ)
   let : IsCyclotomicExtension ({(p : ℕ)} : Set ℕ) K R :=
     IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
       ({(p : ℕ)} : Set ℕ) K A hroot

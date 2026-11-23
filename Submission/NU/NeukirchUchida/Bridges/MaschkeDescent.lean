@@ -148,7 +148,7 @@ noncomputable def localCyclotomicRoot
     (F : Type*) [Field F] [CharZero F] (p : Nat.Primes) :
     AlgebraicClosure F :=
   Classical.choose
-    (HasEnoughRootsOfUnity.exists_primitiveRoot
+    (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
       (AlgebraicClosure F) (p : ℕ))
 
 /-- The extension obtained by adjoining the chosen primitive `p`-th root. -/
@@ -180,7 +180,7 @@ theorem localCyclotomicRootInExtension_spec
   apply IsPrimitiveRoot.of_map_of_injective
     (f := (localCyclotomicExtension F p).val)
   · exact Classical.choose_spec
-      (HasEnoughRootsOfUnity.exists_primitiveRoot
+      (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
         (AlgebraicClosure F) (p : ℕ))
   · exact (localCyclotomicExtension F p).val.injective
 
@@ -206,7 +206,7 @@ private instance localCyclotomicExtension_isCyclotomic
     IsCyclotomicExtension {(p : ℕ)} F
       (localCyclotomicExtension F p) := by
   exact (Classical.choose_spec
-      (HasEnoughRootsOfUnity.exists_primitiveRoot
+      (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
         (AlgebraicClosure F) (p : ℕ)))
     |>.intermediateField_adjoin_isCyclotomicExtension F
 
@@ -229,7 +229,7 @@ private theorem localCyclotomicExtension_finrank_lt
     rw [Polynomial.aeval_def, ← Polynomial.eval_map,
       Polynomial.map_cyclotomic]
     exact (Classical.choose_spec
-      (HasEnoughRootsOfUnity.exists_primitiveRoot
+      (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
         (AlgebraicClosure F) (p : ℕ))).isRoot_cyclotomic p.2.pos
   calc
     (minpoly F (localCyclotomicRoot F p)).natDegree ≤
@@ -978,7 +978,7 @@ private theorem completionResidueFinite
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
   let : IsLocalHom f :=
-    ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
+    ((IsLocalRing.local_hom_tfae f).out 4 1).mp hfmax
   let rf : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
   have hrf : Function.Surjective rf := by
@@ -1051,7 +1051,7 @@ private theorem completionIsLocalField
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
-    simpa using vF.exists_setOf_restrict_le_iff 0 s
+    simpa using vF.exists_setOfPred_restrict_le_iff 0 s
   let : ValuativeRel.IsNontrivial (v.adicCompletion K) :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vF).2 inferInstance
   exact

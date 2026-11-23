@@ -103,7 +103,7 @@ private theorem testRestrictSepEquiv_symm_continuous
     let f : E →ₐ[M] A := σ.toAlgHom.comp E.val
     let g : E →ₐ[M] A := E.val
     have hfg : f = g := by
-      apply AlgHom.coe_ringHom_injective
+      apply AlgHom.toRingHom_injective
       apply IsPurelyInseparable.injective_comp_algebraMap Esep E A
       ext y
       change σ (y.1.1 : A) = (y.1.1 : A)
@@ -373,7 +373,7 @@ private theorem testEvaluationLinear_surjective
       AddSubgroup.toZModSubmodule n Padd
     have hPtop : P = ⊤ := by
       by_contra hP
-      obtain ⟨v, _, hv⟩ := SetLike.exists_of_lt (lt_top_iff_ne_top.mpr hP)
+      obtain ⟨v, _, hv⟩ := IsConcreteLE.exists_of_lt (lt_top_iff_ne_top.mpr hP)
       obtain ⟨F, hFv, hFP⟩ := Submodule.exists_le_ker_of_notMem hv
       let w : W := (Module.evalEquiv (ZMod n) W).symm F
       have hw : w = 0 := by

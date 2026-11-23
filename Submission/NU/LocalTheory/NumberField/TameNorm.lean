@@ -417,7 +417,7 @@ private theorem tame_cyclic_norm_factorization_core
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
-    simpa using vQ.exists_setOf_restrict_le_iff 0 s
+    simpa using vQ.exists_setOfPred_restrict_le_iff 0 s
   let : ValuativeRel.IsNontrivial Q :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vQ).2 inferInstance
   let : IsNonarchimedeanLocalField Q :=
@@ -448,7 +448,7 @@ private theorem tame_cyclic_norm_factorization_core
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
-      (Valued.v : Valuation R NNReal).exists_setOf_restrict_le_iff 0 s
+      (Valued.v : Valuation R NNReal).exists_setOfPred_restrict_le_iff 0 s
   let : ProperSpace R := FiniteDimensional.proper Q R
   let : LocallyCompactSpace R := by infer_instance
   let : ValuativeRel.IsNontrivial R :=
@@ -509,7 +509,7 @@ private theorem tame_cyclic_norm_factorization_core
         Qˣ ⧸ (valuedIntegerRing Q).principalUnitGroup), by simp⟩
   have hfmin : minpoly Q pb.gen = Polynomial.X ^ ℓ - Polynomial.C (a : Q) := by
     have hirr : Irreducible (Polynomial.X ^ ℓ - Polynomial.C (a : Q)) :=
-      X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hnoPow
+      irreducible_X_pow_sub_C_of_prime (Fact.out : ℓ.Prime) hnoPow
     exact (minpoly.eq_of_irreducible_of_monic hirr
       (by simp [hpgen, hαpow])
       (Polynomial.monic_X_pow_sub_C _ (Fact.out : ℓ.Prime).ne_zero)).symm
@@ -720,7 +720,7 @@ private theorem tame_cyclic_norm_factorization_core
           _ = a := by simp
       exact ha (principalUnitModEllClass_eq_zero_of_factor A ℓ a (d * xq) u hu hfac)
     have hfbar : Irreducible fbar := by
-      apply X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime)
+      apply irreducible_X_pow_sub_C_of_prime (Fact.out : ℓ.Prime)
       intro y hy
       exact hbbarNoPow ⟨y, hy⟩
     have hminβbar : minpoly kQ βbar = fbar :=
@@ -984,7 +984,7 @@ private theorem tame_cyclic_norm_factorization_core
       intro heq
       have heqz := congrArg (fun n : ℤ => (n : ZMod ℓ)) heq
       dsimp [score] at heqz
-      rw [dif_neg hi, dif_neg hj] at heqz
+      rw [dite_eq_right hi, dite_eq_right hj] at heqz
       push_cast at heqz
       have hcast : (i.val : ZMod ℓ) * (ordQ a : ZMod ℓ) =
           (j.val : ZMod ℓ) * (ordQ a : ZMod ℓ) := by
@@ -1081,7 +1081,7 @@ private theorem tame_cyclic_norm_factorization_core
         simp [ws]
       rw [heq]
       dsimp [vR]
-      simp only [nnnorm_one]
+      simp only [nnNorm_one]
       change ‖σ ((w : R) - 1)‖₊ < 1
       rw [← NNReal.coe_lt_coe]
       change spectralNorm Q R (σ ((w : R) - 1)) < 1
@@ -1167,7 +1167,7 @@ theorem tame_norm_line {Q R : Type*} [Field Q] [Field R]
       simpa using hx
   let f : Polynomial Q := Polynomial.X ^ ℓ - Polynomial.C (a : Q)
   have hf : Irreducible f :=
-    X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hnoPow
+    irreducible_X_pow_sub_C_of_prime (Fact.out : ℓ.Prime) hnoPow
   let : Fact (Irreducible f) := ⟨hf⟩
   have hprim : (primitiveRoots ℓ Q).Nonempty :=
     ⟨ζ, (mem_primitiveRoots (Fact.out : ℓ.Prime).pos).2 hζ⟩
@@ -1445,7 +1445,7 @@ theorem global_norm_local_line {M E : Type*} [Field M] [Field E]
       simpa using hx
   let fK : Polynomial K := Polynomial.X ^ ℓ - Polynomial.C (aK : K)
   have hfK : Irreducible fK :=
-    X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hnoPow
+    irreducible_X_pow_sub_C_of_prime (Fact.out : ℓ.Prime) hnoPow
   let : Fact (Irreducible fK) := ⟨hfK⟩
   let R := AdjoinRoot fK
   let : Field R := inferInstance
@@ -1464,7 +1464,7 @@ theorem global_norm_local_line {M E : Type*} [Field M] [Field E]
   have hfMroot : Polynomial.aeval α fM = 0 := by
     simp [fM, hαpow]
   have hfM : Irreducible fM := by
-    apply X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime)
+    apply irreducible_X_pow_sub_C_of_prime (Fact.out : ℓ.Prime)
     intro x hx
     apply hnoPow (emb x)
     simpa [aK, emb] using congrArg emb hx

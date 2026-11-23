@@ -215,12 +215,12 @@ theorem integerCarryCocycle_mem (D : UnramifiedCyclicExtensionData K L) :
       have hs := (D.frobeniusEquiv.symm σ).toAdd.val_lt
       have hto : (1 : Multiplicative (ZMod (Module.finrank K L))).toAdd = 0 := rfl
       simp only [integerCarryCocycle, map_one, hto, ZMod.val_zero,
-        zero_add, carryExponent, if_pos hs, Nat.cast_zero]
+        zero_add, carryExponent, ite_eq_left hs, Nat.cast_zero]
     · intro σ
       have hs := (D.frobeniusEquiv.symm σ).toAdd.val_lt
       have hto : (1 : Multiplicative (ZMod (Module.finrank K L))).toAdd = 0 := rfl
       simp only [integerCarryCocycle, map_one, hto, ZMod.val_zero,
-        add_zero, carryExponent, if_pos hs, Nat.cast_zero]
+        add_zero, carryExponent, ite_eq_left hs, Nat.cast_zero]
 
 /-- The concrete comparison-layer `H²(G,ℤ)` class of the standard integer carry. -/
 def integerCarryClass (D : UnramifiedCyclicExtensionData K L) :
@@ -644,15 +644,15 @@ private theorem carryCocycle_mem
           (carryExponent n a b : ℤ) • u := by
       unfold carryExponent
       by_cases h : a.val + b.val < n
-      · rw [if_pos h, if_pos rfl]
+      · rw [ite_eq_left h, ite_eq_left rfl]
         simp
-      · rw [if_neg h]
+      · rw [ite_eq_right h]
         simp
     have hact : (MulRep K L).ρ σ
         (if carryExponent n s t = 0 then (0 : Additive (Units L)) else u) =
           (carryExponent n s t : ℤ) • u := by
       by_cases h : carryExponent n s t = 0
-      · rw [if_pos h]
+      · rw [ite_eq_left h]
         calc
           _ = 0 := ((MulRep K L).ρ σ).map_zero
           _ = (carryExponent n s t : ℤ) • u := by rw [h]; simp
@@ -660,7 +660,7 @@ private theorem carryCocycle_mem
           simp only [carryExponent]
           split_ifs <;> omega
         have hone : carryExponent n s t = 1 := by omega
-        rw [if_neg h, hu, hone]
+        rw [ite_eq_right h, hu, hone]
         simp
     rw [hact, hind, hind, hind]
     calc
@@ -701,10 +701,10 @@ private theorem valuation_carry_cochain
     simp only [carryExponent]
     split_ifs <;> omega
   by_cases h : carryExponent n r s = 0
-  · rw [if_pos h, h]
+  · rw [ite_eq_left h, h]
     simp [normalizedValuation]
   · have hone : carryExponent n r s = 1 := by omega
-    rw [if_neg h, hone, hval]
+    rw [ite_eq_right h, hone, hval]
     rfl
 
 omit [IsGalois K L] [ContinuousSMul K L] in
@@ -1575,7 +1575,7 @@ private theorem residueFinrank_eq_residueDegree
     have : ramificationIndex K L = ramificationIndex K L + 1 := by exact_mod_cast hc
     omega
   have hram : p.ramificationIdx' P = ramificationIndex K L :=
-    Ideal.ramificationIdx_spec hmap.le hnot
+    Ideal.ramificationIdx'_spec hmap.le hnot
   have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
     (S := RingOfIntegers L) K L (p := p) (by
       rw [hp, ne_eq, Ideal.span_singleton_eq_bot]
@@ -1588,7 +1588,7 @@ private theorem residueFinrank_eq_residueDegree
     exact hdegree.trans hselected
   calc
     Module.finrank (LocalResidueField K) (LocalResidueField L) = p.inertiaDeg' P := by
-      rw [Ideal.inertiaDeg_algebraMap]
+      rw [Ideal.inertiaDeg'_algebraMap]
       rfl
     _ = residueDegree K L := hinertia
 
@@ -2092,8 +2092,7 @@ theorem unramifiedCarryTowerData_exists
         (AlgEquiv.restrictScalarsHom K) upper.frobenius := by
         apply AlgEquiv.ext
         intro x
-        simpa using AlgEquiv.restrictNormal_commutes
-          ((AlgEquiv.restrictScalarsHom K) upper.frobenius) M x
+        simp
       change (AlgEquiv.restrictScalarsHom K) upper.frobenius =
         total.frobenius ^ Module.finrank K L
       rw [hnormal, hresLower] at hsub
@@ -2185,15 +2184,15 @@ private theorem carryCocycle_inflation_cochain
         d * carryExponent N r s + ((r.val + s.val) % N) / n := by
     rw [hcn, hcN]
     by_cases hbig : r.val + s.val < N
-    · simp only [if_pos hbig, Nat.mod_eq_of_lt hbig, mul_zero, zero_add]
+    · simp only [ite_eq_left hbig, Nat.mod_eq_of_lt hbig, mul_zero, zero_add]
       split_ifs with hsmall
       · have hi : ¬n ≤ r.val % n + s.val % n := by omega
-        rw [if_neg hi] at hadddiv
+        rw [ite_eq_right hi] at hadddiv
         omega
       · have hi : n ≤ r.val % n + s.val % n := by omega
-        rw [if_pos hi] at hadddiv
+        rw [ite_eq_left hi] at hadddiv
         omega
-    · simp only [if_neg hbig, mul_one]
+    · simp only [ite_eq_right hbig, mul_one]
       have hle : N ≤ r.val + s.val := Nat.le_of_not_gt hbig
       have hmod : (r.val + s.val) % N = r.val + s.val - N := by
         rw [Nat.mod_eq_sub_mod hle, Nat.mod_eq_of_lt]
@@ -2206,10 +2205,10 @@ private theorem carryCocycle_inflation_cochain
         rw [Nat.add_mul_div_left _ _ hn]
       split_ifs with hsmall
       · have hi : ¬n ≤ r.val % n + s.val % n := by omega
-        rw [if_neg hi] at hadddiv
+        rw [ite_eq_right hi] at hadddiv
         omega
       · have hi : n ≤ r.val % n + s.val % n := by omega
-        rw [if_pos hi] at hadddiv
+        rw [ite_eq_left hi] at hadddiv
         omega
   have hcomb : (carryExponent n (r.val : ℕ) (s.val : ℕ) : ℤ) =
       (d : ℤ) * carryExponent N r s +
@@ -2262,9 +2261,9 @@ private theorem carryCocycle_inflation_cochain
       if carryExponent n (r.val : ℕ) (s.val : ℕ) = 0 then
         (0 : Additive (Units M)) else u := by
     by_cases h : carryExponent n (r.val : ℕ) (s.val : ℕ) = 0
-    · rw [if_pos h, if_pos h]
+    · rw [ite_eq_left h, ite_eq_left h]
       exact T.inflationCoefficient.hom.map_zero
-    · rw [if_neg h, if_neg h, hcoeff]
+    · rw [ite_eq_right h, ite_eq_right h, hcoeff]
   have hact : (MulRep K M).ρ σ (b τ) =
       -((s.val / n : ℕ) : ℤ) • u := by
     change (MulRep K M).ρ σ (-((s.val / n : ℕ) : ℤ) • u) =
@@ -2378,8 +2377,8 @@ private theorem carryCocycle_restriction_cochain
     else Additive.ofMul (Units.map (algebraMap L M) πL.val)
   rw [hcoord, hcoord, hcarry]
   by_cases h : carryExponent m r s = 0
-  · rw [if_pos h, if_pos h, map_zero]
-  · rw [if_neg h, if_neg h, T.restrictionCoefficient_apply]
+  · rw [ite_eq_left h, ite_eq_left h, map_zero]
+  · rw [ite_eq_right h, ite_eq_right h, T.restrictionCoefficient_apply]
     apply Additive.toMul.injective
     exact hunit
 
@@ -2710,14 +2709,14 @@ private theorem baseChange_source_valuation_cochain
     (ramificationIndex K E : ℤ) * (carryExponent m a b : ℤ)
   rw [hcoord, hcoord, hcarry]
   by_cases hc : carryExponent m a b = 0
-  · rw [if_pos hc, map_zero, hc]
+  · rw [ite_eq_left hc, map_zero, hc]
     change normalizedValuation W (1 : Units W) = 0
     simp [normalizedValuation]
   · have hle : carryExponent m a b ≤ 1 := by
       simp only [carryExponent]
       split_ifs <;> omega
     have hone : carryExponent m a b = 1 := by omega
-    rw [if_neg hc]
+    rw [ite_eq_right hc]
     let x : Units U := Units.map (algebraMap K U).toMonoidHom πK.val
     have hcoeff := B.sourceCoefficient_apply x
     calc
@@ -2811,15 +2810,15 @@ private theorem baseChange_target_valuation_cochain
         e * carryExponent m a b + ((a.val + b.val) % m) / r := by
     rw [hcr, hcm]
     by_cases hbig : a.val + b.val < m
-    · simp only [if_pos hbig, Nat.mod_eq_of_lt hbig, mul_zero, zero_add]
+    · simp only [ite_eq_left hbig, Nat.mod_eq_of_lt hbig, mul_zero, zero_add]
       split_ifs with hsmall
       · have hi : ¬r ≤ a.val % r + b.val % r := by omega
-        rw [if_neg hi] at hadddiv
+        rw [ite_eq_right hi] at hadddiv
         omega
       · have hi : r ≤ a.val % r + b.val % r := by omega
-        rw [if_pos hi] at hadddiv
+        rw [ite_eq_left hi] at hadddiv
         omega
-    · simp only [if_neg hbig, mul_one]
+    · simp only [ite_eq_right hbig, mul_one]
       have hle : m ≤ a.val + b.val := Nat.le_of_not_gt hbig
       have hmod : (a.val + b.val) % m = a.val + b.val - m := by
         rw [Nat.mod_eq_sub_mod hle, Nat.mod_eq_of_lt]
@@ -2832,10 +2831,10 @@ private theorem baseChange_target_valuation_cochain
         rw [Nat.add_mul_div_left _ _ hr]
       split_ifs with hsmall
       · have hi : ¬r ≤ a.val % r + b.val % r := by omega
-        rw [if_neg hi] at hadddiv
+        rw [ite_eq_right hi] at hadddiv
         omega
       · have hi : r ≤ a.val % r + b.val % r := by omega
-        rw [if_pos hi] at hadddiv
+        rw [ite_eq_left hi] at hadddiv
         omega
   have hcomb : (carryExponent r (a.val : ℕ) (b.val : ℕ) : ℤ) =
       (e : ℤ) * carryExponent m a b +
@@ -2856,14 +2855,14 @@ private theorem baseChange_target_valuation_cochain
       (carryExponent r (a.val : ℕ) (b.val : ℕ) : ℤ) := by
     rw [hcoord, hcoord]
     by_cases hc : carryExponent r (a.val : ℕ) (b.val : ℕ) = 0
-    · rw [if_pos hc, map_zero, hc]
+    · rw [ite_eq_left hc, map_zero, hc]
       change normalizedValuation W (1 : Units W) = 0
       simp [normalizedValuation]
     · have hle1 : carryExponent r (a.val : ℕ) (b.val : ℕ) ≤ 1 := by
         simp only [carryExponent]
         split_ifs <;> omega
       have hone : carryExponent r (a.val : ℕ) (b.val : ℕ) = 1 := by omega
-      rw [if_neg hc]
+      rw [ite_eq_right hc]
       let x : Units R := Units.map (algebraMap E R).toMonoidHom πE.val
       have hcoeff := B.targetCoefficient_apply x
       calc

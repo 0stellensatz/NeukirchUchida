@@ -34,7 +34,7 @@ lemma Algebra.isUnramifiedAt_iff_of_isDedekindDomain'
   rw [Algebra.isUnramifiedAt_iff_map_eq R (p.under R) p, and_iff_right,
     Ideal.IsDedekindDomain.ramificationIdx'_eq_one_iff hp Ideal.map_comap_le]
   have : Finite (R ⧸ p.under R) :=
-    Ideal.finiteQuotientOfFreeOfNeBot _ (mt Ideal.eq_bot_of_comap_eq_bot hp)
+    Ideal.finiteQuotientOfFreeOfNeBot _ (mt Ideal.eq_bot_of_under_eq_bot hp)
   have : Finite ((p.under R).ResidueField) := IsLocalization.finite _
     (nonZeroDivisors (R ⧸ p.under R))
   infer_instance

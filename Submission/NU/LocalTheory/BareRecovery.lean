@@ -173,7 +173,7 @@ private noncomputable def bareActionHom
     intro x
     obtain ⟨h, rfl⟩ := bareElementaryClass_surjective (p : ℕ) x
     simp only [elementaryQuotientTransport_elementaryClass,
-      conjugationOnOpenNormal_apply, LinearEquiv.mul_apply]
+      conjugationOnOpenNormal_apply, mul_apply_eq_comp]
     congr 1
     apply Subtype.ext
     simp [conjugateInOpenNormal, mul_assoc]
@@ -240,7 +240,7 @@ noncomputable def barePacketStabilizer {G : Type*} [Group G]
     simp [conjugateBarePacket]
   mul_mem' := by
     intro σ τ hσ hτ
-    simp only [Set.mem_setOf_eq] at hσ hτ ⊢
+    simp only [Set.mem_ofPred_eq] at hσ hτ ⊢
     change P.map (barePacketAction U p σ).toLinearMap = P at hσ
     change P.map (barePacketAction U p τ).toLinearMap = P at hτ
     calc
@@ -255,7 +255,7 @@ noncomputable def barePacketStabilizer {G : Type*} [Group G]
       _ = P := by rw [hτ, hσ]
   inv_mem' := by
     intro σ hσ
-    simp only [Set.mem_setOf_eq] at hσ ⊢
+    simp only [Set.mem_ofPred_eq] at hσ ⊢
     change P.map (barePacketAction U p σ).toLinearMap = P at hσ
     calc
       conjugateBarePacket U p σ⁻¹ P =
@@ -303,7 +303,7 @@ theorem mem_bareCrit_iff_exists_plane {G : Type*} [Group G]
           (∀ a b : ContinuousCharacter U.toSubgroup (p : ℕ),
             CupZero (p : ℕ) a b → evaluationDet x y a b = 0) ∧
           D = barePacketStabilizer U p P := by
-  simp only [bareCrit, Set.mem_setOf_eq, IsPacket]
+  simp only [bareCrit, Set.mem_ofPred_eq, IsPacket]
   aesop
 
 /-! ## Equivariance -/
@@ -1764,7 +1764,7 @@ private theorem algEquiv_fiber_isOpen
     have heq : {g : Ω ≃ₐ[K] Ω | g x = y} =
         g₀ • (MulAction.stabilizer (Ω ≃ₐ[K] Ω) x : Set (Ω ≃ₐ[K] Ω)) := by
       ext g
-      rw [mem_leftCoset_iff, Set.mem_setOf_eq]
+      rw [mem_leftCoset_iff, Set.mem_ofPred_eq]
       change (g x = y) ↔ (g₀⁻¹ * g) x = x
       constructor
       · intro hg
@@ -2806,7 +2806,7 @@ private noncomputable def henselianBridge_normalizedRealValuation
       simp [f]
     by_cases hxy : x + y = 0
     · simp [f, hx, hy, hxy]
-    simp only [f, dif_neg hx, dif_neg hy, dif_neg hxy]
+    simp only [f, dite_eq_right hx, dite_eq_right hy, dite_eq_right hxy]
     rcases A.valuation.map_add' x y with h | h
     · apply (min_le_left _ _).trans
       have hm : e (Additive.ofMul (Units.mk0 (A.valuation (x + y))
@@ -2840,7 +2840,7 @@ private noncomputable def henselianBridge_normalizedRealValuation
     · subst y
       simp [f]
     have hxy0 : x * y ≠ 0 := mul_ne_zero hx hy
-    simp only [f, dif_neg hx, dif_neg hy, dif_neg hxy0,
+    simp only [f, dite_eq_right hx, dite_eq_right hy, dite_eq_right hxy0,
       ← WithTop.coe_add, WithTop.coe_eq_coe]
     have huv :
         Additive.ofMul (Units.mk0 (A.valuation (x * y))

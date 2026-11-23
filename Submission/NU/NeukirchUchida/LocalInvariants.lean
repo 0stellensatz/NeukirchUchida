@@ -358,8 +358,8 @@ private noncomputable def abstractPlaceValuationEquiv
     (abstractPlace R P).1 ≃+* P.1 where
   toFun x := ⟨R.closureEquiv x, x.property⟩
   invFun x := ⟨R.closureEquiv.symm x, by
-    simpa [abstractPlace, NU.LocalTheory.ambientAbsoluteFinitePlaceEquiv,
-      NU.LocalTheory.transportValuationSubring] using x.property⟩
+    simp [abstractPlace, NU.LocalTheory.ambientAbsoluteFinitePlaceEquiv,
+      NU.LocalTheory.transportValuationSubring]⟩
   left_inv x := by ext; simp
   right_inv x := by ext; simp
   map_add' x y := by ext; simp
@@ -1214,7 +1214,7 @@ private theorem packetAction_localPlane_triangular
     have h := hYrank
     rw [hEq, hPrank] at h
     omega
-  obtain ⟨x, hxP, hxY⟩ := SetLike.exists_of_lt hYlt
+  obtain ⟨x, hxP, hxY⟩ := IsConcreteLE.exists_of_lt hYlt
   let : Module.Finite (ZMod ell) Y :=
     Module.finite_of_finrank_pos (by rw [hYrank]; omega)
   let byY : Module.Basis (Fin 1) (ZMod ell) Y :=
@@ -1351,9 +1351,9 @@ private noncomputable def absoluteCyclotomicCharacter
     (K : Type*) [Field K] [CharZero K]
     (ell : NU.LocalTheory.OddPrime) :
     Field.absoluteGaloisGroup K →* (ZMod (ell : ℕ))ˣ := by
-  let zeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
+  let zeta := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
     (AlgebraicClosure K) (ell : ℕ)).choose
-  let hzeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
+  let hzeta := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
     (AlgebraicClosure K) (ell : ℕ)).choose_spec
   exact hzeta.autToPow K
 
@@ -1373,9 +1373,9 @@ private theorem absoluteCyclotomicScalar_eq_one_iff
     absoluteCyclotomicScalar K ell g = 1 ↔
       g ∈ NU.LocalTheory.cyclotomicKernel K (ell : ℕ) := by
   let : Fact (1 < (ell : ℕ)) := ⟨ell.1.2.one_lt⟩
-  let zeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
+  let zeta := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
     (AlgebraicClosure K) (ell : ℕ)).choose
-  let hzeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
+  let hzeta := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
     (AlgebraicClosure K) (ell : ℕ)).choose_spec
   have hspec : zeta ^ (absoluteCyclotomicScalar K ell g).val =
       NU.LocalTheory.absoluteGaloisAlgEquiv g zeta := by
@@ -1892,10 +1892,10 @@ private theorem source_packetDeterminant_at_markedLevel
           (QuotientGroup.mk g)).toLinearMap).map E.toLinearMap :=
         Submodule.map_comp _ _ _
       _ = P.map E.toLinearMap := by rw [hstableBare]
-  let zetaAbs := (HasEnoughRootsOfUnity.exists_primitiveRoot
+  let zetaAbs := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
     (AlgebraicClosure K₁) (ell : ℕ)).choose
   have hzetaAbs : IsPrimitiveRoot zetaAbs (ell : ℕ) :=
-    (HasEnoughRootsOfUnity.exists_primitiveRoot
+    (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
       (AlgebraicClosure K₁) (ell : ℕ)).choose_spec
   have hzetaMem : zetaAbs ∈ L.field := by
     change zetaAbs ∈ IntermediateField.fixedField U.toSubgroup
@@ -2343,10 +2343,10 @@ private theorem target_packetDeterminant_identifies_cyclotomic
       (NU.LocalTheory.packetAction K₂
         (CyclotomicField (ell : ℕ) L.field) (ell : ℕ) sigma) PC d :=
     ⟨E x, E y, hxyC, a, b, c, r, hxC, hyC, hd⟩
-  let zetaAbs := (HasEnoughRootsOfUnity.exists_primitiveRoot
+  let zetaAbs := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
     (AlgebraicClosure K₂) (ell : ℕ)).choose
   have hzetaAbs : IsPrimitiveRoot zetaAbs (ell : ℕ) :=
-    (HasEnoughRootsOfUnity.exists_primitiveRoot
+    (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
       (AlgebraicClosure K₂) (ell : ℕ)).choose_spec
   have hzetaMem : zetaAbs ∈ L.field := by
     change zetaAbs ∈ IntermediateField.fixedField V.toSubgroup
@@ -2921,7 +2921,7 @@ private theorem completionResidueFinite
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
   let : IsLocalHom f :=
-    ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
+    ((IsLocalRing.local_hom_tfae f).out 4 1).mp hfmax
   let rf : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
   have hrf : Function.Surjective rf := by
@@ -2997,7 +2997,7 @@ private theorem completionIsLocalField
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
-    simpa using vF.exists_setOf_restrict_le_iff 0 s
+    simpa using vF.exists_setOfPred_restrict_le_iff 0 s
   let : ValuativeRel.IsNontrivial (v.adicCompletion K) :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vF).2 inferInstance
   exact
@@ -3088,7 +3088,7 @@ private theorem completion_residueCharacteristic_eq
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
   let : IsLocalHom f :=
-    ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
+    ((IsLocalRing.local_hom_tfae f).out 4 1).mp hfmax
   let r2 : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
   have hr1 : ringChar (NU.LCFT.LocalResidueField F) =
@@ -3109,14 +3109,14 @@ private noncomputable def localCyclotomicRoot
     (F : Type*) [Field F] [CharZero F] (ell : Nat.Primes) :
     AlgebraicClosure F :=
   Classical.choose
-    (HasEnoughRootsOfUnity.exists_primitiveRoot
+    (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
       (AlgebraicClosure F) (ell : ℕ))
 
 private theorem localCyclotomicRoot_spec
     (F : Type*) [Field F] [CharZero F] (ell : Nat.Primes) :
     IsPrimitiveRoot (localCyclotomicRoot F ell) (ell : ℕ) :=
   Classical.choose_spec
-    (HasEnoughRootsOfUnity.exists_primitiveRoot
+    (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
       (AlgebraicClosure F) (ell : ℕ))
 
 /-- The finite extension obtained by adjoining `mu_ell`. -/
@@ -3479,7 +3479,7 @@ private theorem finiteExtension_localFieldStructure
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
-      (Valued.v : Valuation E NNReal).exists_setOf_restrict_le_iff 0 s
+      (Valued.v : Valuation E NNReal).exists_setOfPred_restrict_le_iff 0 s
   have hloc : LocallyCompactSpace E :=
     LocallyCompactSpace.of_finiteDimensional_of_complete F E
   have hnontriv : ValuativeRel.IsNontrivial E := by
@@ -4985,8 +4985,7 @@ private theorem localUnitDecomposition_kummerQuotient_finrank_le_two
           exact units.teichmullerEquiv.apply_symm_apply _
         rw [ht0]
         apply Multiplicative.toAdd.injective
-        simpa [nt] using (ZMod.natCast_zmod_val
-          (Multiplicative.toAdd (units.teichmullerEquiv ct))).symm
+        simp [nt]
       let ru : Units F := units.productEquiv.symm (1, 1, rp, rf)
       have hu : u = vu ^ nv * tu ^ nt * ru ^ (ell : ℕ) := by
         apply units.productEquiv.injective
@@ -5859,7 +5858,7 @@ private theorem odd_kummer_raw
       (ringChar.eq_iff).mp hringChar
     let : P.asIdeal.LiesOver v.asIdeal := hPv
     have hnormPcoprime : (Ideal.absNorm P.asIdeal).Coprime (lambda : ℕ) := by
-      rw [Ideal.absNorm_eq_pow_inertiaDeg_of_liesOver
+      rw [Ideal.absNorm_eq_pow_inertiaDeg'_of_liesOver
         P.asIdeal v.asIdeal inferInstance v.ne_bot]
       change (NU.Chebotarev.PrimeIdeal.norm v ^ _).Coprime (lambda : ℕ)
       rw [norm_eq_residueCharacteristic_rat]
@@ -6011,7 +6010,7 @@ private theorem odd_kummer_raw
   have hB : B.Finite := hD.preimage htoPrime.injOn
   let S := NU.Chebotarev.frobeniusPrimeSet
     (K := ℚ) (L := E) (ConjClasses.mk sigma)
-  have hSgood : (S \ B).Infinite := hinf.diff hB
+  have hSgood : (S \ B).Infinite := hinf.sdiff hB
   have himage : (toPrime '' (S \ B)).Infinite :=
     hSgood.image htoPrime.injOn
   apply himage.mono
@@ -6173,13 +6172,13 @@ private theorem oddPrime_case
           x ^ (lambda : ℕ) = (b : ZMod (ell : ℕ))} := by
   have hrat : Irreducible
       (X ^ (lambda : ℕ) - C (b : ℚ)) :=
-    X_pow_sub_C_irreducible_of_prime lambda.2 hbmax
+    irreducible_X_pow_sub_C_of_prime lambda.2 hbmax
   have hnopow := oddPrime_not_pow_in_cyclotomic
     lambda hlambda M hM b (by omega) hrat
   have hfield : Irreducible
       (X ^ (lambda : ℕ) - C
         (algebraMap ℚ (CyclotomicField ((lambda : ℕ) ^ M) ℚ) b)) :=
-    X_pow_sub_C_irreducible_of_prime lambda.2 hnopow
+    irreducible_X_pow_sub_C_of_prime lambda.2 hnopow
   exact odd_kummer_raw lambda M b hM hb hfield
 
 
@@ -6298,7 +6297,7 @@ private theorem no_square_in_twoPower_cyclotomic_of_oddFactor
     IsCyclotomicExtension.Rat.ramificationIdx_eq_of_not_dvd
       (p : ℕ) F P hpdvd
   have he' : q.ramificationIdx' P = 1 := by
-    rw [Ideal.ramificationIdx_eq_ramificationIdx' q P hq0]
+    rw [Ideal.ramificationIdx'_eq_ramificationIdx q P hq0]
     exact he
   have hmult : multiplicity q (Ideal.span {((b : ℕ) : ℤ)}) =
       b.factorization (p : ℕ) := by
@@ -6310,7 +6309,7 @@ private theorem no_square_in_twoPower_cyclotomic_of_oddFactor
               (Ideal.span {((b : ℕ) : ℤ)}) =
               multiplicity ((p : ℕ) : ℤ) ((b : ℕ) : ℤ) :=
             multiplicity_eq_of_emultiplicity_eq
-              Ideal.emultiplicity_eq_emultiplicity_span
+              Ideal.emultiplicity_span_eq_emultiplicity
           _ = multiplicity (p : ℕ) b := by
             rw [← Int.multiplicity_natAbs (p : ℕ) (b : ℤ)]
             simp
@@ -6365,7 +6364,7 @@ private theorem twoPrime_nonexceptional_case
   have hfield : Irreducible
       (X ^ 2 - C
         (algebraMap ℚ (CyclotomicField (2 ^ M) ℚ) b)) :=
-    X_pow_sub_C_irreducible_of_prime Nat.prime_two hnopow
+    irreducible_X_pow_sub_C_of_prime Nat.prime_two hnopow
   exact odd_kummer_raw ⟨2, Nat.prime_two⟩ M b hM hb hfield
 
 /-- The quadratic even-prime branch when the extracted base is not twice a
@@ -6409,11 +6408,11 @@ private theorem quartic_radical_irreducible
     (b : ℕ) (hb : 1 < b) (hbmax : ∀ c : ℚ, c ^ 2 ≠ b) :
     Irreducible (X ^ 4 - C (b : ℚ)) := by
   have hquad : Irreducible (X ^ 2 - C (b : ℚ)) :=
-    X_pow_sub_C_irreducible_of_prime Nat.prime_two hbmax
+    irreducible_X_pow_sub_C_of_prime Nat.prime_two hbmax
   rw [show 4 = 2 * 2 by norm_num]
   apply irreducible_X_pow_mul_sub_C hquad
   have := Fact.mk hquad
-  apply X_pow_sub_C_irreducible_of_prime Nat.prime_two
+  apply irreducible_X_pow_sub_C_of_prime Nat.prime_two
   intro y hy
   have hn := congrArg (Algebra.norm ℚ) hy
   rw [map_pow, norm_root_X_pow_sub_C (by norm_num)] at hn
@@ -6911,7 +6910,7 @@ private theorem twoPrime_exceptional_kummer_raw
       (ringChar.eq_iff).mp hringChar
     let : P.asIdeal.LiesOver v.asIdeal := hPv
     have hnormPcoprime : (Ideal.absNorm P.asIdeal).Coprime 2 := by
-      rw [Ideal.absNorm_eq_pow_inertiaDeg_of_liesOver
+      rw [Ideal.absNorm_eq_pow_inertiaDeg'_of_liesOver
         P.asIdeal v.asIdeal inferInstance v.ne_bot]
       change (NU.Chebotarev.PrimeIdeal.norm v ^ _).Coprime 2
       rw [norm_eq_residueCharacteristic_rat]
@@ -7061,7 +7060,7 @@ private theorem twoPrime_exceptional_kummer_raw
   have hB : B.Finite := hD.preimage htoPrime.injOn
   let S := NU.Chebotarev.frobeniusPrimeSet
     (K := ℚ) (L := E) (ConjClasses.mk sigma)
-  have hSgood : (S \ B).Infinite := hinf.diff hB
+  have hSgood : (S \ B).Infinite := hinf.sdiff hB
   have himage : (toPrime '' (S \ B)).Infinite :=
     hSgood.image htoPrime.injOn
   apply himage.mono
@@ -7096,7 +7095,7 @@ private theorem twoPrime_exceptional_case
   obtain ⟨a, ha, hnot⟩ :=
     exceptional_cyclotomic_radical_data M b hM hb hbmax hcase
   have hfield : Irreducible (X ^ 2 - C a) :=
-    X_pow_sub_C_irreducible_of_prime Nat.prime_two hnot
+    irreducible_X_pow_sub_C_of_prime Nat.prime_two hnot
   have hraw := twoPrime_exceptional_kummer_raw M b hM hb a ha hfield
   apply hraw.mono
   rintro ell ⟨hell, hmod, hquarter⟩
@@ -7917,9 +7916,9 @@ private theorem finiteLevelResidueAction_eq_primePower_of_cyclotomic
       intro heq
       apply hellp
       rw [heq]
-    let zeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
+    let zeta := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
       (AlgebraicClosure K) (ellOdd : ℕ)).choose
-    let hzeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
+    let hzeta := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
       (AlgebraicClosure K) (ellOdd : ℕ)).choose_spec
     let M := galoisLevelJoinElement L zeta
     have hLM : L.LE M := le_galoisLevelJoinElement L zeta
@@ -8240,7 +8239,7 @@ theorem ambientResidueNorm_eq_pow
   change NU.Chebotarev.PrimeIdeal.norm v =
     NU.Chebotarev.PrimeIdeal.norm q ^
       v.asIdeal.inertiaDeg (NumberField.RingOfIntegers ℚ)
-  rw [← Ideal.inertiaDeg_eq_inertiaDeg' q.asIdeal v.asIdeal]
+  rw [← Ideal.inertiaDeg'_eq_inertiaDeg q.asIdeal v.asIdeal]
   exact NU.Chebotarev.PrimeIdeal.norm_pow_inertiaDeg v q inferInstance
 
 /-! ### Ambient assembly: `cor:chi`, `prop:inertia`, `prop:q`, and `lem:bridge` -/
@@ -8706,8 +8705,8 @@ private theorem finiteLevel_localDegree_eq_index_mul
     let := Localization.AtPrime.algebraOfLiesOver v.asIdeal w.asIdeal
     unfold finitePlaceLocalDegree
     set_option synthInstance.maxHeartbeats 400000 in
-    rw [Ideal.ramificationIdx'_tower' v.asIdeal w.asIdeal,
-      Ideal.inertiaDeg'_tower v.asIdeal w.asIdeal]
+    rw [Ideal.ramificationIdx_tower' v.asIdeal w.asIdeal,
+      Ideal.inertiaDeg_tower v.asIdeal w.asIdeal]
     ring
   change finitePlaceLocalDegree w =
     (Subgroup.comap
@@ -9098,9 +9097,9 @@ private theorem ambientCyclotomicScalar_eq_natCast_of_power
     simp [hrone, hzeta0]
   let ga : Field.absoluteGaloisGroup K := R.galoisEquiv.symm g
   change absoluteCyclotomicScalar K ell ga = (N : ZMod (ell : ℕ))
-  let zeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
+  let zeta := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
     (AlgebraicClosure K) (ell : ℕ)).choose
-  let hzeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
+  let hzeta := (HasEnoughRootsOfUnity.exists_isPrimitiveRoot
     (AlgebraicClosure K) (ell : ℕ)).choose_spec
   have hspec : zeta ^ (absoluteCyclotomicScalar K ell ga).val =
       NU.LocalTheory.absoluteGaloisAlgEquiv ga zeta := by
@@ -10276,7 +10275,7 @@ private theorem ambientResidueCoordinateCandidate_spec
       exact ambientResidueDegree_dvd_powerExponent R P g hg a ha
     rw [show ambientResidueCoordinateCandidate P g =
         profiniteIntegerOfNat hd.choose by
-      simp only [ambientResidueCoordinateCandidate, dif_pos hex, dif_pos hd]]
+      simp only [ambientResidueCoordinateCandidate, dite_eq_left hex, dite_eq_left hd]]
     rw [← profiniteIntegerOfNat_mul, ← hd.choose_spec, hua]
   · intro g hg j hcoord
     by_cases he : ∃ a : ℕ, ActsAsPowerOnResidue P.1 g
@@ -10384,7 +10383,7 @@ private theorem additive_power_exponent_eq_primePower
         have hc := congrArg (fun f : Polynomial F => f.coeff 1) hpolyn
         rw [Polynomial.coeff_X_add_one_pow, Polynomial.coeff_add,
           Polynomial.coeff_X_pow, Polynomial.coeff_one,
-          if_neg (by omega : 1 ≠ n), if_neg one_ne_zero] at hc
+          ite_eq_right (by omega : 1 ≠ n), ite_eq_right one_ne_zero] at hc
         simp only [Nat.choose_one_right, add_zero] at hc
         exact (CharP.cast_eq_zero_iff F p n).mp hc
       obtain ⟨m, rfl⟩ := hpdvd
@@ -10759,7 +10758,7 @@ private theorem ambientUnramifiedLocalData_exists
         ambientResidueCoordinateCandidate P₁ g
       dsimp [p₁, p₂] at he₁ he₂
       simp only [ambientResidueCoordinateCandidate,
-        dif_neg he₁, dif_neg he₂]
+        dite_eq_right he₁, dite_eq_right he₂]
   exact ⟨{
     source := C₁
     target := C₂

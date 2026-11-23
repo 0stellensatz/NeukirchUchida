@@ -120,7 +120,7 @@ theorem le_correspondingField
     (theta : absoluteGaloisGroup F₁ ≃ₜ* absoluteGaloisGroup F₂)
     (K₁ : NumberFieldExtension F₁) :
     F₂.field ≤ (correspondingField theta K₁).field := by
-  apply (IntermediateField.le_iff_le _ _).2
+  apply (IntermediateField.le_fixedField_iff_le_fixingSubgroup _ _).2
   exact Subgroup.map_subtype_le _
 
 /-- The correspondent, packaged as an ambient extension of `F₂`. -/
@@ -410,7 +410,7 @@ private theorem valuationSubring_comap_ne_top_of_local
       (i.comp A.toSubring.subtype |>.codRestrict W.toSubring hi)) :
     W.comap i ≠ ⊤ := by
   obtain ⟨x, _, hx⟩ :=
-    SetLike.exists_of_lt (lt_top_iff_ne_top.mpr hA)
+    IsConcreteLE.exists_of_lt (lt_top_iff_ne_top.mpr hA)
   have hx0 : x ≠ 0 := by
     intro h
     apply hx
@@ -1167,8 +1167,8 @@ theorem degreeOne_iff_rationalDecompositionGroup_le
             (N.field ≃ₐ[F.field] N.field)]
   have hcard : Nat.card Dq = absoluteLocalDegree F v * Nat.card Df := by
     rw [hcardq, hcardf, absoluteLocalDegree, he, hf,
-      Ideal.ramificationIdx'_tower' v.asIdeal w.asIdeal,
-      Ideal.inertiaDeg'_tower v.asIdeal w.asIdeal]
+      Ideal.ramificationIdx_tower' v.asIdeal w.asIdeal,
+      Ideal.inertiaDeg_tower v.asIdeal w.asIdeal]
     ring
   let inc : Df → Dq := fun sigma =>
     ⟨sigma.1.restrictScalars ℚ, by

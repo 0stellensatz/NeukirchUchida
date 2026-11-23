@@ -422,7 +422,7 @@ private noncomputable def fixedFieldLocalData
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
-      (Valued.v : Valuation E NNReal).exists_setOf_restrict_le_iff 0 s
+      (Valued.v : Valuation E NNReal).exists_setOfPred_restrict_le_iff 0 s
   letI : IsValuativeTopology E := htop
   have hnontriv : ValuativeRel.IsNontrivial E :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vE).2 inferInstance
@@ -620,7 +620,7 @@ private theorem sylow_restricted_H2_bound
   let : ValuativeExtension E L := D.upperExtension
   let eG := IntermediateField.subgroupEquivAlgEquiv
     (P : Subgroup (L ≃ₐ[K] L))
-  have hPG : IsPGroup p (L ≃ₐ[E] L) := P.isPGroup'.of_equiv eG
+  have hPG : IsPGroup p (L ≃ₐ[E] L) := P.isPGroup.of_equiv eG
   have hlocal := local_H2_upperBound_of_isPGroup E L p hPG
   let eH := restrictedH2Equiv (P : Subgroup (L ≃ₐ[K] L))
   let : Finite (Inhomogeneous.H2 (MulRep E L)) := hlocal.1
@@ -746,7 +746,7 @@ private theorem local_H2_upperBound_sylow_induction :
           change ((PG : Sylow q G) : Subgroup G).index • x.1.toAdd =
             ((PG : Sylow q G) : Subgroup G).index • y.1.toAdd
           exact hindex
-        exact (PA.isPGroup'.powEquiv' PG.not_dvd_index).injective hpow
+        exact (PA.isPGroup.powEquiv' PG.not_dvd_index).injective hpow
       have hcardPA : Nat.card PA ≤ Nat.card C :=
         Nat.card_le_card_of_injective _ hresPA
       have hcardC : Nat.card C ≤ Nat.card PG :=
@@ -884,6 +884,7 @@ structure UnramifiedEnvelopeData (π : Uniformizer K) where
       transportedH2 descentQuotient descentCoefficient β = psi → α = β
 
 omit [IsGalois K L] [ContinuousSMul K L] [IsScalarTower K L M] [IsScalarTower K U M] [FiniteDimensional K M] [FiniteDimensional U M] [IsGalois K M] [IsGalois L M] [ValuativeExtension K M] [ValuativeExtension U M] [ContinuousSMul K M] [ContinuousSMul L M] [ContinuousSMul U M] in
+omit [ContinuousSMul K U] in
 private theorem envelope_preimage_existsUnique (π : Uniformizer K)
     (D : UnramifiedEnvelopeData K L U M π) :
     ∃! α : Inhomogeneous.H2 (MulRep K L),
@@ -900,6 +901,7 @@ noncomputable def unramifiedEnvelopePreimage (π : Uniformizer K)
   (envelope_preimage_existsUnique K L U M π D).choose
 
 omit [IsGalois K L] [ContinuousSMul K L] [IsScalarTower K L M] [IsScalarTower K U M] [FiniteDimensional K M] [FiniteDimensional U M] [IsGalois K M] [IsGalois L M] [ValuativeExtension K M] [ValuativeExtension U M] [ContinuousSMul K M] [ContinuousSMul L M] [ContinuousSMul U M] in
+omit [ContinuousSMul K U] in
 /-- The chosen envelope preimage has the required inflated image. -/
 theorem unramifiedEnvelopePreimage_spec (π : Uniformizer K)
     (D : UnramifiedEnvelopeData K L U M π) :
@@ -908,6 +910,7 @@ theorem unramifiedEnvelopePreimage_spec (π : Uniformizer K)
   (envelope_preimage_existsUnique K L U M π D).choose_spec.1
 
 omit [IsGalois K L] [ContinuousSMul K L] [IsScalarTower K L M] [IsScalarTower K U M] [FiniteDimensional K M] [FiniteDimensional U M] [IsGalois K M] [IsGalois L M] [ValuativeExtension K M] [ValuativeExtension U M] [ContinuousSMul K M] [ContinuousSMul L M] [ContinuousSMul U M] in
+omit [ContinuousSMul K U] in
 private theorem envelope_preimage_order (π : Uniformizer K)
     (D : UnramifiedEnvelopeData K L U M π)
     (α : Inhomogeneous.H2 (MulRep K L))
@@ -1584,7 +1587,7 @@ private noncomputable def envelopeFiniteLocalFieldData
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
-      (Valued.v : Valuation E NNReal).exists_setOf_restrict_le_iff 0 s
+      (Valued.v : Valuation E NNReal).exists_setOfPred_restrict_le_iff 0 s
   have hloc : LocallyCompactSpace E :=
     LocallyCompactSpace.of_finiteDimensional_of_complete K E
   have hnontriv : ValuativeRel.IsNontrivial E := by
@@ -3513,8 +3516,7 @@ theorem unramifiedEnvelopePreimage_descends
     (D₁ : UnramifiedEnvelopeData K L U₁ M₁ π₁) :
     DescendsFromUnramifiedEnvelopes K L
       (unramifiedEnvelopePreimage K L U₁ M₁ π₁ D₁) := by
-  intro π₂ U₂' M₂'
-  intro _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ D₂
+  intro π₂ U₂' M₂' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ D₂
   rw [unramifiedEnvelopePreimage_commonRefinement
     (K := K) (L := L) (Ksep := Ksep) (U₁ := U₁) (M₁ := M₁)
     (U₂ := U₂') (M₂ := M₂') T π₁ π₂ D₁ D₂]
@@ -3627,6 +3629,7 @@ abbrev fundamentalClassValue : Inhomogeneous.H2 (MulRep K L) :=
   (fundamentalClass K L).class
 
 omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [IsGalois K L] in
 /--
 **F08**, Theorem `thm:local-fundamental-class`: Hilbert 90 supplies the degree-one vanishing in
 the same local-field instance bundle.

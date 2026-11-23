@@ -411,7 +411,7 @@ private theorem primitiveDivisionPolynomial_coeff_mem
     (primitiveDivisionPolynomial_map_residue K π m)
   rw [Polynomial.coeff_map] at hcoeff
   have hne : n ≠ (residueCard K - 1) * residueCard K ^ (m - 1) := ne_of_lt hn'
-  simp only [Polynomial.coeff_X_pow, if_neg hne] at hcoeff
+  simp only [Polynomial.coeff_X_pow, ite_eq_right hne] at hcoeff
   exact Ideal.Quotient.eq_zero_iff_mem.mp hcoeff
 
 private theorem primitiveDivisionPolynomial_coeff_zero_notMem_sq
@@ -601,7 +601,7 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
-      (Valued.v : Valuation E ℝ≥0).exists_setOf_restrict_le_iff 0 s
+      (Valued.v : Valuation E ℝ≥0).exists_setOfPred_restrict_le_iff 0 s
   let : IsValuativeTopology E := hvt
   have hlc : LocallyCompactSpace E :=
     LocallyCompactSpace.of_finiteDimensional_of_complete K E
@@ -617,7 +617,7 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
     intro a b
     change ‖algebraMap K E a‖₊ ≤ ‖algebraMap K E b‖₊ ↔ a ≤ᵥ b
     rw [← NNReal.coe_le_coe]
-    simp only [coe_nnnorm]
+    simp only [coe_nnNorm]
     rw [show ‖algebraMap K E a‖ = ‖a‖ from
       spectralNorm_extends (K := K) (L := E) a,
       show ‖algebraMap K E b‖ = ‖b‖ from
@@ -1417,7 +1417,7 @@ theorem lubinTateTower_exists (π : Uniformizer K) :
       (((L (m + 1) (Nat.succ_pos m)).generator :
         (L (m + 1) (Nat.succ_pos m)).field) : Ksep) by
           rw [hLgen (m + 1) (Nat.succ_pos m)]
-          congr 2 <;> omega]
+          congr 2]
     change algebraMap S Ksep (Polynomial.eval₂ c y (lubinTatePolynomial K π)) = _
     rw [Polynomial.hom_eval₂, Polynomial.eval_map]
     congr 1
@@ -1583,7 +1583,7 @@ private lemma mvPowerSeries_subst_zero_eq_C_constantCoeff
     · have hprod : (0 : σ →₀ ℕ).prod
           (fun _ e => (0 : MvPowerSeries τ R) ^ e) = 1 := by
         simp [Finsupp.prod]
-      rw [if_neg hd, hprod, MvPowerSeries.coeff_one, if_neg hd, smul_zero]
+      rw [ite_eq_right hd, hprod, MvPowerSeries.coeff_one, ite_eq_right hd, smul_zero]
   · intro e he
     obtain ⟨i, hi⟩ : e.support.Nonempty :=
       Finsupp.support_nonempty_iff.mpr he
@@ -1766,7 +1766,7 @@ private theorem formalGroup_sub_X_factor
     simp [e] at this
   have hleft : MvPowerSeries.coeff e
       (F.toPowerSeries - MvPowerSeries.X 0) = 1 := by
-    rw [map_sub, F.lin_coeff_Y, MvPowerSeries.coeff_X, if_neg hneq, sub_zero]
+    rw [map_sub, F.lin_coeff_Y, MvPowerSeries.coeff_X, ite_eq_right hneq, sub_zero]
   have hright : MvPowerSeries.coeff e (MvPowerSeries.X 1 * Q) =
       MvPowerSeries.constantCoeff Q := by
     rw [MvPowerSeries.coeff_mul, Finset.sum_eq_single (e, 0)]
@@ -2516,7 +2516,7 @@ private noncomputable def lubinTateIntegralUnitActionHom
     Units (RingOfIntegers K) →* (L.field ≃ₐ[K] L.field) where
   toFun := lubinTateIntegralUnitAlgEquiv K Ksep π m hm L
   map_one' := by
-    apply AlgEquiv.coe_algHom_injective
+    apply AlgEquiv.coe_toAlgHom_injective
     let pb := lubinTateLevelPowerBasis K Ksep π m hm L
     apply pb.algHom_ext
     rw [lubinTateLevelPowerBasis_gen K Ksep π m hm L]
@@ -2528,7 +2528,7 @@ private noncomputable def lubinTateIntegralUnitActionHom
       lubinTateLevel_evaluation_X K Ksep π m hm L]
   map_mul' := by
     intro u v
-    apply AlgEquiv.coe_algHom_injective
+    apply AlgEquiv.coe_toAlgHom_injective
     let pb := lubinTateLevelPowerBasis K Ksep π m hm L
     apply pb.algHom_ext
     rw [lubinTateLevelPowerBasis_gen K Ksep π m hm L]
@@ -2577,7 +2577,7 @@ private theorem lubinTateIntegralUnitAction_ker
     have h := (lubinTateLevel_evaluation_add_eq_iff K Ksep π m hm L
       1 ((u : RingOfIntegers K) - 1)).mpr hz
     simpa using h
-  apply AlgEquiv.coe_algHom_injective
+  apply AlgEquiv.coe_toAlgHom_injective
   let pb := lubinTateLevelPowerBasis K Ksep π m hm L
   apply pb.algHom_ext
   rw [lubinTateLevelPowerBasis_gen K Ksep π m hm L]
@@ -3038,7 +3038,7 @@ private theorem lubinTateTowerRestriction_integralUnit
   let G := lubinTateFormalModule K π
   let eu := G.endomorphism (u : RingOfIntegers K)
   let f := lubinTateSeries K π
-  apply AlgEquiv.coe_algHom_injective
+  apply AlgEquiv.coe_toAlgHom_injective
   let pb := lubinTateLevelPowerBasis K Ksep π m hm L
   apply pb.algHom_ext
   rw [lubinTateLevelPowerBasis_gen K Ksep π m hm L]

@@ -92,7 +92,7 @@ theorem centralizer_absoluteGaloisGroup_eq_one
       have hA : A ≠ ⊤ :=
         NU.LocalTheory.primeValuationSubring_ne_top v
       obtain ⟨x, _, hx⟩ :=
-        SetLike.exists_of_lt (lt_top_iff_ne_top.mpr hA)
+        IsConcreteLE.exists_of_lt (lt_top_iff_ne_top.mpr hA)
       have hx0 : x ≠ 0 := by
         intro h
         apply hx

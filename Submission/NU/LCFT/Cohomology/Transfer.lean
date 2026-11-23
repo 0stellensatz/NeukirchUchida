@@ -188,7 +188,7 @@ variable {S : Subgroup G} (T : ExplicitTransversal S ι)
 private theorem rho_inv_rho (M : Rep ℤ G) (g : G) (x : M) :
     M.ρ g⁻¹ (M.ρ g x) = x := by
   let : Module ℤ M := M.hV2
-  rw [← Module.End.mul_apply, ← map_mul]
+  rw [← mul_apply_eq_comp, ← map_mul]
   simp
 
 omit [Fintype ι] in
@@ -196,8 +196,8 @@ private theorem rho_action_factorization (M : Rep ℤ G) (i : ι) (g : G) (x : M
     M.ρ g (M.ρ (T.rep (T.next i g))⁻¹ x) =
       M.ρ (T.rep i)⁻¹ (M.ρ (T.factor i g : G) x) := by
   let : Module ℤ M := M.hV2
-  rw [← Module.End.mul_apply, ← map_mul, T.action_factorization,
-    map_mul, Module.End.mul_apply]
+  rw [← mul_apply_eq_comp, ← map_mul, T.action_factorization,
+    map_mul, mul_apply_eq_comp]
 
 /-- Transfer in degree zero, for a fixed explicit right transversal. -/
 def corC0 (M : Rep ℤ G) : C0 (Rep.res S.subtype M) →+ C0 M where
@@ -508,7 +508,7 @@ private theorem homogeneous2_equivariant (M : Rep ℤ G) (c : C2 M)
       homogeneous2 M c (g * x₀) (g * x₁) (g * x₂) := by
   let : Module ℤ M := M.hV2
   simp only [homogeneous2]
-  rw [← Module.End.mul_apply, ← map_mul]
+  rw [← mul_apply_eq_comp, ← map_mul]
   congr 2 <;> simp [mul_assoc]
 
 private theorem homogeneous2_cocycle (M : Rep ℤ G) (c : C2 M)
@@ -526,7 +526,7 @@ private theorem homogeneous2_cocycle (M : Rep ℤ G) (c : C2 M)
   simp only [map_sub, map_add, map_zero] at h'
   change homogeneous2 M c x₁ x₂ x₃ - homogeneous2 M c x₀ x₂ x₃ +
       homogeneous2 M c x₀ x₁ x₃ - homogeneous2 M c x₀ x₁ x₂ = 0
-  simpa [homogeneous2, ← Module.End.mul_apply, ← map_mul, mul_assoc] using h'
+  simpa [homogeneous2, ← mul_apply_eq_comp, ← map_mul, mul_assoc] using h'
 
 private theorem homogeneous2_prism (M : Rep ℤ G) (c : C2 M)
     (hc : d2 M c = 0) (o₀ o₁ o₂ n₀ n₁ n₂ : G) :
@@ -713,7 +713,7 @@ private theorem corC1_change_summand (M : Rep ℤ G)
       _ = -b.1 x⁻¹ := by rw [← h']; simp
   have hu (z : M) : M.ρ (U.rep i)⁻¹ z =
       M.ρ (T.rep i)⁻¹ (M.ρ (C.gauge i : G)⁻¹ z) := by
-    rw [C.rep_eq, mul_inv_rev, map_mul, Module.End.mul_apply]
+    rw [C.rep_eq, mul_inv_rev, map_mul, mul_apply_eq_comp]
   rw [hu, C.factor_eq]
   have hinside :
       M.ρ (C.gauge i : G)⁻¹
@@ -766,7 +766,7 @@ theorem corH0_eq (C : TransversalChange T U) (M : Rep ℤ G) :
     ∑ i : ι, M.ρ (T.rep i)⁻¹ a.1
   apply Finset.sum_congr rfl
   intro i _
-  rw [C.rep_eq, mul_inv_rev, map_mul, Module.End.mul_apply]
+  rw [C.rep_eq, mul_inv_rev, map_mul, mul_apply_eq_comp]
   have ha := a.2 (C.gauge i)⁻¹
   change M.ρ ((C.gauge i : G)⁻¹) a.1 = a.1 at ha
   rw [ha]
@@ -815,7 +815,7 @@ private theorem homogeneous2_change_new (M : Rep ℤ G)
           (T.factor i g * T.factor (T.next i g) h *
             (C.gauge (T.next (T.next i g) h))⁻¹)) := by
   let : Module ℤ M := M.hV2
-  rw [C.rep_eq, mul_inv_rev, map_mul, Module.End.mul_apply]
+  rw [C.rep_eq, mul_inv_rev, map_mul, mul_apply_eq_comp]
   congr 1
   simp only [homogeneous2, MonoidHom.coe_comp,
     Subgroup.coe_subtype, Function.comp_apply]
@@ -1103,7 +1103,7 @@ theorem norm_eq_subgroupNorm_cosetSum (T : ExplicitTransversal S ι)
       intro s _
       apply Finset.sum_congr rfl
       intro i _
-      rw [← Module.End.mul_apply, ← map_mul]
+      rw [← mul_apply_eq_comp, ← map_mul]
     _ = _ := by
       simp only [MonoidHom.coe_comp, Function.comp_apply]
       rw [Finset.sum_comm]
@@ -1143,7 +1143,7 @@ theorem norm_eq_cor_subgroupNorm (T : ExplicitTransversal S ι)
       rw [map_sum]
       apply Finset.sum_congr rfl
       intro s _
-      rw [← Module.End.mul_apply, ← map_mul]
+      rw [← mul_apply_eq_comp, ← map_mul]
     _ = _ := by
       simp only [MonoidHom.coe_comp, Function.comp_apply]
       rw [Finset.sum_comm]
@@ -1273,8 +1273,8 @@ private theorem cosetSum_generator_mem_augmentation
             intro i _
             change M.ρ (T.rep i) (M.ρ g a) =
               M.ρ (T.factor i g : G) (M.ρ (T.rep (T.next i g)) a)
-            rw [← Module.End.mul_apply, ← map_mul,
-              ← Module.End.mul_apply, ← map_mul, T.factorization]
+            rw [← mul_apply_eq_comp, ← map_mul,
+              ← mul_apply_eq_comp, ← map_mul, T.factorization]
       _ = (∑ i : ι, (Rep.res S.subtype M).ρ (T.factor i g)
           (M.ρ (T.rep (T.next i g)) a)) -
           ∑ i : ι, M.ρ (T.rep (T.next i g)) a := by rw [hreindex]

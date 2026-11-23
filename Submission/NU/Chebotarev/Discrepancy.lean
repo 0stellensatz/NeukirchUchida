@@ -246,7 +246,7 @@ theorem abs_affineLatticePointCount_sub_volume_div_covolume_le_boundaryCells
       μ (S ∩ fundamentalCell L b v l) = 0 := by
     have hlB : l ∉ B := fun hl => hlt (hBt hl)
     have hlA : v + (l : E) ∉ S := by
-      simpa only [A, affineLatticeIndexSet, Set.mem_setOf_eq] using
+      simpa only [A, affineLatticeIndexSet, mem_ofPred_eq] using
         (fun hl => hlt (hAt hl))
     rw [inter_fundamentalCell_eq_empty_of_not_mem L b v S l hlB hlA, measure_empty]
   let : VAddInvariantMeasure L E μ :=
@@ -299,21 +299,21 @@ theorem abs_affineLatticePointCount_sub_volume_div_covolume_le_boundaryCells
           μ.real (S ∩ fundamentalCell L b v l) / c| ≤
         if l ∈ B then (1 : ℝ) else 0 := by
     by_cases hlB : l ∈ B
-    · rw [if_pos hlB]
+    · rw [ite_eq_left hlB]
       obtain ⟨hq0, hq1⟩ := hquotient l
       by_cases hlA : l ∈ A
-      · rw [if_pos hlA, abs_of_nonneg (sub_nonneg.mpr hq1)]
+      · rw [ite_eq_left hlA, abs_of_nonneg (sub_nonneg.mpr hq1)]
         linarith
-      · rw [if_neg hlA, zero_sub, abs_neg, abs_of_nonneg hq0]
+      · rw [ite_eq_right hlA, zero_sub, abs_neg, abs_of_nonneg hq0]
         exact hq1
-    · rw [if_neg hlB]
+    · rw [ite_eq_right hlB]
       by_cases hlA : l ∈ A
       · have hp : v + (l : E) ∈ S := hlA
-        rw [if_pos hlA, inter_fundamentalCell_eq_of_mem L b v S l hlB hp,
+        rw [ite_eq_left hlA, inter_fundamentalCell_eq_of_mem L b v S l hlB hp,
           measureReal_fundamentalCell L μ b v l]
         simp [c, hc.ne']
       · have hp : v + (l : E) ∉ S := hlA
-        rw [if_neg hlA,
+        rw [ite_eq_right hlA,
           inter_fundamentalCell_eq_empty_of_not_mem L b v S l hlB hp]
         simp
   calc

@@ -464,8 +464,7 @@ private def reverse : N (A := A) S ⟶ Rep.ind (botS S).subtype (BS (A := A) S) 
     intro z
     induction z using Representation.Coinvariants.induction_on with
     | h z =>
-      induction z using TensorProduct.induction_on with
-      | zero => simp
+      induction z using TensorProduct.inductionOn with
       | add x y hx hy =>
         rw [map_add, map_add, map_add]
         exact congrArg₂ (· + ·) hx hy
@@ -523,8 +522,7 @@ private def resIndIso : N (A := A) S ≅
     intro z
     induction z using Representation.Coinvariants.induction_on with
     | h z =>
-      induction z using TensorProduct.induction_on with
-      | zero => simp
+      induction z using TensorProduct.inductionOn with
       | add x y hx hy =>
         rw [map_add, map_add, map_add]
         exact congrArg₂ (· + ·) hx hy
@@ -573,8 +571,7 @@ private def resIndIso : N (A := A) S ≅
     intro z
     induction z using Representation.Coinvariants.induction_on with
     | h z =>
-      induction z using TensorProduct.induction_on with
-      | zero => simp
+      induction z using TensorProduct.inductionOn with
       | add x y hx hy =>
         rw [map_add, map_add, map_add]
         exact congrArg₂ (· + ·) hx hy

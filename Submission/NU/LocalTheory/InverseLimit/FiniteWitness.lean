@@ -212,7 +212,7 @@ theorem noncyclic_decompositionGroup_ramified
   rw [IsRamifiedAtBase, not_lt] at hunramified
   have he : (w.asIdeal.under (𝓞 K)).ramificationIdx' w.asIdeal = 1 := by
     apply Nat.le_antisymm hunramified
-    rw [Ideal.ramificationIdx_eq_ramificationIdx'
+    rw [Ideal.ramificationIdx'_eq_ramificationIdx
       (w.asIdeal.under (𝓞 K)) w.asIdeal
       (Ideal.under_ne_bot (𝓞 K) w.ne_bot)]
     exact Ideal.ramificationIdx_pos (q := w.asIdeal) (𝓞 K)
@@ -231,7 +231,7 @@ theorem noncyclic_decompositionGroup_ramified
   have hIcard : Nat.card (w.asIdeal.inertia G) = 1 := by
     rw [Ideal.card_inertia_eq_ramificationIdxIn p w.asIdeal,
       Ideal.ramificationIdxIn_eq_ramificationIdx p w.asIdeal G,
-      ← Ideal.ramificationIdx_eq_ramificationIdx' p w.asIdeal
+      ← Ideal.ramificationIdx'_eq_ramificationIdx p w.asIdeal
         (Ideal.under_ne_bot (𝓞 K) w.ne_bot)]
     exact he
   have hIcard' :

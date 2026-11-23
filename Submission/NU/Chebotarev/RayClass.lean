@@ -172,7 +172,7 @@ private def admissiblePrincipalSubgroup (m : RayModulus K) :
     rintro I J ⟨a, ha, hI⟩ ⟨b, hb, hJ⟩
     refine ⟨a * b, rayAdmissible_mul m ha hb, ?_⟩
     change (I.1.1 : FractionalIdeal _ K) * (J.1.1 : FractionalIdeal _ K) = _
-    rw [hI, hJ, FractionalIdeal.spanSingleton_mul_spanSingleton]
+    rw [hI, hJ, ← map_mul (FractionalIdeal.spanSingleton _)]
     rfl
   inv_mem' := by
     rintro I ⟨a, ha, hI⟩
@@ -231,7 +231,7 @@ private theorem rayToClass_kills_principal (m : RayModulus K) :
   change ClassGroup.mk K I.1 = 1
   rw [ClassGroup.mk_eq_one_iff]
   refine ⟨⟨(a : K), ?_⟩⟩
-  simp only [hI, FractionalIdeal.coe_spanSingleton]
+  simp only [hI, FractionalIdeal.coeToSubmodule_spanSingleton]
 
 private noncomputable def forgetToClass (m : RayModulus K) :
     RayClassGroup m →* ClassGroup (NumberField.RingOfIntegers K) :=
@@ -317,7 +317,7 @@ private theorem rayToClass_surjective (m : RayModulus K) :
         simpa using hx0
       have hcountX : FractionalIdeal.count K p
           (Ideal.span {x} : FractionalIdeal (NumberField.RingOfIntegers K)⁰ K) = e p.asIdeal := by
-        rw [FractionalIdeal.count_coe K p hspan0]
+        rw [FractionalIdeal.count_coeIdeal K p hspan0]
         rw [Ideal.count_associates_factors_eq hspan0 p.isPrime p.ne_bot]
         exact_mod_cast Ideal.count_normalizedFactors_eq
           ((Ideal.span_singleton_le_iff_mem _).mpr (hxpow p.asIdeal hp_mem))
@@ -326,7 +326,7 @@ private theorem rayToClass_surjective (m : RayModulus K) :
           (I : FractionalIdeal (NumberField.RingOfIntegers K)⁰ K) = e p.asIdeal := by
         have hI0 : (I : Ideal (NumberField.RingOfIntegers K)) ≠ 0 :=
           mem_nonZeroDivisors_iff_ne_zero.mp I.2
-        rw [FractionalIdeal.count_coe K p hI0]
+        rw [FractionalIdeal.count_coeIdeal K p hI0]
         rw [Ideal.count_associates_factors_eq hI0 p.isPrime p.ne_bot]
       change FractionalIdeal.count K p
         ((X : FractionalIdeal _ K) *
@@ -369,7 +369,7 @@ private theorem count_span_eq_zero_iff {x : O} (hx : x ≠ 0) (p : PrimeIdeal K)
       (Ideal.span {x} : FractionalIdeal O⁰ K) = 0 ↔ x ∉ p.asIdeal := by
   classical
   have hs : Ideal.span {x} ≠ (0 : Ideal O) := by simpa
-  rw [FractionalIdeal.count_coe K p hs, Int.ofNat_eq_zero]
+  rw [FractionalIdeal.count_coeIdeal K p hs, Int.ofNat_eq_zero]
   constructor
   · intro hc hxp
     have hdvd : p.asIdeal ∣ Ideal.span {x} :=
@@ -417,7 +417,7 @@ private theorem fraction_prime_mem_iff (a : Kˣ) (p : PrimeIdeal K)
         (Ideal.span {γ} : FractionalIdeal O⁰ K)⁻¹ := by
     simp only [FractionalIdeal.coeIdeal_span_singleton]
     rw [FractionalIdeal.spanSingleton_inv,
-      FractionalIdeal.spanSingleton_mul_spanSingleton]
+      ← map_mul (FractionalIdeal.spanSingleton _)]
     rw [← hfrac]
     simp only [div_eq_mul_inv]
   have heq : FractionalIdeal.count K p
@@ -667,8 +667,8 @@ private noncomputable def realSignHom (σ : K →+* ℝ) :
       simp [ha, hb]
     · have ha' : σ (a : K) < 0 := lt_of_le_of_ne (le_of_not_gt ha) ha0
       have hb' : σ (b : K) < 0 := lt_of_le_of_ne (le_of_not_gt hb) hb0
-      simp only [Units.val_mul, map_mul, if_pos (mul_pos_of_neg_of_neg ha' hb'),
-        if_neg ha, if_neg hb]
+      simp only [Units.val_mul, map_mul, ite_eq_left (mul_pos_of_neg_of_neg ha' hb'),
+        ite_eq_right ha, ite_eq_right hb]
       rw [← ofAdd_add]
       congr 1
 
@@ -768,10 +768,10 @@ private theorem exists_integer_with_signs (s : Finset (K →+* ℝ))
         else Multiplicative.ofAdd 1) = e σ := by
     by_cases he : e σ = 1
     · have habs := abs_lt.mp (by simpa [he] using hkσ σ)
-      rw [if_pos (by linarith), he]
+      rw [ite_eq_left (by linarith), he]
     · have habs := abs_lt.mp (by simpa [he] using hkσ σ)
       have hkneg : σ.1 k < 0 := by linarith
-      rw [if_neg (not_lt_of_ge hkneg.le)]
+      rw [ite_eq_right (not_lt_of_ge hkneg.le)]
       rw [← ofAdd_toAdd (e σ)]
       generalize hz : Multiplicative.toAdd (e σ) = z₂
       fin_cases z₂
@@ -814,15 +814,15 @@ private theorem exists_integer_with_signs (s : Finset (K →+* ℝ))
   rw [hσq]
   have hbσpos : 0 < (σ.1 (algebraMap O K (b : O))) ^ 2 := sq_pos_of_ne_zero hbσ
   by_cases hkpos : 0 < σ.1 k
-  · rw [if_pos (mul_pos hbσpos hkpos)]
+  · rw [ite_eq_left (mul_pos hbσpos hkpos)]
     have hs := hksign σ
-    rw [if_pos hkpos] at hs
+    rw [ite_eq_left hkpos] at hs
     exact hs
   · have hprod : ¬0 < (σ.1 (algebraMap O K (b : O))) ^ 2 * σ.1 k :=
       not_lt_of_ge (mul_nonpos_of_nonneg_of_nonpos hbσpos.le (le_of_not_gt hkpos))
-    rw [if_neg hprod]
+    rw [ite_eq_right hprod]
     have hs := hksign σ
-    rw [if_neg hkpos] at hs
+    rw [ite_eq_right hkpos] at hs
     exact hs
 
 private theorem exists_add_with_signs (s : Finset (K →+* ℝ))
@@ -873,15 +873,15 @@ private theorem exists_add_with_signs (s : Finset (K →+* ℝ))
   by_cases htpos : 0 < σ.1 (algebraMap O K t)
   · have hypos : 0 < σ.1 (algebraMap O K (x + N * t)) := by
       nlinarith [hprod σ]
-    rw [if_pos htpos] at hsσ
-    rw [if_pos hypos]
+    rw [ite_eq_left htpos] at hsσ
+    rw [ite_eq_left hypos]
     exact hsσ
   · have htneg : σ.1 (algebraMap O K t) < 0 :=
       lt_of_le_of_ne (le_of_not_gt htpos) (htσ0 σ)
     have hyneg : σ.1 (algebraMap O K (x + N * t)) < 0 := by
       nlinarith [hprod σ]
-    rw [if_neg htpos] at hsσ
-    rw [if_neg (not_lt_of_ge hyneg.le)]
+    rw [ite_eq_right htpos] at hsσ
+    rw [ite_eq_right (not_lt_of_ge hyneg.le)]
     exact hsσ
 
 
@@ -1223,7 +1223,7 @@ theorem exactSequence (m : RayModulus K) :
       change _ = FractionalIdeal.spanSingleton _
         ((((a : Kˣ) * ((unitsToRayElements m u : rayElementGroup m) : Kˣ)⁻¹) : Kˣ) : K)
       rw [Units.val_mul, Units.val_inv_eq_inv_val,
-        ← FractionalIdeal.spanSingleton_mul_spanSingleton]
+        map_mul (FractionalIdeal.spanSingleton _)]
       have huone : FractionalIdeal.spanSingleton (NumberField.RingOfIntegers K)⁰
           (((unitsToRayElements m u : rayElementGroup m) : Kˣ) : K) = 1 := by
         change FractionalIdeal.spanSingleton (NumberField.RingOfIntegers K)⁰
@@ -1281,7 +1281,7 @@ theorem exactSequence (m : RayModulus K) :
       change ClassGroup.mk K (principalRayIdeal m a).1 = 1
       rw [ClassGroup.mk_eq_one_iff]
       refine ⟨⟨((a : Kˣ) : K), ?_⟩⟩
-      rw [principalRayIdeal_val, FractionalIdeal.coe_spanSingleton]
+      rw [principalRayIdeal_val, FractionalIdeal.coeToSubmodule_spanSingleton]
     · intro hc
       obtain ⟨I, hIc⟩ := QuotientGroup.mk'_surjective (RayPrincipalSubgroup m) c
       change mk m I = c at hIc
@@ -1300,7 +1300,7 @@ theorem exactSequence (m : RayModulus K) :
       have heq : toPrincipalIdeal (NumberField.RingOfIntegers K) K au = I.1 := by
         apply Units.ext
         apply Subtype.coe_injective
-        simpa [au, coe_toPrincipalIdeal, FractionalIdeal.coe_spanSingleton] using ha.symm
+        simpa [au, coe_toPrincipalIdeal, FractionalIdeal.coeToSubmodule_spanSingleton] using ha.symm
       have hau : au ∈ rayElementGroup m := by
         change toPrincipalIdeal (NumberField.RingOfIntegers K) K au ∈
           RayIdealGroup m

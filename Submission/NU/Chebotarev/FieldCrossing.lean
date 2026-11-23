@@ -126,8 +126,7 @@ private theorem fieldCrossing_relative_cyclotomic_data
     apply top_unique
     intro x hx
     clear hx
-    induction x using TensorProduct.induction_on with
-    | zero => exact (Algebra.adjoin K ({ζP} : Set P)).zero_mem
+    induction x using TensorProduct.inductionOn with
     | tmul x y =>
         rw [show x ⊗ₜ[ℚ] y = algebraMap K P x * ι y by
           rw [Algebra.TensorProduct.algebraMap_apply,
@@ -239,8 +238,7 @@ private theorem fieldCrossing_pair_algebraic
     intro a b
     apply AlgEquiv.ext
     intro z
-    induction z using TensorProduct.induction_on with
-    | zero => simp
+    induction z using TensorProduct.inductionOn with
     | tmul x y =>
         simp only [Prod.fst_mul, Prod.snd_mul, Algebra.TensorProduct.congr_apply,
           Algebra.TensorProduct.map_tmul]
@@ -284,7 +282,7 @@ private theorem fieldCrossing_pair_algebraic
     calc
       Nat.card Gal(N/K) ≤ Nat.card (N →ₐ[K] N) :=
         Nat.card_le_card_of_injective (fun e : Gal(N/K) => e.toAlgHom)
-          AlgEquiv.coe_algHom_injective
+          AlgEquiv.coe_toAlgHom_injective
       _ ≤ Module.finrank K N := card_algHom_le_finrank K N N
   have hfin : Module.finrank K N =
       Module.finrank K L * Module.finrank K M := Module.finrank_tensorProduct
@@ -1023,7 +1021,7 @@ private theorem fieldCrossing_coeff_sum
     Nat.card {I : Ideal (NumberField.RingOfIntegers K) //
       I ≠ 0 ∧ Ideal.absNorm I ≤ n} := by
   rw [← Finset.card_preimage_eq_sum_card_image_eq
-    (fun k _ => Ideal.finite_setOf_absNorm_eq k)]
+    (fun k _ => Ring.HasFiniteQuotients.finite_absNorm_eq k)]
   apply Nat.card_congr
   refine
     { toFun := fun I => ⟨I.1, ?_⟩
@@ -1073,11 +1071,11 @@ private theorem fieldCrossing_summable_ideal_rpow
     rw [LSeries.norm_term_eq]
     by_cases hn : n = 0
     · subst n
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       simp only [Nat.cast_zero]
       rw [show Real.rpow 0 (-s) = (0 : ℝ) ^ (-s) from rfl,
         Real.zero_rpow (by linarith : -s ≠ 0), mul_zero]
-    · rw [if_neg hn]
+    · rw [ite_eq_right hn]
       have han : 0 ≤ a n := Nat.cast_nonneg _
       simp only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg han,
         Complex.ofReal_re]
@@ -1085,7 +1083,7 @@ private theorem fieldCrossing_summable_ideal_rpow
       exact congrArg (a n * ·) (Real.rpow_neg (Nat.cast_nonneg n) s).symm
   let (n : ℕ) : Fintype
       {I : Ideal (NumberField.RingOfIntegers K) // Ideal.absNorm I = n} :=
-    (Ideal.finite_setOf_absNorm_eq n).fintype
+    (Ring.HasFiniteQuotients.finite_absNorm_eq n).fintype
   have hsigma : Summable (fun z : Σ n : ℕ,
       {I : Ideal (NumberField.RingOfIntegers K) // Ideal.absNorm I = n} =>
       Real.rpow (Ideal.absNorm z.2.1 : ℝ) (-s)) := by
@@ -1138,8 +1136,8 @@ private theorem fieldCrossing_dirichletPrimeSum_mono
   intro p
   simp only [f]
   by_cases hp : p ∈ S
-  · rw [if_pos hp, if_pos (hST hp)]
-  · rw [if_neg hp]
+  · rw [ite_eq_left hp, ite_eq_left (hST hp)]
+  · rw [ite_eq_right hp]
     split_ifs
     · exact Real.rpow_nonneg (Nat.cast_nonneg _) _
     · exact le_rfl

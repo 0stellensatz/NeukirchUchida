@@ -1104,7 +1104,7 @@ private theorem absoluteGalois_apply_isLocallyConstant
   rw [show {τ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M | τ v = σ v} =
       σ • (U : Set (AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)) by
     ext τ
-    simp only [Set.mem_setOf_eq, Set.mem_smul_set_iff_inv_smul_mem,
+    simp only [Set.mem_ofPred_eq, Set.mem_smul_set_iff_inv_smul_mem,
       SetLike.mem_coe, U, MulAction.mem_stabilizer_iff, AlgEquiv.smul_def]
     constructor
     · intro h
@@ -1134,7 +1134,7 @@ private theorem cupPrimitiveRootIndex_spec
     (ζ : A) (hζ : IsPrimitiveRoot ζ ℓ) (x : A) (hx : x ^ ℓ = 1) :
     ζ ^ (cupPrimitiveRootIndex ζ hζ x).val = x := by
   have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
-  rw [cupPrimitiveRootIndex, dif_pos hx]
+  rw [cupPrimitiveRootIndex, dite_eq_left hx]
   exact (hζ.eq_pow_of_pow_eq_one hx).choose_spec.2
 
 private theorem primitiveRoot_pow_val_sub
@@ -2651,7 +2651,7 @@ theorem cyclic_norm_criterion {M E : Type*} [Field M] [Field E]
     · exact ⟨Units.mk0 x hx0, Units.ext (by simpa using hx)⟩
   let f : Polynomial M := Polynomial.X ^ ℓ - Polynomial.C (a : M)
   have hf : Irreducible f :=
-    X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hpow
+    irreducible_X_pow_sub_C_of_prime (Fact.out : ℓ.Prime) hpow
   let : Fact (Irreducible f) := ⟨hf⟩
   have hprim : (primitiveRoots ℓ M).Nonempty :=
     ⟨ζ, (mem_primitiveRoots (Fact.out : ℓ.Prime).pos).2 hζ⟩
@@ -2706,7 +2706,7 @@ theorem steinberg_cupZero {M : Type*} [Field M] {ℓ : ℕ}
     · exact ⟨Units.mk0 x hx0, Units.ext (by simpa using hx)⟩
   let f : Polynomial M := Polynomial.X ^ ℓ - Polynomial.C (a : M)
   have hf : Irreducible f :=
-    X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hpow
+    irreducible_X_pow_sub_C_of_prime (Fact.out : ℓ.Prime) hpow
   let : Fact (Irreducible f) := ⟨hf⟩
   let E := AdjoinRoot f
   let : Field E := inferInstance

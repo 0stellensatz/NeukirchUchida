@@ -312,8 +312,7 @@ private def annihilatorQuotientCharacter
       map_one' := by simp
       map_mul' := by
         intro x y
-        simpa using (p : MulCharacter F n).map_add
-          (Additive.ofMul x) (Additive.ofMul y) }
+        simp }
   let qmul : (Fˣ ⧸ S) →* Multiplicative (ZMod n) :=
     QuotientGroup.lift S pmul (by
       intro x hx

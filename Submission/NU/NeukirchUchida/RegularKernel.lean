@@ -1,7 +1,8 @@
 import Submission.NU.NeukirchUchida.ChebotarevContainment
 import Mathlib.GroupTheory.SchurZassenhaus
 import Mathlib.NumberTheory.KummerDedekind
-import Mathlib.NumberTheory.RamificationInertia.Valuation
+import Mathlib.RingTheory.DedekindDomain.AdicValuation.Completion
+import Mathlib.RingTheory.DedekindDomain.AdicValuation.Valuation
 import Mathlib.Algebra.Polynomial.FieldDivision
 import Submission.NU.Compat
 
@@ -28,14 +29,14 @@ noncomputable section
 /-- A chosen primitive `p`-th root of unity in `Omega`. -/
 noncomputable def primitiveRootInOmega (p : NU.LocalTheory.OddPrime) : Omega :=
   Classical.choose
-    (HasEnoughRootsOfUnity.exists_primitiveRoot Omega (p : ℕ))
+    (HasEnoughRootsOfUnity.exists_isPrimitiveRoot Omega (p : ℕ))
 
 /-- The chosen root is genuinely primitive; this defining theorem prevents a
 choice of `1` when `p > 1`. -/
 theorem primitiveRootInOmega_spec (p : NU.LocalTheory.OddPrime) :
     IsPrimitiveRoot (primitiveRootInOmega p) (p : ℕ) :=
   Classical.choose_spec
-    (HasEnoughRootsOfUnity.exists_primitiveRoot Omega (p : ℕ))
+    (HasEnoughRootsOfUnity.exists_isPrimitiveRoot Omega (p : ℕ))
 
 /-- The cyclotomic field `ℚ(mu_p)` inside the fixed `Omega`. -/
 def cyclotomicFieldInOmega (p : NU.LocalTheory.OddPrime) :
@@ -307,7 +308,7 @@ theorem kummerProjector_idempotent
     dsimp [P, R]
     classical
     ext x
-    rw [MonoidAlgebra.single_mul_apply, one_mul]
+    rw [MonoidAlgebra.coeff_single_mul_apply, one_mul]
     change (kummerProjector p hcard chi).coeff (d⁻¹ * x) =
       (chi d : R) * (kummerProjector p hcard chi).coeff x
     rw [kummerProjector_apply, kummerProjector_apply]
@@ -355,7 +356,7 @@ theorem kummerProjector_leftTranslate
   classical
   let := Fintype.ofFinite Delta
   ext delta
-  rw [MonoidAlgebra.single_mul_apply, one_mul]
+  rw [MonoidAlgebra.coeff_single_mul_apply, one_mul]
   change (kummerProjector p hcard chi).coeff (gamma⁻¹ * delta) =
     (chi gamma : ZMod (p : ℕ)) *
       (kummerProjector p hcard chi).coeff delta
@@ -563,7 +564,7 @@ theorem projectedKummerClass_eigen
     have hmul : (MonoidAlgebra.single delta 1 * P).coeff eta =
         P.coeff (delta⁻¹ * eta) := by
       simpa only [MonoidAlgebra.coeff, one_mul] using
-        (MonoidAlgebra.single_mul_apply P (1 : ZMod (p : ℕ)) delta eta)
+        (MonoidAlgebra.coeff_single_mul_apply P (1 : ZMod (p : ℕ)) delta eta)
     have hsmul :
         ((cyclotomicCharacter N p delta : ZMod (p : ℕ)) • P).coeff eta =
           (cyclotomicCharacter N p delta : ZMod (p : ℕ)) * P.coeff eta := by
@@ -1119,7 +1120,7 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
   let f : Polynomial E.field :=
     Polynomial.X ^ (p : ℕ) - Polynomial.C a.1
   have hirr : Irreducible f :=
-    X_pow_sub_C_irreducible_of_prime p.1.2 hnotpow
+    irreducible_X_pow_sub_C_of_prime p.1.2 hnotpow
   let R0 : IntermediateField E.field Omega :=
     IntermediateField.adjoin E.field {alpha}
   let RQ : IntermediateField ℚ Omega := R0.restrictScalars ℚ
@@ -1797,7 +1798,7 @@ private theorem existsIdentityFrobeniusPrimeAway
   have hB : B.Finite := by
     apply Set.Finite.of_finite_image
       (f := fun q : NU.Chebotarev.PrimeIdeal ℚ => q.asIdeal)
-    · exact (Ideal.finite_setOf_absNorm_eq n).subset (by
+    · exact (Ring.HasFiniteQuotients.finite_absNorm_eq n).subset (by
         intro I hI
         rcases hI with ⟨q, hqn, rfl⟩
         exact hqn)
@@ -1870,13 +1871,13 @@ private theorem splitsCompletelyAt_of_identityFrobenius
       exact isConj_one_right.mp hc.symm
     constructor
     · rw [asymmetricAbsoluteRamificationIndex,
-        ← Ideal.ramificationIdx_eq_ramificationIdx'
+        ← Ideal.ramificationIdx'_eq_ramificationIdx
           q.asIdeal W.asIdeal q.ne_bot]
       have hu := (Algebra.isUnramifiedAt_iff_of_isDedekindDomain'
         W.ne_bot).mp hWu
       simpa [← hWover.over] using hu
     · rw [asymmetricAbsoluteResidueDegree,
-        ← Ideal.inertiaDeg_eq_inertiaDeg' q.asIdeal W.asIdeal]
+        ← Ideal.inertiaDeg'_eq_inertiaDeg q.asIdeal W.asIdeal]
       have hord := NU.Chebotarev.arithFrobAt_order_eq_inertiaDeg W hWu
       rw [hfrob, orderOf_one, ← hWover.over] at hord
       exact hord.symm
@@ -1939,9 +1940,9 @@ private theorem restrictSplitPrime
         rw [hv_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal]⟩
   let : v.asIdeal.LiesOver q.asIdeal := hvq
   let := Localization.AtPrime.algebraOfLiesOver v.asIdeal P.asIdeal
-  have heTower := Ideal.ramificationIdx'_tower'
+  have heTower := Ideal.ramificationIdx_tower'
     (R := 𝓞 ℚ) v.asIdeal P.asIdeal
-  have hfTower := Ideal.inertiaDeg'_tower
+  have hfTower := Ideal.inertiaDeg_tower
     (R := 𝓞 ℚ) v.asIdeal P.asIdeal
   have hPoldE : P.asIdeal.ramificationIdx (𝓞 ℚ) = 1 := hPe
   have hPoldF : P.asIdeal.inertiaDeg (𝓞 ℚ) = 1 := hPf
@@ -2244,7 +2245,7 @@ private theorem kummerRadicalRamifiedAt
   have hpe : (p : ℕ) ∣ e := (p.1.2.dvd_mul.mp hd).resolve_right hk
   have hepos : 0 < e :=
     Nat.pos_of_ne_zero
-      (Ideal.IsDedekindDomain.ramificationIdx_ne_zero_of_liesOver
+      (Ideal.IsDedekindDomain.ramificationIdx'_ne_zero_of_liesOver
         W.asIdeal P.ne_bot)
   have hple : (p : ℕ) ≤ e := Nat.le_of_dvd hepos hpe
   have hele : e ≤ (p : ℕ) := by
@@ -2252,7 +2253,7 @@ private theorem kummerRadicalRamifiedAt
     exact Ideal.ramificationIdx_le_finrank B E R W.asIdeal
   have heq : e = (p : ℕ) := Nat.le_antisymm hele hple
   refine ⟨W, hrestrict, ?_⟩
-  rw [← Ideal.ramificationIdx_eq_ramificationIdx'
+  rw [← Ideal.ramificationIdx'_eq_ramificationIdx
     P.asIdeal W.asIdeal P.ne_bot,
     show P.asIdeal.ramificationIdx' W.asIdeal = e from rfl, heq]
   exact p.1.2.one_lt
@@ -2864,7 +2865,7 @@ private theorem radicalNumberFieldExtension_finrank_of_not_isPow
   let f : Polynomial E.field :=
     Polynomial.X ^ (p : ℕ) - Polynomial.C a.1
   have hirr : Irreducible f :=
-    X_pow_sub_C_irreducible_of_prime p.1.2 hnotpow
+    irreducible_X_pow_sub_C_of_prime p.1.2 hnotpow
   have hroot : Polynomial.aeval alpha0 f = 0 := by
     rw [Polynomial.aeval_def,
       show f = Polynomial.X ^ (p : ℕ) - Polynomial.C a.1 from rfl,
@@ -2964,7 +2965,7 @@ private theorem kummerRadicalFieldRamifiedAt
   have hpe : (p : ℕ) ∣ e := (p.1.2.dvd_mul.mp hd).resolve_right hk
   have hepos : 0 < e :=
     Nat.pos_of_ne_zero
-      (Ideal.IsDedekindDomain.ramificationIdx_ne_zero_of_liesOver
+      (Ideal.IsDedekindDomain.ramificationIdx'_ne_zero_of_liesOver
         W.asIdeal P.ne_bot)
   have hple : (p : ℕ) ≤ e := Nat.le_of_dvd hepos hpe
   have hele : e ≤ (p : ℕ) := by
@@ -2972,7 +2973,7 @@ private theorem kummerRadicalFieldRamifiedAt
     exact Ideal.ramificationIdx_le_finrank B E R W.asIdeal
   have heq : e = (p : ℕ) := Nat.le_antisymm hele hple
   refine ⟨W, hrestrict, ?_⟩
-  rw [← Ideal.ramificationIdx_eq_ramificationIdx'
+  rw [← Ideal.ramificationIdx'_eq_ramificationIdx
     P.asIdeal W.asIdeal P.ne_bot,
     show P.asIdeal.ramificationIdx' W.asIdeal = e from rfl, heq]
   exact p.1.2.one_lt
@@ -3836,7 +3837,7 @@ private theorem regularKernel_localEmbedding_place (P : FinitePlace K)
     refine ⟨x, hqfinj ?_⟩
     rw [← RingHom.comp_apply, hcompat, hx]
   have hf : P.asIdeal.inertiaDeg' W.asIdeal = 1 := by
-    rw [Ideal.inertiaDeg_algebraMap]
+    rw [Ideal.inertiaDeg'_algebraMap]
     have haInj : Function.Injective
         (Algebra.ofId (NumberField.RingOfIntegers K ⧸ P.asIdeal)
           (NumberField.RingOfIntegers L ⧸ W.asIdeal)) := by
@@ -3856,12 +3857,12 @@ private theorem regularKernel_localEmbedding_place (P : FinitePlace K)
       _ = 1 := Module.finrank_self _
   have he' : W.asIdeal.ramificationIdx
       (NumberField.RingOfIntegers K) = 1 := by
-    rw [← Ideal.ramificationIdx_eq_ramificationIdx'
+    rw [← Ideal.ramificationIdx'_eq_ramificationIdx
       P.asIdeal W.asIdeal P.ne_bot]
     exact he
   have hf' : W.asIdeal.inertiaDeg
       (NumberField.RingOfIntegers K) = 1 := by
-    rw [← Ideal.inertiaDeg_eq_inertiaDeg' P.asIdeal W.asIdeal]
+    rw [← Ideal.inertiaDeg'_eq_inertiaDeg P.asIdeal W.asIdeal]
     exact hf
   exact ⟨W, hrestrict, he', hf'⟩
 
@@ -4019,7 +4020,7 @@ private theorem tameKummerRadical_splits
     let fpoly : Polynomial E.field :=
       Polynomial.X ^ (p : ℕ) - Polynomial.C a.1
     have hirr : Irreducible fpoly :=
-      X_pow_sub_C_irreducible_of_prime p.1.2 hpow
+      irreducible_X_pow_sub_C_of_prime p.1.2 hpow
     have hroot : Polynomial.aeval alpha0 fpoly = 0 := by
       simp [fpoly, halpha]
     have hmonic : fpoly.Monic :=
@@ -4179,7 +4180,7 @@ private theorem kummerRadical_ramificationIndex_eq_prime
   have hpe : (p : ℕ) ∣ e := (p.1.2.dvd_mul.mp hd).resolve_right hk
   have hepos : 0 < e :=
     Nat.pos_of_ne_zero
-      (Ideal.IsDedekindDomain.ramificationIdx_ne_zero_of_liesOver
+      (Ideal.IsDedekindDomain.ramificationIdx'_ne_zero_of_liesOver
         W.asIdeal P.ne_bot)
   have hple : (p : ℕ) ≤ e := Nat.le_of_dvd hepos hpe
   have hele : e ≤ (p : ℕ) := by
@@ -4187,7 +4188,7 @@ private theorem kummerRadical_ramificationIndex_eq_prime
     exact Ideal.ramificationIdx_le_finrank B E.field R.field.field W.asIdeal
   have heq : e = (p : ℕ) := Nat.le_antisymm hele hple
   rw [relativeRamificationIndex,
-    ← Ideal.ramificationIdx_eq_ramificationIdx'
+    ← Ideal.ramificationIdx'_eq_ramificationIdx
       P.asIdeal W.asIdeal P.ne_bot]
   exact heq
 
@@ -4424,7 +4425,7 @@ private theorem transportRadicalRamificationToDescent
   let : D.P.asIdeal.LiesOver (D.v 1).asIdeal := hPoverv
   let := Localization.AtPrime.algebraOfLiesOver
     (D.v 1).asIdeal D.P.asIdeal
-  have heTowerQP := Ideal.ramificationIdx'_tower'
+  have heTowerQP := Ideal.ramificationIdx_tower'
     (R := 𝓞 ℚ) (D.v 1).asIdeal D.P.asIdeal
   have hvPe : D.P.asIdeal.ramificationIdx (𝓞 N.field) = 1 := by
     rw [hqPe] at heTowerQP
@@ -4441,7 +4442,7 @@ private theorem transportRadicalRamificationToDescent
         _ = D.v 1 := D.P_over_identity)
   let : W.asIdeal.LiesOver (D.v 1).asIdeal := hWoverv
   let := Localization.AtPrime.algebraOfLiesOver D.P.asIdeal W.asIdeal
-  have heTowerPW := Ideal.ramificationIdx'_tower'
+  have heTowerPW := Ideal.ramificationIdx_tower'
     (R := 𝓞 N.field) D.P.asIdeal W.asIdeal
   have hvWe : W.asIdeal.ramificationIdx (𝓞 N.field) = (p : ℕ) := by
     rw [hvPe, heWP, one_mul] at heTowerPW
@@ -4464,7 +4465,7 @@ private theorem transportRadicalRamificationToDescent
   let : w.asIdeal.LiesOver (D.v 1).asIdeal := hwoverv
   let : W.asIdeal.LiesOver w.asIdeal := hWoverw
   let := Localization.AtPrime.algebraOfLiesOver w.asIdeal W.asIdeal
-  have heTowerLW := Ideal.ramificationIdx'_tower'
+  have heTowerLW := Ideal.ramificationIdx_tower'
     (R := 𝓞 N.field) w.asIdeal W.asIdeal
   have hEbound : Module.finrank N.field E.field ≤ (p : ℕ) - 1 :=
     cyclotomicCompositum_finrank_le_p_sub_one N p
@@ -4492,7 +4493,7 @@ private theorem transportRadicalRamificationToDescent
   have hpLeDegree : (p : ℕ) ≤
       Module.finrank L.field.field R.field.field := by
     rw [heTowerLW]
-    rw [← Ideal.ramificationIdx_eq_ramificationIdx'
+    rw [← Ideal.ramificationIdx'_eq_ramificationIdx
       w.asIdeal W.asIdeal w.ne_bot]
     exact Ideal.ramificationIdx_le_finrank
       BLR L.field.field R.field.field W.asIdeal
@@ -4598,9 +4599,9 @@ private theorem transportRadicalSplittingToDescent
     have hWf : W.asIdeal.inertiaDeg (𝓞 E.field) = 1 :=
       hWindices.2
     let := Localization.AtPrime.algebraOfLiesOver Q.asIdeal W.asIdeal
-    have heTowerQW := Ideal.ramificationIdx'_tower'
+    have heTowerQW := Ideal.ramificationIdx_tower'
       (R := 𝓞 ℚ) Q.asIdeal W.asIdeal
-    have hfTowerQW := Ideal.inertiaDeg'_tower
+    have hfTowerQW := Ideal.inertiaDeg_tower
       (R := 𝓞 ℚ) Q.asIdeal W.asIdeal
     have hqWe : W.asIdeal.ramificationIdx (𝓞 ℚ) = 1 := by
       rw [hQe, hWe, one_mul] at heTowerQW
@@ -4616,9 +4617,9 @@ private theorem transportRadicalSplittingToDescent
     let : W.asIdeal.LiesOver (D.v g).asIdeal := hWoverv
     let := Localization.AtPrime.algebraOfLiesOver
       (D.v g).asIdeal W.asIdeal
-    have heTowerNW := Ideal.ramificationIdx'_tower'
+    have heTowerNW := Ideal.ramificationIdx_tower'
       (R := 𝓞 ℚ) (D.v g).asIdeal W.asIdeal
-    have hfTowerNW := Ideal.inertiaDeg'_tower
+    have hfTowerNW := Ideal.inertiaDeg_tower
       (R := 𝓞 ℚ) (D.v g).asIdeal W.asIdeal
     have hvWe : W.asIdeal.ramificationIdx (𝓞 N.field) = 1 := by
       rw [hqWe] at heTowerNW
@@ -4633,9 +4634,9 @@ private theorem transportRadicalSplittingToDescent
     let : w.asIdeal.LiesOver (D.v g).asIdeal := hwover
     let : W.asIdeal.LiesOver w.asIdeal := hWoverw
     let := Localization.AtPrime.algebraOfLiesOver w.asIdeal W.asIdeal
-    have heTowerLW := Ideal.ramificationIdx'_tower'
+    have heTowerLW := Ideal.ramificationIdx_tower'
       (R := 𝓞 N.field) w.asIdeal W.asIdeal
-    have hfTowerLW := Ideal.inertiaDeg'_tower
+    have hfTowerLW := Ideal.inertiaDeg_tower
       (R := 𝓞 N.field) w.asIdeal W.asIdeal
     have hwe : w.asIdeal.ramificationIdx (𝓞 N.field) = 1 := by
       rw [hvWe] at heTowerLW
@@ -4889,9 +4890,9 @@ private theorem regularKernel_ramificationIdx_map_equiv
   have hmapP : Ideal.map f P ≠ ⊥ := by
     intro h
     exact hP ((Ideal.map_eq_bot_iff_of_injective f.injective).mp h)
-  rw [← Ideal.ramificationIdx_eq_ramificationIdx'
+  rw [← Ideal.ramificationIdx'_eq_ramificationIdx
       (Ideal.map f P) (Ideal.map g Q) hmapP,
-    ← Ideal.ramificationIdx_eq_ramificationIdx' P Q hP]
+    ← Ideal.ramificationIdx'_eq_ramificationIdx P Q hP]
   unfold Ideal.ramificationIdx'
   congr 1
   ext n
@@ -4961,9 +4962,9 @@ private theorem regularKernel_inertiaDeg_map_equiv
     Ideal.IsMaximal.map_bijective f f.bijective inferInstance
   let : (Ideal.map g Q).IsMaximal :=
     Ideal.IsMaximal.map_bijective g g.bijective inferInstance
-  rw [← Ideal.inertiaDeg_eq_inertiaDeg' (Ideal.map f P) (Ideal.map g Q),
-    ← Ideal.inertiaDeg_eq_inertiaDeg' P Q,
-    Ideal.inertiaDeg_algebraMap, Ideal.inertiaDeg_algebraMap]
+  rw [← Ideal.inertiaDeg'_eq_inertiaDeg (Ideal.map f P) (Ideal.map g Q),
+    ← Ideal.inertiaDeg'_eq_inertiaDeg P Q,
+    Ideal.inertiaDeg'_algebraMap, Ideal.inertiaDeg'_algebraMap]
   let ef : (R ⧸ P) ≃+* (R' ⧸ Ideal.map f P) :=
     Ideal.quotientEquiv P (Ideal.map f P) f rfl
   let eg : (S ⧸ Q) ≃+* (S' ⧸ Ideal.map g Q) :=
@@ -5059,7 +5060,7 @@ private theorem regularConjugateCompositumData_exists
       have hs := Classical.choose_spec
         (AlgEquiv.restrictNormalHom_surjective Omega g)
       have hsx := DFunLike.congr_fun hs x
-      have hlt : lift g = tau := dif_neg hg
+      have hlt : lift g = tau := dite_eq_right hg
       rw [hlt]
       calc
         tau x.1 = N.field.val
@@ -5913,7 +5914,7 @@ private theorem regularRawFactorEvaluation_surjective
     let : w.asIdeal.LiesOver (D.v g).asIdeal := hwOver
     let : W.asIdeal.LiesOver w.asIdeal := hWOverw
     let := Localization.AtPrime.algebraOfLiesOver w.asIdeal W.asIdeal
-    have heTower := Ideal.ramificationIdx'_tower'
+    have heTower := Ideal.ramificationIdx_tower'
       (R := 𝓞 N.field) w.asIdeal W.asIdeal
     have hrelativePos : 0 < W.asIdeal.ramificationIdx (𝓞 F) :=
       Ideal.ramificationIdx_pos (q := W.asIdeal) (𝓞 F)
@@ -6406,7 +6407,7 @@ private theorem regularFactorAddEquiv_conjugation
           (regularFactorAddEquiv hAsymmetric D (Additive.ofMul a)).coeff
             (g⁻¹ * k) := by
         simpa only [MonoidAlgebra.coeff, one_mul] using
-          (MonoidAlgebra.single_mul_apply
+          (MonoidAlgebra.coeff_single_mul_apply
             (regularFactorAddEquiv hAsymmetric D (Additive.ofMul a))
             (1 : ZMod (p : ℕ)) g k)
       exact hm.symm

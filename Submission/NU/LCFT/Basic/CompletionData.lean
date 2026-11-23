@@ -113,7 +113,7 @@ theorem localFieldExtensionData_exists
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
-      (Valued.v : Valuation L NNReal).exists_setOf_restrict_le_iff 0 s
+      (Valued.v : Valuation L NNReal).exists_setOfPred_restrict_le_iff 0 s
   let : IsValuativeTopology L := htop
   have hloc : LocallyCompactSpace L :=
     LocallyCompactSpace.of_finiteDimensional_of_complete K L
@@ -629,7 +629,7 @@ private noncomputable def reciprocityFixedFieldLocalData
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
-      (Valued.v : Valuation E NNReal).exists_setOf_restrict_le_iff 0 s
+      (Valued.v : Valuation E NNReal).exists_setOfPred_restrict_le_iff 0 s
   letI : IsValuativeTopology E := htop
   have hnontriv : ValuativeRel.IsNontrivial E :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vE).2 inferInstance
@@ -1236,7 +1236,7 @@ private theorem shrink_local
           {z | ValuativeRel.valuation A z < γ} ⊆ s) ↔
         ∃ γ : (MonoidWithZeroHom.ValueGroup₀ (.ofClass w))ˣ,
           {z | w.restrict z < γ.val} ⊆ s by
-      have h := (w.exists_setOf_restrict_le_iff 0 s).symm
+      have h := (w.exists_setOfPred_restrict_le_iff 0 s).symm
       simp only [sub_zero] at h
       exact h]
     -- transport the valuation-neighborhood criterion across e
@@ -2479,13 +2479,13 @@ private theorem finiteReciprocity_cohomologicalCompensated_unramified
           have hs : (Multiplicative.ofAdd (1 : ZMod n)).toAdd = 1 := rfl
           rw [hs]
           by_cases hc : carryExponent n r.toAdd 1 = 0
-          · rw [if_pos hc, hc]
+          · rw [ite_eq_left hc, hc]
             simp
           · have hle : carryExponent n r.toAdd 1 ≤ 1 := by
               simp only [carryExponent]
               split_ifs <;> omega
             have hone : carryExponent n r.toAdd 1 = 1 := by omega
-            rw [if_neg hc, hone]
+            rw [ite_eq_right hc, hone]
             simp [u]
         calc
           (∑ r : Multiplicative (ZMod n),
@@ -4067,7 +4067,7 @@ theorem normSubgroup_isClosed : IsClosed (normSubgroup K L : Set (Units K)) := b
     have hp := hs.preimage Units.continuous_val
     convert hp using 1
     ext x
-    rw [Set.mem_setOf_eq, Set.mem_preimage, Set.mem_setOf_eq,
+    rw [mem_ofPred_eq, Set.mem_preimage, mem_ofPred_eq,
       (ValuativeRel.valuation K).restrict_eq_one_iff,
       normalizedValuation_eq_zero_iff_valuation_eq_one]
   let N₀ : Subgroup (Units K) := normSubgroup K L ⊓ V
@@ -4344,6 +4344,7 @@ private theorem normGroup_primitive_constantCoeff
   simp
 
 omit [TopologicalSpace Ksep] in
+omit [IsSepClosure K Ksep] in
 private theorem normGroup_level_minpoly
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -5838,7 +5839,7 @@ theorem rectangularSubgroup_cofinal (π : Uniformizer K)
       (fun γ : Units (ValuativeRel.ValueGroupWithZero K) =>
         {x : Units K | valuation K ((x : K) - 1) < γ}) := by
     rw [Units.isEmbedding_val₀.isInducing.nhds_eq_comap]
-    simpa only [Set.preimage_setOf_eq, Units.val_one] using
+    simpa only [Set.preimage_ofPred_eq, Units.val_one] using
       ((IsValuativeTopology.hasBasis_nhds (R := K) (1 : K)).comap
         ((↑) : Units K → K))
   obtain ⟨γ, _, hγ⟩ := hbasis.mem_iff.mp hH

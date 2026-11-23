@@ -526,8 +526,7 @@ theorem lemma_2_6 (T H : Set F) (hT : IsMulSubgroup T)
     have hm := hT.mul_mem hy.2 hr.2
     have hy0 : 1 + y ≠ 0 := fun e => hT.zero_notMem (e ▸ hy.2)
     convert hm using 1; field_simp [hy0]; ring
-  · intro hprod
-    intro w hw
+  · intro hprod w hw
     rcases Set.mem_add.mp hw with ⟨a, ha, x, hx, hax⟩
     have ha' : a = 1 := by simpa using ha
     subst a
@@ -752,9 +751,9 @@ theorem theorem_2_10 (T H : Set F) (hT : IsMulSubgroup T)
       convert hsum using 1; field_simp; ring
     · have hinv := h29.2.1 (x * y⁻¹) hratio
       have hratio' : y * x⁻¹ ∈ O H T := by
-        convert hinv using 1; field_simp <;> ring
+        convert hinv using 1; field_simp
       have hsum := hmul hx (hone_add hratio')
-      convert hsum using 1; field_simp <;> ring
+      convert hsum using 1; field_simp
   have hneg : ∀ ⦃x : F⦄, x ∈ O H T → -x ∈ O H T := by
     intro x hx
     have hm := hmul (Or.inr h29.2.2) hx
@@ -853,7 +852,7 @@ theorem corollary_2_11_basicPart (T T_hat H : Set F)
     rcases hnorm' with hnorm | ⟨v, hv, hev⟩
     · left
       have hm := hT_hat.mul_mem hs (hT_le hnorm)
-      convert hm using 1; dsimp [r]; field_simp <;> ring
+      convert hm using 1; dsimp [r]; field_simp
     · right
       refine ⟨s * r * v, hT_hat.mul_mem (hT_hat.mul_mem hs hr) (hT_le hv), ?_⟩
       change (a * r) * v = 1 + a * r at hev
@@ -1563,7 +1562,7 @@ private theorem neg_a_mem_U_two_coset (T H : Set F)
     have hxnot : (-a)⁻¹ * z ∉ Ominus H_hat T := by
       intro hx
       apply hn
-      convert hx.2 using 1 <;> field_simp [ha0] <;> ring
+      convert hx.2 using 1
     have hx0 : (-a)⁻¹ * z ≠ 0 :=
       mul_ne_zero (inv_ne_zero (neg_ne_zero.mpr ha0)) hz0
     have hobs := observation_2_3_part3 T H_hat hT hHhat hbasic_hat
@@ -1573,16 +1572,16 @@ private theorem neg_a_mem_U_two_coset (T H : Set F)
       exact hxnot (hobs.2.mpr hi)
     have hq : -a * z⁻¹ ∈ Ominus H T := by
       apply hminus_le
-      convert hxinv using 1; field_simp [ha0, hz0] <;> ring
+      convert hxinv using 1; field_simp [ha0, hz0]
     have hr_hat : -b * z ∈ Ominus H_hat T :=
       ⟨subgroup_mul_not_mem hHhat hnegbH hz.1,
         by convert hone_b hz using 1; ring⟩
     have hr : -b * z ∈ Ominus H T := hminus_le hr_hat
     have hqrnot : 1 - (-a * z⁻¹) * (-b * z) ∉ T := by
-      convert hnot using 1; field_simp [hz0] <;> ring
+      convert hnot using 1; field_simp [hz0]
     have hs := exceptional_star T H hT hH hbasic hall hq hr hqrnot
     have hcaz : 1 - a * b ∈ (a * z⁻¹) • T := by
-      convert hs.1 using 1 <;> field_simp [hz0] <;> ring
+      convert hs.1 using 1 <;> field_simp [hz0]
     rcases Set.mem_smul_set.mp hcaz with ⟨t, ht, hteq⟩
     rcases Set.mem_smul_set.mp hfirst with ⟨s, hsT, hseq⟩
     rw [smul_eq_mul] at hteq hseq
@@ -1603,7 +1602,7 @@ private theorem neg_a_mem_U_two_coset (T H : Set F)
       exact heq ▸ hT.mul_mem hsT (hT.inv_mem ht)
     have hnegzH : -z ∈ H := by
       have hh := hTH (hT.inv_mem hnegzi)
-      convert hh using 1; field_simp [hz0] <;> ring
+      convert hh using 1; field_simp [hz0]
     have hzH := hH.mul_mem (neg_one_mem_H T H hT hbasic) hnegzH
     apply hz.1
     left

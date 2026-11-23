@@ -102,7 +102,7 @@ theorem exists_ambientExtension
   let : Algebra.IsAlgebraic F₂.field Omega :=
     Algebra.IsAlgebraic.tower_top (K := ℚ) F₂.field
   obtain ⟨f', hf'⟩ :=
-    IsAlgClosed.surjective_restrictDomain_of_isAlgebraic
+    IsAlgClosed.surjective_domRestrict_of_isAlgebraic
       (K := ℚ) (L := F₂.field) (E := Omega) (M := Omega) f
   let alpha : RationalAbsoluteGaloisGroup :=
     AlgEquiv.ofBijective f' (Algebra.IsAlgebraic.algHom_bijective f')

@@ -144,8 +144,7 @@ private def localDQuotientCharacter
       map_one' := by simp
       map_mul' := by
         intro x y
-        simpa using (p : MulCharacter F n).map_add
-          (Additive.ofMul x) (Additive.ofMul y) }
+        simp }
   let qmul : (Fˣ ⧸ A.principalUnitGroup) →* Multiplicative (ZMod n) :=
     QuotientGroup.lift A.principalUnitGroup pmul (by
       intro x hx
@@ -285,7 +284,7 @@ theorem cupZero_alternating_iff {M : Type*} [Field M] [NumberField M]
             (Units.ext (by simpa using hx))
       let f : Polynomial M := Polynomial.X ^ ℓ - Polynomial.C (a : M)
       have hf : Irreducible f :=
-        X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hpow
+        irreducible_X_pow_sub_C_of_prime (Fact.out : ℓ.Prime) hpow
       let : Fact (Irreducible f) := ⟨hf⟩
       let E := AdjoinRoot f
       let : Field E := inferInstance
