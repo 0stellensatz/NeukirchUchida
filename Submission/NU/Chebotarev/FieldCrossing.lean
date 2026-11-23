@@ -25,9 +25,9 @@ private theorem fieldCrossing_absolute_cyclotomic_tensor_isDomain
     (p : ℕ) (hp : Nat.Prime p)
     (hpd : ¬ p ∣ (NumberField.discr L).natAbs) :
     IsDomain (L ⊗[ℚ] CyclotomicField p ℚ) := by
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
-  letI : NeZero p := ⟨hp.ne_zero⟩
-  letI : NeZero (p : ℚ) := ⟨by exact_mod_cast hp.ne_zero⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
+  let : NeZero p := ⟨hp.ne_zero⟩
+  let : NeZero (p : ℚ) := ⟨by exact_mod_cast hp.ne_zero⟩
   let C := CyclotomicField p ℚ
   let Ω := AlgebraicClosure ℚ
   let f : L →ₐ[ℚ] Ω := IsAlgClosed.lift
@@ -36,11 +36,11 @@ private theorem fieldCrossing_absolute_cyclotomic_tensor_isDomain
   let B : IntermediateField ℚ Ω := g.fieldRange
   let eA : L ≃ₐ[ℚ] A := f.equivFieldRange
   let eB : C ≃ₐ[ℚ] B := g.equivFieldRange
-  letI : FiniteDimensional ℚ A := eA.toLinearEquiv.finiteDimensional
-  letI : FiniteDimensional ℚ B := eB.toLinearEquiv.finiteDimensional
+  let : FiniteDimensional ℚ A := eA.toLinearEquiv.finiteDimensional
+  let : FiniteDimensional ℚ B := eB.toLinearEquiv.finiteDimensional
   let U : IntermediateField ℚ Ω := A ⊔ B
-  letI : FiniteDimensional ℚ U := IntermediateField.finiteDimensional_sup A B
-  letI : NumberField U := NumberField.mk
+  let : FiniteDimensional ℚ U := IntermediateField.finiteDimensional_sup A B
+  let : NumberField U := NumberField.mk
   let iA : A →ₐ[ℚ] U := IntermediateField.inclusion le_sup_left
   let iB : B →ₐ[ℚ] U := IntermediateField.inclusion le_sup_right
   let fU : L →ₐ[ℚ] U := iA.comp eA.toAlgHom
@@ -49,11 +49,11 @@ private theorem fieldCrossing_absolute_cyclotomic_tensor_isDomain
   let B' : IntermediateField ℚ U := gU.fieldRange
   let eA' : L ≃ₐ[ℚ] A' := fU.equivFieldRange
   let eB' : C ≃ₐ[ℚ] B' := gU.equivFieldRange
-  letI : IsCyclotomicExtension {p} ℚ C := by
+  let : IsCyclotomicExtension {p} ℚ C := by
     dsimp [C]
     exact CyclotomicField.isCyclotomicExtension p ℚ
-  letI : IsGalois ℚ C := IsCyclotomicExtension.isGalois {p} ℚ C
-  letI : IsGalois ℚ B' := IsGalois.of_algEquiv eB'
+  let : IsGalois ℚ C := IsCyclotomicExtension.isGalois {p} ℚ C
+  let : IsGalois ℚ B' := IsGalois.of_algEquiv eB'
   have hdiscA : NumberField.discr A' = NumberField.discr L :=
     (NumberField.discr_eq_discr_of_algEquiv L eA').symm
   have hdiscB : NumberField.discr B' =
@@ -84,17 +84,17 @@ private theorem fieldCrossing_relative_cyclotomic_data
     IsDomain (L ⊗[K] CyclotomicField p K) ∧
       Module.finrank K (CyclotomicField p K) = p - 1 ∧
       IsCyclic (Gal(CyclotomicField p K/K)) := by
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
-  letI : NeZero p := ⟨hp.ne_zero⟩
-  letI : NeZero (p : ℚ) := ⟨by exact_mod_cast hp.ne_zero⟩
-  letI : NeZero (p : K) := ⟨by exact_mod_cast hp.ne_zero⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
+  let : NeZero p := ⟨hp.ne_zero⟩
+  let : NeZero (p : ℚ) := ⟨by exact_mod_cast hp.ne_zero⟩
+  let : NeZero (p : K) := ⟨by exact_mod_cast hp.ne_zero⟩
   let C := CyclotomicField p ℚ
   let P := K ⊗[ℚ] C
-  letI : IsDomain P := hKC
+  let : IsDomain P := hKC
   have hfield : IsField P :=
     Algebra.TensorProduct.isField_of_isAlgebraic ℚ K C
       (Or.inl (Algebra.IsAlgebraic.of_finite ℚ K))
-  letI : Field P := hfield.toField
+  let : Field P := hfield.toField
   have hC : IsCyclotomicExtension {p} ℚ C :=
     CyclotomicField.isCyclotomicExtension p ℚ
   let ζ : C := IsCyclotomicExtension.zeta p ℚ C
@@ -138,7 +138,7 @@ private theorem fieldCrossing_relative_cyclotomic_data
           (Subalgebra.algebraMap_mem _ x) (hright y)
     | add x y ihx ihy =>
         exact (Algebra.adjoin K ({ζP} : Set P)).add_mem ihx ihy
-  letI : IsCyclotomicExtension {p} K P := by
+  let : IsCyclotomicExtension {p} K P := by
     rw [IsCyclotomicExtension.iff_adjoin_eq_top]
     constructor
     · intro n hn hn0
@@ -153,14 +153,14 @@ private theorem fieldCrossing_relative_cyclotomic_data
       subst x
       exact ⟨p, Set.mem_singleton p, hp.ne_zero, hζP.pow_eq_one⟩
   let M := CyclotomicField p K
-  letI : IsCyclotomicExtension {p} K M :=
+  let : IsCyclotomicExtension {p} K M :=
     CyclotomicField.isCyclotomicExtension p K
   let eM : M ≃ₐ[K] P := IsCyclotomicExtension.algEquiv {p} K M P
   have hdomain : IsDomain (L ⊗[K] M) := by
     let e : L ⊗[K] M ≃ₐ[K] L ⊗[ℚ] C :=
       (Algebra.TensorProduct.congr (AlgEquiv.refl : L ≃ₐ[K] L) eM).trans
         (Algebra.TensorProduct.cancelBaseChange ℚ K K L C)
-    letI : IsDomain (L ⊗[ℚ] C) := hLC
+    let : IsDomain (L ⊗[ℚ] C) := hLC
     exact e.toMulEquiv.isDomain _
   have hdegree : Module.finrank K M = p - 1 := by
     rw [eM.toLinearEquiv.finrank_eq]
@@ -168,7 +168,7 @@ private theorem fieldCrossing_relative_cyclotomic_data
     rw [Module.finrank_tensorProduct, Module.finrank_self, one_mul,
       IsCyclotomicExtension.Rat.finrank p C, Nat.totient_prime hp]
   have hcyclic : IsCyclic Gal(M/K) := by
-    letI : IsCyclic (ZMod p)ˣ := ZMod.isCyclic_units_prime hp
+    let : IsCyclic (ZMod p)ˣ := ZMod.isCyclic_units_prime hp
     let hζM := IsCyclotomicExtension.zeta_spec p K M
     exact isCyclic_of_injective (hζM.autToPow K) (hζM.autToPow_injective K)
   exact ⟨hdomain, hdegree, hcyclic⟩
@@ -193,11 +193,11 @@ private theorem fieldCrossing_unramified_descends
       simpa using hover⟩
   have hPq : P.asIdeal.LiesOver Q.asIdeal := hPQ
   have hPp : P.asIdeal.LiesOver p.asIdeal := by
-    letI : P.asIdeal.LiesOver Q.asIdeal := hPq
-    letI : Q.asIdeal.LiesOver p.asIdeal := hQp
+    let : P.asIdeal.LiesOver Q.asIdeal := hPq
+    let : Q.asIdeal.LiesOver p.asIdeal := hQp
     exact Ideal.LiesOver.trans P.asIdeal Q.asIdeal p.asIdeal
-  letI : P.asIdeal.LiesOver Q.asIdeal := hPq
-  letI : Algebra.IsUnramifiedAt
+  let : P.asIdeal.LiesOver Q.asIdeal := hPq
+  let : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers K) P.asIdeal := h P hPp
   exact Algebra.IsUnramifiedAt.of_liesOver
     (NumberField.RingOfIntegers K) Q.asIdeal P.asIdeal
@@ -224,13 +224,13 @@ private theorem fieldCrossing_pair_algebraic
         frobeniusElementPrimeSet (K := K) (L := M) tau)
       (1 / ((Nat.card Gal(L/K) : ℝ) * Nat.card Gal(M/K))) := by
   let N := L ⊗[K] M
-  letI : IsDomain N := hdisj
+  let : IsDomain N := hdisj
   have hfield : IsField N :=
     Algebra.TensorProduct.isField_of_isAlgebraic K L M
       (Or.inl (Algebra.IsAlgebraic.of_finite K L))
-  letI : Field N := hfield.toField
-  letI : NumberField N := NumberField.of_module_finite K N
-  letI : FiniteDimensional K N := by infer_instance
+  let : Field N := hfield.toField
+  let : NumberField N := NumberField.of_module_finite K N
+  let : FiniteDimensional K N := by infer_instance
   let pairHom : Gal(L/K) × Gal(M/K) →* Gal(N/K) := by
     refine
       { toFun := fun s => Algebra.TensorProduct.congr s.1 s.2
@@ -292,11 +292,11 @@ private theorem fieldCrossing_pair_algebraic
       Module.finrank K N := by
     rw [hfin, IsGalois.card_aut_eq_finrank, IsGalois.card_aut_eq_finrank]
   have hcard : Nat.card Gal(N/K) = Module.finrank K N := by omega
-  letI : IsGalois K N := IsGalois.of_card_aut_eq_finrank K N hcard
+  let : IsGalois K N := IsGalois.of_card_aut_eq_finrank K N hcard
   have hcardN : Nat.card Gal(N/K) =
       Nat.card Gal(L/K) * Nat.card Gal(M/K) := hcard.trans hcardprod.symm
-  letI : Fintype (Gal(L/K) × Gal(M/K)) := Fintype.ofFinite _
-  letI : Fintype Gal(N/K) := Fintype.ofFinite _
+  let : Fintype (Gal(L/K) × Gal(M/K)) := Fintype.ofFinite _
+  let : Fintype Gal(N/K) := Fintype.ofFinite _
   have hpairBij : Function.Bijective pairHom :=
     (Fintype.bijective_iff_injective_and_card pairHom).2 ⟨hpairHom, by
       rw [Fintype.card_eq_nat_card, Fintype.card_eq_nat_card,
@@ -363,7 +363,7 @@ private theorem fieldCrossing_pair_algebraic
       IsGalois.intermediateFieldEquivSubgroup_apply, hfix,
       IntermediateField.fixingSubgroup_top]
   have hnell : ell ≠ 0 := by omega
-  letI : NeZero ell := ⟨hnell⟩
+  let : NeZero ell := ⟨hnell⟩
   let zeta : M := IsCyclotomicExtension.zeta ell K M
   have hzeta : IsPrimitiveRoot zeta ell := IsCyclotomicExtension.zeta_spec ell K M
   let zetaN : N := iM zeta
@@ -395,7 +395,7 @@ private theorem fieldCrossing_pair_algebraic
       rfl
     · intro x hx
       exact Algebra.IsAlgebraic.isAlgebraic x
-  letI : IsCyclotomicExtension {ell} E N := by
+  let : IsCyclotomicExtension {ell} E N := by
     rw [IsCyclotomicExtension.iff_adjoin_eq_top]
     constructor
     · intro n hn hn0
@@ -437,7 +437,7 @@ private theorem fieldCrossing_pair_algebraic
       (K := E) (M := N) (F := N) ell mE hell hmodE hramE rhoE
     rw [hcardE] at h
     exact h
-  letI : IsMulCommutative Gal(M/K) :=
+  let : IsMulCommutative Gal(M/K) :=
     IsCyclotomicExtension.isMulCommutative {ell} K M
   have hcomm (a b : Gal(N/K)) : a * b = b * a := by
     obtain ⟨a, rfl⟩ := pairEquiv.surjective a
@@ -447,7 +447,7 @@ private theorem fieldCrossing_pair_algebraic
     apply Prod.ext
     · exact IsMulCommutative.is_comm.comm _ _
     · exact IsMulCommutative.is_comm.comm _ _
-  letI : IsMulCommutative Gal(N/K) := ⟨⟨hcomm⟩⟩
+  let : IsMulCommutative Gal(N/K) := ⟨⟨hcomm⟩⟩
   have hcentral : Subgroup.centralizer ({rho} : Set Gal(N/K)) = ⊤ := by
     ext s
     simp only [Subgroup.mem_centralizer_singleton_iff, Subgroup.mem_top, iff_true]
@@ -493,8 +493,8 @@ private theorem fieldCrossing_pair_algebraic
       (1 / (Nat.card Gal(N/K) : ℝ)) := by
     rw [← hclassElem]
     exact hbase
-  letI : Algebra M N := Algebra.TensorProduct.rightAlgebra
-  letI : IsScalarTower K M N := Algebra.TensorProduct.right_isScalarTower
+  let : Algebra M N := Algebra.TensorProduct.rightAlgebra
+  let : IsScalarTower K M N := Algebra.TensorProduct.right_isScalarTower
   have hrestrictL (a : Gal(L/K)) (b : Gal(M/K)) :
       AlgEquiv.restrictNormalHom L (pairEquiv (a, b)) = a := by
     apply AlgEquiv.ext
@@ -520,14 +520,14 @@ private theorem fieldCrossing_pair_algebraic
   let underL : PrimeIdeal N → PrimeIdeal L := fun P =>
     ⟨P.asIdeal.under (NumberField.RingOfIntegers L), inferInstance, by
       intro h
-      letI : P.asIdeal.LiesOver
+      let : P.asIdeal.LiesOver
           (⊥ : Ideal (NumberField.RingOfIntegers L)) := ⟨by simp [h]⟩
       exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot
         (NumberField.RingOfIntegers L) P.asIdeal)⟩
   let underM : PrimeIdeal N → PrimeIdeal M := fun P =>
     ⟨P.asIdeal.under (NumberField.RingOfIntegers M), inferInstance, by
       intro h
-      letI : P.asIdeal.LiesOver
+      let : P.asIdeal.LiesOver
           (⊥ : Ideal (NumberField.RingOfIntegers M)) := ⟨by simp [h]⟩
       exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot
         (NumberField.RingOfIntegers M) P.asIdeal)⟩
@@ -686,7 +686,7 @@ private theorem fieldCrossing_algebraic_core
   · intro K L _ _ _ _ _ _ n k hn hk avoid
     let q := n ^ k
     have hq : q ≠ 0 := pow_ne_zero k (Nat.ne_of_gt hn)
-    letI : NeZero q := ⟨hq⟩
+    let : NeZero q := ⟨hq⟩
     let bound := avoid.sum id + (NumberField.discr L).natAbs
     have hone : IsUnit (1 : ZMod q) := isUnit_one
     obtain ⟨p, hpbound, hp, hpeq⟩ :=
@@ -823,8 +823,8 @@ private theorem fieldCrossing_cyclic_bad_card_le
       (n + 1) * (N / 2 ^ k) := by
   classical
   let G := Multiplicative (ZMod N)
-  letI : NeZero N := ⟨hN.ne'⟩
-  letI : Fintype G := Multiplicative.fintype
+  let : NeZero N := ⟨hN.ne'⟩
+  let : Fintype G := Multiplicative.fintype
   have hcard : Nat.card G = N := by
     calc
       Nat.card G = Nat.card (ZMod N) := Nat.card_congr Multiplicative.toAdd
@@ -919,7 +919,7 @@ theorem cyclic_proportion_orderOf_dvd_tendsto_one
   let bad : ℕ → ℕ := fun k =>
     Nat.card {x : Multiplicative (ZMod (N k)) // ¬ n ∣ orderOf x}
   have htotal (k : ℕ) : good k + bad k = N k := by
-    letI : NeZero (N k) := ⟨(hNpos k).ne'⟩
+    let : NeZero (N k) := ⟨(hNpos k).ne'⟩
     change Nat.card {x : Multiplicative (ZMod (N k)) // n ∣ orderOf x} +
       Nat.card {x : Multiplicative (ZMod (N k)) // ¬n ∣ orderOf x} = N k
     rw [Nat.card_eq_fintype_card, Nat.card_eq_fintype_card,
@@ -1083,7 +1083,7 @@ private theorem fieldCrossing_summable_ideal_rpow
         Complex.ofReal_re]
       rw [div_eq_mul_inv]
       exact congrArg (a n * ·) (Real.rpow_neg (Nat.cast_nonneg n) s).symm
-  letI (n : ℕ) : Fintype
+  let (n : ℕ) : Fintype
       {I : Ideal (NumberField.RingOfIntegers K) // Ideal.absNorm I = n} :=
     (Ideal.finite_setOf_absNorm_eq n).fintype
   have hsigma : Summable (fun z : Σ n : ℕ,
@@ -1256,11 +1256,11 @@ private theorem abelian_chebotarev_lower_bound
     have hdisj : IsDomain (L ⊗[K] M) := (hℓ k).2.2.2.1
     have hfin : Module.finrank K M = ℓ k - 1 := (hℓ k).2.2.2.2.1
     have hcyc : IsCyclic Gal(M/K) := (hℓ k).2.2.2.2.2
-    letI : FiniteDimensional K M :=
+    let : FiniteDimensional K M :=
       IsCyclotomicExtension.finiteDimensional {(ℓ k)} K M
-    letI : IsGalois K M := IsCyclotomicExtension.isGalois {(ℓ k)} K M
-    letI : IsCyclic Gal(M/K) := hcyc
-    letI : IsMulCommutative Gal(M/K) := IsCyclic.isMulCommutative
+    let : IsGalois K M := IsCyclotomicExtension.isGalois {(ℓ k)} K M
+    let : IsCyclic Gal(M/K) := hcyc
+    let : IsMulCommutative Gal(M/K) := IsCyclic.isMulCommutative
     have hMcard : Nat.card Gal(M/K) = N k := by
       rw [IsGalois.card_aut_eq_finrank, hfin]
     obtain ⟨m, hmod, hram⟩ :=
@@ -1337,7 +1337,7 @@ theorem abelian_chebotarev_dirichletDensity
   let S : G → Set (PrimeIdeal K) := fun g =>
     frobeniusElementPrimeSet (K := K) (L := L) g
   let δ : G → ℝ := fun _ => 1 / (Nat.card G : ℝ)
-  letI : Fintype G := Fintype.ofFinite G
+  let : Fintype G := Fintype.ofFinite G
   have hSdisj : Set.PairwiseDisjoint Set.univ S := by
     intro g hg h hh hgh
     exact frobeniusElementPrimeSet_disjoint hgh
@@ -1416,8 +1416,8 @@ theorem chebotarev_dirichletDensity
         rw [hP, hgE]
     have hcardE : Nat.card Gal(L/E) = orderOf g := by
       rw [← Nat.card_congr e.toEquiv, Nat.card_zpowers]
-    letI : IsCyclic Gal(L/E) := (e.isCyclic).mp inferInstance
-    letI : IsMulCommutative Gal(L/E) := IsCyclic.isMulCommutative
+    let : IsCyclic Gal(L/E) := (e.isCyclic).mp inferInstance
+    let : IsMulCommutative Gal(L/E) := IsCyclic.isMulCommutative
     have hup : HasDirichletDensity
         (deuringUpstairsPrimeSet (K := K) (L := L) g)
         (1 / (orderOf g : ℝ)) := by
@@ -1431,9 +1431,9 @@ theorem chebotarev_dirichletDensity
     have hclass : (ConjClasses.mk g).carrier.ncard =
         Nat.card (Gal(L/K)) /
           Nat.card (Subgroup.centralizer ({g} : Set (Gal(L/K)))) := by
-      letI : Fintype (Gal(L/K)) := Fintype.ofFinite _
-      letI : Fintype (ConjClasses.mk g).carrier := Fintype.ofFinite _
-      letI : Fintype (MulAction.stabilizer (ConjAct (Gal(L/K))) g) :=
+      let : Fintype (Gal(L/K)) := Fintype.ofFinite _
+      let : Fintype (ConjClasses.mk g).carrier := Fintype.ofFinite _
+      let : Fintype (MulAction.stabilizer (ConjAct (Gal(L/K))) g) :=
         Fintype.ofFinite _
       rw [← Set.fintypeCard_eq_ncard]
       rw [ConjClasses.card_carrier]

@@ -97,19 +97,19 @@ theorem arithFrobAt_order_eq_inertiaDeg
   let S := NumberField.RingOfIntegers L
   let G := Gal(L/K)
   let p : Ideal R := P.asIdeal.under R
-  letI : p.IsPrime := inferInstance
-  letI : p.IsMaximal := inferInstance
-  letI : Field (R ⧸ p) := Ideal.Quotient.field p
-  letI : Field (S ⧸ P.asIdeal) := Ideal.Quotient.field P.asIdeal
-  letI : Fintype (R ⧸ p) := Fintype.ofFinite (R ⧸ p)
-  letI : Fintype (S ⧸ P.asIdeal) := Fintype.ofFinite (S ⧸ P.asIdeal)
-  letI := Localization.AtPrime.algebraOfLiesOver p P.asIdeal
+  let : p.IsPrime := inferInstance
+  let : p.IsMaximal := inferInstance
+  let : Field (R ⧸ p) := Ideal.Quotient.field p
+  let : Field (S ⧸ P.asIdeal) := Ideal.Quotient.field P.asIdeal
+  let : Fintype (R ⧸ p) := Fintype.ofFinite (R ⧸ p)
+  let : Fintype (S ⧸ P.asIdeal) := Fintype.ofFinite (S ⧸ P.asIdeal)
+  let := Localization.AtPrime.algebraOfLiesOver p P.asIdeal
   let σ : MulAction.stabilizer G P.asIdeal :=
     ⟨arithFrobeniusAt (K := K) (L := L) P,
       IsArithFrobAt.arithFrobAt_mem_stabilizer R G P.asIdeal⟩
   let ρ := Ideal.Quotient.stabilizerHom P.asIdeal p G
   have hram : p.ramificationIdx' P.asIdeal = 1 := by
-    letI : Algebra.IsUnramifiedAt R P.asIdeal := hP
+    let : Algebra.IsUnramifiedAt R P.asIdeal := hP
     exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt P.ne_bot
   have hIcard : Nat.card (P.asIdeal.inertia G) = 1 := by
     rw [Ideal.card_inertia_eq_ramificationIdxIn p P.asIdeal,
@@ -164,7 +164,7 @@ theorem arithFrobAt_generates_decomposition
         (NumberField.RingOfIntegers K) (Gal(L/K)) P.asIdeal)
   · rw [Nat.card_zpowers, arithFrobAt_order_eq_inertiaDeg P hP]
     unfold decompositionSubgroup
-    letI : Algebra.IsUnramifiedAt
+    let : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) P.asIdeal := hP
     rw [Ideal.card_stabilizer_eq_card_inertia_mul_finrank
       (P.asIdeal.under (NumberField.RingOfIntegers K)) P.asIdeal,
@@ -231,7 +231,7 @@ theorem arithFrobAt_restrict_pow
   let J : Subgroup D := H.comap (Subgroup.subtype D)
   have hunrE : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers E) P.asIdeal := by
-    letI : Algebra.IsUnramifiedAt
+    let : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) P.asIdeal := hunr
     exact Algebra.IsUnramifiedAt.of_restrictScalars
       (NumberField.RingOfIntegers K) P.asIdeal
@@ -278,8 +278,8 @@ theorem arithFrobAt_restrict_pow
       ← hPq.over]
   have htower := Ideal.inertiaDeg_algebra_tower
     (q.asIdeal.under (NumberField.RingOfIntegers K)) q.asIdeal P.asIdeal
-  letI : IsMulCommutative D := Subgroup.zpowers_isMulCommutative s
-  letI : J.Normal := Subgroup.normal_of_isMulCommutative J
+  let : IsMulCommutative D := Subgroup.zpowers_isMulCommutative s
+  let : J.Normal := Subgroup.normal_of_isMulCommutative J
   have hindex : J.index = m := by
     have hc := Subgroup.card_mul_index J
     rw [hJcard, hDcard, htower] at hc
@@ -310,7 +310,7 @@ theorem arithFrobAt_restrict_pow
     change Ideal.Quotient.mk P.asIdeal (i t • x) = _
     rw [ht]
     exact hp
-  letI : Algebra.IsUnramifiedAt
+  let : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers E) P.asIdeal := hunrE
   have heq := htArith.eq_of_isUnramifiedAt
     (IsArithFrobAt.arithFrobAt (NumberField.RingOfIntegers E)
@@ -342,8 +342,8 @@ theorem arithFrobAt_restrict
   let r : Gal(M/K) := AlgEquiv.restrictNormalHom M s
   have hunrQ : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers K) Q.asIdeal := by
-    letI : P.asIdeal.LiesOver Q.asIdeal := hPQ
-    letI : Algebra.IsUnramifiedAt
+    let : P.asIdeal.LiesOver Q.asIdeal := hPQ
+    let : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) P.asIdeal := hunr
     exact Algebra.IsUnramifiedAt.of_liesOver
       (NumberField.RingOfIntegers K) Q.asIdeal P.asIdeal
@@ -378,7 +378,7 @@ theorem arithFrobAt_restrict
         Nat.card (NumberField.RingOfIntegers K ⧸
           P.asIdeal.under (NumberField.RingOfIntegers K)) ∈ P.asIdeal at hs
     simpa only [map_sub, map_pow, hact] using hs
-  letI : Algebra.IsUnramifiedAt
+  let : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers K) Q.asIdeal := hunrQ
   have heq := hr.eq_of_isUnramifiedAt
     (IsArithFrobAt.arithFrobAt (NumberField.RingOfIntegers K)
@@ -446,8 +446,8 @@ theorem ramifiedPrimes_finite
   let B := NumberField.RingOfIntegers L
   let I : Ideal B := differentIdeal A B
   have hI : I ≠ ⊥ := differentIdeal_ne_bot
-  letI : NeZero I := ⟨hI⟩
-  letI : Finite (B ⧸ I) := Ring.HasFiniteQuotients.finiteQuotient hI
+  let : NeZero I := ⟨hI⟩
+  let : Finite (B ⧸ I) := Ring.HasFiniteQuotients.finiteQuotient hI
   let ramUp : Set (PrimeIdeal L) := {P | P.asIdeal ∣ I}
   have hramUp : ramUp.Finite := by
     apply Set.Finite.of_finite_image
@@ -466,7 +466,7 @@ theorem ramifiedPrimes_finite
   let under : PrimeIdeal L → PrimeIdeal K := fun P =>
     ⟨P.asIdeal.under A, inferInstance, by
       intro h
-      letI : P.asIdeal.LiesOver (⊥ : Ideal A) := ⟨by simpa [h]⟩
+      let : P.asIdeal.LiesOver (⊥ : Ideal A) := ⟨by simpa [h]⟩
       exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot A P.asIdeal)⟩
   apply (hramUp.image under).subset
   intro p hp

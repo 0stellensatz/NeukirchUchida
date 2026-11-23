@@ -392,7 +392,7 @@ theorem regularKernelTransport_pointwise_translate
       regularKernelTransport F₁ F₂ N theta h₁ h₂ M lambda =
         regularKernelConjugation N M hcomm h lambda := by
   let E := M.toExtension.field
-  letI : IsGalois ℚ E.field := M.isGaloisQ
+  let : IsGalois ℚ E.field := M.isGaloisQ
   let tau := regularKernelTransport F₁ F₂ N theta h₁ h₂ M
   let H₁ : Subgroup (RegularKernelGroup N M) := Subgroup.zpowers lambda
   let K₁E : IntermediateField ℚ E.field :=
@@ -401,7 +401,7 @@ theorem regularKernelTransport_pointwise_translate
   let L₁ : NumberFieldInOmega :=
     { field := L₁field
       finite := by
-        letI : Module.Finite ℚ K₁E :=
+        let : Module.Finite ℚ K₁E :=
           FiniteDimensional.left ℚ K₁E E.field
         exact Module.Finite.equiv
           (IntermediateField.liftAlgEquiv K₁E).toLinearEquiv }
@@ -422,7 +422,7 @@ theorem regularKernelTransport_pointwise_translate
   let L₂ := correspondingField theta K₁
   let thetaL := correspondingRestrictedIso theta K₁
   let KE := extensionOfLE F₁ E (h₁.trans M.toExtension.le_base)
-  letI : IsGalois ℚ KE.field.field := by
+  let : IsGalois ℚ KE.field.field := by
     change IsGalois ℚ E.field
     infer_instance
   have hKE : KE.field = E := by rfl
@@ -467,10 +467,10 @@ theorem regularKernelTransport_pointwise_translate
       exact map_zpow (AlgEquiv.restrictScalarsHom ℚ) lambda n
     rw [← hpow, hn]
     rfl
-  letI : IsCyclic (relativeGaloisGroup L₁ E hL₁E) :=
+  let : IsCyclic (relativeGaloisGroup L₁ E hL₁E) :=
     isCyclic_iff_exists_zpowers_eq_top.mpr ⟨lambda₁, hgen₁⟩
   let sigmaLE := normalLevelQuotientIso thetaL E hL₁E hL₂E
-  letI : IsCyclic (relativeGaloisGroup L₂ E hL₂E) :=
+  let : IsCyclic (relativeGaloisGroup L₂ E hL₂E) :=
     isCyclic_of_surjective sigmaLE.toMonoidHom sigmaLE.surjective
   have hpres : PreservesNormalLevel thetaL E hL₁E hL₂E :=
     normalLevel_fixed thetaL E hL₁E hL₂E
@@ -593,10 +593,10 @@ theorem finiteLevel_conjugacy
   obtain ⟨p, hp⟩ :=
     exists_oddPrime_gt (Fintype.card (N.field ≃ₐ[ℚ] N.field))
   obtain ⟨M, hcomm, hdata⟩ := exists_regularKernelExtension N p
-  letI : CommGroup (RegularKernelGroup N M) :=
+  let : CommGroup (RegularKernelGroup N M) :=
     regularKernelCommGroup N M hcomm
   obtain ⟨hExponent, moduleA, hmodule⟩ := hdata
-  letI : Module (ZMod (p : ℕ))
+  let : Module (ZMod (p : ℕ))
       (Additive (RegularKernelGroup N M)) := moduleA
   obtain ⟨hscalar, e, he, hcard⟩ := hmodule
   let tauMul : RegularKernelGroup N M ≃* RegularKernelGroup N M :=
@@ -731,8 +731,8 @@ theorem exists_finiteLevel_inducingAutomorphism
           normalLevelQuotientIso theta N h₁ h₂ := by
   obtain ⟨hN, hinner⟩ := finiteLevel_conjugacy F₁ F₂ N theta h₁ h₂
   let sigmaN := normalLevelQuotientIso theta N h₁ h₂
-  letI : IsGalois ℚ Omega := by
-    letI : IsAlgClosure ℚ Omega :=
+  let : IsGalois ℚ Omega := by
+    let : IsAlgClosure ℚ Omega :=
       ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
     exact ⟨⟩
   obtain ⟨alpha, halpha⟩ :=
@@ -784,7 +784,7 @@ theorem exists_finiteLevel_inducingAutomorphism
       refine ⟨alpha⁻¹ * y * alpha, hback, ?_⟩
       change alpha * (alpha⁻¹ * y * alpha) * alpha⁻¹ = y
       group
-  letI : SMul RationalAbsoluteGaloisGroup (Set Omega) := Set.smulSet
+  let : SMul RationalAbsoluteGaloisGroup (Set Omega) := Set.smulSet
   have hset : (conjugateField alpha F₂.field : Set Omega) =
       alpha • (F₂.field : Set Omega) := by
     ext x

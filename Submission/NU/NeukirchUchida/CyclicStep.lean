@@ -50,7 +50,7 @@ theorem rationalBottomIntegersEquiv_finitePrime
       rationalPrime F (finitePrime F P) := by
   apply IsDedekindDomain.HeightOneSpectrum.ext
   let hbot : rationalNumberField.field ≤ F.field := bot_le
-  letI : Algebra rationalNumberField.field F.field :=
+  let : Algebra rationalNumberField.field F.field :=
     (IntermediateField.inclusion hbot).toRingHom.toAlgebra
   let L := extensionOfLE rationalNumberField F hbot
   have hres := restrictFinitePlace_finitePrime rationalNumberField L P
@@ -190,7 +190,7 @@ private theorem frobeniusIntegralCenter_comap
     frobeniusIntegralCenter (A.comap f) =
       (frobeniusIntegralCenter A).comap
         (NumberField.RingOfIntegers.mapRingHom f) := by
-  letI : IsLocalHom (frobeniusValuationComapMap f A) :=
+  let : IsLocalHom (frobeniusValuationComapMap f A) :=
     frobeniusValuationComapMap_isLocal f A
   apply Ideal.ext
   intro x
@@ -280,10 +280,10 @@ private theorem valuationSubring_eq_of_frobeniusCenter_eq
   apply ValuationSubring.ext
   intro x
   let L : IntermediateField K E := IntermediateField.adjoin K {x}
-  letI : FiniteDimensional K L :=
+  let : FiniteDimensional K L :=
     IntermediateField.finiteDimensional_adjoin (S := {x})
       (fun y _ => Algebra.IsIntegral.isIntegral y)
-  letI : NumberField L := NumberField.of_module_finite K L
+  let : NumberField L := NumberField.of_module_finite K L
   let AL : ValuationSubring L := A.comap L.val.toRingHom
   let CL : ValuationSubring L := C.comap L.val.toRingHom
   have hAL : AL ≠ ⊤ := by
@@ -340,29 +340,29 @@ private theorem exists_normalizedArithmeticFrobenius
     (F : NumberFieldInOmega) (P : AbsolutePrime) :
     ∃ phi : decompositionGroup F P,
       IsArithmeticFrobeniusLift F P phi := by
-  letI : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
-  letI : Algebra.IsAlgebraic F.field Omega :=
+  let : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
+  let : Algebra.IsAlgebraic F.field Omega :=
     IntermediateField.isAlgebraic_tower_top
-  letI : IsAlgClosure F.field Omega :=
+  let : IsAlgClosure F.field Omega :=
     ⟨AlgebraicClosure.isAlgClosed ℚ, inferInstance⟩
-  letI : IsGalois F.field Omega := IsGalois.mk
+  let : IsGalois F.field Omega := IsGalois.mk
   let G := Omega ≃ₐ[F.field] Omega
   let B := 𝓞 Omega
-  letI : Algebra.IsAlgebraic ℤ Omega :=
+  let : Algebra.IsAlgebraic ℤ Omega :=
     (IsFractionRing.comap_isAlgebraic_iff
       (A := ℤ) (K := ℚ) (C := Omega)).mpr
         (by exact inferInstance : Algebra.IsAlgebraic ℚ Omega)
-  letI : IsFractionRing B Omega :=
+  let : IsFractionRing B Omega :=
     integralClosure.isFractionRing_of_algebraic
       (A := ℤ) (L := Omega) (fun x hx => by
         apply (Int.cast_injective (α := Omega))
         simpa using hx)
-  letI : IsGaloisGroup G F.field Omega := IsGaloisGroup.of_isGalois F.field Omega
-  letI : IsGaloisGroup G (𝓞 F.field) B :=
+  let : IsGaloisGroup G F.field Omega := IsGaloisGroup.of_isGalois F.field Omega
+  let : IsGaloisGroup G (𝓞 F.field) B :=
     IsGaloisGroup.of_isFractionRing G (𝓞 F.field) B F.field Omega
-  letI : TopologicalSpace B := ⊥
-  letI : DiscreteTopology B := ⟨rfl⟩
-  letI : ContinuousSMul G B :=
+  let : TopologicalSpace B := ⊥
+  let : DiscreteTopology B := ⟨rfl⟩
+  let : ContinuousSMul G B :=
     continuousSMul_iff_stabilizer_isOpen.mpr fun x => by
       have hx := stabilizer_isOpen_of_isIntegral (K := F.field) (x : Omega)
       have heq : (MulAction.stabilizer G x : Set G) =
@@ -379,17 +379,17 @@ private theorem exists_normalizedArithmeticFrobenius
   let Q : Ideal B := frobeniusIntegralCenter P.valuationSubring
   let v := finitePrime F P
   have hQv : Q.under (𝓞 F.field) = v.asIdeal := frobeniusIntegralCenter_under F P
-  letI : Q.LiesOver v.asIdeal := ⟨hQv.symm⟩
-  haveI : Q.IsPrime := frobeniusIntegralCenter_isPrime P.valuationSubring
+  let : Q.LiesOver v.asIdeal := ⟨hQv.symm⟩
+  have : Q.IsPrime := frobeniusIntegralCenter_isPrime P.valuationSubring
   have hInt : Algebra.IsIntegral (𝓞 F.field ⧸ v.asIdeal) (B ⧸ Q) := by
     infer_instance
-  haveI : IsDomain (B ⧸ Q) := Ideal.Quotient.isDomain Q
-  letI : Field (𝓞 F.field ⧸ v.asIdeal) := Ideal.Quotient.field v.asIdeal
-  letI : Field (B ⧸ Q) :=
+  have : IsDomain (B ⧸ Q) := Ideal.Quotient.isDomain Q
+  let : Field (𝓞 F.field ⧸ v.asIdeal) := Ideal.Quotient.field v.asIdeal
+  let : Field (B ⧸ Q) :=
     (isField_of_isIntegral_of_isField'
       (R := 𝓞 F.field ⧸ v.asIdeal) (S := B ⧸ Q)
       (Field.toIsField (𝓞 F.field ⧸ v.asIdeal))).toField
-  haveI : Fintype (𝓞 F.field ⧸ v.asIdeal) := Fintype.ofFinite _
+  have : Fintype (𝓞 F.field ⧸ v.asIdeal) := Fintype.ofFinite _
   have hAlg : Algebra.IsAlgebraic (𝓞 F.field ⧸ v.asIdeal) (B ⧸ Q) := by
     exact Algebra.IsIntegral.isAlgebraic
   let frob : (B ⧸ Q) ≃ₐ[(𝓞 F.field ⧸ v.asIdeal)] (B ⧸ Q) :=
@@ -467,13 +467,13 @@ private theorem exists_normalizedArithmeticFrobenius
     obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective z
     let Efield : IntermediateField ℚ Omega :=
       IntermediateField.adjoin ℚ ({(x : Omega)} : Set Omega)
-    letI : FiniteDimensional ℚ Efield :=
+    let : FiniteDimensional ℚ Efield :=
       IntermediateField.adjoin.finiteDimensional
         (Algebra.IsIntegral.isIntegral (x : Omega))
     let E : NumberFieldInOmega :=
       { field := Efield
         finite := by infer_instance }
-    letI : NumberField E.field := NumberField.of_module_finite ℚ E.field
+    let : NumberField E.field := NumberField.of_module_finite ℚ E.field
     let u := finitePrime E P
     let xE : E.field := ⟨(x : Omega),
       IntermediateField.subset_adjoin ℚ ({(x : Omega)} : Set Omega)
@@ -558,7 +558,7 @@ private theorem absoluteNorm_eq_of_degreeOne
     Nat.card (𝓞 ℚ ⧸ q.asIdeal) =
       NU.Chebotarev.PrimeIdeal.norm (finitePrime F P) := by
   let v := finitePrime F P
-  letI : v.asIdeal.LiesOver q.asIdeal := ⟨by
+  let : v.asIdeal.LiesOver q.asIdeal := ⟨by
     rw [← hqv]
     rfl⟩
   have hf : absoluteResidueDegree F v = 1 := by
@@ -632,9 +632,9 @@ ledger. -/
 private theorem finitePrimeFrobeniusLiftingConstruction :
     FinitePrimeFrobeniusLiftingConstruction := by
   intro F N hFN _ s hs q w hunramified hwq hfrob
-  letI : Algebra F.field N.field :=
+  let : Algebra F.field N.field :=
     (IntermediateField.inclusion hFN).toRingHom.toAlgebra
-  letI : IsScalarTower ℚ F.field N.field := by
+  let : IsScalarTower ℚ F.field N.field := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
@@ -654,7 +654,7 @@ private theorem finitePrimeFrobeniusLiftingConstruction :
     exact hwq.over.symm
   have hunrw : Algebra.IsUnramifiedAt (𝓞 ℚ) w.asIdeal :=
     hunramified w hwq
-  letI : Algebra.IsUnramifiedAt (𝓞 ℚ) w.asIdeal := hunrw
+  let : Algebra.IsUnramifiedAt (𝓞 ℚ) w.asIdeal := hunrw
   have hs_eq : s.1 = NU.Chebotarev.arithFrobeniusAt
       (K := ℚ) (L := N.field) w := by
     have heq := hfrob.eq_of_isUnramifiedAt
@@ -731,17 +731,17 @@ private theorem finitePrimeFrobeniusLiftingConstruction :
       change v.asIdeal =
         (NU.LocalTheory.restrictFinitePlace F.field w').asIdeal
       rw [hw'v]⟩
-    letI : w'.asIdeal.LiesOver v.asIdeal := hover
-    letI : v.asIdeal.LiesOver q.asIdeal := ⟨by
+    let : w'.asIdeal.LiesOver v.asIdeal := hover
+    let : v.asIdeal.LiesOver q.asIdeal := ⟨by
       exact congrArg IsDedekindDomain.HeightOneSpectrum.asIdeal hqv.symm⟩
     have hw'q : w'.asIdeal.LiesOver q.asIdeal :=
       Ideal.LiesOver.trans w'.asIdeal v.asIdeal q.asIdeal
     have hunrw' : Algebra.IsUnramifiedAt (𝓞 ℚ) w'.asIdeal :=
       hunramified w' hw'q
-    letI : Algebra.IsUnramifiedAt (𝓞 ℚ) w'.asIdeal := hunrw'
+    let : Algebra.IsUnramifiedAt (𝓞 ℚ) w'.asIdeal := hunrw'
     have hunrF : Algebra.IsUnramifiedAt (𝓞 F.field) w'.asIdeal :=
       Algebra.IsUnramifiedAt.of_restrictScalars (𝓞 ℚ) w'.asIdeal
-    letI : Algebra.IsUnramifiedAt (𝓞 F.field) w'.asIdeal := hunrF
+    let : Algebra.IsUnramifiedAt (𝓞 F.field) w'.asIdeal := hunrF
     change w'.asIdeal.ramificationIdx (𝓞 F.field) = 1
     rw [← Ideal.ramificationIdx_eq_ramificationIdx'
       v.asIdeal w'.asIdeal v.ne_bot]
@@ -1237,8 +1237,8 @@ theorem cyclic_quotient_is_conjugation
       SubMulAction.fixingSubgroup_smul_eq_fixingSubgroup_map_conj]
     exact hgroup
   have hfield : conjugateField alpha F₂.field = F₁.field := by
-    letI : IsGalois ℚ Omega := by
-      letI : IsAlgClosure ℚ Omega :=
+    let : IsGalois ℚ Omega := by
+      let : IsAlgClosure ℚ Omega :=
         ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
       exact ⟨⟩
     rw [← InfiniteGalois.fixedField_fixingSubgroup

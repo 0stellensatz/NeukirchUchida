@@ -197,7 +197,7 @@ theorem HMinusOne_equiv_tate (M : Rep ℤ G) :
       M.tateNorm ≫ (groupCohomology.cochainsIso₀ M).hom
     simp only [Rep.tateNorm]
     simp
-  letI : Module ℤ (LinearMap.ker
+  let : Module ℤ (LinearMap.ker
       ((tateComplex M).sc' (-2 : ℤ) (-1 : ℤ) 0).g.hom) :=
     (LinearMap.ker ((tateComplex M).sc' (-2 : ℤ) (-1 : ℤ) 0).g.hom).module
   let e : normKernel M ≃+
@@ -825,14 +825,14 @@ private def barAugmentationKernelLift (s : KernelFork (barAugmentation G)) : s.p
 private def barAugmentationIncIsKernel : IsLimit (KernelFork.ofι (barAugmentationInclusion G) (barAugmentation_comp (G := G))) :=
   Fork.IsLimit.mk _ (barAugmentationKernelLift (G := G))
     (fun s => by
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       apply Representation.IntertwiningMap.ext
       apply LinearMap.ext
       intro z
       rfl)
     (fun s m hm => by
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       apply Representation.IntertwiningMap.ext
       apply LinearMap.ext
@@ -1008,7 +1008,7 @@ def cocyclePushoutProjection (a : G → G → M)
 @[simp] private lemma cocyclePushout_comp (a : G → G → M)
     (ha : a ∈ NU.LCFT.Inhomogeneous.cocycles2 M) :
     cocyclePushoutInclusion M a ha ≫ cocyclePushoutProjection M a ha = 0 := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   apply Rep.hom_ext
   apply Representation.IntertwiningMap.ext
   apply LinearMap.ext
@@ -1055,7 +1055,7 @@ private def cocyclePushoutIncIsKernel (a : G → G → M)
     IsLimit (KernelFork.ofι (cocyclePushoutInclusion M a ha) (cocyclePushout_comp M a ha)) :=
   Fork.IsLimit.mk _ (cocyclePushoutKernelLift M a ha)
     (fun s => by
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       apply Representation.IntertwiningMap.ext
       apply LinearMap.ext
@@ -1064,7 +1064,7 @@ private def cocyclePushoutIncIsKernel (a : G → G → M)
       · rfl
       · exact (cocyclePushoutFork_snd_zero M a ha s z).symm)
     (fun s m hm => by
-      letI : Mono (cocyclePushoutInclusion M a ha) := (Rep.mono_iff_injective _).2 fun x y h =>
+      let : Mono (cocyclePushoutInclusion M a ha) := (Rep.mono_iff_injective _).2 fun x y h =>
         congrArg Prod.fst h
       apply (cancel_mono (cocyclePushoutInclusion M a ha)).1
       change m ≫ Fork.ι (KernelFork.ofι (cocyclePushoutInclusion M a ha)
@@ -1073,7 +1073,7 @@ private def cocyclePushoutIncIsKernel (a : G → G → M)
           (cocyclePushoutInclusion M a ha) (cocyclePushout_comp M a ha))
       rw [hm]
       symm
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       apply Representation.IntertwiningMap.ext
       apply LinearMap.ext

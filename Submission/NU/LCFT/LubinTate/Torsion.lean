@@ -194,7 +194,7 @@ structure LubinTateTower (π : Uniformizer K) where
       (((level m hm).generator : (level m hm).field) : Ksep)
 
 private theorem torsion_one_lt_residueCard : 1 < residueCard K := by
-  letI := Fintype.ofFinite (LocalResidueField K)
+  let := Fintype.ofFinite (LocalResidueField K)
   change 1 < Nat.card (LocalResidueField K)
   rw [Nat.card_eq_fintype_card]
   exact Fintype.one_lt_card
@@ -532,7 +532,7 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
   let g : E := ⟨α, IntermediateField.mem_adjoin_simple_self K α⟩
   have hP := primitiveDivisionPolynomial_eisenstein K Ksep π m hm
   have hq : 1 < residueCard K := by
-    letI := Fintype.ofFinite (LocalResidueField K)
+    let := Fintype.ofFinite (LocalResidueField K)
     change 1 < Nat.card (LocalResidueField K)
     rw [Nat.card_eq_fintype_card]
     exact Fintype.one_lt_card
@@ -554,7 +554,7 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
   have hαint : IsIntegral K α := by
     refine ⟨PK, hPKmonic, ?_⟩
     simpa [Polynomial.eval_map] using hPKroot_sep
-  letI : FiniteDimensional K E := IntermediateField.adjoin.finiteDimensional hαint
+  let : FiniteDimensional K E := IntermediateField.adjoin.finiteDimensional hαint
   have hPKroot : Polynomial.aeval g PK = 0 := by
     apply (algebraMap E Ksep).injective
     rw [map_zero, Polynomial.aeval_def, Polynomial.hom_eval₂,
@@ -570,28 +570,28 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
     rw [IntermediateField.adjoin.finrank hαint, ← hminSep]
     dsimp only [PK]
     rw [Polynomial.Monic.natDegree_map hPmonic, hP.2.1]
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  letI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  let := isUniformAddGroup_of_addCommGroup (G := K)
+  let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
     { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI : NontriviallyNormedField K :=
+  let : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValuativeRel.ValueGroupWithZero K)
-  letI : NontriviallyNormedField E := spectralNorm.nontriviallyNormedField K E
-  letI : NormedAlgebra K E := spectralNorm.normedAlgebra K E
-  letI : IsUltrametricDist E :=
+  let : NontriviallyNormedField E := spectralNorm.nontriviallyNormedField K E
+  let : NormedAlgebra K E := spectralNorm.normedAlgebra K E
+  let : IsUltrametricDist E :=
     IsUltrametricDist.isUltrametricDist_of_isNonarchimedean_norm
       (isNonarchimedean_spectralNorm (K := K) (L := E))
   let vE : Valuation E ℝ≥0 := NormedField.valuation (K := E)
   let vrE : ValuativeRel E := ValuativeRel.ofValuation vE
   let topE : TopologicalSpace E := inferInstance
-  letI : ValuativeRel E := vrE
-  letI : vE.Compatible := Valuation.Compatible.ofValuation vE
-  letI : TopologicalSpace E := topE
-  letI : Valued E ℝ≥0 := NormedField.toValued
-  haveI : (Valued.v : Valuation E ℝ≥0).Compatible := by
+  let : ValuativeRel E := vrE
+  let : vE.Compatible := Valuation.Compatible.ofValuation vE
+  let : TopologicalSpace E := topE
+  let : Valued E ℝ≥0 := NormedField.toValued
+  have : (Valued.v : Valuation E ℝ≥0).Compatible := by
     rw [show (Valued.v : Valuation E ℝ≥0) = NormedField.valuation from rfl]
     infer_instance
   have hvt : IsValuativeTopology E := by
@@ -600,16 +600,16 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
     rw [Valued.is_topological_valuation s]
     simpa using
       (Valued.v : Valuation E ℝ≥0).exists_setOf_restrict_le_iff 0 s
-  letI : IsValuativeTopology E := hvt
+  let : IsValuativeTopology E := hvt
   have hlc : LocallyCompactSpace E :=
     LocallyCompactSpace.of_finiteDimensional_of_complete K E
-  letI : LocallyCompactSpace E := hlc
+  let : LocallyCompactSpace E := hlc
   have hnt : ValuativeRel.IsNontrivial E := by
     rw [ValuativeRel.isNontrivial_iff_isNontrivial vE]
     infer_instance
-  letI : ValuativeRel.IsNontrivial E := hnt
+  let : ValuativeRel.IsNontrivial E := hnt
   have hlocal : IsNonarchimedeanLocalField E := by exact { }
-  letI : IsNonarchimedeanLocalField E := hlocal
+  let : IsNonarchimedeanLocalField E := hlocal
   have hve : ValuativeExtension K E := by
     constructor
     intro a b
@@ -622,9 +622,9 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
       spectralNorm_extends (K := K) (L := E) b]
     exact (Valuation.Compatible.vle_iff_le (v := Valued.v) a b |>.trans
       Valued.toNormedField.norm_le_iff.symm).symm
-  letI : ValuativeExtension K E := hve
+  let : ValuativeExtension K E := hve
   have hcsmul : ContinuousSMul K E := by infer_instance
-  letI : ContinuousSMul K E := hcsmul
+  let : ContinuousSMul K E := hcsmul
   have integral_of_integer (x : RingOfIntegers E) :
       IsIntegral (RingOfIntegers K) (x : E) := by
     have hxrel : ((x : E) ≤ᵥ (1 : E)) :=
@@ -735,13 +735,13 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
     exact_mod_cast hdpos
   have hgEval : PowerSeries.HasEval g :=
     tendsto_pow_atTop_nhds_zero_of_norm_lt_one hgnorm
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) := by
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) := by
     constructor
     exact ValuativeRel.isEquiv _ _
   let intMap : RingOfIntegers K →+* RingOfIntegers E :=
     algebraMap (RingOfIntegers K) (RingOfIntegers E)
-  letI : Algebra (RingOfIntegers K) (RingOfIntegers E) := intMap.toAlgebra
-  letI : IsScalarTower (RingOfIntegers K) (RingOfIntegers E) E :=
+  let : Algebra (RingOfIntegers K) (RingOfIntegers E) := intMap.toAlgebra
+  let : IsScalarTower (RingOfIntegers K) (RingOfIntegers E) E :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
   have hring : Algebra.adjoin (RingOfIntegers K) {gO} = ⊤ := by
     rw [eq_top_iff]
@@ -1082,21 +1082,21 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
   obtain ⟨ev, hev⟩ : ∃ ev : PowerSeries (RingOfIntegers K) →+* E,
       ∀ f, ev f = ∑' n : ℕ,
         algebraMap (RingOfIntegers K) E (PowerSeries.coeff n f) * g ^ n := by
-    letI : WithIdeal (RingOfIntegers K) := ⟨LocalMaximalIdeal K⟩
-    letI : TopologicalSpace (RingOfIntegers K) := (LocalMaximalIdeal K).adicTopology
-    letI : UniformSpace (RingOfIntegers K) := IsTopologicalAddGroup.rightUniformSpace _
-    letI : IsUniformAddGroup (RingOfIntegers K) := isUniformAddGroup_of_addCommGroup
-    letI : WithIdeal (RingOfIntegers E) := ⟨LocalMaximalIdeal E⟩
-    letI : TopologicalSpace (RingOfIntegers E) := (LocalMaximalIdeal E).adicTopology
-    letI : UniformSpace (RingOfIntegers E) := IsTopologicalAddGroup.rightUniformSpace _
-    letI : IsUniformAddGroup (RingOfIntegers E) := isUniformAddGroup_of_addCommGroup
-    letI : IsLinearTopology (RingOfIntegers E) (RingOfIntegers E) :=
+    let : WithIdeal (RingOfIntegers K) := ⟨LocalMaximalIdeal K⟩
+    let : TopologicalSpace (RingOfIntegers K) := (LocalMaximalIdeal K).adicTopology
+    let : UniformSpace (RingOfIntegers K) := IsTopologicalAddGroup.rightUniformSpace _
+    let : IsUniformAddGroup (RingOfIntegers K) := isUniformAddGroup_of_addCommGroup
+    let : WithIdeal (RingOfIntegers E) := ⟨LocalMaximalIdeal E⟩
+    let : TopologicalSpace (RingOfIntegers E) := (LocalMaximalIdeal E).adicTopology
+    let : UniformSpace (RingOfIntegers E) := IsTopologicalAddGroup.rightUniformSpace _
+    let : IsUniformAddGroup (RingOfIntegers E) := isUniformAddGroup_of_addCommGroup
+    let : IsLinearTopology (RingOfIntegers E) (RingOfIntegers E) :=
       (LocalMaximalIdeal E).isLinearTopology
     have hadicE : IsAdic (LocalMaximalIdeal E) := rfl
     have hcomplete := hadicE.isAdicComplete_iff.mp
       (inferInstance : IsAdicComplete (LocalMaximalIdeal E) (RingOfIntegers E))
-    letI : CompleteSpace (RingOfIntegers E) := hcomplete.1
-    letI : T2Space (RingOfIntegers E) := hcomplete.2
+    let : CompleteSpace (RingOfIntegers E) := hcomplete.1
+    let : T2Space (RingOfIntegers E) := hcomplete.2
     have hmapIdeal : Ideal.map intMap (LocalMaximalIdeal K) ≤ LocalMaximalIdeal E := by
       rw [Ideal.map_le_iff_le_comap]
       intro x hx
@@ -1192,7 +1192,7 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
 private theorem torsion_residueCard_sub_one_ne_zero :
     ((residueCard K - 1 : ℕ) : RingOfIntegers K) ≠ 0 := by
   intro h
-  letI := Fintype.ofFinite (LocalResidueField K)
+  let := Fintype.ofFinite (LocalResidueField K)
   have hmap := congr_arg (IsLocalRing.residue (RingOfIntegers K)) h
   have hqpos : 0 < residueCard K := Nat.card_pos
   have hone : 1 ≤ residueCard K := hqpos
@@ -1343,7 +1343,7 @@ private theorem exists_compatible_primitiveDivision_root (π : Uniformizer K) (m
   have hpdeg : (F - Polynomial.C x).degree ≠ 0 := by
     rw [Polynomial.degree_sub_eq_left_of_degree_lt hdeglt, hFdegree]
     exact_mod_cast (Nat.zero_lt_one.trans (torsion_one_lt_residueCard K)).ne'
-  letI : IsSepClosed Ksep := IsSepClosure.sep_closed K
+  let : IsSepClosed Ksep := IsSepClosure.sep_closed K
   obtain ⟨y, hy⟩ := IsSepClosed.exists_root (F - Polynomial.C x) hpdeg hsep
   refine ⟨y, hy.dvd hdiv, ?_⟩
   rw [Polynomial.IsRoot.def, Polynomial.eval_sub, Polynomial.eval_C, sub_eq_zero] at hy
@@ -1358,7 +1358,7 @@ theorem lubinTateTower_exists (π : Uniformizer K) :
   let φ := algebraMap (RingOfIntegers K) Ksep
   let A : ℕ → Type v := fun n =>
     {x : Ksep // ((primitiveDivisionPolynomial K π (n + 1)).map φ).IsRoot x}
-  letI : IsSepClosed Ksep := IsSepClosure.sep_closed K
+  let : IsSepClosed Ksep := IsSepClosure.sep_closed K
   have hQ1monic : ((primitiveDivisionPolynomial K π 1).map φ).Monic :=
     (primitiveDivisionPolynomial_monic_natDegree K π 1 (by omega)).1.map φ
   have hQ1deg : ((primitiveDivisionPolynomial K π 1).map φ).degree ≠ 0 := by
@@ -1497,7 +1497,7 @@ private theorem lubinTateLevel_minpoly
     minpoly K L.generator =
       (primitiveDivisionPolynomial K π m).map
         (algebraMap (RingOfIntegers K) K) := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
+  let : FiniteDimensional K L.field := L.finiteDimensional
   let P := primitiveDivisionPolynomial K π m
   let PK := P.map (algebraMap (RingOfIntegers K) K)
   have hPmonic : P.Monic :=
@@ -1687,7 +1687,7 @@ private lemma formalGroupXzero_constantCoeff
 private lemma formalGroupXzero_eq_X
     {R : Type*} [CommRing R] (F : FormalGroup R) :
     formalGroupXzero F = PowerSeries.X := by
-  haveI : Invertible ((formalGroupXzero F).coeff 1) :=
+  have : Invertible ((formalGroupXzero F).coeff 1) :=
     (formalGroupXzero_coeff_one F) ▸ invertibleOne
   calc
     _ = (formalGroupXzero F).substInv.subst
@@ -1967,9 +1967,9 @@ private theorem lubinTateLevel_evaluation_C
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (r : RingOfIntegers K) :
     L.evaluation (PowerSeries.C r) = algebraMap (RingOfIntegers K) L.field r := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
-  letI : ValuativeRel L.field := L.localFieldData.valuativeRel
-  letI : TopologicalSpace L.field := L.localFieldData.topology
+  let : FiniteDimensional K L.field := L.finiteDimensional
+  let : ValuativeRel L.field := L.localFieldData.valuativeRel
+  let : TopologicalSpace L.field := L.localFieldData.topology
   rw [L.evaluation_apply, tsum_eq_single 0]
   · simp [PowerSeries.coeff_C]
   · intro n hn
@@ -1994,9 +1994,9 @@ private theorem lubinTateLevel_evaluation_X
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
     L.evaluation PowerSeries.X = L.generator := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
-  letI : ValuativeRel L.field := L.localFieldData.valuativeRel
-  letI : TopologicalSpace L.field := L.localFieldData.topology
+  let : FiniteDimensional K L.field := L.finiteDimensional
+  let : ValuativeRel L.field := L.localFieldData.valuativeRel
+  let : TopologicalSpace L.field := L.localFieldData.topology
   rw [L.evaluation_apply, tsum_eq_single 1]
   · simp [PowerSeries.coeff_X]
   · intro n hn
@@ -2234,9 +2234,9 @@ private theorem lubinTateLevel_evaluation_ker
     { toIsWeaklyEisensteinAt :=
         (primitiveDivisionPolynomial_eisenstein K Ksep π m hm).1.isWeaklyEisensteinAt
       monic := hmonic }
-  letI : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
-  letI : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
-  letI : IsAdicComplete I R := by
+  let : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
+  let : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
+  let : IsAdicComplete I R := by
     dsimp [I, R]
     infer_instance
   let H := hdist.isWeierstrassDivisorAt'
@@ -2369,7 +2369,7 @@ private theorem lubinTateRootAlgEquiv_generator
     (hy : (primitiveDivisionPolynomial K π m).eval₂
       (algebraMap (RingOfIntegers K) L.field) y = 0) :
     lubinTateRootAlgEquiv K Ksep π m hm L y hy L.generator = y := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
+  let : FiniteDimensional K L.field := L.finiteDimensional
   rw [← lubinTateLevelPowerBasis_gen K Ksep π m hm L]
   simp [lubinTateRootAlgEquiv]
 
@@ -2423,14 +2423,14 @@ private theorem exists_lubinTateUnit_action_polynomial
       p.eval₂ (algebraMap (RingOfIntegers K) L.field) L.generator =
         L.evaluation ((lubinTateFormalModule K π).endomorphism
           (u : RingOfIntegers K)) := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
-  letI : ValuativeRel L.field := L.localFieldData.valuativeRel
-  letI : TopologicalSpace L.field := L.localFieldData.topology
-  letI : IsNonarchimedeanLocalField L.field := L.localFieldData.localField
-  letI : ValuativeExtension K L.field := L.localFieldData.valuativeExtension
+  let : FiniteDimensional K L.field := L.finiteDimensional
+  let : ValuativeRel L.field := L.localFieldData.valuativeRel
+  let : TopologicalSpace L.field := L.localFieldData.topology
+  let : IsNonarchimedeanLocalField L.field := L.localFieldData.localField
+  let : ValuativeExtension K L.field := L.localFieldData.valuativeExtension
   let intMap := L.integerAlgebraMap
-  letI : Algebra (RingOfIntegers K) (RingOfIntegers L.field) := intMap.toAlgebra
-  letI : IsScalarTower (RingOfIntegers K) (RingOfIntegers L.field) L.field :=
+  let : Algebra (RingOfIntegers K) (RingOfIntegers L.field) := intMap.toAlgebra
+  let : IsScalarTower (RingOfIntegers K) (RingOfIntegers L.field) L.field :=
     IsScalarTower.of_algebraMap_eq fun x => (L.integerAlgebraMap_apply x).symm
   let y := L.evaluation ((lubinTateFormalModule K π).endomorphism
     (u : RingOfIntegers K))
@@ -2526,7 +2526,7 @@ private theorem torsion_integralUnitReduction_surjective
     apply top_unique
     rw [← htop]
     exact Ideal.pow_le_self (by omega)
-  letI : Nontrivial (RingOfIntegers K ⧸ I) :=
+  let : Nontrivial (RingOfIntegers K ⧸ I) :=
     Ideal.Quotient.nontrivial_iff.mpr hI
   apply IsLocalRing.surjective_units_map_of_local_ringHom
     (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective
@@ -2627,7 +2627,7 @@ private theorem lubinTateLevel_finrank
     (L : LubinTateLevel K Ksep π m) :
     Module.finrank K L.field =
       (residueCard K - 1) * residueCard K ^ (m - 1) := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
+  let : FiniteDimensional K L.field := L.finiteDimensional
   let pb := lubinTateLevelPowerBasis K Ksep π m hm L
   let P := primitiveDivisionPolynomial K π m
   have hmonic : P.Monic := (primitiveDivisionPolynomial_monic_natDegree K π m hm).1
@@ -2646,7 +2646,7 @@ private theorem lubinTateLevel_finrank
 
 private theorem torsion_quotient_finite (m : ℕ) :
     Finite (RingOfIntegers K ⧸ LocalMaximalIdeal K ^ m) := by
-  letI : Finite (RingOfIntegers K ⧸ LocalMaximalIdeal K) := by
+  let : Finite (RingOfIntegers K ⧸ LocalMaximalIdeal K) := by
     change Finite (LocalResidueField K)
     infer_instance
   exact Ideal.finite_quotient_pow
@@ -2688,12 +2688,12 @@ private theorem torsion_card_quotient_units (m : ℕ) (hm : 1 ≤ m) :
     apply (IsLocalRing.maximalIdeal.isMaximal (R := R)).ne_top
     rw [eq_top_iff]
     simpa [h] using hpow_le
-  letI : Nontrivial A := Ideal.Quotient.nontrivial_iff.mpr hpow_ne_top
-  letI : IsLocalRing A :=
+  let : Nontrivial A := Ideal.Quotient.nontrivial_iff.mpr hpow_ne_top
+  let : IsLocalRing A :=
     IsLocalRing.of_surjective' (Ideal.Quotient.mk (I ^ m)) Ideal.Quotient.mk_surjective
-  letI : Finite A := torsion_quotient_finite K m
-  letI : Fintype A := Fintype.ofFinite A
-  letI : Fintype Aˣ := Fintype.ofFinite Aˣ
+  let : Finite A := torsion_quotient_finite K m
+  let : Fintype A := Fintype.ofFinite A
+  let : Fintype Aˣ := Fintype.ofFinite Aˣ
   let J : Ideal A := I.map (Ideal.Quotient.mk (I ^ m))
   have hJ : J = IsLocalRing.maximalIdeal A := by
     exact IsLocalRing.map_maximalIdeal_of_surjective
@@ -2748,13 +2748,13 @@ private theorem lubinTateQuotientUnitActionHom_bijective
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
     Function.Bijective (lubinTateQuotientUnitActionHom K Ksep π m hm L) := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
+  let : FiniteDimensional K L.field := L.finiteDimensional
   let A := RingOfIntegers K ⧸ LocalMaximalIdeal K ^ m
   let U := Units A
-  letI : Finite A := torsion_quotient_finite K m
-  letI : Finite U := inferInstance
-  letI : Fintype U := Fintype.ofFinite U
-  letI : Fintype (L.field ≃ₐ[K] L.field) := AlgEquiv.fintype K L.field
+  let : Finite A := torsion_quotient_finite K m
+  let : Finite U := inferInstance
+  let : Fintype U := Fintype.ofFinite U
+  let : Fintype (L.field ≃ₐ[K] L.field) := AlgEquiv.fintype K L.field
   let f := lubinTateQuotientUnitActionHom K Ksep π m hm L
   have hinj : Function.Injective f :=
     lubinTateQuotientUnitActionHom_injective K Ksep π m hm L
@@ -2780,7 +2780,7 @@ private noncomputable def lubinTateLevelGaloisEquiv
 private theorem lubinTateLevel_isGalois
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) : IsGalois K L.field := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
+  let : FiniteDimensional K L.field := L.finiteDimensional
   apply IsGalois.of_card_aut_eq_finrank K L.field
   calc
     Nat.card (L.field ≃ₐ[K] L.field) =
@@ -2798,8 +2798,8 @@ private theorem lubinTate_conjugates_eq_primitive
     Set.range (fun σ : (L.field ≃ₐ[K] L.field) =>
       (((σ L.generator : L.field)) : Ksep)) =
         {x : Ksep | IsPrimitiveLubinTateDivisionPoint K Ksep π m x} := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
-  letI : IsGalois K L.field := lubinTateLevel_isGalois K Ksep π m hm L
+  let : FiniteDimensional K L.field := L.finiteDimensional
+  let : IsGalois K L.field := lubinTateLevel_isGalois K Ksep π m hm L
   ext x
   constructor
   · rintro ⟨σ, rfl⟩
@@ -2881,11 +2881,11 @@ private theorem lubinTateTowerRestriction_apply
   let E := (T.level m hm).field
   let M := (T.level (m + 1) (Nat.succ_pos m)).field
   let i := IntermediateField.inclusion (T.field_le m hm)
-  letI : FiniteDimensional K E := (T.level m hm).finiteDimensional
-  letI : IsGalois K E :=
+  let : FiniteDimensional K E := (T.level m hm).finiteDimensional
+  let : IsGalois K E :=
     lubinTateLevel_isGalois K Ksep π m hm (T.level m hm)
-  letI : Algebra E M := i.toAlgebra
-  letI : IsScalarTower K E M :=
+  let : Algebra E M := i.toAlgebra
+  let : IsScalarTower K E M :=
     IsScalarTower.of_algebraMap_eq fun z => (i.commutes z).symm
   exact AlgEquiv.restrictNormal_commutes σ E x
 

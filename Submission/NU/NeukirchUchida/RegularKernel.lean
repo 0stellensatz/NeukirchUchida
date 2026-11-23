@@ -48,11 +48,11 @@ noncomputable def cyclotomicCompositum
     NumberFieldInOmega where
   field := N.field ⊔ cyclotomicFieldInOmega p
   finite := by
-    letI : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
-    letI : Algebra.IsIntegral ℚ Omega := Algebra.IsAlgebraic.isIntegral
+    let : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
+    let : Algebra.IsIntegral ℚ Omega := Algebra.IsAlgebraic.isIntegral
     let A := IntermediateField.adjoin ℚ
       ({primitiveRootInOmega p} : Set Omega)
-    letI : FiniteDimensional ℚ A :=
+    let : FiniteDimensional ℚ A :=
       IntermediateField.adjoin.finiteDimensional
         (Algebra.IsIntegral.isIntegral (primitiveRootInOmega p))
     exact IntermediateField.finiteDimensional_sup N.field A
@@ -116,7 +116,7 @@ theorem cyclotomicCharacter_spec
       cyclotomicRoot N p ^ ((cyclotomicCharacter N p delta :
         ZMod (p : ℕ)).val) := by
   let E := cyclotomicCompositum N p
-  letI : Algebra N.field E.field :=
+  let : Algebra N.field E.field :=
     (IntermediateField.inclusion
       (le_cyclotomicCompositum N p)).toRingHom.toAlgebra
   have hroot : IsPrimitiveRoot (cyclotomicRoot N p) (p : ℕ) := by
@@ -236,7 +236,7 @@ theorem kummerProjector_apply
       (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
         ((chi delta)⁻¹ : ZMod (p : ℕ)) := by
   classical
-  letI := Fintype.ofFinite Delta
+  let := Fintype.ofFinite Delta
   unfold kummerProjector
   rw [MonoidAlgebra.coeff_sum]
   change Finsupp.applyAddHom delta (∑ d : Delta,
@@ -290,7 +290,7 @@ theorem kummerProjector_idempotent
     (chi : Delta →* (ZMod (p : ℕ))ˣ) :
     IsIdempotentElem (kummerProjector p hcard chi) := by
   classical
-  letI := Fintype.ofFinite Delta
+  let := Fintype.ofFinite Delta
   let R := ZMod (p : ℕ)
   let P := kummerProjector p hcard chi
   let a : Delta → R := fun d =>
@@ -358,7 +358,7 @@ theorem kummerProjector_leftTranslate
     MonoidAlgebra.single gamma 1 * kummerProjector p hcard chi =
       (chi gamma : ZMod (p : ℕ)) • kummerProjector p hcard chi := by
   classical
-  letI := Fintype.ofFinite Delta
+  let := Fintype.ofFinite Delta
   ext delta
   rw [MonoidAlgebra.single_mul_apply, one_mul]
   change (kummerProjector p hcard chi).coeff (gamma⁻¹ * delta) =
@@ -381,7 +381,7 @@ theorem cyclotomicDelta_card_dvd_p_sub_one
     Nat.card (CyclotomicDelta N p) ∣ (p : ℕ) - 1 := by
   let E := cyclotomicCompositum N p
   have hNE : N.field ≤ E.field := le_cyclotomicCompositum N p
-  letI : Algebra ℚ E.field := E.field.algebra'
+  let : Algebra ℚ E.field := E.field.algebra'
   let N' : IntermediateField ℚ E.field := IntermediateField.restrict hNE
   let C : IntermediateField ℚ E.field :=
     IntermediateField.adjoin ℚ ({cyclotomicRoot N p} : Set E.field)
@@ -467,7 +467,7 @@ theorem cyclotomicDelta_card_dvd_p_sub_one
     simpa using hx'.symm
   have hdvd := Subgroup.card_dvd_of_injective
     (cyclotomicCharacter N p) hinj
-  letI : Fact (Nat.Prime (p : ℕ)) := ⟨p.1.2⟩
+  let : Fact (Nat.Prime (p : ℕ)) := ⟨p.1.2⟩
   calc
     Nat.card (CyclotomicDelta N p) ∣ Nat.card (ZMod (p : ℕ))ˣ := hdvd
     _ = Fintype.card (ZMod (p : ℕ))ˣ := Nat.card_eq_fintype_card
@@ -553,7 +553,7 @@ theorem projectedKummerClass_eigen
       projectedKummerClass N p c ^
         ((cyclotomicCharacter N p delta : ZMod (p : ℕ)).val) := by
   classical
-  letI := Fintype.ofFinite (CyclotomicDelta N p)
+  let := Fintype.ofFinite (CyclotomicDelta N p)
   let E := cyclotomicCompositum N p
   let D := CyclotomicDelta N p
   let P := cyclotomicKummerProjector N p
@@ -912,7 +912,7 @@ private theorem regularKernelConstruction_of_additive
     RegularKernelConstruction := by
   intro N _ p
   obtain ⟨M, hcomm, eAdd, hequiv⟩ := h N p
-  letI : CommGroup (RegularKernelGroup N M) :=
+  let : CommGroup (RegularKernelGroup N M) :=
     regularKernelCommGroup N M hcomm
   have hpow (a : RegularKernelGroup N M) : a ^ (p : ℕ) = 1 := by
     apply Additive.ofMul.injective
@@ -946,9 +946,9 @@ private theorem regularKernelConstruction_of_additive
     · intro g a
       exact hequiv g a
     · classical
-      letI : Fintype
+      let : Fintype
           ((N.field ≃ₐ[ℚ] N.field) →₀ ZMod (p : ℕ)) := inferInstance
-      letI : Fintype
+      let : Fintype
           (MonoidAlgebra (ZMod (p : ℕ)) (N.field ≃ₐ[ℚ] N.field)) :=
         Fintype.ofEquiv ((N.field ≃ₐ[ℚ] N.field) →₀ ZMod (p : ℕ))
           MonoidAlgebra.coeffEquiv.symm
@@ -983,7 +983,7 @@ private theorem cyclotomicCompositum_isGaloisOverBase
   let E := cyclotomicCompositum N p
   let zeta : Omega := primitiveRootInOmega p
   have hNE : N.field ≤ E.field := le_cyclotomicCompositum N p
-  letI : Algebra N.field E.field :=
+  let : Algebra N.field E.field :=
     (IntermediateField.inclusion hNE).toRingHom.toAlgebra
   let EN : IntermediateField N.field Omega :=
     IntermediateField.extendScalars hNE
@@ -996,11 +996,11 @@ private theorem cyclotomicCompositum_isGaloisOverBase
           N.field ⊔ IntermediateField.adjoin ℚ {zeta} :=
         IntermediateField.restrictScalars_adjoin_eq_sup ℚ N.field {zeta}
       _ = E.field := rfl
-  letI : Algebra.IsAlgebraic ℚ Omega :=
+  let : Algebra.IsAlgebraic ℚ Omega :=
     AlgebraicClosure.isAlgebraic ℚ
-  letI : Algebra.IsAlgebraic N.field Omega :=
+  let : Algebra.IsAlgebraic N.field Omega :=
     Algebra.IsAlgebraic.tower_top (K := ℚ) (A := Omega) N.field
-  letI : Normal N.field Omega :=
+  let : Normal N.field Omega :=
     { isAlgebraic := fun x => Algebra.IsAlgebraic.isAlgebraic x
       splits' := fun _ => IsAlgClosed.splits _ }
   have hnormal : Normal N.field EN := by
@@ -1048,7 +1048,7 @@ private theorem cyclotomicCompositum_isGaloisOverBase
       rw [IntermediateField.mem_map]
       exact ⟨sigmaEquiv.symm x, hstable sigmaEquiv.symm x hx,
         sigmaEquiv.apply_symm_apply x⟩
-  letI : Normal N.field E.field := hnormal
+  let : Normal N.field E.field := hnormal
   exact IsGalois.mk
 
 /-- The eigenclass equation, expressed on representatives. -/
@@ -1140,12 +1140,12 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
   let Rfield : NumberFieldInOmega :=
     { field := RQ
       finite := by
-        letI : Algebra.IsAlgebraic ℚ Omega :=
+        let : Algebra.IsAlgebraic ℚ Omega :=
           AlgebraicClosure.isAlgebraic ℚ
-        letI : Algebra.IsIntegral ℚ Omega :=
+        let : Algebra.IsIntegral ℚ Omega :=
           Algebra.IsAlgebraic.isIntegral
         let A := IntermediateField.adjoin ℚ ({alpha} : Set Omega)
-        letI : FiniteDimensional ℚ A :=
+        let : FiniteDimensional ℚ A :=
           IntermediateField.adjoin.finiteDimensional
             (Algebra.IsIntegral.isIntegral alpha)
         rw [hRQ]
@@ -1156,29 +1156,29 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
     change x ∈ R0
     exact R0.algebraMap_mem ⟨x, hx⟩
   have hNR : N.field ≤ RQ := hNE.trans hER
-  letI : Algebra ℚ RQ := RQ.algebra'
-  letI : Algebra N.field E.field :=
+  let : Algebra ℚ RQ := RQ.algebra'
+  let : Algebra N.field E.field :=
     (IntermediateField.inclusion hNE).toRingHom.toAlgebra
-  letI : Algebra E.field RQ :=
+  let : Algebra E.field RQ :=
     (IntermediateField.inclusion hER).toRingHom.toAlgebra
-  letI : Algebra N.field RQ :=
+  let : Algebra N.field RQ :=
     (IntermediateField.inclusion hNR).toRingHom.toAlgebra
-  letI : IsScalarTower N.field E.field RQ := by
+  let : IsScalarTower N.field E.field RQ := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
-  letI : IsScalarTower ℚ N.field RQ := by
+  let : IsScalarTower ℚ N.field RQ := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
-  letI : IsScalarTower ℚ E.field RQ := by
+  let : IsScalarTower ℚ E.field RQ := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
-  letI : Module.Finite ℚ RQ := Rfield.finite
-  letI : Module.Finite N.field RQ :=
+  let : Module.Finite ℚ RQ := Rfield.finite
+  let : Module.Finite N.field RQ :=
     Module.Finite.of_restrictScalars_finite ℚ N.field RQ
-  letI : Module.Finite E.field RQ :=
+  let : Module.Finite E.field RQ :=
     Module.Finite.of_restrictScalars_finite ℚ E.field RQ
   let alphaR : RQ := by
     refine ⟨alpha, ?_⟩
@@ -1243,7 +1243,7 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
     rw [IntermediateField.adjoin_map, himapTop, Set.image_singleton]
     change IntermediateField.adjoin E.field {i alphaR} = ⊤
     exact hgenRR
-  letI : Polynomial.IsSplittingField E.field RQ f :=
+  let : Polynomial.IsSplittingField E.field RQ f :=
     isSplittingField_iff_intermediateField.mpr ⟨hsplits, by
       apply top_unique
       rw [← hgen]
@@ -1258,23 +1258,23 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
         show f = Polynomial.X ^ (p : ℕ) - Polynomial.C a.1 from rfl,
         Polynomial.eval₂_sub, Polynomial.eval₂_X_pow,
         Polynomial.eval₂_C, halphaR, sub_self]⟩
-  letI : IsGalois E.field RQ :=
+  let : IsGalois E.field RQ :=
     isGalois_of_isSplittingField_X_pow_sub_C hroots hirr RQ
   have hfinER : Module.finrank E.field RQ = (p : ℕ) :=
     finrank_of_isSplittingField_X_pow_sub_C hroots hirr RQ
-  letI : IsGalois N.field E.field :=
+  let : IsGalois N.field E.field :=
     cyclotomicCompositum_isGaloisOverBase N p
-  letI : IsScalarTower N.field E.field Omega := by
+  let : IsScalarTower N.field E.field Omega := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
   let RN : IntermediateField N.field Omega :=
     IntermediateField.extendScalars hNR
-  letI : Algebra.IsAlgebraic ℚ Omega :=
+  let : Algebra.IsAlgebraic ℚ Omega :=
     AlgebraicClosure.isAlgebraic ℚ
-  letI : Algebra.IsAlgebraic N.field Omega :=
+  let : Algebra.IsAlgebraic N.field Omega :=
     Algebra.IsAlgebraic.tower_top (K := ℚ) (A := Omega) N.field
-  letI : Normal N.field Omega :=
+  let : Normal N.field Omega :=
     { isAlgebraic := fun x => Algebra.IsAlgebraic.isAlgebraic x
       splits' := fun _ => IsAlgClosed.splits _ }
   have hnormalNR : Normal N.field RN := by
@@ -1389,8 +1389,8 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
       rw [IntermediateField.mem_map]
       exact ⟨sigmaEquiv.symm x, hstable sigmaEquiv.symm x hx,
         sigmaEquiv.apply_symm_apply x⟩
-  letI : Normal N.field RQ := hnormalNR
-  letI : IsGalois N.field RQ := IsGalois.mk
+  let : Normal N.field RQ := hnormalNR
+  let : IsGalois N.field RQ := IsGalois.mk
   let H := RQ ≃ₐ[N.field] RQ
   let D := E.field ≃ₐ[N.field] E.field
   let res : H →* D := AlgEquiv.restrictNormalHom E.field
@@ -1576,8 +1576,8 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
       simpa only [map_inv₀] using congrArg Inv.inv hx
     · intro x y _ _ hx hy
       simpa only [map_mul] using congrArg₂ (· * ·) hx hy
-  letI : IsCyclic D := isCyclic_of_injective chiN hchiInj
-  letI : IsMulCommutative H :=
+  let : IsCyclic D := isCyclic_of_injective chiN hchiInj
+  let : IsMulCommutative H :=
     res.isMulCommutative_of_isCyclic_of_ker_le_center hcentral
   have hindexC : C.index = Nat.card D := by
     calc
@@ -1600,7 +1600,7 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
       _ = (p : ℕ) * Module.finrank N.field E.field := Nat.mul_comm _ _
   have hDdvd : Nat.card D ∣ (p : ℕ) - 1 := by
     have hd := Subgroup.card_dvd_of_injective chiN hchiInj
-    letI : Fact (Nat.Prime (p : ℕ)) := ⟨p.1.2⟩
+    let : Fact (Nat.Prime (p : ℕ)) := ⟨p.1.2⟩
     calc
       Nat.card D ∣ Nat.card (ZMod (p : ℕ))ˣ := hd
       _ = Fintype.card (ZMod (p : ℕ))ˣ := Nat.card_eq_fintype_card
@@ -1616,9 +1616,9 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
     rw [hcardC, hindexC]
     exact Nat.Coprime.coprime_dvd_right hDdvd hcopPred
   obtain ⟨T, hT⟩ := Subgroup.exists_left_complement'_of_coprime hcop
-  letI : T.Normal := Subgroup.normal_of_isMulCommutative T
+  let : T.Normal := Subgroup.normal_of_isMulCommutative T
   let L0 : IntermediateField N.field RQ := IntermediateField.fixedField T
-  letI : IsGalois N.field L0 :=
+  let : IsGalois N.field L0 :=
     IsGalois.of_fixedField_normal_subgroup T
   have hfinL0 : Module.finrank N.field L0 = (p : ℕ) := by
     rw [← IsGalois.card_aut_eq_finrank]
@@ -1720,7 +1720,7 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
     have hx0 : xR ∈ L0 := L0.algebraMap_mem ⟨x, hx⟩
     have hxi : xR ∈ Linside := hx0
     simpa [xR, LQ] using (IntermediateField.mem_lift xR).mpr hxi
-  letI : Algebra N.field LQ :=
+  let : Algebra N.field LQ :=
     (IntermediateField.inclusion hNL).toRingHom.toAlgebra
   let eL : L0 ≃ₐ[N.field] LQ :=
     { toFun := fun x => eQ ⟨x.1, x.2⟩
@@ -1734,25 +1734,25 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
       map_mul' := eQ.map_mul
       map_add' := eQ.map_add
       commutes' := fun _ => by apply Subtype.ext; rfl }
-  letI : Module.Finite ℚ Linside := by infer_instance
+  let : Module.Finite ℚ Linside := by infer_instance
   let Lfield : NumberFieldInOmega :=
     { field := LQ
       finite := Module.Finite.equiv eQ.toLinearEquiv }
   let L : NumberFieldExtension N :=
     { field := Lfield
       le_base := hNL }
-  letI : Algebra N.field L.field.field :=
+  let : Algebra N.field L.field.field :=
     (IntermediateField.inclusion hNL).toRingHom.toAlgebra
-  letI : Module.Finite N.field L.field.field :=
+  let : Module.Finite N.field L.field.field :=
     Module.Finite.equiv eL.toLinearEquiv
-  letI : IsGalois N.field L.field.field := IsGalois.of_algEquiv eL
+  let : IsGalois N.field L.field.field := IsGalois.of_algEquiv eL
   have hfinL : Module.finrank N.field L.field.field = (p : ℕ) := by
     calc
       Module.finrank N.field L.field.field = Module.finrank N.field L0 :=
         eL.toLinearEquiv.finrank_eq.symm
       _ = (p : ℕ) := hfinL0
   have hcyclicL : IsCyclic (L.field.field ≃ₐ[N.field] L.field.field) := by
-    letI : Fact (Nat.Prime (p : ℕ)) := ⟨p.1.2⟩
+    let : Fact (Nat.Prime (p : ℕ)) := ⟨p.1.2⟩
     apply isCyclic_of_prime_card (p := (p : ℕ))
     rw [IsGalois.card_aut_eq_finrank, hfinL]
   refine ⟨L, inferInstance, hfinL, hcyclicL, ?_⟩
@@ -1778,11 +1778,11 @@ private theorem cyclotomicCompositum_isGaloisOverQ
     (p : NU.LocalTheory.OddPrime) :
     IsGalois ℚ (cyclotomicCompositum N p).field := by
   let C := cyclotomicFieldInOmega p
-  letI : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
-  letI : Algebra.IsIntegral ℚ Omega := Algebra.IsAlgebraic.isIntegral
-  haveI : IsCyclotomicExtension {(p : ℕ)} ℚ C :=
+  let : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
+  let : Algebra.IsIntegral ℚ Omega := Algebra.IsAlgebraic.isIntegral
+  have : IsCyclotomicExtension {(p : ℕ)} ℚ C :=
     (primitiveRootInOmega_spec p).intermediateField_adjoin_isCyclotomicExtension ℚ
-  letI : IsGalois ℚ C :=
+  let : IsGalois ℚ C :=
     IsCyclotomicExtension.isGalois {(p : ℕ)} ℚ C
   have hN : Normal ℚ N.field := IsGalois.to_normal
   have hC : Normal ℚ C := IsGalois.to_normal
@@ -1860,7 +1860,7 @@ private theorem splitsCompletelyAt_of_identityFrobenius
       rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal,
         ← hWq]
       rfl⟩
-    letI : W.asIdeal.LiesOver q.asIdeal := hWover
+    let : W.asIdeal.LiesOver q.asIdeal := hWover
     have hWu : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers ℚ) W.asIdeal := hunr W hWover
     have hclassW : NU.Chebotarev.frobeniusClassAt
@@ -1910,9 +1910,9 @@ private theorem restrictSplitPrime
       restrictFinitePlaceAlong N E hNE P = v ∧
       rationalPrime N v = q ∧ absoluteRamificationIndex N v = 1 ∧
         absoluteResidueDegree N v = 1 := by
-  letI : Algebra N.field E.field :=
+  let : Algebra N.field E.field :=
     (IntermediateField.inclusion hNE).toRingHom.toAlgebra
-  letI : IsScalarTower ℚ N.field E.field := by
+  let : IsScalarTower ℚ N.field E.field := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
@@ -1927,7 +1927,7 @@ private theorem restrictSplitPrime
     rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal,
       ← hPq]
     rfl⟩
-  letI : P.asIdeal.LiesOver v.asIdeal := hPv
+  let : P.asIdeal.LiesOver v.asIdeal := hPv
   have hvq : v.asIdeal.LiesOver q.asIdeal := ⟨by
     rw [Ideal.under_def]
     calc
@@ -1947,8 +1947,8 @@ private theorem restrictSplitPrime
           (algebraMap (NumberField.RingOfIntegers ℚ)
             (NumberField.RingOfIntegers N.field)) v.asIdeal := by
         rw [hv_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal]⟩
-  letI : v.asIdeal.LiesOver q.asIdeal := hvq
-  letI := Localization.AtPrime.algebraOfLiesOver v.asIdeal P.asIdeal
+  let : v.asIdeal.LiesOver q.asIdeal := hvq
+  let := Localization.AtPrime.algebraOfLiesOver v.asIdeal P.asIdeal
   have heTower := Ideal.ramificationIdx'_tower'
     (R := 𝓞 ℚ) v.asIdeal P.asIdeal
   have hfTower := Ideal.inertiaDeg'_tower
@@ -1985,8 +1985,8 @@ private theorem splitsCompletelyAt_of_onePlace
     rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal,
       ← hv]
     rfl⟩
-  letI : v0.asIdeal.LiesOver q.asIdeal := hv0over
-  letI : v.asIdeal.LiesOver q.asIdeal := hvover
+  let : v0.asIdeal.LiesOver q.asIdeal := hv0over
+  let : v.asIdeal.LiesOver q.asIdeal := hvover
   have heq_e : v0.asIdeal.ramificationIdx
       (NumberField.RingOfIntegers ℚ) =
       v.asIdeal.ramificationIdx (NumberField.RingOfIntegers ℚ) :=
@@ -2023,7 +2023,7 @@ private theorem splitPrimeOrbitLabel
     rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal,
       ← hv1q]
     rfl⟩
-  letI : v1.asIdeal.LiesOver q.asIdeal := hv1over
+  let : v1.asIdeal.LiesOver q.asIdeal := hv1over
   have hstabcard : Nat.card (MulAction.stabilizer
       (N.field ≃ₐ[ℚ] N.field) v1.asIdeal) = 1 := by
     rw [Ideal.card_stabilizer_eq q.asIdeal v1.asIdeal,
@@ -2062,7 +2062,7 @@ private theorem splitPrimeOrbitLabel
       rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal,
         ← hwq]
       rfl⟩
-    letI : w.asIdeal.LiesOver q.asIdeal := hwover
+    let : w.asIdeal.LiesOver q.asIdeal := hwover
     obtain ⟨g, hg⟩ := Ideal.exists_smul_eq_of_isGaloisGroup
       q.asIdeal v1.asIdeal w.asIdeal (N.field ≃ₐ[ℚ] N.field)
     refine ⟨g, ?_⟩
@@ -2089,7 +2089,7 @@ private theorem conjugatePlace_ne_of_split
     rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal,
       ← hPq]
     rfl⟩
-  letI : P.asIdeal.LiesOver q.asIdeal := hPover
+  let : P.asIdeal.LiesOver q.asIdeal := hPover
   have hcard : Nat.card (MulAction.stabilizer
       (F.field ≃ₐ[ℚ] F.field) P.asIdeal) = 1 := by
     rw [Ideal.card_stabilizer_eq q.asIdeal P.asIdeal,
@@ -2133,7 +2133,7 @@ private theorem asymmetricWeakApproximation
     rw [← IsDedekindDomain.coe_primesOverFinset q.ne_bot
       (NumberField.RingOfIntegers E.field)]
     exact Finset.finite_toSet _
-  letI : Fintype S := hSfin.fintype
+  let : Fintype S := hSfin.fintype
   let Ps : S := ⟨P.asIdeal, P.isPrime, hPover⟩
   obtain ⟨t, htP, htP2⟩ :=
     Ideal.exists_mem_pow_notMem_pow_succ P.asIdeal P.ne_bot
@@ -2152,8 +2152,8 @@ private theorem asymmetricWeakApproximation
     have hne : Q.1 ≠ R.1 := by
       intro h
       exact hQR (Subtype.ext h)
-    haveI : Q.1.IsMaximal := hmax Q
-    haveI : R.1.IsMaximal := hmax R
+    have : Q.1.IsMaximal := hmax Q
+    have : R.1.IsMaximal := hmax R
     exact (Ideal.isCoprime_of_isMaximal hne).pow
   obtain ⟨x, hx⟩ := Ideal.exists_forall_sub_mem_ideal hpair z
   have hxP : x - t ∈ P.asIdeal ^ 2 := by
@@ -2200,7 +2200,7 @@ private theorem kummerRadicalRamifiedAt
         1 < W.asIdeal.ramificationIdx (NumberField.RingOfIntegers E) := by
   let A := NumberField.RingOfIntegers E
   let B := NumberField.RingOfIntegers R
-  letI : NoZeroSMulDivisors A B := ⟨by
+  let : NoZeroSMulDivisors A B := ⟨by
     intro c x h
     change algebraMap A B c * x = 0 at h
     rcases mul_eq_zero.mp h with hc | hx
@@ -2225,7 +2225,7 @@ private theorem kummerRadicalRamifiedAt
   have hWover : W.asIdeal.LiesOver P.asIdeal := ⟨by
     rw [Ideal.under_def]
     exact hJcomap.symm⟩
-  letI : W.asIdeal.LiesOver P.asIdeal := hWover
+  let : W.asIdeal.LiesOver P.asIdeal := hWover
   have hrestrict : NU.LocalTheory.restrictFinitePlace E W = P := by
     apply HeightOneSpectrum.ext
     rw [NU.LocalTheory.restrictFinitePlace_asIdeal]
@@ -2305,7 +2305,7 @@ private theorem asymmetricPrimeData_exists
     (p : NU.LocalTheory.OddPrime) :
     Nonempty (AsymmetricPrimeData N p) := by
   let E := cyclotomicCompositum N p
-  letI : IsGalois ℚ E.field := cyclotomicCompositum_isGaloisOverQ N p
+  let : IsGalois ℚ E.field := cyclotomicCompositum_isGaloisOverQ N p
   obtain ⟨q, hqne, hqFrob⟩ :=
     existsIdentityFrobeniusPrimeAway E (p : ℕ)
   have hsplitE : SplitsCompletelyAt E q :=
@@ -2409,7 +2409,7 @@ private theorem projectedKummerRepresentative_class
   classical
   let E := cyclotomicCompositum N p
   let D := CyclotomicDelta N p
-  letI := Fintype.ofFinite D
+  let := Fintype.ofFinite D
   let u : D → E.fieldˣ := fun delta =>
     Units.map delta.1.toRingEquiv.toMonoidHom b
   let n : D → ℕ := fun delta =>
@@ -2505,7 +2505,7 @@ private theorem AsymmetricApproximationData.conjugate_unit_valuation
     D.P.valuation (cyclotomicCompositum N p).field
       (Units.map delta.1.toRingEquiv.toMonoidHom A.unit).1 = 1 := by
   let E := cyclotomicCompositum N p
-  letI : IsGalois ℚ E.field := cyclotomicCompositum_isGaloisOverQ N p
+  let : IsGalois ℚ E.field := cyclotomicCompositum_isGaloisOverQ N p
   let sigma : E.field ≃ₐ[ℚ] E.field := delta.1
   have hsigma : sigma ≠ 1 := by
     intro h
@@ -2567,7 +2567,7 @@ private theorem projectedKummerRepresentative_valuation
       exp (-(((cyclotomicKummerProjector N p).coeff
         (1 : CyclotomicDelta N p)).val : ℤ)) := by
   classical
-  letI := Fintype.ofFinite (CyclotomicDelta N p)
+  let := Fintype.ofFinite (CyclotomicDelta N p)
   let c := ((cyclotomicKummerProjector N p).coeff
     (1 : CyclotomicDelta N p)).val
   have hone : D.P.valuation (cyclotomicCompositum N p).field
@@ -2640,7 +2640,7 @@ private theorem asymmetricProjectedKummerData_exists
     (A : AsymmetricApproximationData D) :
     Nonempty (AsymmetricProjectedKummerData A) := by
   classical
-  letI : NeZero (p : ℕ) := ⟨p.1.2.ne_zero⟩
+  let : NeZero (p : ℕ) := ⟨p.1.2.ne_zero⟩
   let E := cyclotomicCompositum N p
   let coeff : ZMod (p : ℕ) :=
     (cyclotomicKummerProjector N p).coeff (1 : CyclotomicDelta N p)
@@ -2679,7 +2679,7 @@ private theorem asymmetricProjectedKummerData_exists
   let r : E.fieldˣ := projectedKummerRepresentative N p b
   let correction : E.fieldˣ := A.unit⁻¹ ^ m
   let a : E.fieldˣ := r * correction ^ (p : ℕ)
-  letI := Fintype.ofFinite (CyclotomicDelta N p)
+  let := Fintype.ofFinite (CyclotomicDelta N p)
   have hrepresentativePower :
       projectedKummerRepresentative N p b =
         projectedKummerRepresentative N p A.unit ^ s := by
@@ -2924,7 +2924,7 @@ private theorem kummerRadicalFieldRamifiedAt
         1 < W.asIdeal.ramificationIdx (NumberField.RingOfIntegers E) := by
   let A := NumberField.RingOfIntegers E
   let B := NumberField.RingOfIntegers R
-  letI : NoZeroSMulDivisors A B := ⟨by
+  let : NoZeroSMulDivisors A B := ⟨by
     intro c x h
     have hzero : algebraMap A B c * x = 0 := h
     rcases mul_eq_zero.mp hzero with hc | hx
@@ -2949,7 +2949,7 @@ private theorem kummerRadicalFieldRamifiedAt
   have hWover : W.asIdeal.LiesOver P.asIdeal := ⟨by
     rw [Ideal.under_def]
     exact hJcomap.symm⟩
-  letI : W.asIdeal.LiesOver P.asIdeal := hWover
+  let : W.asIdeal.LiesOver P.asIdeal := hWover
   have hrestrict : NU.LocalTheory.restrictFinitePlace E W = P := by
     apply HeightOneSpectrum.ext
     rw [NU.LocalTheory.restrictFinitePlace_asIdeal]
@@ -3174,20 +3174,20 @@ private theorem regularKernelCompletionIntegers_isAdicComplete
     IsAdicComplete
       (IsLocalRing.maximalIdeal (v.adicCompletionIntegers M))
       (v.adicCompletionIntegers M) := by
-  letI : CompleteSpace (Valued.integer (v.adicCompletion M)) :=
+  let : CompleteSpace (Valued.integer (v.adicCompletion M)) :=
     (Valued.isClosed_valuationSubring
       (v.adicCompletion M)).completeSpace_coe
-  letI : IsDiscreteValuationRing
+  let : IsDiscreteValuationRing
       (Valued.integer (v.adicCompletion M)) := by
     change IsDiscreteValuationRing (v.adicCompletionIntegers M)
     infer_instance
-  letI : Finite (IsLocalRing.ResidueField
+  let : Finite (IsLocalRing.ResidueField
       (primeValuationSubring v)) :=
     regularKernelResidueFieldAt_finite v
-  letI : Finite (Valued.ResidueField (v.adicCompletion M)) :=
+  let : Finite (Valued.ResidueField (v.adicCompletion M)) :=
     Finite.of_surjective (regularKernelCompletionResidueMap v)
       (regularKernelCompletionResidueMap_surjective v)
-  letI : CompactSpace (Valued.integer (v.adicCompletion M)) :=
+  let : CompactSpace (Valued.integer (v.adicCompletion M)) :=
     Valued.integer.compactSpace_iff_completeSpace_and_isDiscreteValuationRing_and_finite_residueField.mpr
       ⟨inferInstance, inferInstance, inferInstance⟩
   change IsAdicComplete
@@ -3221,19 +3221,19 @@ private theorem regularKernel_oneModPrime_isLocalPthPower
     (hchar : residueCharacteristic v ≠ (p : ℕ)) :
     ∃ x : v.adicCompletion M,
       x ^ (p : ℕ) = algebraMap M (v.adicCompletion M) (u : M) := by
-  letI : IsAdicComplete
+  let : IsAdicComplete
       (IsLocalRing.maximalIdeal (v.adicCompletionIntegers M))
       (v.adicCompletionIntegers M) :=
     regularKernelCompletionIntegers_isAdicComplete v
-  letI : HenselianRing (v.adicCompletionIntegers M)
+  let : HenselianRing (v.adicCompletionIntegers M)
       (IsLocalRing.maximalIdeal (v.adicCompletionIntegers M)) :=
     IsAdicComplete.henselianRing _ _
-  letI : Algebra (NumberField.RingOfIntegers M)
+  let : Algebra (NumberField.RingOfIntegers M)
       (primeValuationSubring v) := by
     change Algebra (NumberField.RingOfIntegers M)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime M v)
     infer_instance
-  letI : IsLocalization.AtPrime (primeValuationSubring v) v.asIdeal := by
+  let : IsLocalization.AtPrime (primeValuationSubring v) v.asIdeal := by
     change IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime M v)
       v.asIdeal
@@ -3335,11 +3335,11 @@ private theorem regularKernel_residueCharacteristic_eq_quotient_ringChar
     (v : NU.LocalTheory.FinitePlace K) :
     NU.LocalTheory.residueCharacteristic v =
       ringChar ((NumberField.RingOfIntegers K) ⧸ v.asIdeal) := by
-  letI : Algebra (NumberField.RingOfIntegers K)
+  let : Algebra (NumberField.RingOfIntegers K)
       (NU.LocalTheory.primeValuationSubring v) :=
     show Algebra (NumberField.RingOfIntegers K)
       (HeightOneSpectrum.valuationSubringAtPrime K v) from inferInstance
-  letI : IsLocalization.AtPrime
+  let : IsLocalization.AtPrime
       (NU.LocalTheory.primeValuationSubring v) v.asIdeal :=
     show IsLocalization.AtPrime
       (HeightOneSpectrum.valuationSubringAtPrime K v) v.asIdeal from
@@ -3354,13 +3354,13 @@ private theorem regularKernel_rational_residueCharacteristic_eq_norm
     (q : NU.Chebotarev.PrimeIdeal ℚ) :
     NU.LocalTheory.residueCharacteristic q =
       NU.Chebotarev.PrimeIdeal.norm q := by
-  letI : q.asIdeal.IsMaximal := q.isMaximal
+  let : q.asIdeal.IsMaximal := q.isMaximal
   let J : Ideal ℤ := Ideal.map Rat.ringOfIntegersEquiv q.asIdeal
-  letI : J.IsMaximal :=
+  let : J.IsMaximal :=
     Ideal.map_isMaximal_of_equiv Rat.ringOfIntegersEquiv
-  letI : Field ((NumberField.RingOfIntegers ℚ) ⧸ q.asIdeal) :=
+  let : Field ((NumberField.RingOfIntegers ℚ) ⧸ q.asIdeal) :=
     Ideal.Quotient.field q.asIdeal
-  letI : Field (ℤ ⧸ J) := Ideal.Quotient.field J
+  let : Field (ℤ ⧸ J) := Ideal.Quotient.field J
   let e : ((NumberField.RingOfIntegers ℚ) ⧸ q.asIdeal) ≃+* (ℤ ⧸ J) :=
     Ideal.quotientEquiv q.asIdeal J Rat.ringOfIntegersEquiv rfl
   have hchar :
@@ -3398,13 +3398,13 @@ private theorem regularKernel_residueCharacteristic_restrictFinitePlace
       NU.LocalTheory.residueCharacteristic w := by
   rw [regularKernel_residueCharacteristic_eq_quotient_ringChar,
     regularKernel_residueCharacteristic_eq_quotient_ringChar]
-  letI : Algebra (NumberField.RingOfIntegers L)
+  let : Algebra (NumberField.RingOfIntegers L)
       (NU.LocalTheory.primeValuationSubring
         (NU.LocalTheory.restrictFinitePlace L w)) :=
     show Algebra (NumberField.RingOfIntegers L)
       (HeightOneSpectrum.valuationSubringAtPrime L
         (NU.LocalTheory.restrictFinitePlace L w)) from inferInstance
-  letI : IsLocalization.AtPrime
+  let : IsLocalization.AtPrime
       (NU.LocalTheory.primeValuationSubring
         (NU.LocalTheory.restrictFinitePlace L w))
       (NU.LocalTheory.restrictFinitePlace L w).asIdeal :=
@@ -3450,14 +3450,14 @@ private theorem AsymmetricApproximationData.conjugate_integer_one_mod_away
     (delta : CyclotomicDelta N p) :
     delta.1 • A.integer - 1 ∈ Q.asIdeal := by
   let E := cyclotomicCompositum N p
-  letI : Algebra N.field E.field :=
+  let : Algebra N.field E.field :=
     (IntermediateField.inclusion
       (le_cyclotomicCompositum N p)).toRingHom.toAlgebra
-  letI : IsScalarTower ℚ N.field E.field :=
+  let : IsScalarTower ℚ N.field E.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : IsGalois N.field E.field :=
+  let : IsGalois N.field E.field :=
     cyclotomicCompositum_isGaloisOverBase N p
-  letI : IsGalois ℚ E.field := cyclotomicCompositum_isGaloisOverQ N p
+  let : IsGalois ℚ E.field := cyclotomicCompositum_isGaloisOverQ N p
   let sigma : E.field ≃ₐ[ℚ] E.field := delta.1
   let sigmaN : E.field ≃ₐ[N.field] E.field :=
     { sigma.toRingEquiv with
@@ -3523,13 +3523,13 @@ private theorem projectedKummerRepresentative_localPowerAway
   classical
   intro g hg Q hQ
   let E := cyclotomicCompositum N p
-  letI : Algebra N.field E.field :=
+  let : Algebra N.field E.field :=
     (IntermediateField.inclusion
       (le_cyclotomicCompositum N p)).toRingHom.toAlgebra
-  letI : IsScalarTower ℚ N.field E.field :=
+  let : IsScalarTower ℚ N.field E.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   let C := Q.adicCompletion E.field
-  letI : Algebra E.field C := by
+  let : Algebra E.field C := by
     dsimp [C, E]
     infer_instance
   have hQq : rationalPrime E Q = D.q := by
@@ -3556,7 +3556,7 @@ private theorem projectedKummerRepresentative_localPowerAway
     rw [hresidue]
     exact D.norm_ne
   let Delta := CyclotomicDelta N p
-  letI := Fintype.ofFinite Delta
+  let := Fintype.ofFinite Delta
   let u : Delta → E.fieldˣ := fun delta =>
     Units.map delta.1.toRingEquiv.toMonoidHom K.b
   let n : Delta → ℕ := fun delta =>
@@ -3704,11 +3704,11 @@ private theorem regularKernel_localEmbedding_place (P : FinitePlace K)
     simp only [Ideal.mem_comap, Ideal.mem_bot]
     exact FaithfulSMul.algebraMap_eq_zero_iff _ _
   let W : FinitePlace L := ⟨J, hJprime, hJne⟩
-  letI : W.asIdeal.IsMaximal := W.isMaximal
-  letI : P.asIdeal.IsMaximal := P.isMaximal
-  letI : Field (NumberField.RingOfIntegers L ⧸ W.asIdeal) :=
+  let : W.asIdeal.IsMaximal := W.isMaximal
+  let : P.asIdeal.IsMaximal := P.isMaximal
+  let : Field (NumberField.RingOfIntegers L ⧸ W.asIdeal) :=
     Ideal.Quotient.field W.asIdeal
-  letI : Field (NumberField.RingOfIntegers K ⧸ P.asIdeal) :=
+  let : Field (NumberField.RingOfIntegers K ⧸ P.asIdeal) :=
     Ideal.Quotient.field P.asIdeal
   have hrestrict : restrictFinitePlace K W = P := by
     apply HeightOneSpectrum.ext
@@ -3717,7 +3717,7 @@ private theorem regularKernel_localEmbedding_place (P : FinitePlace K)
   have hWover : W.asIdeal.LiesOver P.asIdeal := ⟨by
     rw [Ideal.under_def]
     exact hJcomap.symm⟩
-  letI : W.asIdeal.LiesOver P.asIdeal := hWover
+  let : W.asIdeal.LiesOver P.asIdeal := hWover
   let AW := IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime L W
   have hAWle : AW ≤ u.valuationSubring := by
     rintro x ⟨b, s, hs, rfl⟩
@@ -3795,15 +3795,15 @@ private theorem regularKernel_localEmbedding_place (P : FinitePlace K)
     Ideal.Quotient.lift W.asIdeal resf hresf
   have hqfinj : Function.Injective qf := qf.injective
   let AP := primeValuationSubring P
-  letI : Algebra (NumberField.RingOfIntegers K) AP := by
+  let : Algebra (NumberField.RingOfIntegers K) AP := by
     change Algebra (NumberField.RingOfIntegers K)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K P)
     infer_instance
-  letI : IsLocalization.AtPrime AP P.asIdeal := by
+  let : IsLocalization.AtPrime AP P.asIdeal := by
     change IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K P) P.asIdeal
     infer_instance
-  letI : IsLocalRing AP := by
+  let : IsLocalRing AP := by
     change IsLocalRing
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K P)
     infer_instance
@@ -3891,11 +3891,11 @@ private theorem regularKernel_allIndices_one_of_galois
     rw [Ideal.under_def, ← restrictFinitePlace_asIdeal, h0]⟩
   have ho : W.asIdeal.LiesOver P.asIdeal := ⟨by
     rw [Ideal.under_def, ← restrictFinitePlace_asIdeal, h]⟩
-  letI : W₀.asIdeal.LiesOver P.asIdeal := ho0
-  letI : W.asIdeal.LiesOver P.asIdeal := ho
-  letI : P.asIdeal.IsMaximal := P.isMaximal
-  letI : W₀.asIdeal.IsMaximal := W₀.isMaximal
-  letI : W.asIdeal.IsMaximal := W.isMaximal
+  let : W₀.asIdeal.LiesOver P.asIdeal := ho0
+  let : W.asIdeal.LiesOver P.asIdeal := ho
+  let : P.asIdeal.IsMaximal := P.isMaximal
+  let : W₀.asIdeal.IsMaximal := W₀.isMaximal
+  let : W.asIdeal.IsMaximal := W.isMaximal
   have heq := Ideal.ramificationIdx_eq_of_isGaloisGroup
     P.asIdeal W.asIdeal W₀.asIdeal (L ≃ₐ[K] L)
   have hfeq := Ideal.inertiaDeg_eq_of_isGaloisGroup
@@ -3988,7 +3988,7 @@ private theorem tameKummerRadical_splits
       exact radicalRoot_spec E p a
     have hintOmega : IsIntegral E.field alpha :=
       ⟨fpoly, hmonic, hrootOmega⟩
-    letI : FiniteDimensional E.field R0 :=
+    let : FiniteDimensional E.field R0 :=
       IntermediateField.adjoin.finiteDimensional hintOmega
     have hgenAlg : Algebra.adjoin E.field {alpha0} = ⊤ := by
       rw [← IntermediateField.adjoin_toSubalgebra]
@@ -4011,7 +4011,7 @@ private theorem tameKummerRadical_splits
       simp [y]
     let j : R.field.field →ₐ[E.field] P.adicCompletion E.field :=
       pb.lift y hpby
-    letI : Module.Free E.field R.field.field := Module.Free.of_basis pb.basis
+    let : Module.Free E.field R.field.field := Module.Free.of_basis pb.basis
     have hfin : Module.finrank E.field R.field.field = 1 := by
       calc
         Module.finrank E.field R.field.field = pb.dim := pb.finrank
@@ -4022,7 +4022,7 @@ private theorem tameKummerRadical_splits
       Algebra.finrank_eq_one_iff_bijective_algebraMap.mp hfin
     let er : E.field ≃ₐ[E.field] R.field.field :=
       AlgEquiv.ofBijective (Algebra.ofId E.field R.field.field) hbij
-    letI : IsGalois E.field R.field.field := IsGalois.of_algEquiv er
+    let : IsGalois E.field R.field.field := IsGalois.of_algEquiv er
     obtain ⟨W₀, hW₀, he₀, hf₀⟩ := regularKernel_localEmbedding_place P j
     refine ⟨⟨W₀, hW₀⟩, ?_⟩
     intro W hW
@@ -4046,7 +4046,7 @@ private theorem tameKummerRadical_splits
       exact radicalRoot_spec E p a
     have hintOmega : IsIntegral E.field alpha :=
       ⟨fpoly, hmonic, hrootOmega⟩
-    letI : FiniteDimensional E.field R0 :=
+    let : FiniteDimensional E.field R0 :=
       IntermediateField.adjoin.finiteDimensional hintOmega
     have hgenAlg : Algebra.adjoin E.field {alpha0} = ⊤ := by
       rw [← IntermediateField.adjoin_toSubalgebra]
@@ -4084,8 +4084,8 @@ private theorem tameKummerRadical_splits
     obtain ⟨z, hz⟩ := hroots
     have hprim : (primitiveRoots (p : ℕ) E.field).Nonempty :=
       ⟨z, (mem_primitiveRoots p.1.2.pos).2 hz⟩
-    letI : Module.Free E.field R.field.field := Module.Free.of_basis pb.basis
-    letI : Polynomial.IsSplittingField E.field R.field.field fpoly := by
+    let : Module.Free E.field R.field.field := Module.Free.of_basis pb.basis
+    let : Polynomial.IsSplittingField E.field R.field.field fpoly := by
       constructor
       · change (Polynomial.X ^ (p : ℕ) - Polynomial.C (a : E.field)).map
             (algebraMap E.field R.field.field) |>.Splits
@@ -4100,7 +4100,7 @@ private theorem tameKummerRadical_splits
         change pb.gen ∈ fpoly.rootSet R.field.field
         rw [Polynomial.mem_rootSet_of_ne (Irreducible.ne_zero hirr)]
         simp [fpoly, hpbpow]
-    letI : IsGalois E.field R.field.field :=
+    let : IsGalois E.field R.field.field :=
       isGalois_of_isSplittingField_X_pow_sub_C hprim hirr R.field.field
     obtain ⟨W₀, hW₀, he₀, hf₀⟩ := regularKernel_localEmbedding_place P j
     refine ⟨⟨W₀, hW₀⟩, ?_⟩
@@ -4159,7 +4159,7 @@ private theorem kummerRadical_ramificationIndex_eq_prime
       E p a P k hval hk
   let A := NumberField.RingOfIntegers E.field
   let B := NumberField.RingOfIntegers R.field.field
-  letI : NoZeroSMulDivisors A B := ⟨by
+  let : NoZeroSMulDivisors A B := ⟨by
     intro c x h
     have hzero : algebraMap A B c * x = 0 := h
     rcases mul_eq_zero.mp hzero with hc | hx
@@ -4167,7 +4167,7 @@ private theorem kummerRadical_ramificationIndex_eq_prime
     · exact Or.inr hx⟩
   have hWover : W.asIdeal.LiesOver P.asIdeal := ⟨by
     rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal, hW]⟩
-  letI : W.asIdeal.LiesOver P.asIdeal := hWover
+  let : W.asIdeal.LiesOver P.asIdeal := hWover
   let e := P.asIdeal.ramificationIdx' W.asIdeal
   have hlie := P.valuation_liesOver R.field.field W a.1
   rw [← Ideal.ramificationIdx'_eq_ramificationIdx P.asIdeal W.asIdeal P.ne_bot] at hlie
@@ -4216,16 +4216,16 @@ private theorem tameKummerRadical_isTame
   have he := kummerRadical_ramificationIndex_eq_prime
     E p a P k hval hk W hW
   rw [he]
-  letI : Algebra (NumberField.RingOfIntegers E.field)
+  let : Algebra (NumberField.RingOfIntegers E.field)
       (NU.LocalTheory.primeValuationSubring P) :=
     show Algebra (NumberField.RingOfIntegers E.field)
       (HeightOneSpectrum.valuationSubringAtPrime E.field P) from inferInstance
-  letI : IsLocalization.AtPrime
+  let : IsLocalization.AtPrime
       (NU.LocalTheory.primeValuationSubring P) P.asIdeal :=
     show IsLocalization.AtPrime
       (HeightOneSpectrum.valuationSubringAtPrime E.field P) P.asIdeal from
         inferInstance
-  letI : Finite (NU.LocalTheory.ResidueFieldAt P) := by
+  let : Finite (NU.LocalTheory.ResidueFieldAt P) := by
     exact Finite.of_equiv
       ((NumberField.RingOfIntegers E.field) ⧸ P.asIdeal)
       (IsLocalization.AtPrime.equivQuotMaximalIdeal P.asIdeal
@@ -4267,9 +4267,9 @@ private theorem cyclotomicCompositum_finrank_le_p_sub_one
     Module.finrank N.field (cyclotomicCompositum N p).field ≤
       (p : ℕ) - 1 := by
   let E := cyclotomicCompositum N p
-  letI : Algebra N.field E.field :=
+  let : Algebra N.field E.field :=
     (IntermediateField.inclusion (le_cyclotomicCompositum N p)).toAlgebra
-  letI : IsGalois N.field E.field :=
+  let : IsGalois N.field E.field :=
     cyclotomicCompositum_isGaloisOverBase N p
   let equivDelta : CyclotomicDelta N p ≃
       (E.field ≃ₐ[N.field] E.field) :=
@@ -4331,7 +4331,7 @@ private theorem finitePlaceAbove_numberFieldExtension
       NU.LocalTheory.restrictFinitePlace K.field W = P := by
   let A := NumberField.RingOfIntegers K.field
   let B := NumberField.RingOfIntegers L.field.field
-  letI : NoZeroSMulDivisors A B := ⟨by
+  let : NoZeroSMulDivisors A B := ⟨by
     intro c x h
     have hzero : algebraMap A B c * x = 0 := h
     rcases mul_eq_zero.mp hzero with hc | hx
@@ -4388,21 +4388,21 @@ private theorem transportRadicalRamificationToDescent
       exact (by exact le_sup_right : L.field.field ≤
         (cyclotomicCompositum N p).field ⊔ L.field.field) hx
     exact hxR
-  letI : Algebra N.field E.field :=
+  let : Algebra N.field E.field :=
     (IntermediateField.inclusion le_sup_left).toAlgebra
-  letI : IsScalarTower ℚ N.field E.field :=
+  let : IsScalarTower ℚ N.field E.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : Algebra N.field R.field.field :=
+  let : Algebra N.field R.field.field :=
     (IntermediateField.inclusion (le_sup_left.trans R.le_base)).toAlgebra
-  letI : IsScalarTower N.field E.field R.field.field :=
+  let : IsScalarTower N.field E.field R.field.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : Algebra L.field.field R.field.field :=
+  let : Algebra L.field.field R.field.field :=
     (IntermediateField.inclusion hLR).toAlgebra
-  letI : IsScalarTower N.field L.field.field R.field.field :=
+  let : IsScalarTower N.field L.field.field R.field.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : IsScalarTower ℚ E.field R.field.field :=
+  let : IsScalarTower ℚ E.field R.field.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : IsScalarTower ℚ N.field R.field.field :=
+  let : IsScalarTower ℚ N.field R.field.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   have hpNotDvdOne : ¬(p : ℕ) ∣ 1 := by
     intro hp
@@ -4424,7 +4424,7 @@ private theorem transportRadicalRamificationToDescent
     exact hcoprime
   have hWoverP : W.asIdeal.LiesOver D.P.asIdeal :=
     regularKernel_liesOver_of_restrict_eq W D.P hWP
-  letI : W.asIdeal.LiesOver D.P.asIdeal := hWoverP
+  let : W.asIdeal.LiesOver D.P.asIdeal := hWoverP
   have hPsplit := D.splitCyclotomic.2 D.P D.P_over_q
   have hqPe : D.P.asIdeal.ramificationIdx (𝓞 ℚ) = 1 :=
     hPsplit.1
@@ -4432,9 +4432,9 @@ private theorem transportRadicalRamificationToDescent
     regularKernel_liesOver_of_restrict_eq (D.v 1) D.q (D.v_over_q 1)
   have hPoverv : D.P.asIdeal.LiesOver (D.v 1).asIdeal :=
     regularKernel_liesOver_of_restrict_eq D.P (D.v 1) D.P_over_identity
-  letI : (D.v 1).asIdeal.LiesOver D.q.asIdeal := hvoverq
-  letI : D.P.asIdeal.LiesOver (D.v 1).asIdeal := hPoverv
-  letI := Localization.AtPrime.algebraOfLiesOver
+  let : (D.v 1).asIdeal.LiesOver D.q.asIdeal := hvoverq
+  let : D.P.asIdeal.LiesOver (D.v 1).asIdeal := hPoverv
+  let := Localization.AtPrime.algebraOfLiesOver
     (D.v 1).asIdeal D.P.asIdeal
   have heTowerQP := Ideal.ramificationIdx'_tower'
     (R := 𝓞 ℚ) (D.v 1).asIdeal D.P.asIdeal
@@ -4451,8 +4451,8 @@ private theorem transportRadicalRamificationToDescent
         _ = NU.LocalTheory.restrictFinitePlace N.field D.P :=
           congrArg (NU.LocalTheory.restrictFinitePlace N.field) hWP
         _ = D.v 1 := D.P_over_identity)
-  letI : W.asIdeal.LiesOver (D.v 1).asIdeal := hWoverv
-  letI := Localization.AtPrime.algebraOfLiesOver D.P.asIdeal W.asIdeal
+  let : W.asIdeal.LiesOver (D.v 1).asIdeal := hWoverv
+  let := Localization.AtPrime.algebraOfLiesOver D.P.asIdeal W.asIdeal
   have heTowerPW := Ideal.ramificationIdx'_tower'
     (R := 𝓞 N.field) D.P.asIdeal W.asIdeal
   have hvWe : W.asIdeal.ramificationIdx (𝓞 N.field) = (p : ℕ) := by
@@ -4473,9 +4473,9 @@ private theorem transportRadicalRamificationToDescent
     regularKernel_liesOver_of_restrict_eq w (D.v 1) hwv
   have hWoverw : W.asIdeal.LiesOver w.asIdeal :=
     regularKernel_liesOver_of_restrict_eq W w hWw
-  letI : w.asIdeal.LiesOver (D.v 1).asIdeal := hwoverv
-  letI : W.asIdeal.LiesOver w.asIdeal := hWoverw
-  letI := Localization.AtPrime.algebraOfLiesOver w.asIdeal W.asIdeal
+  let : w.asIdeal.LiesOver (D.v 1).asIdeal := hwoverv
+  let : W.asIdeal.LiesOver w.asIdeal := hWoverw
+  let := Localization.AtPrime.algebraOfLiesOver w.asIdeal W.asIdeal
   have heTowerLW := Ideal.ramificationIdx'_tower'
     (R := 𝓞 N.field) w.asIdeal W.asIdeal
   have hEbound : Module.finrank N.field E.field ≤ (p : ℕ) - 1 :=
@@ -4486,7 +4486,7 @@ private theorem transportRadicalRamificationToDescent
       hRdegree hLdegree
   let ALR := NumberField.RingOfIntegers L.field.field
   let BLR := NumberField.RingOfIntegers R.field.field
-  letI : NoZeroSMulDivisors ALR BLR := ⟨by
+  let : NoZeroSMulDivisors ALR BLR := ⟨by
     intro c x h
     have hzero : algebraMap ALR BLR c * x = 0 := h
     rcases mul_eq_zero.mp hzero with hc | hx
@@ -4543,17 +4543,17 @@ private theorem transportRadicalSplittingToDescent
   let LR : NumberFieldExtension L.field :=
     { field := R.field
       le_base := hLR }
-  letI : Algebra N.field E.field :=
+  let : Algebra N.field E.field :=
     (IntermediateField.inclusion le_sup_left).toAlgebra
-  letI : IsScalarTower ℚ N.field E.field :=
+  let : IsScalarTower ℚ N.field E.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : Algebra N.field R.field.field :=
+  let : Algebra N.field R.field.field :=
     (IntermediateField.inclusion (le_sup_left.trans R.le_base)).toAlgebra
-  letI : IsScalarTower N.field E.field R.field.field :=
+  let : IsScalarTower N.field E.field R.field.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : Algebra L.field.field R.field.field :=
+  let : Algebra L.field.field R.field.field :=
     (IntermediateField.inclusion hLR).toAlgebra
-  letI : IsScalarTower N.field L.field.field R.field.field :=
+  let : IsScalarTower N.field L.field.field R.field.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   constructor
   · exact finitePlaceAbove_numberFieldExtension L (D.v g)
@@ -4589,17 +4589,17 @@ private theorem transportRadicalSplittingToDescent
         _ = D.q := D.v_over_q g
     have hQsplit := D.splitCyclotomic.2 Q hqQ
     have hWsplit := hsplit g hg Q hQN
-    letI : IsScalarTower ℚ E.field R.field.field :=
+    let : IsScalarTower ℚ E.field R.field.field :=
       IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-    letI : IsScalarTower ℚ N.field R.field.field :=
+    let : IsScalarTower ℚ N.field R.field.field :=
       IsScalarTower.of_algebraMap_eq (fun _ => rfl)
     have hWQ : NU.LocalTheory.restrictFinitePlace E.field W = Q := rfl
     have hQover : Q.asIdeal.LiesOver D.q.asIdeal :=
       regularKernel_liesOver_of_restrict_eq Q D.q hqQ
     have hWoverQ : W.asIdeal.LiesOver Q.asIdeal :=
       regularKernel_liesOver_of_restrict_eq W Q hWQ
-    letI : Q.asIdeal.LiesOver D.q.asIdeal := hQover
-    letI : W.asIdeal.LiesOver Q.asIdeal := hWoverQ
+    let : Q.asIdeal.LiesOver D.q.asIdeal := hQover
+    let : W.asIdeal.LiesOver Q.asIdeal := hWoverQ
     have hQe : Q.asIdeal.ramificationIdx (𝓞 ℚ) = 1 :=
       hQsplit.1
     have hQf : Q.asIdeal.inertiaDeg (𝓞 ℚ) = 1 :=
@@ -4609,7 +4609,7 @@ private theorem transportRadicalSplittingToDescent
       hWindices.1
     have hWf : W.asIdeal.inertiaDeg (𝓞 E.field) = 1 :=
       hWindices.2
-    letI := Localization.AtPrime.algebraOfLiesOver Q.asIdeal W.asIdeal
+    let := Localization.AtPrime.algebraOfLiesOver Q.asIdeal W.asIdeal
     have heTowerQW := Ideal.ramificationIdx'_tower'
       (R := 𝓞 ℚ) Q.asIdeal W.asIdeal
     have hfTowerQW := Ideal.inertiaDeg'_tower
@@ -4624,9 +4624,9 @@ private theorem transportRadicalSplittingToDescent
       regularKernel_liesOver_of_restrict_eq (D.v g) D.q (D.v_over_q g)
     have hWoverv : W.asIdeal.LiesOver (D.v g).asIdeal :=
       regularKernel_liesOver_of_restrict_eq W (D.v g) hWN
-    letI : (D.v g).asIdeal.LiesOver D.q.asIdeal := hvover
-    letI : W.asIdeal.LiesOver (D.v g).asIdeal := hWoverv
-    letI := Localization.AtPrime.algebraOfLiesOver
+    let : (D.v g).asIdeal.LiesOver D.q.asIdeal := hvover
+    let : W.asIdeal.LiesOver (D.v g).asIdeal := hWoverv
+    let := Localization.AtPrime.algebraOfLiesOver
       (D.v g).asIdeal W.asIdeal
     have heTowerNW := Ideal.ramificationIdx'_tower'
       (R := 𝓞 ℚ) (D.v g).asIdeal W.asIdeal
@@ -4642,9 +4642,9 @@ private theorem transportRadicalSplittingToDescent
       regularKernel_liesOver_of_restrict_eq w (D.v g) hw
     have hWoverw : W.asIdeal.LiesOver w.asIdeal :=
       regularKernel_liesOver_of_restrict_eq W w hWw
-    letI : w.asIdeal.LiesOver (D.v g).asIdeal := hwover
-    letI : W.asIdeal.LiesOver w.asIdeal := hWoverw
-    letI := Localization.AtPrime.algebraOfLiesOver w.asIdeal W.asIdeal
+    let : w.asIdeal.LiesOver (D.v g).asIdeal := hwover
+    let : W.asIdeal.LiesOver w.asIdeal := hWoverw
+    let := Localization.AtPrime.algebraOfLiesOver w.asIdeal W.asIdeal
     have heTowerLW := Ideal.ramificationIdx'_tower'
       (R := 𝓞 N.field) w.asIdeal W.asIdeal
     have hfTowerLW := Ideal.inertiaDeg'_tower
@@ -4897,7 +4897,7 @@ private theorem regularKernel_ramificationIdx_map_equiv
       rw [hsq] at hz
       change f.symm x ∈ Ideal.under R Q at hz
       rwa [← Ideal.over_def Q P] at hz
-  letI : (Ideal.map g Q).LiesOver (Ideal.map f P) := hover
+  let : (Ideal.map g Q).LiesOver (Ideal.map f P) := hover
   have hmapP : Ideal.map f P ≠ ⊥ := by
     intro h
     exact hP ((Ideal.map_eq_bot_iff_of_injective f.injective).mp h)
@@ -4968,10 +4968,10 @@ private theorem regularKernel_inertiaDeg_map_equiv
       rw [hsq] at hz
       change f.symm x ∈ Ideal.under R Q at hz
       rwa [← Ideal.over_def Q P] at hz
-  letI : (Ideal.map g Q).LiesOver (Ideal.map f P) := hover
-  letI : (Ideal.map f P).IsMaximal :=
+  let : (Ideal.map g Q).LiesOver (Ideal.map f P) := hover
+  let : (Ideal.map f P).IsMaximal :=
     Ideal.IsMaximal.map_bijective f f.bijective inferInstance
-  letI : (Ideal.map g Q).IsMaximal :=
+  let : (Ideal.map g Q).IsMaximal :=
     Ideal.IsMaximal.map_bijective g g.bijective inferInstance
   rw [← Ideal.inertiaDeg_eq_inertiaDeg' (Ideal.map f P) (Ideal.map g Q),
     ← Ideal.inertiaDeg_eq_inertiaDeg' P Q,
@@ -5050,9 +5050,9 @@ private theorem regularConjugateCompositumData_exists
     (p : NU.LocalTheory.OddPrime) :
     Nonempty (RegularConjugateCompositumData N p) := by
   classical
-  letI : Algebra.IsAlgebraic ℚ Omega :=
+  let : Algebra.IsAlgebraic ℚ Omega :=
     AlgebraicClosure.isAlgebraic ℚ
-  letI : Normal ℚ Omega :=
+  let : Normal ℚ Omega :=
     { isAlgebraic := fun x => Algebra.IsAlgebraic.isAlgebraic x
       splits' := fun _ => IsAlgClosed.splits _ }
   obtain ⟨q, hnorm, _hsplitN, v, hvq, hvinj, _hvsurj, hvconj,
@@ -5117,7 +5117,7 @@ private theorem regularConjugateCompositumData_exists
       (algebraMap N.field (factor g).field.field).comp g.toRingHom =
         (eQ g).toRingEquiv.toRingHom.comp
           (algebraMap N.field L.field.field) := by
-    letI : Algebra N.field (factor g).field.field :=
+    let : Algebra N.field (factor g).field.field :=
       (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
     ext x
     exact (hlift g x).symm
@@ -5125,7 +5125,7 @@ private theorem regularConjugateCompositumData_exists
       letI : Algebra N.field (factor g).field.field :=
         (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
       IsGalois N.field (factor g).field.field := by
-    letI : Algebra N.field (factor g).field.field :=
+    let : Algebra N.field (factor g).field.field :=
       (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
     exact IsGalois.of_equiv_equiv (h := hLgal)
       (f := g.toRingEquiv) (g := (eQ g).toRingEquiv) (hcomp g)
@@ -5133,7 +5133,7 @@ private theorem regularConjugateCompositumData_exists
       letI : Algebra N.field (factor g).field.field :=
         (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
       Module.finrank N.field (factor g).field.field = (p : ℕ) := by
-    letI : Algebra N.field (factor g).field.field :=
+    let : Algebra N.field (factor g).field.field :=
       (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
     calc
       Module.finrank N.field (factor g).field.field =
@@ -5146,7 +5146,7 @@ private theorem regularConjugateCompositumData_exists
         (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
       IsCyclic ((factor g).field.field ≃ₐ[N.field]
         (factor g).field.field) := by
-    letI : Algebra N.field (factor g).field.field :=
+    let : Algebra N.field (factor g).field.field :=
       (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
     exact (regularKernelSemilinearAutCongr g.toRingEquiv
       (eQ g).toRingEquiv (hcomp g)).isCyclic.mp hLcyclic
@@ -5158,7 +5158,7 @@ private theorem regularConjugateCompositumData_exists
         (NumberField.RingOfIntegers.mapRingEquiv
           (eQ g).toRingEquiv).toRingHom.comp
             (algebraMap (𝓞 N.field) (𝓞 L.field.field)) := by
-    letI : Algebra N.field (factor g).field.field :=
+    let : Algebra N.field (factor g).field.field :=
       (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
     ext x
     have hc := DFunLike.congr_fun (hcomp g) (x : N.field)
@@ -5177,15 +5177,15 @@ private theorem regularConjugateCompositumData_exists
       letI : Algebra N.field (factor g).field.field :=
         (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
       IsRamifiedAt (factor g) (v g) := by
-    letI : Algebra N.field (factor g).field.field :=
+    let : Algebra N.field (factor g).field.field :=
       (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
-    letI : FiniteDimensional ℚ (factor g).field.field := hfactorFinite g
-    letI : NumberField (factor g).field.field :=
+    let : FiniteDimensional ℚ (factor g).field.field := hfactorFinite g
+    let : NumberField (factor g).field.field :=
       NumberField.of_module_finite ℚ (factor g).field.field
     obtain ⟨w, hw, he⟩ := hLramified
     have hover : w.asIdeal.LiesOver (v 1).asIdeal :=
       regularKernel_liesOver_of_restrict_eq w (v 1) hw
-    letI : w.asIdeal.LiesOver (v 1).asIdeal := hover
+    let : w.asIdeal.LiesOver (v 1).asIdeal := hover
     let w' := regularKernelMapFinitePlace (eQ g).toRingEquiv w
     refine ⟨w', ?_, ?_⟩
     · calc
@@ -5215,10 +5215,10 @@ private theorem regularConjugateCompositumData_exists
       letI : Algebra N.field (factor g).field.field :=
         (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
       SplitsCompletelyAbove (factor g) (v h) := by
-    letI : Algebra N.field (factor g).field.field :=
+    let : Algebra N.field (factor g).field.field :=
       (IntermediateField.inclusion (factor g).le_base).toRingHom.toAlgebra
-    letI : FiniteDimensional ℚ (factor g).field.field := hfactorFinite g
-    letI : NumberField (factor g).field.field :=
+    let : FiniteDimensional ℚ (factor g).field.field := hfactorFinite g
+    let : NumberField (factor g).field.field :=
       NumberField.of_module_finite ℚ (factor g).field.field
     let k : N.field ≃ₐ[ℚ] N.field := g⁻¹ * h
     have hk : k ≠ 1 := by
@@ -5268,7 +5268,7 @@ private theorem regularConjugateCompositumData_exists
       have hindices := hseedSplit.2 w hrest
       have hover : w.asIdeal.LiesOver (v k).asIdeal :=
         regularKernel_liesOver_of_restrict_eq w (v k) hrest
-      letI : w.asIdeal.LiesOver (v k).asIdeal := hover
+      let : w.asIdeal.LiesOver (v k).asIdeal := hover
       have hram := regularKernel_ramificationIdx_map_equiv
         (NumberField.RingOfIntegers.mapRingEquiv g.toRingEquiv)
         (NumberField.RingOfIntegers.mapRingEquiv (eQ g).toRingEquiv)
@@ -5294,16 +5294,16 @@ private theorem regularConjugateCompositumData_exists
         exact hindices.1
       · rw [← hbase, ← hforward, hinertia']
         exact hindices.2
-  letI : IsScalarTower ℚ N.field Omega := by
+  let : IsScalarTower ℚ N.field Omega := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
-  letI : Algebra.IsAlgebraic N.field Omega :=
+  let : Algebra.IsAlgebraic N.field Omega :=
     Algebra.IsAlgebraic.tower_top (K := ℚ) (A := Omega) N.field
-  letI : Normal N.field Omega :=
+  let : Normal N.field Omega :=
     { isAlgebraic := fun x => Algebra.IsAlgebraic.isAlgebraic x
       splits' := fun _ => IsAlgClosed.splits _ }
-  letI : IsGalois N.field L.field.field := hLgal
+  let : IsGalois N.field L.field.field := hLgal
   let LN : IntermediateField N.field Omega :=
     IntermediateField.extendScalars L.le_base
   have hLNnormal : Normal N.field LN := by
@@ -5366,7 +5366,7 @@ private theorem regularConjugateCompositumData_exists
     exact ⟨x, hx, rfl⟩
   let Mfield : IntermediateField ℚ Omega :=
     ⨆ g : N.field ≃ₐ[ℚ] N.field, factorField g
-  letI (g : N.field ≃ₐ[ℚ] N.field) :
+  let (g : N.field ≃ₐ[ℚ] N.field) :
       FiniteDimensional ℚ (factorField g) := hfactorFinite g
   have hMfinite : FiniteDimensional ℚ Mfield := by
     dsimp [Mfield]
@@ -5397,8 +5397,8 @@ private theorem regularConjugateCompositumData_exists
       AlgEquiv.ofBijective sigmaHom
         (AlgHom.normal_bijective ℚ Omega Omega sigmaHom)
     simpa [sigma] using hMstable sigma
-  letI : FiniteDimensional ℚ Mfield := hMfinite
-  letI : Normal ℚ Mfield := hMnormal
+  let : FiniteDimensional ℚ Mfield := hMfinite
+  let : Normal ℚ Mfield := hMnormal
   have hMgalois : IsGalois ℚ Mfield :=
     { to_isSeparable := by infer_instance
       to_normal := hMnormal }
@@ -5416,9 +5416,9 @@ private theorem regularConjugateCompositumData_exists
       isGaloisQ := by
         change IsGalois ℚ Mfield
         exact hMgalois }
-  letI : Algebra N.field Mfield :=
+  let : Algebra N.field Mfield :=
     (IntermediateField.inclusion hMle).toAlgebra
-  letI : IsScalarTower ℚ N.field Mfield :=
+  let : IsScalarTower ℚ N.field Mfield :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   let liftM (g : N.field ≃ₐ[ℚ] N.field) : Mfield ≃ₐ[ℚ] Mfield :=
     (IntermediateField.equivMap Mfield (lift g).toAlgHom).trans
@@ -5586,12 +5586,12 @@ private theorem regularConjugateFactorRestriction_apply
           (regularConjugateFactor_le_overfield D g) x) := by
   let F := (D.factor g).field.field
   let M := D.overfield.toExtension.field.field
-  letI : Algebra F M :=
+  let : Algebra F M :=
     (IntermediateField.inclusion
       (regularConjugateFactor_le_overfield D g)).toAlgebra
-  letI : IsScalarTower N.field F M :=
+  let : IsScalarTower N.field F M :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : IsGalois N.field F := D.factor_isGalois g
+  let : IsGalois N.field F := D.factor_isGalois g
   exact AlgEquiv.restrictNormal_commutes a F x
 
 /-- Undoing `Multiplicative` and then `Additive` leaves the original
@@ -5682,7 +5682,7 @@ private theorem regularRawFactorEvaluation_injective
     have hmul := Additive.ofMul.injective hadd
     simpa only [aM, bM] using hmul
   let cK : RegularKernelGroup N D.overfield := aM⁻¹ * bM
-  letI : Algebra ℚ D.overfield.toExtension.field.field :=
+  let : Algebra ℚ D.overfield.toExtension.field.field :=
     D.overfield.toExtension.field.field.algebra'
   let c : D.overfield.toExtension.field.field ≃ₐ[ℚ]
       D.overfield.toExtension.field.field := cK.restrictScalars ℚ
@@ -5790,13 +5790,13 @@ private theorem regularConjugateFactorRestriction_eq_one_of_mem_inertia
     regularConjugateFactorRestriction D k sigma.1 = 1 := by
   let F := (D.factor k).field.field
   let M := D.overfield.toExtension.field.field
-  letI : Algebra F M :=
+  let : Algebra F M :=
     (IntermediateField.inclusion
       (regularConjugateFactor_le_overfield D k)).toAlgebra
-  letI : IsScalarTower N.field F M :=
+  let : IsScalarTower N.field F M :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : IsGalois N.field F := D.factor_isGalois k
-  letI : Finite (F ≃ₐ[N.field] F) :=
+  let : IsGalois N.field F := D.factor_isGalois k
+  let : Finite (F ≃ₐ[N.field] F) :=
     Finite.of_injective (AlgEquiv.restrictScalarsHom ℚ)
       (AlgEquiv.restrictScalarsHom_injective ℚ)
   let w : NU.LocalTheory.FinitePlace F :=
@@ -5806,7 +5806,7 @@ private theorem regularConjugateFactorRestriction_eq_one_of_mem_inertia
   have hsplit := (D.factor_split k g hgk).2 w hwg
   have hwOver : w.asIdeal.LiesOver (D.v g).asIdeal :=
     regularKernel_liesOver_of_restrict_eq w (D.v g) hwg
-  letI : w.asIdeal.LiesOver (D.v g).asIdeal := hwOver
+  let : w.asIdeal.LiesOver (D.v g).asIdeal := hwOver
   have hcard : Nat.card
       (w.asIdeal.inertia (F ≃ₐ[N.field] F)) = 1 := by
     rw [Ideal.card_inertia_eq_ramificationIdxIn (D.v g).asIdeal w.asIdeal,
@@ -5864,7 +5864,7 @@ private theorem regularConjugateCompositum_kernelElementaryAbelian
       _ = evaluation (Additive.ofMul (b * a)) :=
         (map_add evaluation (Additive.ofMul b) (Additive.ofMul a)).symm
   refine ⟨hcomm, ?_⟩
-  letI : CommGroup (RegularKernelGroup N D.overfield) :=
+  let : CommGroup (RegularKernelGroup N D.overfield) :=
     regularKernelCommGroup N D.overfield hcomm
   intro a
   apply Additive.ofMul.injective
@@ -5885,7 +5885,7 @@ private theorem regularRawFactorEvaluation_surjective
   classical
   obtain ⟨hcomm, _⟩ :=
     regularConjugateCompositum_kernelElementaryAbelian hAsymmetric D
-  letI : CommGroup (RegularKernelGroup N D.overfield) :=
+  let : CommGroup (RegularKernelGroup N D.overfield) :=
     regularKernelCommGroup N D.overfield hcomm
   let evaluation := regularFactorEvaluation
     (regularConjugateRawFactorCoordinates hAsymmetric D)
@@ -5900,14 +5900,14 @@ private theorem regularRawFactorEvaluation_surjective
     obtain ⟨W, hWw⟩ := finitePlaceAbove_numberFieldExtension FM w
     let F := (D.factor g).field.field
     let M := D.overfield.toExtension.field.field
-    letI : Algebra F M :=
+    let : Algebra F M :=
       (IntermediateField.inclusion
         (regularConjugateFactor_le_overfield D g)).toAlgebra
-    letI : IsScalarTower N.field F M :=
+    let : IsScalarTower N.field F M :=
       IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-    letI : IsScalarTower ℚ N.field M :=
+    let : IsScalarTower ℚ N.field M :=
       IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-    letI : IsGalois N.field M :=
+    let : IsGalois N.field M :=
       IsGalois.tower_top_of_isGalois ℚ N.field M
     have hWg : NU.LocalTheory.restrictFinitePlace N.field W = D.v g := by
       calc
@@ -5922,9 +5922,9 @@ private theorem regularRawFactorEvaluation_surjective
       regularKernel_liesOver_of_restrict_eq w (D.v g) hwg
     have hWOverw : W.asIdeal.LiesOver w.asIdeal :=
       regularKernel_liesOver_of_restrict_eq W w hWw
-    letI : w.asIdeal.LiesOver (D.v g).asIdeal := hwOver
-    letI : W.asIdeal.LiesOver w.asIdeal := hWOverw
-    letI := Localization.AtPrime.algebraOfLiesOver w.asIdeal W.asIdeal
+    let : w.asIdeal.LiesOver (D.v g).asIdeal := hwOver
+    let : W.asIdeal.LiesOver w.asIdeal := hWOverw
+    let := Localization.AtPrime.algebraOfLiesOver w.asIdeal W.asIdeal
     have heTower := Ideal.ramificationIdx'_tower'
       (R := 𝓞 N.field) w.asIdeal W.asIdeal
     have hrelativePos : 0 < W.asIdeal.ramificationIdx (𝓞 F) :=
@@ -5935,8 +5935,8 @@ private theorem regularRawFactorEvaluation_surjective
         (Nat.le_mul_of_pos_right _ hrelativePos)
     have hWOver : W.asIdeal.LiesOver (D.v g).asIdeal :=
       regularKernel_liesOver_of_restrict_eq W (D.v g) hWg
-    letI : W.asIdeal.LiesOver (D.v g).asIdeal := hWOver
-    letI : Finite (RegularKernelGroup N D.overfield) :=
+    let : W.asIdeal.LiesOver (D.v g).asIdeal := hWOver
+    let : Finite (RegularKernelGroup N D.overfield) :=
       Finite.of_injective (AlgEquiv.restrictScalarsHom ℚ)
         (AlgEquiv.restrictScalarsHom_injective ℚ)
     have hcard : Nat.card (W.asIdeal.inertia
@@ -5947,13 +5947,13 @@ private theorem regularRawFactorEvaluation_surjective
         Ideal.ramificationIdxIn_eq_ramificationIdx
           (D.v g).asIdeal W.asIdeal
           (RegularKernelGroup N D.overfield)]
-    letI := Fintype.ofFinite (W.asIdeal.inertia
+    let := Fintype.ofFinite (W.asIdeal.inertia
       (RegularKernelGroup N D.overfield))
     have hcard' : 1 < Fintype.card (W.asIdeal.inertia
         (RegularKernelGroup N D.overfield)) := by
       rw [← Nat.card_eq_fintype_card, hcard]
       exact hWram
-    letI : Nontrivial (W.asIdeal.inertia
+    let : Nontrivial (W.asIdeal.inertia
         (RegularKernelGroup N D.overfield)) :=
       Fintype.one_lt_card_iff_nontrivial.mp hcard'
     obtain ⟨sigma, hsigma⟩ := exists_ne
@@ -6285,8 +6285,8 @@ private theorem regularFactorEvaluation_surjective
     Function.Surjective (regularFactorEvaluation
       (regularConjugateFactorCoordinates hAsymmetric D)) := by
   classical
-  letI := Fintype.ofFinite (N.field ≃ₐ[ℚ] N.field)
-  letI : Finite ((N.field ≃ₐ[ℚ] N.field) →₀ ZMod (p : ℕ)) := by
+  let := Fintype.ofFinite (N.field ≃ₐ[ℚ] N.field)
+  let : Finite ((N.field ≃ₐ[ℚ] N.field) →₀ ZMod (p : ℕ)) := by
     infer_instance
   let evaluation := regularFactorEvaluation
     (regularConjugateFactorCoordinates hAsymmetric D)
@@ -6433,7 +6433,7 @@ private theorem regularKernelAdditiveConstruction :
   obtain ⟨hcomm, _hpow⟩ :=
     regularConjugateCompositum_kernelElementaryAbelian
       asymmetricCyclicConstruction D
-  letI : CommGroup (RegularKernelGroup N D.overfield) :=
+  let : CommGroup (RegularKernelGroup N D.overfield) :=
     regularKernelCommGroup N D.overfield hcomm
   refine ⟨D.overfield, hcomm,
     regularFactorAddEquiv asymmetricCyclicConstruction D, ?_⟩

@@ -105,7 +105,7 @@ theorem numberField_valuations {K : Type*} [Field K] [NumberField K]
   let v := valuationCenterPlace A hA
   have hle : primeValuationSubring v ≤ A :=
     primeValuationSubring_valuationCenterPlace_le A hA
-  letI : Ring.KrullDimLE 1 (primeValuationSubring v) := by
+  let : Ring.KrullDimLE 1 (primeValuationSubring v) := by
     change Ring.KrullDimLE 1
       (HeightOneSpectrum.valuationSubringAtPrime K v)
     infer_instance

@@ -163,7 +163,7 @@ private theorem normalizedValuation_map_nonneg_iff
     [ValuativeExtension K L] (x : Units K) :
     0 ≤ normalizedValuation L (Units.map (algebraMap K L) x) ↔
       0 ≤ normalizedValuation K x := by
-  letI : (valuation K).HasExtension (valuation L) := by
+  let : (valuation K).HasExtension (valuation L) := by
     constructor
     exact ValuativeRel.isEquiv _ _
   unfold normalizedValuation normalizedValuationHom
@@ -332,21 +332,21 @@ theorem ringOfIntegers_module_finite
     [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L]
     [ValuativeExtension K L]
     [(valuation K).HasExtension (valuation L)] : Module.Finite 𝒪[K] 𝒪[L] := by
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  letI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI := IsTopologicalAddGroup.rightUniformSpace L
-  letI := isUniformAddGroup_of_addCommGroup (G := L)
-  letI : ContinuousSMul K L := ⟨by
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  let := isUniformAddGroup_of_addCommGroup (G := K)
+  let := IsTopologicalAddGroup.rightUniformSpace L
+  let := isUniformAddGroup_of_addCommGroup (G := L)
+  let : ContinuousSMul K L := ⟨by
     have h : Continuous (fun p : K × L => algebraMap K L p.1 * p.2) :=
       (((continuous_algebraMap_of_valuativeExtension K L).comp continuous_fst).mul
         continuous_snd).congr (fun _ => rfl)
     simpa only [Algebra.smul_def] using h⟩
-  letI : (Valued.v (R := K) (Γ₀ := ValueGroupWithZero K)).RankOne :=
+  let : (Valued.v (R := K) (Γ₀ := ValueGroupWithZero K)).RankOne :=
     { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI : NontriviallyNormedField K :=
+  let : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
   let b := Module.Free.chooseBasis K L
   let coord (i) : L →ₗ[K] K :=
@@ -387,7 +387,7 @@ theorem ringOfIntegers_module_finite
     exact hmul.le
   let g (i) : L := c⁻¹ • b i
   let lattice : Submodule 𝒪[K] L := Submodule.span 𝒪[K] (Set.range g)
-  letI : Module.Finite 𝒪[K] lattice :=
+  let : Module.Finite 𝒪[K] lattice :=
     Module.Finite.span_of_finite 𝒪[K] (Set.finite_range g)
   let toL : 𝒪[L] →ₗ[𝒪[K]] L :=
     (IsScalarTower.toAlgHom 𝒪[K] 𝒪[L] L).toLinearMap
@@ -527,10 +527,10 @@ theorem ramificationInvariants_exists :
         normalizedValuation L (Units.map (algebraMap K L) x) =
           (e : ℤ) * normalizedValuation K x) ∧
       Module.finrank K L = e * f := by
-  letI : (valuation K).HasExtension (valuation L) := by
+  let : (valuation K).HasExtension (valuation L) := by
     constructor
     exact ValuativeRel.isEquiv _ _
-  letI : Module.Finite 𝒪[K] 𝒪[L] := ringOfIntegers_module_finite K L
+  let : Module.Finite 𝒪[K] 𝒪[L] := ringOfIntegers_module_finite K L
   obtain ⟨heZ, hscale⟩ := normalizedValuation_map_eq_mul K L
   let eZ : ℤ := normalizedValuation L
     (Units.map (algebraMap K L) (defaultUniformizer K).val)
@@ -730,14 +730,14 @@ theorem compactOpenLattices_commensurable
     Finite (Λ ⧸ (Λ ⊓ Γ).comap Λ.subtype) ∧
       Finite (Γ ⧸ (Λ ⊓ Γ).comap Γ.subtype) := by
   constructor
-  · letI : CompactSpace Λ := isCompact_iff_compactSpace.mp hΛ.isCompact
+  · let : CompactSpace Λ := isCompact_iff_compactSpace.mp hΛ.isCompact
     apply AddSubgroup.quotient_finite_of_isOpen
     change IsOpen {x : Λ | (x : V) ∈ Λ ∧ (x : V) ∈ Γ}
     convert hΓ.isOpen.preimage continuous_subtype_val using 1
     ext x
     simp only [Set.mem_setOf_eq, Set.mem_preimage, SetLike.mem_coe]
     exact and_iff_right x.prop
-  · letI : CompactSpace Γ := isCompact_iff_compactSpace.mp hΓ.isCompact
+  · let : CompactSpace Γ := isCompact_iff_compactSpace.mp hΓ.isCompact
     apply AddSubgroup.quotient_finite_of_isOpen
     change IsOpen {x : Γ | (x : V) ∈ Λ ∧ (x : V) ∈ Γ}
     convert hΛ.isOpen.preimage continuous_subtype_val using 1
@@ -1277,42 +1277,42 @@ private theorem finiteExtension_localFieldData_exists
         ∃ hFL : ValuativeExtension F L,
           letI : ValuativeExtension F L := hFL
           ContinuousSMul F L := by
-  letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
-  letI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
-  letI : (Valued.v (R := F) (Γ₀ := ValuativeRel.ValueGroupWithZero F)).RankOne :=
+  let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
+  let : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
+  let : (Valued.v (R := F) (Γ₀ := ValuativeRel.ValueGroupWithZero F)).RankOne :=
     { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := F).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI : NontriviallyNormedField F :=
+  let : NontriviallyNormedField F :=
     Valued.toNontriviallyNormedField F (ValuativeRel.ValueGroupWithZero F)
   let nL : NontriviallyNormedField L := spectralNorm.nontriviallyNormedField F L
-  letI : NontriviallyNormedField L := nL
-  letI : IsUltrametricDist L :=
+  let : NontriviallyNormedField L := nL
+  let : IsUltrametricDist L :=
     IsUltrametricDist.isUltrametricDist_of_isNonarchimedean_norm
       (isNonarchimedean_spectralNorm (K := F) (L := L))
-  letI : NormedAlgebra F L := spectralNorm.normedAlgebra F L
+  let : NormedAlgebra F L := spectralNorm.normedAlgebra F L
   let tL : TopologicalSpace L := inferInstance
   let vL : ValuativeRel L :=
     ValuativeRel.ofValuation (NormedField.valuation (K := L))
   refine ⟨vL, tL, ?_⟩
-  letI : ValuativeRel L := vL
-  letI : (NormedField.valuation (K := L)).Compatible :=
+  let : ValuativeRel L := vL
+  let : (NormedField.valuation (K := L)).Compatible :=
     Valuation.Compatible.ofValuation (NormedField.valuation (K := L))
-  letI : TopologicalSpace L := tL
-  letI : Valued L NNReal := NormedField.toValued
-  haveI : (Valued.v : Valuation L NNReal).Compatible := by
+  let : TopologicalSpace L := tL
+  let : Valued L NNReal := NormedField.toValued
+  have : (Valued.v : Valuation L NNReal).Compatible := by
     rw [show (Valued.v : Valuation L NNReal) = NormedField.valuation from rfl]
     infer_instance
-  haveI htop : IsValuativeTopology L := by
+  have htop : IsValuativeTopology L := by
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
       (Valued.v : Valuation L NNReal).exists_setOf_restrict_le_iff 0 s
-  haveI hloc : LocallyCompactSpace L :=
+  have hloc : LocallyCompactSpace L :=
     LocallyCompactSpace.of_finiteDimensional_of_complete F L
-  haveI hnontriv : ValuativeRel.IsNontrivial L := by
+  have hnontriv : ValuativeRel.IsNontrivial L := by
     rw [ValuativeRel.isNontrivial_iff_isNontrivial (NormedField.valuation (K := L))]
     infer_instance
   let hL : IsNonarchimedeanLocalField L :=
@@ -1320,7 +1320,7 @@ private theorem finiteExtension_localFieldData_exists
       toLocallyCompactSpace := hloc
       toIsNontrivial := hnontriv }
   refine ⟨hL, ?_⟩
-  letI : IsNonarchimedeanLocalField L := hL
+  let : IsNonarchimedeanLocalField L := hL
   let hFL : ValuativeExtension F L := by
     constructor
     intro a b
@@ -1333,7 +1333,7 @@ private theorem finiteExtension_localFieldData_exists
       Valuation.Compatible.vle_iff_le (v := ValuativeRel.valuation F)]
     exact Valued.toNormedField.norm_le_iff
   refine ⟨hFL, ?_⟩
-  letI : ValuativeExtension F L := hFL
+  let : ValuativeExtension F L := hFL
   exact inferInstance
 
 /-- A monic lift of an irreducible degree-`d` residue polynomial. -/
@@ -1354,9 +1354,9 @@ private theorem unramifiedLiftPolynomial_exists
     Nonempty (UnramifiedLiftPolynomial F d) := by
   let k := LocalResidueField F
   let p := ringChar k
-  letI : Fact p.Prime := ⟨CharP.prime_ringChar k⟩
-  letI : CharP k p := ringChar.charP k
-  letI : NeZero d := ⟨hd.ne'⟩
+  let : Fact p.Prime := ⟨CharP.prime_ringChar k⟩
+  let : CharP k p := ringChar.charP k
+  let : NeZero d := ⟨hd.ne'⟩
   let l := FiniteField.Extension k p d
   let α : l := (Field.exists_primitive_element k l).choose
   have hα : IntermediateField.adjoin k {α} = ⊤ :=
@@ -1419,7 +1419,7 @@ private theorem unramifiedLevelSeed_exists [IsSepClosure K Ksep]
     apply Polynomial.degree_ne_of_natDegree_ne
     rw [D.monic.natDegree_map, D.natDegree]
     exact hd.ne'
-  letI : IsSepClosed Ksep := IsSepClosure.sep_closed K
+  let : IsSepClosed Ksep := IsSepClosure.sep_closed K
   obtain ⟨z, hz⟩ := IsSepClosed.exists_aeval_eq_zero Ksep fK hfK_degree hfK_sep
   refine ⟨⟨D, z, ?_⟩⟩
   exact (minpoly.eq_of_irreducible_of_monic hfK hz (D.monic.map _)).symm
@@ -1438,21 +1438,21 @@ private theorem unramifiedLevelSeed_isUnramified [IsSepClosure K Ksep]
       IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)
     IsUnramifiedIntermediateField K Ksep (IntermediateField.adjoin K {S.root}) := by
   let U := IntermediateField.adjoin K {S.root}
-  letI : FiniteDimensional K U :=
+  let : FiniteDimensional K U :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)
   obtain ⟨vU, tU, hU, hKU, hsmul⟩ := finiteExtension_localFieldData_exists K U
   refine ⟨vU, tU, ?_⟩
-  letI : ValuativeRel U := vU
-  letI : TopologicalSpace U := tU
+  let : ValuativeRel U := vU
+  let : TopologicalSpace U := tU
   refine ⟨hU, ?_⟩
-  letI : IsNonarchimedeanLocalField U := hU
+  let : IsNonarchimedeanLocalField U := hU
   refine ⟨hKU, ?_⟩
-  letI : ValuativeExtension K U := hKU
+  let : ValuativeExtension K U := hKU
   refine ⟨hsmul, ?_⟩
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) := by
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) := by
     constructor
     exact ValuativeRel.isEquiv _ _
-  letI : Module.Finite 𝒪[K] 𝒪[U] := ringOfIntegers_module_finite K U
+  let : Module.Finite 𝒪[K] 𝒪[U] := ringOfIntegers_module_finite K U
   let g : U := IntermediateField.AdjoinSimple.gen K S.root
   have hgpoly : Polynomial.aeval g S.lift.poly = 0 := by
     rw [← Polynomial.aeval_map_algebraMap K, ← S.minpoly_eq,
@@ -1502,7 +1502,7 @@ private theorem unramifiedLevelSeed_isUnramified [IsSepClosure K Ksep]
     exact S.lift.reduction_irreducible.natDegree_pos
   have hlower : d ≤ Module.finrank k kU := by
     let A := IntermediateField.adjoin k {gbar}
-    haveI : FiniteDimensional k A :=
+    have : FiniteDimensional k A :=
       IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral gbar)
     calc
       d = Module.finrank k A := by
@@ -1518,9 +1518,9 @@ private theorem unramifiedLevelSeed_isUnramified [IsSepClosure K Ksep]
     rw [show p = Ideal.span {ϖK} from hϖKirr.maximalIdeal_eq,
       ne_eq, Ideal.span_singleton_eq_bot]
     exact hϖKirr.ne_zero
-  letI : Module.IsTorsionFree 𝒪[K] 𝒪[U] :=
+  let : Module.IsTorsionFree 𝒪[K] 𝒪[U] :=
     Valuation.HasExtension.instIsTorsionFreeInteger
-  letI : NoZeroSMulDivisors 𝒪[K] 𝒪[U] :=
+  let : NoZeroSMulDivisors 𝒪[K] 𝒪[U] :=
     { eq_zero_or_eq_zero_of_smul_eq_zero := by
         intro c x hcx
         by_cases hc : c = 0
@@ -1623,7 +1623,7 @@ private theorem hensel_lift_residue_root
       _ = 0 := by
         simpa only [Polynomial.aeval_def,
           IsLocalRing.ResidueField.algebraMap_eq] using hroot
-  letI : Field (R ⧸ IsLocalRing.maximalIdeal R) := Ideal.Quotient.field _
+  let : Field (R ⧸ IsLocalRing.maximalIdeal R) := Ideal.Quotient.field _
   have hunit : IsUnit (Ideal.Quotient.mk (IsLocalRing.maximalIdeal R)
       (f.derivative.eval a₀')) := by
     rw [isUnit_iff_ne_zero]
@@ -1646,7 +1646,7 @@ private theorem finiteField_irreducible_root_of_natDegree_dvd_finrank
     (f : Polynomial k) (hf : Irreducible f)
     (h : f.natDegree ∣ Module.finrank k l) :
     ∃ x : l, Polynomial.aeval x f = 0 := by
-  letI : Fact (Irreducible f) := ⟨hf⟩
+  let : Fact (Irreducible f) := ⟨hf⟩
   let A := AdjoinRoot f
   have hfin : Module.finrank k A = f.natDegree := by
     exact finrank_quotient_span_eq_natDegree
@@ -1689,18 +1689,18 @@ private theorem residue_finrank_eq_finrank_of_unramified
       Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal 𝒪[E])
         (IsLocalRing.maximalIdeal 𝒪[K])
     Module.finrank (LocalResidueField K) (LocalResidueField E) = Module.finrank K E := by
-  letI : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
-  letI : TopologicalSpace E := unramifiedIntermediateFieldTopology K Ksep E hE
-  letI : IsNonarchimedeanLocalField E :=
+  let : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
+  let : TopologicalSpace E := unramifiedIntermediateFieldTopology K Ksep E hE
+  let : IsNonarchimedeanLocalField E :=
     unramifiedIntermediateFieldLocalField K Ksep E hE
-  letI : ValuativeExtension K E :=
+  let : ValuativeExtension K E :=
     unramifiedIntermediateFieldValuativeExtension K Ksep E hE
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Algebra (LocalResidueField K) (LocalResidueField E) :=
+  let : Algebra (LocalResidueField K) (LocalResidueField E) :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal 𝒪[E])
       (IsLocalRing.maximalIdeal 𝒪[K])
-  letI : Module.Finite 𝒪[K] 𝒪[E] := ringOfIntegers_module_finite K E
+  let : Module.Finite 𝒪[K] 𝒪[E] := ringOfIntegers_module_finite K E
   let p : Ideal 𝒪[K] := IsLocalRing.maximalIdeal 𝒪[K]
   let P : Ideal 𝒪[E] := IsLocalRing.maximalIdeal 𝒪[E]
   obtain ⟨ϖK, hϖK, hϖKirr⟩ := integral_normalizedUniformizer K
@@ -1789,17 +1789,17 @@ private theorem unramifiedLevelSeed_liftedRoot
       ⟨ValuativeRel.isEquiv _ _⟩
     ∃ a : RingOfIntegers E,
       (S.lift.poly.map (algebraMap (RingOfIntegers K) (RingOfIntegers E))).IsRoot a := by
-  letI : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
-  letI : TopologicalSpace E := unramifiedIntermediateFieldTopology K Ksep E hE
-  letI : IsNonarchimedeanLocalField E :=
+  let : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
+  let : TopologicalSpace E := unramifiedIntermediateFieldTopology K Ksep E hE
+  let : IsNonarchimedeanLocalField E :=
     unramifiedIntermediateFieldLocalField K Ksep E hE
-  letI : ValuativeExtension K E :=
+  let : ValuativeExtension K E :=
     unramifiedIntermediateFieldValuativeExtension K Ksep E hE
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let k := LocalResidueField K
   let kE := LocalResidueField E
-  letI : Algebra k kE :=
+  let : Algebra k kE :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal 𝒪[E])
       (IsLocalRing.maximalIdeal 𝒪[K])
   let fbar := S.lift.poly.map (IsLocalRing.residue 𝒪[K])
@@ -1841,8 +1841,8 @@ private theorem unramifiedLevelSeed_liftedRoot
         rw [Polynomial.derivative_map],
       Polynomial.eval₂_map] at hderiv₀'
     exact hderiv₀'
-  letI : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
-  letI : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
+  let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
+  let : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   obtain ⟨a, ha, _⟩ := hensel_lift_residue_root 𝒪[E] fE hfE a₀ hrootE hderivE
   exact ⟨a, ha⟩
 
@@ -1855,23 +1855,23 @@ private theorem unramifiedLevelSeed_isGalois [IsSepClosure K Ksep]
       IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)
     IsGalois K (IntermediateField.adjoin K {S.root}) := by
   let U := IntermediateField.adjoin K {S.root}
-  letI : FiniteDimensional K U :=
+  let : FiniteDimensional K U :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)
   have hunr : IsUnramifiedIntermediateField K Ksep U :=
     unramifiedLevelSeed_isUnramified K Ksep S
-  letI : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U hunr
-  letI : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U hunr
-  letI : IsNonarchimedeanLocalField U :=
+  let : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U hunr
+  let : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U hunr
+  let : IsNonarchimedeanLocalField U :=
     unramifiedIntermediateFieldLocalField K Ksep U hunr
-  letI : ValuativeExtension K U :=
+  let : ValuativeExtension K U :=
     unramifiedIntermediateFieldValuativeExtension K Ksep U hunr
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : UniformSpace U := IsTopologicalAddGroup.rightUniformSpace U
-  letI : IsUniformAddGroup U := isUniformAddGroup_of_addCommGroup
+  let : UniformSpace U := IsTopologicalAddGroup.rightUniformSpace U
+  let : IsUniformAddGroup U := isUniformAddGroup_of_addCommGroup
   let k := LocalResidueField K
   let kU := LocalResidueField U
-  letI : Algebra k kU :=
+  let : Algebra k kU :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal 𝒪[U])
       (IsLocalRing.maximalIdeal 𝒪[K])
   let fbar := S.lift.poly.map (IsLocalRing.residue 𝒪[K])
@@ -1984,7 +1984,7 @@ private theorem unramifiedLevelSeed_isGalois [IsSepClosure K Ksep]
   have hsplits : ((minpoly K S.root).map (algebraMap K U)).Splits := by
     rw [S.minpoly_eq]
     exact hfKU_splits
-  letI : Normal K U := by
+  let : Normal K U := by
     constructor
     intro x
     rw [IntermediateField.minpoly_eq]
@@ -2006,15 +2006,15 @@ private theorem unramifiedLevelSeed_le_of_dvd [IsSepClosure K Ksep]
     (hdiv : d ∣ Module.finrank K E) :
     IntermediateField.adjoin K {S.root} ≤ E := by
   let U := IntermediateField.adjoin K {S.root}
-  letI : FiniteDimensional K U :=
+  let : FiniteDimensional K U :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)
-  letI : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
-  letI : TopologicalSpace E := unramifiedIntermediateFieldTopology K Ksep E hE
-  letI : IsNonarchimedeanLocalField E :=
+  let : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
+  let : TopologicalSpace E := unramifiedIntermediateFieldTopology K Ksep E hE
+  let : IsNonarchimedeanLocalField E :=
     unramifiedIntermediateFieldLocalField K Ksep E hE
-  letI : ValuativeExtension K E :=
+  let : ValuativeExtension K E :=
     unramifiedIntermediateFieldValuativeExtension K Ksep E hE
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   obtain ⟨a, ha⟩ := unramifiedLevelSeed_liftedRoot K Ksep S E hE hdiv
   let fK := S.lift.poly.map (algebraMap 𝒪[K] K)
@@ -2045,7 +2045,7 @@ private theorem unramifiedLevelSeed_le_of_dvd [IsSepClosure K Ksep]
     exact hzroot
   have hminz : fK = minpoly K z :=
     minpoly.eq_of_irreducible_of_monic hfK hzaeval (S.lift.monic.map _)
-  letI : IsGalois K U := unramifiedLevelSeed_isGalois K Ksep S
+  let : IsGalois K U := unramifiedLevelSeed_isGalois K Ksep S
   have hsplitf : (fK.map (algebraMap K U)).Splits := by
     have hs := IsGalois.splits K (IntermediateField.AdjoinSimple.gen K S.root)
     rw [IntermediateField.minpoly_gen, S.minpoly_eq] at hs
@@ -2069,7 +2069,7 @@ private theorem unramifiedLevelSeed_le_of_dvd [IsSepClosure K Ksep]
     rw [Set.mem_singleton_iff] at hx
     subst x
     exact hzE
-  haveI : FiniteDimensional K Z :=
+  have : FiniteDimensional K Z :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral z)
   have hZrank : Module.finrank K Z = d := by
     rw [IntermediateField.adjoin.finrank (Algebra.IsIntegral.isIntegral z), ← hminz]
@@ -2139,17 +2139,17 @@ private theorem unramifiedLift_root_unique
       (S.lift.poly.map (algebraMap (RingOfIntegers K) (RingOfIntegers E))).IsRoot b →
       IsLocalRing.residue (RingOfIntegers E) a =
         IsLocalRing.residue (RingOfIntegers E) b → a = b := by
-  letI : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
-  letI : TopologicalSpace E := unramifiedIntermediateFieldTopology K Ksep E hE
-  letI : IsNonarchimedeanLocalField E :=
+  let : ValuativeRel E := unramifiedIntermediateFieldValuativeRel K Ksep E hE
+  let : TopologicalSpace E := unramifiedIntermediateFieldTopology K Ksep E hE
+  let : IsNonarchimedeanLocalField E :=
     unramifiedIntermediateFieldLocalField K Ksep E hE
-  letI : ValuativeExtension K E :=
+  let : ValuativeExtension K E :=
     unramifiedIntermediateFieldValuativeExtension K Ksep E hE
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let k := LocalResidueField K
   let kE := LocalResidueField E
-  letI : Algebra k kE :=
+  let : Algebra k kE :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal 𝒪[E])
       (IsLocalRing.maximalIdeal 𝒪[K])
   let fE := S.lift.poly.map (algebraMap 𝒪[K] 𝒪[E])
@@ -2307,17 +2307,17 @@ private theorem unramifiedLevelSeed_residueRingEquiv_injective [IsSepClosure K K
       ⟨ValuativeRel.isEquiv _ _⟩
     Function.Injective (unramifiedResidueRingEquiv K Ksep U hU) := by
   let U := IntermediateField.adjoin K {S.root}
-  letI : FiniteDimensional K U :=
+  let : FiniteDimensional K U :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)
   let hU : IsUnramifiedIntermediateField K Ksep U :=
     unramifiedLevelSeed_isUnramified K Ksep S
-  letI : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U hU
-  letI : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U hU
-  letI : IsNonarchimedeanLocalField U :=
+  let : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U hU
+  let : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U hU
+  let : IsNonarchimedeanLocalField U :=
     unramifiedIntermediateFieldLocalField K Ksep U hU
-  letI : ValuativeExtension K U :=
+  let : ValuativeExtension K U :=
     unramifiedIntermediateFieldValuativeExtension K Ksep U hU
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let g : U := IntermediateField.AdjoinSimple.gen K S.root
   have hgpoly : Polynomial.aeval g S.lift.poly = 0 := by
@@ -2419,7 +2419,7 @@ private theorem unramifiedLevelFields_le_of_dvd [IsSepClosure K Ksep]
     (S : ∀ n : ℕ, UnramifiedLevelSeed K Ksep (n + 1))
     {a b : ℕ} (h : a + 1 ∣ b + 1) :
     unramifiedLevelField K Ksep (S a) ≤ unramifiedLevelField K Ksep (S b) := by
-  letI : FiniteDimensional K (unramifiedLevelField K Ksep (S b)) :=
+  let : FiniteDimensional K (unramifiedLevelField K Ksep (S b)) :=
     unramifiedLevelFieldFiniteDimensional K Ksep (S b)
   apply unramifiedLevelSeed_le_of_dvd K Ksep (S a)
     (unramifiedLevelField K Ksep (S b))
@@ -2471,22 +2471,22 @@ private theorem unramifiedLevelFrobeniusDatum_exists [IsSepClosure K Ksep]
     {d : ℕ} (S : UnramifiedLevelSeed K Ksep d) :
     Nonempty (UnramifiedLevelFrobeniusDatum K Ksep S) := by
   let U := unramifiedLevelField K Ksep S
-  letI : FiniteDimensional K U := unramifiedLevelFieldFiniteDimensional K Ksep S
+  let : FiniteDimensional K U := unramifiedLevelFieldFiniteDimensional K Ksep S
   let hU : IsUnramifiedIntermediateField K Ksep U :=
     unramifiedLevelField_isUnramified K Ksep S
-  letI : IsGalois K U := unramifiedLevelField_isGalois K Ksep S
-  letI : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U hU
-  letI : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U hU
-  letI : IsNonarchimedeanLocalField U :=
+  let : IsGalois K U := unramifiedLevelField_isGalois K Ksep S
+  let : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U hU
+  let : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U hU
+  let : IsNonarchimedeanLocalField U :=
     unramifiedIntermediateFieldLocalField K Ksep U hU
-  letI : ValuativeExtension K U :=
+  let : ValuativeExtension K U :=
     unramifiedIntermediateFieldValuativeExtension K Ksep U hU
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let k := LocalResidueField K
   let kU := LocalResidueField U
-  letI : Fintype k := Fintype.ofFinite k
-  letI : Algebra k kU :=
+  let : Fintype k := Fintype.ofFinite k
+  let : Algebra k kU :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal 𝒪[U])
       (IsLocalRing.maximalIdeal 𝒪[K])
   let red := unramifiedResidueAlgEquivHom K Ksep U hU
@@ -2494,10 +2494,10 @@ private theorem unramifiedLevelFrobeniusDatum_exists [IsSepClosure K Ksep]
     intro σ τ hστ
     apply unramifiedLevelSeed_residueRingEquiv_injective K Ksep S
     exact congr_arg AlgEquiv.toRingEquiv hστ
-  letI : Fintype (kU ≃ₐ[k] kU) := AlgEquiv.fintype k kU
-  letI : Fintype (U ≃ₐ[K] U) := AlgEquiv.fintype K U
-  letI : Finite (kU ≃ₐ[k] kU) := Finite.of_fintype _
-  letI : Finite (U ≃ₐ[K] U) := Finite.of_fintype _
+  let : Fintype (kU ≃ₐ[k] kU) := AlgEquiv.fintype k kU
+  let : Fintype (U ≃ₐ[K] U) := AlgEquiv.fintype K U
+  let : Finite (kU ≃ₐ[k] kU) := Finite.of_fintype _
+  let : Finite (U ≃ₐ[K] U) := Finite.of_fintype _
   have hcard : Nat.card (kU ≃ₐ[k] kU) = Nat.card (U ≃ₐ[K] U) := by
     rw [IsGalois.card_aut_eq_finrank, IsGalois.card_aut_eq_finrank,
       residue_finrank_eq_finrank_of_unramified K Ksep U hU]
@@ -2601,35 +2601,35 @@ private theorem unramifiedLevelFrobeniusData_exists [IsSepClosure K Ksep]
   intro a b h
   let Ua := unramifiedLevelField K Ksep (S a)
   let Ub := unramifiedLevelField K Ksep (S b)
-  letI : FiniteDimensional K Ua :=
+  let : FiniteDimensional K Ua :=
     unramifiedLevelFieldFiniteDimensional K Ksep (S a)
-  letI : FiniteDimensional K Ub :=
+  let : FiniteDimensional K Ub :=
     unramifiedLevelFieldFiniteDimensional K Ksep (S b)
   let hUa : IsUnramifiedIntermediateField K Ksep Ua :=
     unramifiedLevelField_isUnramified K Ksep (S a)
   let hUb : IsUnramifiedIntermediateField K Ksep Ub :=
     unramifiedLevelField_isUnramified K Ksep (S b)
-  letI : ValuativeRel Ua := unramifiedIntermediateFieldValuativeRel K Ksep Ua hUa
-  letI : TopologicalSpace Ua := unramifiedIntermediateFieldTopology K Ksep Ua hUa
-  letI : IsNonarchimedeanLocalField Ua :=
+  let : ValuativeRel Ua := unramifiedIntermediateFieldValuativeRel K Ksep Ua hUa
+  let : TopologicalSpace Ua := unramifiedIntermediateFieldTopology K Ksep Ua hUa
+  let : IsNonarchimedeanLocalField Ua :=
     unramifiedIntermediateFieldLocalField K Ksep Ua hUa
-  letI : ValuativeExtension K Ua :=
+  let : ValuativeExtension K Ua :=
     unramifiedIntermediateFieldValuativeExtension K Ksep Ua hUa
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation Ua) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation Ua) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : ValuativeRel Ub := unramifiedIntermediateFieldValuativeRel K Ksep Ub hUb
-  letI : TopologicalSpace Ub := unramifiedIntermediateFieldTopology K Ksep Ub hUb
-  letI : IsNonarchimedeanLocalField Ub :=
+  let : ValuativeRel Ub := unramifiedIntermediateFieldValuativeRel K Ksep Ub hUb
+  let : TopologicalSpace Ub := unramifiedIntermediateFieldTopology K Ksep Ub hUb
+  let : IsNonarchimedeanLocalField Ub :=
     unramifiedIntermediateFieldLocalField K Ksep Ub hUb
-  letI : ValuativeExtension K Ub :=
+  let : ValuativeExtension K Ub :=
     unramifiedIntermediateFieldValuativeExtension K Ksep Ub hUb
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation Ub) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation Ub) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let hab : Ua ≤ Ub := unramifiedLevelFields_le_of_dvd K Ksep S h
   let inc : Ua →ₐ[K] Ub := IntermediateField.inclusion hab
-  letI : Algebra Ua Ub := intermediateFieldInclusionAlgebra K Ksep hab
-  letI : Module.Finite 𝒪[K] 𝒪[Ua] := ringOfIntegers_module_finite K Ua
-  letI : Module.Finite 𝒪[K] 𝒪[Ub] := ringOfIntegers_module_finite K Ub
+  let : Algebra Ua Ub := intermediateFieldInclusionAlgebra K Ksep hab
+  let : Module.Finite 𝒪[K] 𝒪[Ua] := ringOfIntegers_module_finite K Ua
+  let : Module.Finite 𝒪[K] 𝒪[Ub] := ringOfIntegers_module_finite K Ub
   have inc_mem (z : 𝒪[Ua]) :
       inc (z : Ua) ∈ (ValuativeRel.valuation Ub).integer := by
     have hzO : IsIntegral 𝒪[K] z := Algebra.IsIntegral.isIntegral z
@@ -2649,13 +2649,13 @@ private theorem unramifiedLevelFrobeniusData_exists [IsSepClosure K Ksep]
     intro x y hxy
     apply Subtype.ext
     exact inc.injective (congr_arg Subtype.val hxy)
-  letI : Algebra 𝒪[Ua] 𝒪[Ub] := incO.toRingHom.toAlgebra
-  letI : IsScalarTower 𝒪[K] 𝒪[Ua] 𝒪[Ub] :=
+  let : Algebra 𝒪[Ua] 𝒪[Ub] := incO.toRingHom.toAlgebra
+  let : IsScalarTower 𝒪[K] 𝒪[Ua] 𝒪[Ub] :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
   have hincO_integral : incO.toRingHom.IsIntegral := by
     intro z
     exact (Algebra.IsIntegral.isIntegral (R := 𝒪[K]) z).tower_top
-  letI : IsLocalHom incO.toRingHom :=
+  let : IsLocalHom incO.toRingHom :=
     hincO_integral.isLocalHom hincO_injective
   let φa := (D a).frobenius
   let φb := (D b).frobenius
@@ -2761,38 +2761,38 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
       (unramifiedLevelField_isGalois K Ksep S)
       (unramifiedLevelField_isUnramified K Ksep S)) := by
   let U := unramifiedLevelField K Ksep S
-  letI : FiniteDimensional K U := unramifiedLevelFieldFiniteDimensional K Ksep S
+  let : FiniteDimensional K U := unramifiedLevelFieldFiniteDimensional K Ksep S
   let hU : IsUnramifiedIntermediateField K Ksep U :=
     unramifiedLevelField_isUnramified K Ksep S
-  letI : IsGalois K U := unramifiedLevelField_isGalois K Ksep S
-  letI : IsGalois K E := hE
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
+  let : IsGalois K U := unramifiedLevelField_isGalois K Ksep S
+  let : IsGalois K E := hE
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   have hd : 0 < d := by
     rw [← S.lift.natDegree, ← S.lift.monic.natDegree_map
       (IsLocalRing.residue 𝒪[K])]
     exact S.lift.reduction_irreducible.natDegree_pos
-  letI : IsSepClosure E Ksep :=
+  let : IsSepClosure E Ksep :=
     { sep_closed := IsSepClosure.sep_closed K
       separable := ⟨fun x =>
         IsSeparable.tower_top E (Algebra.IsSeparable.isSeparable K x)⟩ }
   let SE : UnramifiedLevelSeed E Ksep d :=
     (unramifiedLevelSeed_exists E Ksep d hd).some
   let W := unramifiedLevelField E Ksep SE
-  letI : FiniteDimensional E W := unramifiedLevelFieldFiniteDimensional E Ksep SE
+  let : FiniteDimensional E W := unramifiedLevelFieldFiniteDimensional E Ksep SE
   let hW : IsUnramifiedIntermediateField E Ksep W :=
     unramifiedLevelField_isUnramified E Ksep SE
-  letI : ValuativeRel W := unramifiedIntermediateFieldValuativeRel E Ksep W hW
-  letI : TopologicalSpace W := unramifiedIntermediateFieldTopology E Ksep W hW
-  letI : IsNonarchimedeanLocalField W :=
+  let : ValuativeRel W := unramifiedIntermediateFieldValuativeRel E Ksep W hW
+  let : TopologicalSpace W := unramifiedIntermediateFieldTopology E Ksep W hW
+  let : IsNonarchimedeanLocalField W :=
     unramifiedIntermediateFieldLocalField E Ksep W hW
-  letI : ValuativeExtension E W :=
+  let : ValuativeExtension E W :=
     unramifiedIntermediateFieldValuativeExtension E Ksep W hW
-  letI : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation W) :=
+  let : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation W) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Algebra K W :=
+  let : Algebra K W :=
     ((algebraMap E W).comp (algebraMap K E)).toAlgebra
-  letI : IsScalarTower K E W := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsScalarTower K E W := IsScalarTower.of_algebraMap_eq fun _ => rfl
   let hKW : ValuativeExtension K W := by
     constructor
     intro x y
@@ -2800,22 +2800,22 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
     rw [show algebraMap K W x = algebraMap E W (algebraMap K E x) from rfl,
       show algebraMap K W y = algebraMap E W (algebraMap K E y) from rfl,
       ValuativeExtension.vle_iff_vle, ValuativeExtension.vle_iff_vle]
-  letI : ValuativeExtension K W := hKW
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation W) :=
+  let : ValuativeExtension K W := hKW
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation W) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let k := LocalResidueField K
   let kE := LocalResidueField E
   let kW := LocalResidueField W
-  letI : Algebra k kE :=
+  let : Algebra k kE :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal 𝒪[E])
       (IsLocalRing.maximalIdeal 𝒪[K])
-  letI : Algebra kE kW :=
+  let : Algebra kE kW :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal 𝒪[W])
       (IsLocalRing.maximalIdeal 𝒪[E])
-  letI : Algebra k kW :=
+  let : Algebra k kW :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal 𝒪[W])
       (IsLocalRing.maximalIdeal 𝒪[K])
-  letI : IsScalarTower k kE kW := by
+  let : IsScalarTower k kE kW := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     obtain ⟨r, rfl⟩ := IsLocalRing.residue_surjective x
@@ -2860,8 +2860,8 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
         rw [Polynomial.derivative_map],
       Polynomial.eval₂_map] at hderiv₀'
     exact hderiv₀'
-  letI : UniformSpace W := IsTopologicalAddGroup.rightUniformSpace W
-  letI : IsUniformAddGroup W := isUniformAddGroup_of_addCommGroup
+  let : UniformSpace W := IsTopologicalAddGroup.rightUniformSpace W
+  let : IsUniformAddGroup W := isUniformAddGroup_of_addCommGroup
   obtain ⟨zO, hzO, _⟩ :=
     hensel_lift_residue_root 𝒪[W] fW hfW a₀ hrootW hderivW
   let fK := S.lift.poly.map (algebraMap 𝒪[K] K)
@@ -2913,7 +2913,7 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
     rw [Set.mem_singleton_iff] at hx
     subst x
     exact hzWK
-  haveI : FiniteDimensional K Z :=
+  have : FiniteDimensional K Z :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral z)
   have hZrank : Module.finrank K Z = d := by
     rw [IntermediateField.adjoin.finrank (Algebra.IsIntegral.isIntegral z), ← hminz]
@@ -2926,16 +2926,16 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
     exact W.algebraMap_mem ⟨x, hx⟩
   let C := E ⊔ U
   have hCleWK : C ≤ WK := sup_le hEleWK hUleWK
-  letI : FiniteDimensional K C := IntermediateField.finiteDimensional_sup E U
-  letI : Algebra E C := intermediateFieldInclusionAlgebra K Ksep le_sup_left
-  letI : IsScalarTower K E C := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : FiniteDimensional E C := FiniteDimensional.right K E C
+  let : FiniteDimensional K C := IntermediateField.finiteDimensional_sup E U
+  let : Algebra E C := intermediateFieldInclusionAlgebra K Ksep le_sup_left
+  let : IsScalarTower K E C := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : FiniteDimensional E C := FiniteDimensional.right K E C
   obtain ⟨vC, tC, hC, hEC, hsmulE⟩ := finiteExtension_localFieldData_exists E C
-  letI : ValuativeRel C := vC
-  letI : TopologicalSpace C := tC
-  letI : IsNonarchimedeanLocalField C := hC
-  letI : ValuativeExtension E C := hEC
-  letI : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation C) :=
+  let : ValuativeRel C := vC
+  let : TopologicalSpace C := tC
+  let : IsNonarchimedeanLocalField C := hC
+  let : ValuativeExtension E C := hEC
+  let : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation C) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let hKC : ValuativeExtension K C := by
     constructor
@@ -2944,8 +2944,8 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
     rw [show algebraMap K C x = algebraMap E C (algebraMap K E x) from rfl,
       show algebraMap K C y = algebraMap E C (algebraMap K E y) from rfl,
       ValuativeExtension.vle_iff_vle, ValuativeExtension.vle_iff_vle]
-  letI : ValuativeExtension K C := hKC
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation C) :=
+  let : ValuativeExtension K C := hKC
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation C) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let CE : IntermediateField E Ksep :=
     IntermediateField.extendScalars (by exact le_sup_left : E ≤ C)
@@ -2953,11 +2953,11 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
     intro x hx
     exact hCleWK hx
   let j : C →ₐ[E] W := IntermediateField.inclusion hCEleW
-  letI : Algebra C W := j.toRingHom.toAlgebra
-  letI : IsScalarTower E C W := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : FiniteDimensional C W := FiniteDimensional.right E C W
-  letI : Module.Finite 𝒪[E] 𝒪[C] := ringOfIntegers_module_finite E C
-  letI : Module.Finite 𝒪[E] 𝒪[W] := ringOfIntegers_module_finite E W
+  let : Algebra C W := j.toRingHom.toAlgebra
+  let : IsScalarTower E C W := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : FiniteDimensional C W := FiniteDimensional.right E C W
+  let : Module.Finite 𝒪[E] 𝒪[C] := ringOfIntegers_module_finite E C
+  let : Module.Finite 𝒪[E] 𝒪[W] := ringOfIntegers_module_finite E W
   have hmemC (x : C) :
       x ∈ (ValuativeRel.valuation C).integer ↔ IsIntegral 𝒪[E] x := by
     constructor
@@ -2985,7 +2985,7 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
       x ∈ (ValuativeRel.valuation C).integer
     rw [hmemW, hmemC]
     exact isIntegral_algHom_iff (j.restrictScalars 𝒪[E]) j.injective
-  letI : (ValuativeRel.valuation C).HasExtension (ValuativeRel.valuation W) :=
+  let : (ValuativeRel.valuation C).HasExtension (ValuativeRel.valuation W) :=
     Valuation.HasExtension.ofComapInteger hinteger
   let hCW : ValuativeExtension C W := by
     constructor
@@ -2994,7 +2994,7 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
       Valuation.HasExtension.val_map_le_iff (ValuativeRel.valuation C)
         (ValuativeRel.valuation W),
       ← Valuation.Compatible.vle_iff_le (v := ValuativeRel.valuation C)]
-  letI : ValuativeExtension C W := hCW
+  let : ValuativeExtension C W := hCW
   let πE := (defaultUniformizer E).val
   have hEW := normalizedValuation_algebraMap E W πE
   rw [(unramifiedIntermediateFieldIsUnramified E Ksep W hW).ramificationIndex_eq_one,
@@ -3027,20 +3027,20 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
     rw [hn]
     exact dvd_mul_left (ramificationIndex E C) (ramificationIndex C W)
   let hCEunr : IsUnramifiedLocalExtension E C := ⟨hram⟩
-  letI : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U hU
-  letI : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U hU
-  letI : IsNonarchimedeanLocalField U :=
+  let : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U hU
+  let : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U hU
+  let : IsNonarchimedeanLocalField U :=
     unramifiedIntermediateFieldLocalField K Ksep U hU
-  letI : ValuativeExtension K U :=
+  let : ValuativeExtension K U :=
     unramifiedIntermediateFieldValuativeExtension K Ksep U hU
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let q : U →ₐ[K] C := IntermediateField.inclusion le_sup_right
-  letI : Algebra U C := q.toRingHom.toAlgebra
-  letI : IsScalarTower K U C := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : FiniteDimensional U C := FiniteDimensional.right K U C
-  letI : Module.Finite 𝒪[K] 𝒪[U] := ringOfIntegers_module_finite K U
-  letI : Module.Finite 𝒪[K] 𝒪[C] := ringOfIntegers_module_finite K C
+  let : Algebra U C := q.toRingHom.toAlgebra
+  let : IsScalarTower K U C := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : FiniteDimensional U C := FiniteDimensional.right K U C
+  let : Module.Finite 𝒪[K] 𝒪[U] := ringOfIntegers_module_finite K U
+  let : Module.Finite 𝒪[K] 𝒪[C] := ringOfIntegers_module_finite K C
   have hmemU (x : U) :
       x ∈ (ValuativeRel.valuation U).integer ↔ IsIntegral 𝒪[K] x := by
     constructor
@@ -3068,7 +3068,7 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
       x ∈ (ValuativeRel.valuation U).integer
     rw [hmemCK, hmemU]
     exact isIntegral_algHom_iff (q.restrictScalars 𝒪[K]) q.injective
-  letI : (ValuativeRel.valuation U).HasExtension (ValuativeRel.valuation C) :=
+  let : (ValuativeRel.valuation U).HasExtension (ValuativeRel.valuation C) :=
     Valuation.HasExtension.ofComapInteger hintegerUC
   let hUC : ValuativeExtension U C := by
     constructor
@@ -3077,7 +3077,7 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
       Valuation.HasExtension.val_map_le_iff (ValuativeRel.valuation U)
         (ValuativeRel.valuation C),
       ← Valuation.Compatible.vle_iff_le (v := ValuativeRel.valuation U)]
-  letI : ValuativeExtension U C := hUC
+  let : ValuativeExtension U C := hUC
   let hsmulK : ContinuousSMul K C := by
     constructor
     have hcont : Continuous (fun p : K × C => algebraMap K C p.1 * p.2) :=
@@ -3091,7 +3091,7 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
         continuous_snd
     simpa only [Algebra.smul_def] using hcont
   let hGC : IsGalois K C := by infer_instance
-  letI : IsGalois K C := hGC
+  let : IsGalois K C := hGC
   let hGEC : IsGalois E C := IsGalois.tower_top_of_isGalois K E C
   refine ⟨
     { compositumValuativeRel := vC
@@ -3099,8 +3099,8 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
       compositumLocalField := hC
       finiteDimensional_left := inferInstance
       finiteDimensional_right := by
-        letI : Algebra U C := intermediateFieldInclusionAlgebra K Ksep le_sup_right
-        letI : IsScalarTower K U C := IsScalarTower.of_algebraMap_eq fun _ => rfl
+        let : Algebra U C := intermediateFieldInclusionAlgebra K Ksep le_sup_right
+        let : IsScalarTower K U C := IsScalarTower.of_algebraMap_eq fun _ => rfl
         exact FiniteDimensional.right K U C
       scalarTower_left := inferInstance
       scalarTower_right := by
@@ -3124,11 +3124,11 @@ private theorem unramifiedLevelFields_intersection_finrank [IsSepClosure K Ksep]
   let U := unramifiedLevelField K Ksep (S a)
   let V := unramifiedLevelField K Ksep (S b)
   let I := U ⊓ V
-  letI : FiniteDimensional K U :=
+  let : FiniteDimensional K U :=
     unramifiedLevelFieldFiniteDimensional K Ksep (S a)
-  letI : FiniteDimensional K V :=
+  let : FiniteDimensional K V :=
     unramifiedLevelFieldFiniteDimensional K Ksep (S b)
-  letI : FiniteDimensional K I :=
+  let : FiniteDimensional K I :=
     FiniteDimensional.of_injective
       (IntermediateField.inclusion (by exact inf_le_left : I ≤ U)).toLinearMap
       (IntermediateField.inclusion_injective (by exact inf_le_left : I ≤ U))
@@ -3215,11 +3215,11 @@ private theorem unramifiedLevelSeed_liftedRoot_of_residueFinrank
     ∃ a : RingOfIntegers L,
       (S.lift.poly.map
         (algebraMap (RingOfIntegers K) (RingOfIntegers L))).IsRoot a := by
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let k := LocalResidueField K
   let kL := LocalResidueField L
-  letI : Algebra k kL :=
+  let : Algebra k kL :=
     Ideal.Quotient.algebraOfLiesOver
       (IsLocalRing.maximalIdeal (RingOfIntegers L))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
@@ -3263,8 +3263,8 @@ private theorem unramifiedLevelSeed_liftedRoot_of_residueFinrank
         rw [Polynomial.derivative_map],
       Polynomial.eval₂_map] at hderiv₀'
     exact hderiv₀'
-  letI : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
-  letI : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
+  let : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
+  let : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
   obtain ⟨a, ha, _⟩ :=
     hensel_lift_residue_root (RingOfIntegers L) fL hfL a₀ hrootL hderivL
   exact ⟨a, ha⟩
@@ -3285,9 +3285,9 @@ private theorem unramifiedLevelSeed_le_fieldRange_of_residueFinrank
       d ∣ Module.finrank (LocalResidueField K) (LocalResidueField L)) :
     IntermediateField.adjoin K {S.root} ≤ j.fieldRange := by
   let U := IntermediateField.adjoin K {S.root}
-  letI : FiniteDimensional K U :=
+  let : FiniteDimensional K U :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   obtain ⟨a, ha⟩ :=
     unramifiedLevelSeed_liftedRoot_of_residueFinrank K Ksep S L hdiv
@@ -3321,7 +3321,7 @@ private theorem unramifiedLevelSeed_le_fieldRange_of_residueFinrank
     exact hzroot
   have hminz : fK = minpoly K z :=
     minpoly.eq_of_irreducible_of_monic hfK hzaeval (S.lift.monic.map _)
-  letI : IsGalois K U := unramifiedLevelSeed_isGalois K Ksep S
+  let : IsGalois K U := unramifiedLevelSeed_isGalois K Ksep S
   have hsplitf : (fK.map (algebraMap K U)).Splits := by
     have hs := IsGalois.splits K (IntermediateField.AdjoinSimple.gen K S.root)
     rw [IntermediateField.minpoly_gen, S.minpoly_eq] at hs
@@ -3344,7 +3344,7 @@ private theorem unramifiedLevelSeed_le_fieldRange_of_residueFinrank
     rw [Set.mem_singleton_iff] at hx
     subst x
     exact hzRange
-  haveI : FiniteDimensional K Z :=
+  have : FiniteDimensional K Z :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral z)
   have hZrank : Module.finrank K Z = d := by
     rw [IntermediateField.adjoin.finrank (Algebra.IsIntegral.isIntegral z), ← hminz]
@@ -3370,11 +3370,11 @@ private theorem unramifiedLevelSeed_residueFinrank_dvd_of_le_fieldRange
         (IsLocalRing.maximalIdeal (RingOfIntegers L))
         (IsLocalRing.maximalIdeal (RingOfIntegers K))
     d ∣ Module.finrank (LocalResidueField K) (LocalResidueField L) := by
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let k := LocalResidueField K
   let kL := LocalResidueField L
-  letI : Algebra k kL :=
+  let : Algebra k kL :=
     Ideal.Quotient.algebraOfLiesOver
       (IsLocalRing.maximalIdeal (RingOfIntegers L))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
@@ -3433,7 +3433,7 @@ private theorem unramifiedLevelSeed_residueFinrank_dvd_of_le_fieldRange
     (minpoly.eq_of_irreducible_of_monic S.lift.reduction_irreducible
       hrootbar (S.lift.monic.map _)).symm
   let A := IntermediateField.adjoin k {a₀}
-  haveI : FiniteDimensional k A :=
+  have : FiniteDimensional k A :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral a₀)
   have hdegree : Module.finrank k A = d := by
     rw [IntermediateField.adjoin.finrank (Algebra.IsIntegral.isIntegral a₀),
@@ -3463,7 +3463,7 @@ theorem UnramifiedTower.field_le_fieldRange_of_dvd_residueFinrank
   let S : UnramifiedLevelSeed K Ksep (n + 1) :=
     (unramifiedLevelSeed_exists K Ksep (n + 1) (Nat.succ_pos n)).some
   let U := IntermediateField.adjoin K {S.root}
-  letI : FiniteDimensional K U :=
+  let : FiniteDimensional K U :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)
   have hUle : U ≤ j.fieldRange :=
     unramifiedLevelSeed_le_fieldRange_of_residueFinrank K Ksep S L j hdiv
@@ -3471,7 +3471,7 @@ theorem UnramifiedTower.field_le_fieldRange_of_dvd_residueFinrank
   have hUeq : U = T₀.field n :=
     hT₀ n U (unramifiedLevelSeed_isUnramified K Ksep S)
       (unramifiedLevelSeed_finrank K Ksep S)
-  letI : FiniteDimensional K (T.field n) := T.finiteDimensional n
+  let : FiniteDimensional K (T.field n) := T.finiteDimensional n
   have hTeq : T.field n = T₀.field n :=
     hT₀ n (T.field n) (T.unramified n) (T.finrank n)
   rw [hTeq, ← hUeq]
@@ -3495,13 +3495,13 @@ theorem UnramifiedTower.degree_dvd_residueFinrank_of_field_le_fieldRange
   let S : UnramifiedLevelSeed K Ksep (n + 1) :=
     (unramifiedLevelSeed_exists K Ksep (n + 1) (Nat.succ_pos n)).some
   let U := IntermediateField.adjoin K {S.root}
-  letI : FiniteDimensional K U :=
+  let : FiniteDimensional K U :=
     IntermediateField.adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral S.root)
   obtain ⟨T₀, hT₀⟩ := unramifiedTower_lifting_classification K Ksep
   have hUeq : U = T₀.field n :=
     hT₀ n U (unramifiedLevelSeed_isUnramified K Ksep S)
       (unramifiedLevelSeed_finrank K Ksep S)
-  letI : FiniteDimensional K (T.field n) := T.finiteDimensional n
+  let : FiniteDimensional K (T.field n) := T.finiteDimensional n
   have hTeq : T.field n = T₀.field n :=
     hT₀ n (T.field n) (T.unramified n) (T.finrank n)
   apply unramifiedLevelSeed_residueFinrank_dvd_of_le_fieldRange K Ksep S L j
@@ -3520,7 +3520,7 @@ theorem unramifiedTower_existsUnique [IsSepClosure K Ksep] :
       ∀ T' : UnramifiedTower K Ksep, ∀ n, T'.field n = T.field n := by
   obtain ⟨T, hT⟩ := unramifiedTower_lifting_classification K Ksep
   refine ⟨T, fun T' n => ?_⟩
-  letI : FiniteDimensional K (T'.field n) := T'.finiteDimensional n
+  let : FiniteDimensional K (T'.field n) := T'.finiteDimensional n
   exact hT n (T'.field n) (T'.unramified n) (T'.finrank n)
 
 /-- The chosen unramified tower in the fixed separable closure. -/

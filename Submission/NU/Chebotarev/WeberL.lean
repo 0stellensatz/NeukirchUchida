@@ -201,7 +201,7 @@ private theorem weberPrivatePartialZeta_eq_LSeries (m : RayModulus K)
   let A := {a : Ideal O // a ≠ 0 ∧ IsCoprime a m.finite ∧
     RayClassGroup.IsClassOfIdeal m a c}
   let B : ℕ → Type _ := fun n => {a : A // Ideal.absNorm a.1 = n}
-  letI (n : ℕ) : Fintype (B n) :=
+  let (n : ℕ) : Fintype (B n) :=
     Set.Finite.fintype (Set.Finite.preimage
       (s := {a : Ideal O | Ideal.absNorm a = n})
       (f := fun a : A => a.1) Subtype.val_injective.injOn
@@ -310,7 +310,7 @@ private theorem weberPrivatePartialZeta_summable (m : RayModulus K)
   let A := {a : Ideal O // a ≠ 0 ∧ IsCoprime a m.finite ∧
     RayClassGroup.IsClassOfIdeal m a c}
   let B : ℕ → Type _ := fun n => {a : A // Ideal.absNorm a.1 = n}
-  letI (n : ℕ) : Fintype (B n) :=
+  let (n : ℕ) : Fintype (B n) :=
     Set.Finite.fintype (Set.Finite.preimage
       (s := {a : Ideal O | Ideal.absNorm a = n})
       (f := fun a : A => a.1) Subtype.val_injective.injOn
@@ -545,7 +545,7 @@ private theorem weberPrivatePartialContinuation_eq (m : RayModulus K)
 private theorem weberPrivateMulChar_sum_eq_zero {G : Type*} [CommGroup G] [Finite G]
     (ψ : MulChar G ℂ) (hψ : ψ ≠ 1) : ∑' c : G, ψ c = 0 := by
   classical
-  letI := Fintype.ofFinite G
+  let := Fintype.ofFinite G
   rw [tsum_fintype]
   have hex : ∃ d : G, ψ d ≠ 1 := by
     by_contra h
@@ -621,7 +621,7 @@ private theorem weberPrivate_trivialCharacterValue (m : RayModulus K)
     (a : Ideal O) (ha : a ≠ 0) (hcop : IsCoprime a m.finite) :
     rayClassCharacterValue m 1 a = 1 := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   let c : RayClassGroup m :=
     RayClassGroup.mk m (weberPrivateRayIdealOfCoprime m a ha hcop)
   have hac : RayClassGroup.IsClassOfIdeal m a c :=
@@ -713,7 +713,7 @@ private theorem weberPrivateFiniteFactor_hasSum {ι : Type*} [DecidableEq ι]
   induction t using Finset.induction with
   | empty =>
       let z : weberPrivateFactoredFinsupp (∅ : Finset ι) := ⟨0, by simp⟩
-      letI : Unique (weberPrivateFactoredFinsupp (∅ : Finset ι)) :=
+      let : Unique (weberPrivateFactoredFinsupp (∅ : Finset ι)) :=
         { default := z
           uniq := fun e => by
             apply Subtype.ext
@@ -1020,7 +1020,7 @@ private theorem weberPrivate_characterValue_eq (m : RayModulus K)
     rayClassCharacterValue m ψ a =
       ψ (RayClassGroup.mk m (weberPrivateRayIdealOfCoprime m a ha hcop)) := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   let c : RayClassGroup m :=
     RayClassGroup.mk m (weberPrivateRayIdealOfCoprime m a ha hcop)
   have hac : RayClassGroup.IsClassOfIdeal m a c :=
@@ -1172,7 +1172,7 @@ private theorem weberPrivateIdealTerm_eq_classSum (m : RayModulus K)
     weberPrivateIdealTerm m ψ s a =
       ∑' c : RayClassGroup m, ψ c * weberPrivatePartialTerm m c s a := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   rw [tsum_fintype]
   by_cases ha : a ≠ 0 ∧ IsCoprime a m.finite
   · let c : RayClassGroup m :=
@@ -1204,7 +1204,7 @@ private theorem weberPrivateIdealTerm_summable (m : RayModulus K)
     (ψ : RayClassCharacter m) (s : ℂ) (hs : 1 < s.re) :
     Summable (weberPrivateIdealTerm m ψ s) := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   obtain ⟨ρ, hρ, hO⟩ := RayClassGroup.idealCount_sub_linear_isBigO m
   have hsumm (c : RayClassGroup m) :
       Summable (fun a => ψ c * weberPrivatePartialTerm m c s a) :=
@@ -1226,7 +1226,7 @@ private theorem weberPrivateIdealTerm_tsum (m : RayModulus K)
     (ψ : RayClassCharacter m) (s : ℂ) (hs : 1 < s.re) :
     ∑' a : Ideal O, weberPrivateIdealTerm m ψ s a = weberLSeries m ψ s := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   obtain ⟨ρ, hρ, hO⟩ := RayClassGroup.idealCount_sub_linear_isBigO m
   have hsumm (c : RayClassGroup m) :
       Summable (fun a => ψ c * weberPrivatePartialTerm m c s a) :=
@@ -1324,7 +1324,7 @@ theorem weberLSeries_analytic_of_ne_one (m : RayModulus K)
         1 - 1 / (Module.finrank ℚ K : ℝ) < s.re} ∧
       ∀ s : ℂ, 1 < s.re → F s = weberLSeries m ψ s := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   obtain ⟨ρ, hρ, hO⟩ := RayClassGroup.idealCount_sub_linear_isBigO m
   have hOn (c : RayClassGroup m) :=
     weberPrivateError_bigO m c ρ (hO c)
@@ -1361,7 +1361,7 @@ factors removed. -/
 theorem weberLSeries_trivial (m : RayModulus K) (s : ℂ) (hs : 1 < s.re) :
     weberLSeries m 1 s = incompleteDedekindZeta m s := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   obtain ⟨ρ, hρ, hO⟩ := RayClassGroup.idealCount_sub_linear_isBigO m
   have hsumm (c : RayClassGroup m) :
       Summable (weberPrivatePartialTerm m c s) :=
@@ -1421,7 +1421,7 @@ private theorem weberPrivateDedekindZeta_eq_idealTsum (s : ℂ)
   have hsum : Summable f :=
     (weberPrivateIdealTerm_summable m 1 s hs).congr hterm
   let B : ℕ → Type _ := fun n => {a : Ideal O // Ideal.absNorm a = n}
-  letI (n : ℕ) : Fintype (B n) :=
+  let (n : ℕ) : Fintype (B n) :=
     Set.Finite.fintype (Ideal.finite_setOf_absNorm_eq n)
   let e := Equiv.sigmaFiberEquiv (fun a : Ideal O => Ideal.absNorm a)
   have hsigma : Summable (fun z : Σ n, B n => f z.2.1) := by

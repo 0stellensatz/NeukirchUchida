@@ -64,7 +64,7 @@ private theorem finiteLevelGenerators_nonempty
     (L : GaloisLevel K) (H : Subgroup (Field.absoluteGaloisGroup K))
     (hcyclic : IsCyclic (finiteLevelImage L H)) :
     (finiteLevelGenerators L H).Nonempty := by
-  letI : IsCyclic (finiteLevelImage L H) := hcyclic
+  let : IsCyclic (finiteLevelImage L H) := hcyclic
   obtain ⟨y, hy⟩ := IsCyclic.exists_generator
     (α := finiteLevelImage L H)
   obtain ⟨h, rfl⟩ := finiteLevelImageMap_surjective L H y
@@ -138,10 +138,10 @@ theorem cyclic_finite_images_imply_procyclic
     obtain ⟨k, hik, hjk⟩ := hΛ.2.1 i j
     exact ⟨k, finiteLevelGenerators_antitone H hik,
       finiteLevelGenerators_antitone H hjk⟩
-  letI : Nonempty ι := hΛ.1
-  letI : CompactSpace (Field.absoluteGaloisGroup K) :=
+  let : Nonempty ι := hΛ.1
+  let : CompactSpace (Field.absoluteGaloisGroup K) :=
     absoluteGaloisGroup_compactSpace
-  letI : CompactSpace H :=
+  let : CompactSpace H :=
     hclosed.isClosedEmbedding_subtypeVal.compactSpace
   obtain ⟨h, hh⟩ :=
     IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
@@ -158,10 +158,10 @@ theorem cyclic_finite_images_imply_procyclic
       (z : Field.absoluteGaloisGroup K)) (a := (1 : H)) U).mp hU
   obtain ⟨E, hEfin, hEnormal, hEV⟩ :=
     (krullTopology_mem_nhds_one_iff_of_normal K (AlgebraicClosure K) V).mp hV
-  letI : FiniteDimensional K E := hEfin
-  letI : Normal K E := hEnormal
-  letI : NumberField E := NumberField.of_module_finite K E
-  letI : IsGalois K E := ⟨⟩
+  let : FiniteDimensional K E := hEfin
+  let : Normal K E := hEnormal
+  let : NumberField E := NumberField.of_module_finite K E
+  let : IsGalois K E := ⟨⟩
   let LE : GaloisLevel K :=
     { field := E
       finiteDimensional := hEfin
@@ -220,13 +220,13 @@ theorem noncyclic_decompositionGroup_ramified
   let R := 𝓞 K
   let S := 𝓞 L
   let p : Ideal R := w.asIdeal.under R
-  letI : p.IsPrime := inferInstance
-  letI : p.IsMaximal := inferInstance
-  letI : Field (R ⧸ p) := Ideal.Quotient.field p
-  letI : Field (S ⧸ w.asIdeal) := Ideal.Quotient.field w.asIdeal
-  letI : Fintype (R ⧸ p) := Fintype.ofFinite (R ⧸ p)
-  letI : Fintype (S ⧸ w.asIdeal) := Fintype.ofFinite (S ⧸ w.asIdeal)
-  letI : w.asIdeal.LiesOver p := ⟨rfl⟩
+  let : p.IsPrime := inferInstance
+  let : p.IsMaximal := inferInstance
+  let : Field (R ⧸ p) := Ideal.Quotient.field p
+  let : Field (S ⧸ w.asIdeal) := Ideal.Quotient.field w.asIdeal
+  let : Fintype (R ⧸ p) := Fintype.ofFinite (R ⧸ p)
+  let : Fintype (S ⧸ w.asIdeal) := Fintype.ofFinite (S ⧸ w.asIdeal)
+  let : w.asIdeal.LiesOver p := ⟨rfl⟩
   let ρ := Ideal.Quotient.stabilizerHom w.asIdeal p G
   have hIcard : Nat.card (w.asIdeal.inertia G) = 1 := by
     rw [Ideal.card_inertia_eq_ramificationIdxIn p w.asIdeal,
@@ -248,7 +248,7 @@ theorem noncyclic_decompositionGroup_ramified
     exact Subgroup.card_eq_one.mp hIcard'
   have hρinj : Function.Injective ρ :=
     (MonoidHom.ker_eq_bot_iff ρ).mp hker
-  letI := finitePlaceAction K L
+  let := finitePlaceAction K L
   let f0 : decompositionGroup K w →
       MulAction.stabilizer G w.asIdeal := fun σ => by
     refine ⟨σ.1, ?_⟩
@@ -311,8 +311,8 @@ theorem restrictLevelPlace_mem_finiteWitnesses
     {L M : GaloisLevel K} (hLM : L.LE M)
     {w : FinitePlace M.field} (hw : w ∈ finiteWitnesses H M) :
     restrictLevelPlace hLM w ∈ finiteWitnesses H L := by
-  letI : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
-  letI : IsScalarTower K L.field M.field :=
+  let : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
+  let : IsScalarTower K L.field M.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   change decompositionGroup K (restrictLevelPlace hLM w) = finiteLevelImage L H
   rw [restrictLevelPlace]
@@ -367,9 +367,9 @@ private theorem finitePlaces_over_finitePlace
     apply Subtype.ext
     apply HeightOneSpectrum.ext
     exact congrArg Subtype.val hwz
-  letI : Fintype (v.asIdeal.primesOver (𝓞 L)) :=
+  let : Fintype (v.asIdeal.primesOver (𝓞 L)) :=
     (IsDedekindDomain.primesOver_finite v.asIdeal (𝓞 L)).fintype
-  letI : Finite {w : FinitePlace L |
+  let : Finite {w : FinitePlace L |
       restrictFinitePlace K w = v} := Finite.of_injective f hf
   exact Set.finite_coe_iff.mp inferInstance
 
@@ -379,8 +379,8 @@ private theorem restrictFinitePlace_restrictLevelPlace
     (w : FinitePlace M.field) :
     restrictFinitePlace K (restrictLevelPlace hLM w) =
       restrictFinitePlace K w := by
-  letI : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
-  letI : IsScalarTower K L.field M.field :=
+  let : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
+  let : IsScalarTower K L.field M.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   apply HeightOneSpectrum.ext
   rw [restrictLevelPlace, restrictFinitePlace_asIdeal,
@@ -461,8 +461,8 @@ theorem finite_inverse_system_compactness
         intro i j k f g
         ext x
         exact (r_comp (leOfHom g.unop) (leOfHom f.unop) x).symm }
-  letI (i : ιᵒᵖ) : Finite (F.obj i) := inferInstance
-  letI (i : ιᵒᵖ) : Nonempty (F.obj i) := inferInstance
+  let (i : ιᵒᵖ) : Finite (F.obj i) := inferInstance
+  let (i : ιᵒᵖ) : Nonempty (F.obj i) := inferInstance
   obtain ⟨u, hu⟩ := nonempty_sections_of_finite_inverse_system F
   let x : ∀ i, S i := fun i => u (Opposite.op i)
   refine ⟨x, ?_⟩

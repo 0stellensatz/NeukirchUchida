@@ -70,13 +70,13 @@ private theorem kummerRoot_pow'
       algebraMap M (AlgebraicClosure M) (a : M) := by
   let A := AlgebraicClosure M
   let S := separableClosure M A
-  letI : Normal M A := inferInstance
-  letI : IsGalois M S := separableClosure.isGalois M A
+  let : Normal M A := inferInstance
+  let : IsGalois M S := separableClosure.isGalois M A
   have hcast : (ℓ : S) ≠ 0 := by
     rw [← map_natCast (algebraMap M S)]
     simpa only [map_zero] using
       (algebraMap M S).injective.ne (primitiveRoot_natCast_ne_zero' hζ)
-  letI : NeZero (ℓ : S) := ⟨hcast⟩
+  let : NeZero (ℓ : S) := ⟨hcast⟩
   unfold kummerRoot'
   dsimp only
   let r : S := (IsSepClosed.exists_pow_nat_eq
@@ -149,7 +149,7 @@ private theorem kummerActionIndex_spec'
   let ratio : A := (show A ≃ₐ[M] A from σ)
     (kummerRoot' ζ hζ a) / kummerRoot' ζ hζ a
   have hratio : ratio ^ ℓ = 1 := kummerActionRatio_pow' ζ hζ a σ
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   exact (hζA.eq_pow_of_pow_eq_one hratio).choose_spec.2
 
 private theorem kummerActionEquation'
@@ -257,7 +257,7 @@ private theorem rawKummerAddHom_continuous'
     Continuous (rawKummerAddHom' ζ hζ a) := by
   let A := AlgebraicClosure M
   let α : A := kummerRoot' ζ hζ a
-  letI : Algebra.IsIntegral M A := Algebra.IsAlgebraic.isIntegral
+  let : Algebra.IsIntegral M A := Algebra.IsAlgebraic.isIntegral
   apply continuous_of_continuousAt_zero (rawKummerAddHom' ζ hζ a)
   rw [continuousAt_def]
   intro s hs
@@ -332,7 +332,7 @@ private theorem rawKummerCharacter_eq_of_definingEquation'
     rw [← hαpow, hα, zero_pow (Fact.out : ℓ.Prime).ne_zero]
   have hζA : IsPrimitiveRoot ζA ℓ :=
     hζ.map_of_injective (algebraMap M A).injective
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   have hratio : (β / α) ^ ℓ = (1 : A) := by
     rw [div_pow, hβpow, hαpow, div_self hmapa]
   obtain ⟨j, _, hj⟩ := hζA.eq_pow_of_pow_eq_one hratio
@@ -376,7 +376,7 @@ private theorem primitiveRoot_pow_val_add'
     {A : Type*} [Field A] {ℓ : ℕ} [Fact ℓ.Prime]
     {ζ : A} (hζ : IsPrimitiveRoot ζ ℓ) (x y : ZMod ℓ) :
     ζ ^ (x + y).val = ζ ^ x.val * ζ ^ y.val := by
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   rw [ZMod.val_add]
   calc
     ζ ^ ((x.val + y.val) % ℓ) = ζ ^ (x.val + y.val) :=
@@ -469,13 +469,13 @@ private theorem kummerRoot_mem_separableClosure'
     kummerRoot' ζ hζ a ∈ separableClosure M (AlgebraicClosure M) := by
   let A := AlgebraicClosure M
   let S := separableClosure M A
-  letI : Normal M A := inferInstance
-  letI : IsGalois M S := separableClosure.isGalois M A
+  let : Normal M A := inferInstance
+  let : IsGalois M S := separableClosure.isGalois M A
   have hcast : (ℓ : S) ≠ 0 := by
     rw [← map_natCast (algebraMap M S)]
     simpa only [map_zero] using
       (algebraMap M S).injective.ne (primitiveRoot_natCast_ne_zero' hζ)
-  letI : NeZero (ℓ : S) := ⟨hcast⟩
+  let : NeZero (ℓ : S) := ⟨hcast⟩
   unfold kummerRoot'
   dsimp only
   exact (IsSepClosed.exists_pow_nat_eq
@@ -514,8 +514,8 @@ private theorem rawKummerLinear_injective'
       simpa only [rawKummerLinear_class'] using hx
     let A := AlgebraicClosure M
     let S := separableClosure M A
-    letI : Normal M A := inferInstance
-    letI : IsGalois M S := separableClosure.isGalois M A
+    let : Normal M A := inferInstance
+    let : IsGalois M S := separableClosure.isGalois M A
     let αS : S := ⟨kummerRoot' ζ hζ a,
       kummerRoot_mem_separableClosure' ζ hζ a⟩
     have hfixedA (σ : Field.absoluteGaloisGroup M) :
@@ -568,8 +568,8 @@ private theorem rawKummerLinear_surjective'
   intro χ
   classical
   let A := AlgebraicClosure M
-  letI : Normal M A := inferInstance
-  letI : Algebra.IsIntegral M A := Algebra.IsAlgebraic.isIntegral
+  let : Normal M A := inferInstance
+  let : Algebra.IsIntegral M A := Algebra.IsAlgebraic.isIntegral
   let kerSet : Set (Field.absoluteGaloisGroup M) :=
     {σ | continuousCharacterValue χ σ = 0}
   have hkerOpen : IsOpen kerSet := by
@@ -584,19 +584,19 @@ private theorem rawKummerLinear_surjective'
     hkerOpen.mem_nhds hkerOne
   obtain ⟨E, hEfin, hEnormal, hEker⟩ :=
     (krullTopology_mem_nhds_one_iff_of_normal M A kerSet).mp hkerNhd
-  letI : FiniteDimensional M E := hEfin
-  letI : Normal M E := hEnormal
+  let : FiniteDimensional M E := hEfin
+  let : Normal M E := hEnormal
   let Esep := separableClosure M E
-  letI : IsGalois M Esep := separableClosure.isGalois M E
+  let : IsGalois M Esep := separableClosure.isGalois M E
   let L : IntermediateField M A := IntermediateField.lift Esep
   let eL : Esep ≃ₐ[M] L := IntermediateField.liftAlgEquiv Esep
-  letI : FiniteDimensional M L := eL.toLinearEquiv.finiteDimensional
-  letI : Normal M L := Normal.of_algEquiv eL
-  letI : Algebra.IsSeparable M L := ⟨fun x => by
+  let : FiniteDimensional M L := eL.toLinearEquiv.finiteDimensional
+  let : Normal M L := Normal.of_algEquiv eL
+  let : Algebra.IsSeparable M L := ⟨fun x => by
     have hs := Algebra.IsSeparable.isSeparable M (eL.symm x)
     have hm := hs.map eL.toAlgHom eL.injective
     simpa using hm⟩
-  letI : IsGalois M L := ⟨⟩
+  let : IsGalois M L := ⟨⟩
   have hfixE_of_fixL (σ : Field.absoluteGaloisGroup M)
       (hσL : σ ∈ L.fixingSubgroup) : σ ∈ E.fixingSubgroup := by
     let σE : E ≃ₐ[M] E := AlgEquiv.restrictNormalHom E σ
@@ -854,7 +854,7 @@ theorem kummerCharacterValue_eq_of_action
     rw [← hαpow, hα, zero_pow (Fact.out : ℓ.Prime).ne_zero]
   have hζA : IsPrimitiveRoot ζA ℓ :=
     hζ.map_of_injective (algebraMap M A).injective
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   have hratio : (β / α) ^ ℓ = (1 : A) := by
     rw [div_pow, hβpow, hαpow, div_self hmapa]
   obtain ⟨j, _, hj⟩ := hζA.eq_pow_of_pow_eq_one hratio
@@ -924,7 +924,7 @@ private theorem kummerCharacter_eq_of_definingEquation
     rw [← hαpow, hα, zero_pow (Fact.out : ℓ.Prime).ne_zero]
   have hζA : IsPrimitiveRoot ζA ℓ :=
     hζ.map_of_injective (algebraMap M A).injective
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   have hratio : (β / α) ^ ℓ = (1 : A) := by
     rw [div_pow, hβpow, hαpow, div_self hmapa]
   obtain ⟨j, _, hj⟩ := hζA.eq_pow_of_pow_eq_one hratio
@@ -997,9 +997,9 @@ private theorem kummerDualLinear_bijective'
     {M : Type*} [Field M] {ℓ : ℕ} [Fact ℓ.Prime]
     (ζ : M) (hζ : IsPrimitiveRoot ζ ℓ) :
     Function.Bijective (kummerDualLinear' ζ hζ) := by
-  letI : CompactSpace (Field.absoluteGaloisGroup M) :=
+  let : CompactSpace (Field.absoluteGaloisGroup M) :=
     absoluteGaloisGroup_compactSpace
-  letI : TotallyDisconnectedSpace (Field.absoluteGaloisGroup M) :=
+  let : TotallyDisconnectedSpace (Field.absoluteGaloisGroup M) :=
     absoluteGaloisGroup_totallyDisconnectedSpace
   have heval :=
     evaluationLinear_bijective_of_compact_totallyDisconnected
@@ -1096,7 +1096,7 @@ private theorem absoluteGalois_apply_isLocallyConstant
   let U : Subgroup (AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) :=
     MulAction.stabilizer (AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) v
   have hU : IsOpen (U : Set (AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)) := by
-    letI : Algebra.IsIntegral M (AlgebraicClosure M) := Algebra.IsAlgebraic.isIntegral
+    let : Algebra.IsIntegral M (AlgebraicClosure M) := Algebra.IsAlgebraic.isIntegral
     exact stabilizer_isOpen_of_isIntegral v
   rw [IsLocallyConstant.iff_isOpen_fiber_apply]
   intro σ
@@ -1133,7 +1133,7 @@ private theorem cupPrimitiveRootIndex_spec
     {A : Type*} [Field A] {ℓ : ℕ} [Fact ℓ.Prime]
     (ζ : A) (hζ : IsPrimitiveRoot ζ ℓ) (x : A) (hx : x ^ ℓ = 1) :
     ζ ^ (cupPrimitiveRootIndex ζ hζ x).val = x := by
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   rw [cupPrimitiveRootIndex, dif_pos hx]
   exact (hζ.eq_pow_of_pow_eq_one hx).choose_spec.2
 
@@ -1231,7 +1231,7 @@ private theorem kummerCharacter_action_of_root
     rw [← hrpow, hr, zero_pow (Fact.out : ℓ.Prime).ne_zero]
   have hζA : IsPrimitiveRoot ζA ℓ :=
     hζ.map_of_injective (algebraMap M A).injective
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   have hratio : (β / r) ^ ℓ = (1 : A) := by
     rw [div_pow, hβpow, hrpow, div_self hmapa]
   obtain ⟨j, _, hj⟩ := hζA.eq_pow_of_pow_eq_one hratio
@@ -1318,14 +1318,14 @@ private theorem cyclic_norm_criterion_of_norm
   let ι : E →ₐ[M] AlgebraicClosure M := IsAlgClosed.lift
   let L : IntermediateField M (AlgebraicClosure M) := ι.fieldRange
   let e : E ≃ₐ[M] L := AlgHom.equivFieldRange (f := ι)
-  letI : FiniteDimensional M L := e.toLinearEquiv.finiteDimensional
-  letI : IsGalois M L := IsGalois.of_algEquiv e
+  let : FiniteDimensional M L := e.toLinearEquiv.finiteDimensional
+  let : IsGalois M L := IsGalois.of_algEquiv e
   have hfinrank : Module.finrank M L = ℓ := by
     rw [← e.toLinearEquiv.finrank_eq]
     exact hdegree
   have hcard : Nat.card (L ≃ₐ[M] L) = ℓ := by
     rw [IsGalois.card_aut_eq_finrank, hfinrank]
-  letI : IsCyclic (L ≃ₐ[M] L) := isCyclic_of_prime_card hcard
+  let : IsCyclic (L ≃ₐ[M] L) := isCyclic_of_prime_card hcard
   let r : L := e α
   have hrpowL : r ^ ℓ = algebraMap M L (a : M) := by
     dsimp [r]
@@ -1382,7 +1382,7 @@ private theorem cyclic_norm_criterion_of_norm
     rw [show zL = e (z : E) by rfl, Algebra.norm_eq_of_algEquiv e, hz]
   have hnormprod : (∏ t : L ≃ₐ[M] L, t zL) = algebraMap M L (b : M) := by
     rw [← Algebra.norm_eq_prod_automorphisms, hnormzL]
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   let autFromFin : Fin ℓ ≃ (L ≃ₐ[M] L) :=
     (ZMod.finEquiv ℓ).toEquiv.trans <|
       Multiplicative.ofAdd.trans (zmodMulEquivOfGenerator hsgen hcard).toEquiv
@@ -1539,7 +1539,7 @@ private theorem cyclic_norm_criterion_of_norm
     exact congrArg Multiplicative.toAdd (map_mul cyc.symm g h)
   let f : (L ≃ₐ[M] L) → Lˣ := fun t =>
     Units.mk0 (Q (coord t).val) (hQ0 (coord t).val)
-  letI : SMul (L ≃ₐ[M] L) Lˣ :=
+  let : SMul (L ≃ₐ[M] L) Lˣ :=
     AlgEquiv.instMulDistribMulActionUnits.toSMul
   have hf : groupCohomology.IsMulCocycle₁ f := by
     intro g h
@@ -1831,14 +1831,14 @@ private theorem cyclic_norm_criterion_to_norm
   let ι : E →ₐ[M] AlgebraicClosure M := IsAlgClosed.lift
   let L : IntermediateField M (AlgebraicClosure M) := ι.fieldRange
   let e : E ≃ₐ[M] L := AlgHom.equivFieldRange (f := ι)
-  letI : FiniteDimensional M L := e.toLinearEquiv.finiteDimensional
-  letI : IsGalois M L := IsGalois.of_algEquiv e
+  let : FiniteDimensional M L := e.toLinearEquiv.finiteDimensional
+  let : IsGalois M L := IsGalois.of_algEquiv e
   have hfinrank : Module.finrank M L = ℓ := by
     rw [← e.toLinearEquiv.finrank_eq]
     exact hdegree
   have hcard : Nat.card (L ≃ₐ[M] L) = ℓ := by
     rw [IsGalois.card_aut_eq_finrank, hfinrank]
-  letI : IsCyclic (L ≃ₐ[M] L) := isCyclic_of_prime_card hcard
+  let : IsCyclic (L ≃ₐ[M] L) := isCyclic_of_prime_card hcard
   let r : L := e α
   have hrpowL : r ^ ℓ = algebraMap M L (a : M) := by
     dsimp [r]
@@ -1946,7 +1946,7 @@ private theorem cyclic_norm_criterion_to_norm
       (map_ne_zero (algebraMap M (AlgebraicClosure M))).2 (Units.ne_zero b)
     apply hb0
     rw [← hβpow, hβ, zero_pow (Fact.out : ℓ.Prime).ne_zero]
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   let ζA : AlgebraicClosure M := algebraMap M (AlgebraicClosure M) ζ
   have hζA : IsPrimitiveRoot ζA ℓ :=
     hζ.map_of_injective (algebraMap M (AlgebraicClosure M)).injective
@@ -2008,19 +2008,19 @@ private theorem cyclic_norm_criterion_to_norm
     hkerOpen.mem_nhds hkerOne
   obtain ⟨F, hFfin, hFnormal, hFker⟩ :=
     (krullTopology_mem_nhds_one_iff_of_normal M (AlgebraicClosure M) kerSet).mp hkerNhd
-  letI : FiniteDimensional M F := hFfin
-  letI : Normal M F := hFnormal
+  let : FiniteDimensional M F := hFfin
+  let : Normal M F := hFnormal
   let Fsep := separableClosure M F
-  letI : IsGalois M Fsep := separableClosure.isGalois M F
+  let : IsGalois M Fsep := separableClosure.isGalois M F
   let F' : IntermediateField M (AlgebraicClosure M) := IntermediateField.lift Fsep
   let eF : Fsep ≃ₐ[M] F' := IntermediateField.liftAlgEquiv Fsep
-  letI : FiniteDimensional M F' := eF.toLinearEquiv.finiteDimensional
-  letI : Normal M F' := Normal.of_algEquiv eF
-  letI : Algebra.IsSeparable M F' := ⟨fun x => by
+  let : FiniteDimensional M F' := eF.toLinearEquiv.finiteDimensional
+  let : Normal M F' := Normal.of_algEquiv eF
+  let : Algebra.IsSeparable M F' := ⟨fun x => by
     have hs := Algebra.IsSeparable.isSeparable M (eF.symm x)
     have hm := hs.map eF.toAlgHom eF.injective
     simpa using hm⟩
-  letI : IsGalois M F' := ⟨⟩
+  let : IsGalois M F' := ⟨⟩
   have hF'ker : ∀ σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M,
       σ ∈ F'.fixingSubgroup →
         (show Field.absoluteGaloisGroup M from σ) ∈ kerSet := by
@@ -2043,12 +2043,12 @@ private theorem cyclic_norm_criterion_to_norm
     have happ' := congrArg Subtype.val happ
     simpa [σFhom, σF, AlgEquiv.restrictNormalHom_apply] using happ'
   let U : IntermediateField M (AlgebraicClosure M) := L ⊔ F'
-  letI : FiniteDimensional M U := IntermediateField.finiteDimensional_sup L F'
-  letI : Normal M U :=
+  let : FiniteDimensional M U := IntermediateField.finiteDimensional_sup L F'
+  let : Normal M U :=
     IntermediateField.normal_sup M (AlgebraicClosure M) L F'
-  letI : Algebra.IsSeparable M U :=
+  let : Algebra.IsSeparable M U :=
     IntermediateField.isSeparable_sup M (AlgebraicClosure M) L F'
-  letI : IsGalois M U := ⟨⟩
+  let : IsGalois M U := ⟨⟩
   have hUker : ∀ σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M,
       σ ∈ U.fixingSubgroup →
         (show Field.absoluteGaloisGroup M from σ) ∈ kerSet := by
@@ -2056,11 +2056,11 @@ private theorem cyclic_norm_criterion_to_norm
     apply hF'ker σ
     exact IntermediateField.fixingSubgroup_le le_sup_right hσ
   have hLU : L ≤ U := le_sup_left
-  letI : Algebra L U := (IntermediateField.inclusion hLU).toAlgebra
-  letI : IsScalarTower M L U :=
+  let : Algebra L U := (IntermediateField.inclusion hLU).toAlgebra
+  let : IsScalarTower M L U :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : FiniteDimensional L U := FiniteDimensional.right M L U
-  letI : IsGalois L U := IsGalois.tower_top_of_isGalois M L U
+  let : FiniteDimensional L U := FiniteDimensional.right M L U
+  let : IsGalois L U := IsGalois.tower_top_of_isGalois M L U
   have hLU_apply (x : L) :
       algebraMap L U x = ⟨(x : AlgebraicClosure M), hLU x.2⟩ := rfl
   let rU : H →* (U ≃ₐ[L] U) :=
@@ -2145,7 +2145,7 @@ private theorem cyclic_norm_criterion_to_norm
   let fU : (U ≃ₐ[L] U) → Uˣ := fun g =>
     Units.mk0 (ζU ^ (-(ψ g).toAdd).val)
       (pow_ne_zero _ (hζU.ne_zero (Fact.out : ℓ.Prime).ne_zero))
-  letI : SMul (U ≃ₐ[L] U) Uˣ :=
+  let : SMul (U ≃ₐ[L] U) Uˣ :=
     AlgEquiv.instMulDistribMulActionUnits.toSMul
   have hfU : groupCohomology.IsMulCocycle₁ fU := by
     intro g h
@@ -2485,12 +2485,12 @@ private theorem cyclic_norm_criterion_to_norm
     exact S.div_mem
       (S.div_mem hβS (S.toSubalgebra.pow_mem (S.algebraMap_mem ζ) (c ρ).val))
       (S.div_mem hρwS hwS)
-  letI : IsGalois M S := separableClosure.isGalois M (AlgebraicClosure M)
+  let : IsGalois M S := separableClosure.isGalois M (AlgebraicClosure M)
   have hLS : L ≤ S :=
     (le_separableClosure_iff M (AlgebraicClosure M) L).2 inferInstance
-  letI : Algebra L S := (IntermediateField.inclusion hLS).toAlgebra
-  letI : IsScalarTower M L S := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : IsGalois L S := IsGalois.tower_top_of_isGalois M L S
+  let : Algebra L S := (IntermediateField.inclusion hLS).toAlgebra
+  let : IsScalarTower M L S := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsGalois L S := IsGalois.tower_top_of_isGalois M L S
   have hLS_apply (x : L) :
       algebraMap L S x = ⟨(x : AlgebraicClosure M), hLS x.2⟩ := rfl
   let zS : S := ⟨zA, hzS⟩
@@ -2652,10 +2652,10 @@ theorem cyclic_norm_criterion {M E : Type*} [Field M] [Field E]
   let f : Polynomial M := Polynomial.X ^ ℓ - Polynomial.C (a : M)
   have hf : Irreducible f :=
     X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hpow
-  letI : Fact (Irreducible f) := ⟨hf⟩
+  let : Fact (Irreducible f) := ⟨hf⟩
   have hprim : (primitiveRoots ℓ M).Nonempty :=
     ⟨ζ, (mem_primitiveRoots (Fact.out : ℓ.Prime).pos).2 hζ⟩
-  letI : Polynomial.IsSplittingField M E f := by
+  let : Polynomial.IsSplittingField M E f := by
     constructor
     · change (Polynomial.X ^ ℓ - Polynomial.C (a : M)).map
           (algebraMap M E) |>.Splits
@@ -2670,9 +2670,9 @@ theorem cyclic_norm_criterion {M E : Type*} [Field M] [Field E]
       change α ∈ f.rootSet E
       rw [Polynomial.mem_rootSet_of_ne (Irreducible.ne_zero hf)]
       simp [f, hαpow]
-  letI : IsGalois M E :=
+  let : IsGalois M E :=
     isGalois_of_isSplittingField_X_pow_sub_C hprim hf E
-  letI : IsCyclic (E ≃ₐ[M] E) :=
+  let : IsCyclic (E ≃ₐ[M] E) :=
     isCyclic_of_isSplittingField_X_pow_sub_C hprim hf E
   exact cyclic_norm_criterion_core ζ hζ a b ha α hαpow hαgen hdegree
 
@@ -2707,11 +2707,11 @@ theorem steinberg_cupZero {M : Type*} [Field M] {ℓ : ℕ}
   let f : Polynomial M := Polynomial.X ^ ℓ - Polynomial.C (a : M)
   have hf : Irreducible f :=
     X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hpow
-  letI : Fact (Irreducible f) := ⟨hf⟩
+  let : Fact (Irreducible f) := ⟨hf⟩
   let E := AdjoinRoot f
-  letI : Field E := inferInstance
-  letI : Algebra M E := inferInstance
-  letI : FiniteDimensional M E :=
+  let : Field E := inferInstance
+  let : Algebra M E := inferInstance
+  let : FiniteDimensional M E :=
     (AdjoinRoot.powerBasis (Irreducible.ne_zero hf)).finite
   have hroot : (AdjoinRoot.root f : E) ^ ℓ =
       algebraMap M E (a : M) := by
@@ -2723,11 +2723,11 @@ theorem steinberg_cupZero {M : Type*} [Field M] {ℓ : ℕ}
   apply (cyclic_norm_criterion ζ hζ a b ha hE).2
   have hprim : (primitiveRoots ℓ M).Nonempty :=
     ⟨ζ, (mem_primitiveRoots (Fact.out : ℓ.Prime).pos).2 hζ⟩
-  letI : Polynomial.IsSplittingField M E f := by
+  let : Polynomial.IsSplittingField M E f := by
     simpa [E, f] using isSplittingField_AdjoinRoot_X_pow_sub_C hprim hf
-  letI : IsGalois M E :=
+  let : IsGalois M E :=
     isGalois_of_isSplittingField_X_pow_sub_C hprim hf E
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   let autFromFin : Fin ℓ ≃ (E ≃ₐ[M] E) :=
     (ZMod.finEquiv ℓ).toEquiv.trans <|
       Multiplicative.ofAdd.trans (autEquivZmod hf E hζ).symm.toEquiv
@@ -2795,7 +2795,7 @@ theorem kummerCharacter_change_primitiveRoot {M : Type*} [Field M]
     (hζ : IsPrimitiveRoot ζ ℓ) (hζ' : IsPrimitiveRoot ζ' ℓ) :
     ∃ c : ZMod ℓ, c ≠ 0 ∧
       ∀ a : Mˣ, kummerCharacter ζ' hζ' a = c • kummerCharacter ζ hζ a := by
-  haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
+  have : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
   obtain ⟨i, _, hicoprime, hζ'pow⟩ := (hζ.isPrimitiveRoot_iff).mp hζ'
   let d : ZMod ℓ := i
   have hdunit : IsUnit d := (ZMod.isUnit_iff_coprime i ℓ).2 hicoprime

@@ -185,7 +185,7 @@ theorem integerCarryCocycle_mem (D : UnramifiedCyclicExtensionData K L) :
     AbstractReciprocity.IsNormalizedCocycle2
       (TrivialIntegerRep K L) (integerCarryCocycle K L D) := by
   let n := Module.finrank K L
-  letI : NeZero n := ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
+  let : NeZero n := ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
   constructor
   · change Inhomogeneous.d2 (TrivialIntegerRep K L)
       (integerCarryCocycle K L D) = 0
@@ -409,7 +409,7 @@ private theorem sum_carryExponent_one (n : ℕ) [NeZero n] :
   · have hnpos : 0 < n := NeZero.pos n
     obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hnpos.ne'
     have hn2 : 1 < m + 1 := by omega
-    letI : Fact (1 < m + 1) := ⟨hn2⟩
+    let : Fact (1 < m + 1) := ⟨hn2⟩
     have hval (i : Fin (m + 1)) : (ZMod.finEquiv (m + 1) i).val = i.val := by rfl
     have hsum : (∑ r : ZMod (m + 1),
         (carryExponent (m + 1) r 1 : ℤ)) = 1 := by
@@ -435,7 +435,7 @@ private theorem sum_carryExponent_one (n : ℕ) [NeZero n] :
 private theorem integerRowInvariant_carry
     (D : UnramifiedCyclicExtensionData K L) :
     integerRowInvariant K L D (integerCarryClass K L D) = 1 := by
-  letI : NeZero (Module.finrank K L) :=
+  let : NeZero (Module.finrank K L) :=
     ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
   rw [integerCarryClass, AbstractReciprocity.cocycleClass2, integerRowInvariant,
     QuotientAddGroup.lift_mk]
@@ -469,7 +469,7 @@ private theorem integerRowInvariant_carry
 
 private theorem trivialIntegerH2_card (D : UnramifiedCyclicExtensionData K L) :
     Nat.card (TrivialIntegerH2 K L) = Module.finrank K L := by
-  letI : IsCyclic (L ≃ₐ[K] L) :=
+  let : IsCyclic (L ≃ₐ[K] L) :=
     isCyclic_iff_exists_zpowers_eq_top.2 ⟨D.frobenius, D.frobenius_generates⟩
   calc
     Nat.card (TrivialIntegerH2 K L) =
@@ -488,19 +488,19 @@ integer carry class to `1 mod [L:K]`.
 theorem integerH2Comparison_existsUnique (D : UnramifiedCyclicExtensionData K L) :
     ∃! e : TrivialIntegerH2 K L ≃+ ZMod (Module.finrank K L),
       e (integerCarryClass K L D) = 1 := by
-  letI : NeZero (Module.finrank K L) :=
+  let : NeZero (Module.finrank K L) :=
     ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
-  letI : IsCyclic (L ≃ₐ[K] L) :=
+  let : IsCyclic (L ≃ₐ[K] L) :=
     isCyclic_iff_exists_zpowers_eq_top.2 ⟨D.frobenius, D.frobenius_generates⟩
-  letI : NeZero (Nat.card (L ≃ₐ[K] L)) :=
+  let : NeZero (Nat.card (L ≃ₐ[K] L)) :=
     ⟨(Nat.card_pos (α := L ≃ₐ[K] L)).ne'⟩
   let efin := (unramifiedCyclicH2EquivH0 (TrivialIntegerRep K L)).trans
     (unramifiedTrivialH0EquivZMod (G := L ≃ₐ[K] L))
   let hfin : Finite (TrivialIntegerH2 K L) :=
     Finite.of_equiv (ZMod (Nat.card (L ≃ₐ[K] L))) efin.symm.toEquiv
-  letI : Finite (TrivialIntegerH2 K L) := hfin
-  letI : Fintype (TrivialIntegerH2 K L) := Fintype.ofFinite _
-  letI : Fintype (ZMod (Module.finrank K L)) := Fintype.ofFinite _
+  let : Finite (TrivialIntegerH2 K L) := hfin
+  let : Fintype (TrivialIntegerH2 K L) := Fintype.ofFinite _
+  let : Fintype (ZMod (Module.finrank K L)) := Fintype.ofFinite _
   have hsurj : Function.Surjective (integerRowInvariant K L D) := by
     intro y
     refine ⟨y.val • integerCarryClass K L D, ?_⟩
@@ -604,7 +604,7 @@ private theorem carryCocycle_mem
     AbstractReciprocity.IsNormalizedCocycle2 (CarryRep K L)
       (carryCocycle K L D π) := by
   let n := Module.finrank K L
-  letI : NeZero n := ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
+  let : NeZero n := ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
   let u : Additive (Units L) :=
     Additive.ofMul (Units.map (algebraMap K L) π.val)
   have hu (σ : L ≃ₐ[K] L) : (MulRep K L).ρ σ u = u := by
@@ -674,9 +674,9 @@ private theorem valuation_carry_cochain
     (D : UnramifiedCyclicExtensionData K L) (π : Uniformizer K) :
     (fun σ τ => (valuationCoefficient K L).hom (carryCocycle K L D π σ τ)) =
       integerCarryCocycle K L D := by
-  letI : IsUnramifiedLocalExtension K L := D.unramified
+  let : IsUnramifiedLocalExtension K L := D.unramified
   let n := Module.finrank K L
-  letI : NeZero n := ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
+  let : NeZero n := ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
   have hval : normalizedValuation L (Units.map (algebraMap K L) π.val) = 1 := by
     rw [normalizedValuation_algebraMap, π.valuation_eq_one,
       IsUnramifiedLocalExtension.ramificationIndex_eq_one]
@@ -726,9 +726,9 @@ cocycle, its class generates `H²`, and the displayed invariant sends it to `1/n
 theorem carryCocycle_isGenerator
     (D : UnramifiedCyclicExtensionData K L) (π : Uniformizer K) :
     Nonempty (UnramifiedClassData K L D π) := by
-  letI : IsCyclic (L ≃ₐ[K] L) :=
+  let : IsCyclic (L ≃ₐ[K] L) :=
     isCyclic_iff_exists_zpowers_eq_top.2 ⟨D.frobenius, D.frobenius_generates⟩
-  letI : NeZero (Module.finrank K L) :=
+  let : NeZero (Module.finrank K L) :=
     ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
   let c := carryCocycle K L D π
   have hmem : AbstractReciprocity.IsNormalizedCocycle2 (CarryRep K L) c :=
@@ -736,8 +736,8 @@ theorem carryCocycle_isGenerator
   let α := AbstractReciprocity.cocycleClass2 (CarryRep K L) c hmem
   have hvalα : valuationInducedH2 K L α = integerCarryClass K L D :=
     valuationInducedH2_carryClass K L D π
-  letI : Finite (CarryH2 K L) := cyclic_local_H2_finite K L
-  letI : Finite (TrivialIntegerH2 K L) :=
+  let : Finite (CarryH2 K L) := cyclic_local_H2_finite K L
+  let : Finite (TrivialIntegerH2 K L) :=
     Finite.of_equiv (ZMod (Module.finrank K L))
       (integerH2Comparison K L D).symm.toEquiv
   have hsurj : Function.Surjective (valuationInducedH2 K L) := by
@@ -746,8 +746,8 @@ theorem carryCocycle_isGenerator
     apply (integerH2Comparison K L D).injective
     rw [map_nsmul, hvalα, map_nsmul, integerH2Comparison_carry, nsmul_one]
     exact ZMod.natCast_zmod_val (integerH2Comparison K L D β)
-  letI : Fintype (CarryH2 K L) := Fintype.ofFinite _
-  letI : Fintype (TrivialIntegerH2 K L) := Fintype.ofFinite _
+  let : Fintype (CarryH2 K L) := Fintype.ofFinite _
+  let : Fintype (TrivialIntegerH2 K L) := Fintype.ofFinite _
   have hcards : Fintype.card (CarryH2 K L) =
       Fintype.card (TrivialIntegerH2 K L) := by
     rw [← Nat.card_eq_fintype_card, ← Nat.card_eq_fintype_card,
@@ -979,15 +979,15 @@ private theorem finite_middle_unramified
     {A B C : Type} [AddGroup A] [AddGroup B] [AddGroup C]
     [Finite A] [Finite C] (p : A →+ B) (q : B →+ C)
     (h : p.range = q.ker) : Finite B := by
-  letI : Finite p.range := Finite.of_surjective
+  let : Finite p.range := Finite.of_surjective
     (fun x : A => (⟨p x, x, rfl⟩ : p.range)) (fun y => by
       obtain ⟨x, hx⟩ := y.2
       exact ⟨x, Subtype.ext hx⟩)
-  letI : Finite q.ker := Finite.of_injective (fun x : q.ker =>
+  let : Finite q.ker := Finite.of_injective (fun x : q.ker =>
     (⟨x, by rw [h]; exact x.2⟩ : p.range)) (fun x y hxy => by
       apply Subtype.ext
       exact congrArg (fun z : p.range => (z : B)) hxy)
-  letI : Finite q.range := Finite.of_injective (fun x : q.range => (x : C))
+  let : Finite q.range := Finite.of_injective (fun x : q.range => (x : C))
     Subtype.val_injective
   exact (q.finite_iff_finite_ker_range).2 ⟨inferInstance, inferInstance⟩
 
@@ -998,10 +998,10 @@ private theorem rep_shortExact_of_function_unramified
     (hexact : Function.Exact f g) (hf : Function.Injective f)
     (hg : Function.Surjective g) :
     (ShortComplex.mk f g hzero).ShortExact := by
-  letI : Module ℤ A := A.hV2
-  letI : Module ℤ B := B.hV2
-  letI : Module ℤ C := C.hV2
-  letI : Mono f := (Rep.mono_iff_injective f).2 hf
+  let : Module ℤ A := A.hV2
+  let : Module ℤ B := B.hV2
+  let : Module ℤ C := C.hV2
+  let : Mono f := (Rep.mono_iff_injective f).2 hf
   have f_is_kernel : IsLimit (KernelFork.ofι f hzero) := by
     let lift (s : KernelFork g) : s.pt ⟶ A := by
       letI : Module ℤ s.pt := s.pt.hV2
@@ -1034,7 +1034,7 @@ private theorem rep_shortExact_of_function_unramified
           _ = B.ρ σ (f (pre z)) := by rw [hpre]
           _ = f (A.ρ σ (pre z)) := (Rep.hom_comm_apply f σ (pre z)).symm⟩
     have lift_fac (s : KernelFork g) : lift s ≫ f = s.ι := by
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       apply Representation.IntertwiningMap.ext
       apply LinearMap.ext
@@ -1077,7 +1077,7 @@ private theorem deepUnitQuotient_finite_unramified
   obtain ⟨r, hr⟩ := D.V_cofinal_principal_right 0
   let red : U →* Units (RingOfIntegers L ⧸ LocalMaximalIdeal L ^ (r + 1)) :=
     (integralUnitReduction L (r + 1)).comp e.symm.toMonoidHom
-  haveI : Finite (RingOfIntegers L ⧸ LocalMaximalIdeal L ^ (r + 1)) :=
+  have : Finite (RingOfIntegers L ⧸ LocalMaximalIdeal L ^ (r + 1)) :=
     (IsLocalRing.finite_quotient_iff).2 ⟨r + 1, le_rfl⟩
   let P : Subgroup U := (principalUnitSubgroup L (r + 1)).comap U.subtype
   have hP : P = red.ker := by
@@ -1095,15 +1095,15 @@ private theorem deepUnitQuotient_finite_unramified
       refine ⟨e.symm x, hx, ?_⟩
       change ringUnitsToFieldUnits L (e.symm x) = (x : Units L)
       exact congrArg Subtype.val (e.apply_symm_apply x)
-  haveI : Finite red.range := Finite.of_injective (fun x : red.range => (x :
+  have : Finite red.range := Finite.of_injective (fun x : red.range => (x :
     Units (RingOfIntegers L ⧸ LocalMaximalIdeal L ^ (r + 1)))) Subtype.val_injective
-  haveI : Finite (U ⧸ red.ker) :=
+  have : Finite (U ⧸ red.ker) :=
     Finite.of_equiv red.range (QuotientGroup.quotientKerEquivRange red).symm.toEquiv
-  letI : P.FiniteIndex := by rw [hP]; exact Subgroup.finiteIndex_of_finite_quotient
+  let : P.FiniteIndex := by rw [hP]; exact Subgroup.finiteIndex_of_finite_quotient
   have hPV : P ≤ V := by
     intro x hx
     exact hr hx
-  letI : V.FiniteIndex := Subgroup.finiteIndex_of_le hPV
+  let : V.FiniteIndex := Subgroup.finiteIndex_of_le hPV
   exact Subgroup.finite_quotient_of_finiteIndex
 
 private theorem restricted_localUnit_H1_subsingleton
@@ -1115,7 +1115,7 @@ private theorem restricted_localUnit_H1_subsingleton
     (D : UnramifiedCyclicExtensionData K L)
     (S : Subgroup (L ≃ₐ[K] L)) [Fintype S] :
     Subsingleton (Inhomogeneous.H1 (Rep.res S.subtype (localUnitRep K L))) := by
-  letI : IsUnramifiedLocalExtension K L := D.unramified
+  let : IsUnramifiedLocalExtension K L := D.unramified
   let M := Rep.res S.subtype (localUnitRep K L)
   constructor
   intro a b
@@ -1200,10 +1200,10 @@ private theorem restricted_local_units_herbrand
     (Sg : Subgroup (L ≃ₐ[K] L)) [Fintype Sg] :
     ∃ h : HerbrandFinite (Rep.res Sg.subtype (localUnitRep K L)),
       @herbrandQuotient _ _ _ (Rep.res Sg.subtype (localUnitRep K L)) h.h0 h.h1 = 1 := by
-  letI : IsCyclic (L ≃ₐ[K] L) :=
+  let : IsCyclic (L ≃ₐ[K] L) :=
     isCyclic_iff_exists_zpowers_eq_top.2
       ⟨Dcyc.frobenius, Dcyc.frobenius_generates⟩
-  letI : IsCyclic Sg := inferInstance
+  let : IsCyclic Sg := inferInstance
   let U := unitSubgroup L
   let V := D.V 0
   let VU : Subgroup U := V.comap U.subtype
@@ -1254,7 +1254,7 @@ private theorem restricted_local_units_herbrand
     apply Subtype.ext
     exact congrArg (fun z : localUnitRep K L => (z.1 : Additive (Units L))) h
   have hproj : Function.Surjective proj := W.mkQ_surjective
-  letI : Finite (U ⧸ VU) := deepUnitQuotient_finite_unramified K L π D
+  let : Finite (U ⧸ VU) := deepUnitQuotient_finite_unramified K L π D
   have base_mem (x : localUnitRep K L) :
       x ∈ W ↔ base x ∈ VU.toAddSubgroup := Iff.rfl
   let qb : (localUnitRep K L ⧸ W.toAddSubgroup) →+
@@ -1276,7 +1276,7 @@ private theorem restricted_local_units_herbrand
   let eqQ : (localUnitRep K L ⧸ W.toAddSubgroup) ≃+
       (Additive U ⧸ VU.toAddSubgroup) :=
     AddEquiv.ofBijective qb ⟨hqleft.injective, hqright.surjective⟩
-  letI : Finite Q := Finite.of_equiv (Additive (U ⧸ VU)) eqQ.symm.toEquiv
+  let : Finite Q := Finite.of_equiv (Additive (U ⧸ VU)) eqQ.symm.toEquiv
   let deepS : Rep.{0, 0, 0} ℤ Sg := Rep.res Sg.subtype deep
   let unitS : Rep.{0, 0, 0} ℤ Sg := Rep.res Sg.subtype (localUnitRep K L)
   let QS : Rep.{0, 0, 0} ℤ Sg := Rep.res Sg.subtype Q
@@ -1304,21 +1304,21 @@ private theorem restricted_local_units_herbrand
   have hdm : Subsingleton (TateLowDegree.HMinusOne deepS) := by
     let e := (TateLowDegree.HMinusOne_equiv_tate deepS).some
     exact ⟨fun x y => e.injective (hdtm.elim _ _)⟩
-  letI : Subsingleton (TateLowDegree.H0 deepS) := hd0
-  letI : Subsingleton (TateLowDegree.HMinusOne deepS) := hdm
-  letI : Finite (TateLowDegree.H0 deepS) := Finite.of_subsingleton
-  letI : Finite (TateLowDegree.HMinusOne deepS) := Finite.of_subsingleton
-  letI : Finite QS := inferInstance
-  letI : Finite (TateLowDegree.H0 QS) := inferInstance
-  letI : Finite (TateLowDegree.HMinusOne QS) := inferInstance
+  let : Subsingleton (TateLowDegree.H0 deepS) := hd0
+  let : Subsingleton (TateLowDegree.HMinusOne deepS) := hdm
+  let : Finite (TateLowDegree.H0 deepS) := Finite.of_subsingleton
+  let : Finite (TateLowDegree.HMinusOne deepS) := Finite.of_subsingleton
+  let : Finite QS := inferInstance
+  let : Finite (TateLowDegree.H0 QS) := inferInstance
+  let : Finite (TateLowDegree.HMinusOne QS) := inferInstance
   let TS := SC.map (tateComplexFunctor ℤ Sg)
   have hTS : TS.ShortExact := TateCohomology.map_tateComplexFunctor_shortExact hSC
   let tD0 := TS.X₁.homology 0
   let tU0 := TS.X₂.homology 0
   let tQ0 := TS.X₃.homology 0
-  letI : Finite tD0 := Finite.of_equiv (TateLowDegree.H0 deepS)
+  let : Finite tD0 := Finite.of_equiv (TateLowDegree.H0 deepS)
     (TateLowDegree.comparisonH0Tate deepS).toEquiv
-  letI : Finite tQ0 := Finite.of_equiv (TateLowDegree.H0 QS)
+  let : Finite tQ0 := Finite.of_equiv (TateLowDegree.H0 QS)
     (TateLowDegree.comparisonH0Tate QS).toEquiv
   let p0 : tD0 →+ tU0 :=
     (HomologicalComplex.homologyMap TS.f 0).hom.toAddMonoidHom
@@ -1331,16 +1331,16 @@ private theorem restricted_local_units_herbrand
       (HomologicalComplex.homologyMap TS.g 0).hom x = 0
     rw [← LinearMap.mem_range, ← LinearMap.mem_ker,
       (hTS.homology_exact₂ 0).moduleCat_range_eq_ker]
-  letI : Finite tU0 := finite_middle_unramified p0 q0 hpq0
-  letI : Finite (TateLowDegree.H0 unitS) := Finite.of_equiv tU0
+  let : Finite tU0 := finite_middle_unramified p0 q0 hpq0
+  let : Finite (TateLowDegree.H0 unitS) := Finite.of_equiv tU0
     (TateLowDegree.comparisonH0Tate unitS).symm.toEquiv
   let tDm := TS.X₁.homology (-1)
   let tUm := TS.X₂.homology (-1)
   let tQm := TS.X₃.homology (-1)
   let emD := (TateLowDegree.HMinusOne_equiv_tate deepS).some
   let emQ := (TateLowDegree.HMinusOne_equiv_tate QS).some
-  letI : Finite tDm := Finite.of_equiv (TateLowDegree.HMinusOne deepS) emD.toEquiv
-  letI : Finite tQm := Finite.of_equiv (TateLowDegree.HMinusOne QS) emQ.toEquiv
+  let : Finite tDm := Finite.of_equiv (TateLowDegree.HMinusOne deepS) emD.toEquiv
+  let : Finite tQm := Finite.of_equiv (TateLowDegree.HMinusOne QS) emQ.toEquiv
   let pm : tDm →+ tUm :=
     (HomologicalComplex.homologyMap TS.f (-1)).hom.toAddMonoidHom
   let qm : tUm →+ tQm :=
@@ -1352,9 +1352,9 @@ private theorem restricted_local_units_herbrand
       (HomologicalComplex.homologyMap TS.g (-1)).hom x = 0
     rw [← LinearMap.mem_range, ← LinearMap.mem_ker,
       (hTS.homology_exact₂ (-1)).moduleCat_range_eq_ker]
-  letI : Finite tUm := finite_middle_unramified pm qm hpqm
+  let : Finite tUm := finite_middle_unramified pm qm hpqm
   let emU := (TateLowDegree.HMinusOne_equiv_tate unitS).some
-  letI : Finite (TateLowDegree.HMinusOne unitS) :=
+  let : Finite (TateLowDegree.HMinusOne unitS) :=
     Finite.of_equiv tUm emU.symm.toEquiv
   let h : HerbrandFinite unitS := ⟨inferInstance, inferInstance⟩
   refine ⟨h, ?_⟩
@@ -1379,20 +1379,20 @@ theorem unramified_units_cohomologicallyTrivial
     have hi := restricted_localUnit_H1_subsingleton K L D S
     exact ⟨fun x y => (comparisonH1 _).symm.injective (hi.elim _ _)⟩
   · intro S _
-    letI : IsCyclic (L ≃ₐ[K] L) :=
+    let : IsCyclic (L ≃ₐ[K] L) :=
       isCyclic_iff_exists_zpowers_eq_top.2
         ⟨D.frobenius, D.frobenius_generates⟩
-    letI : IsCyclic S := inferInstance
+    let : IsCyclic S := inferInstance
     obtain ⟨h, hq⟩ := restricted_local_units_herbrand K L D π F hF S
-    letI : Finite (TateLowDegree.H0 (Rep.res S.subtype (localUnitRep K L))) := h.h0
-    letI : Finite (TateLowDegree.HMinusOne
+    let : Finite (TateLowDegree.H0 (Rep.res S.subtype (localUnitRep K L))) := h.h0
+    let : Finite (TateLowDegree.HMinusOne
         (Rep.res S.subtype (localUnitRep K L))) := h.h1
     have hH1 := restricted_localUnit_H1_subsingleton K L D S
     have hminus : Subsingleton (TateLowDegree.HMinusOne
         (Rep.res S.subtype (localUnitRep K L))) :=
       ⟨fun x y => (cyclicH1EquivHMinusOne_unramified
         (Rep.res S.subtype (localUnitRep K L))).symm.injective (hH1.elim _ _)⟩
-    letI := hminus
+    let := hminus
     have hmcard : Nat.card (TateLowDegree.HMinusOne
         (Rep.res S.subtype (localUnitRep K L))) = 1 := Nat.card_unique
     rw [herbrandQuotient, hmcard] at hq
@@ -1498,12 +1498,12 @@ private theorem residueFinrank_eq_residueDegree
         (IsLocalRing.maximalIdeal (RingOfIntegers K))
     Module.finrank (LocalResidueField K) (LocalResidueField L) =
       residueDegree K L := by
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Algebra (LocalResidueField K) (LocalResidueField L) :=
+  let : Algebra (LocalResidueField K) (LocalResidueField L) :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal (RingOfIntegers L))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
-  letI : Module.Finite (RingOfIntegers K) (RingOfIntegers L) :=
+  let : Module.Finite (RingOfIntegers K) (RingOfIntegers L) :=
     ringOfIntegers_module_finite K L
   let p : Ideal (RingOfIntegers K) := IsLocalRing.maximalIdeal (RingOfIntegers K)
   let P : Ideal (RingOfIntegers L) := IsLocalRing.maximalIdeal (RingOfIntegers L)
@@ -1609,9 +1609,9 @@ private theorem residueFinrank_eq_finrank_unramified
         (IsLocalRing.maximalIdeal (RingOfIntegers K))
     Module.finrank (LocalResidueField K) (LocalResidueField L) =
       Module.finrank K L := by
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Algebra (LocalResidueField K) (LocalResidueField L) :=
+  let : Algebra (LocalResidueField K) (LocalResidueField L) :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal (RingOfIntegers L))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
   rw [residueFinrank_eq_residueDegree (K := K) (L := L),
@@ -1717,10 +1717,10 @@ private theorem localResidueAlgEquivHom_frobenius
     localResidueAlgEquivHom D.frobenius =
       FiniteField.frobeniusAlgEquivOfAlgebraic
         (LocalResidueField K) (LocalResidueField L) := by
-  letI : Fintype (LocalResidueField K) := Fintype.ofFinite _
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : Fintype (LocalResidueField K) := Fintype.ofFinite _
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Algebra (LocalResidueField K) (LocalResidueField L) :=
+  let : Algebra (LocalResidueField K) (LocalResidueField L) :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal (RingOfIntegers L))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
   let φO := localAlgEquivOnIntegers D.frobenius
@@ -1753,11 +1753,11 @@ private theorem localResidueAlgEquivHom_injective
       Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal (RingOfIntegers L))
         (IsLocalRing.maximalIdeal (RingOfIntegers K))
     Function.Injective (localResidueAlgEquivHom (K := K) (L := L)) := by
-  letI : IsUnramifiedLocalExtension K L := D.unramified
-  letI : Fintype (LocalResidueField K) := Fintype.ofFinite _
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : IsUnramifiedLocalExtension K L := D.unramified
+  let : Fintype (LocalResidueField K) := Fintype.ofFinite _
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Algebra (LocalResidueField K) (LocalResidueField L) :=
+  let : Algebra (LocalResidueField K) (LocalResidueField L) :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal (RingOfIntegers L))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
   let red := localResidueAlgEquivHom (K := K) (L := L)
@@ -1792,13 +1792,13 @@ private theorem arithmeticFrobenius_restrict
     (lower : UnramifiedCyclicExtensionData K L)
     (total : UnramifiedCyclicExtensionData K M) :
     AlgEquiv.restrictNormalHom L total.frobenius = lower.frobenius := by
-  letI : IsUnramifiedLocalExtension K L := lower.unramified
-  letI : Fintype (LocalResidueField K) := Fintype.ofFinite _
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : IsUnramifiedLocalExtension K L := lower.unramified
+  let : Fintype (LocalResidueField K) := Fintype.ofFinite _
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : (ValuativeRel.valuation L).HasExtension (ValuativeRel.valuation M) :=
+  let : (ValuativeRel.valuation L).HasExtension (ValuativeRel.valuation M) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Algebra (LocalResidueField K) (LocalResidueField L) :=
+  let : Algebra (LocalResidueField K) (LocalResidueField L) :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal (RingOfIntegers L))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
   let redL := localResidueAlgEquivHom (K := K) (L := L)
@@ -1810,7 +1810,7 @@ private theorem arithmeticFrobenius_restrict
   let qFO := localAlgEquivOnIntegers qF
   let lowerO := localAlgEquivOnIntegers lower.frobenius
   let totalO := localAlgEquivOnIntegers total.frobenius
-  letI : Module.Finite (RingOfIntegers L) (RingOfIntegers M) :=
+  let : Module.Finite (RingOfIntegers L) (RingOfIntegers M) :=
     ringOfIntegers_module_finite L M
   have hint : (algebraMap (RingOfIntegers L) (RingOfIntegers M)).IsIntegral :=
     Algebra.IsIntegral.isIntegral
@@ -1819,7 +1819,7 @@ private theorem arithmeticFrobenius_restrict
     intro x y hxy
     apply Subtype.ext
     exact (algebraMap L M).injective (congr_arg Subtype.val hxy)
-  letI : IsLocalHom (algebraMap (RingOfIntegers L) (RingOfIntegers M)) :=
+  let : IsLocalHom (algebraMap (RingOfIntegers L) (RingOfIntegers M)) :=
     hint.isLocalHom hincinj
   let resMap : LocalResidueField L →+* LocalResidueField M :=
     IsLocalRing.ResidueField.map (algebraMap (RingOfIntegers L) (RingOfIntegers M))
@@ -1882,19 +1882,19 @@ private theorem arithmeticFrobenius_baseChange
     let q : (W ≃ₐ[E] W) →* (U ≃ₐ[K] U) :=
       (AlgEquiv.restrictNormalHom U).comp (AlgEquiv.restrictScalarsHom K)
     q common.frobenius = source.frobenius ^ residueDegree K E := by
-  letI : IsUnramifiedLocalExtension K U := source.unramified
-  letI : Fintype (LocalResidueField K) := Fintype.ofFinite _
-  letI : Fintype (LocalResidueField E) := Fintype.ofFinite _
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
+  let : IsUnramifiedLocalExtension K U := source.unramified
+  let : Fintype (LocalResidueField K) := Fintype.ofFinite _
+  let : Fintype (LocalResidueField E) := Fintype.ofFinite _
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : (ValuativeRel.valuation U).HasExtension (ValuativeRel.valuation W) :=
+  let : (ValuativeRel.valuation U).HasExtension (ValuativeRel.valuation W) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Algebra (LocalResidueField K) (LocalResidueField E) :=
+  let : Algebra (LocalResidueField K) (LocalResidueField E) :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal (RingOfIntegers E))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
-  letI : Algebra (LocalResidueField K) (LocalResidueField U) :=
+  let : Algebra (LocalResidueField K) (LocalResidueField U) :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal (RingOfIntegers U))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
   let q : (W ≃ₐ[E] W) →* (U ≃ₐ[K] U) :=
@@ -1907,7 +1907,7 @@ private theorem arithmeticFrobenius_baseChange
   let qF : U ≃ₐ[K] U := q common.frobenius
   let qFO := localAlgEquivOnIntegers qF
   let commonO := localAlgEquivOnIntegers common.frobenius
-  letI : Module.Finite (RingOfIntegers U) (RingOfIntegers W) :=
+  let : Module.Finite (RingOfIntegers U) (RingOfIntegers W) :=
     ringOfIntegers_module_finite U W
   have hint : (algebraMap (RingOfIntegers U) (RingOfIntegers W)).IsIntegral :=
     Algebra.IsIntegral.isIntegral
@@ -1916,7 +1916,7 @@ private theorem arithmeticFrobenius_baseChange
     intro x y hxy
     apply Subtype.ext
     exact (algebraMap U W).injective (congr_arg Subtype.val hxy)
-  letI : IsLocalHom (algebraMap (RingOfIntegers U) (RingOfIntegers W)) :=
+  let : IsLocalHom (algebraMap (RingOfIntegers U) (RingOfIntegers W)) :=
     hint.isLocalHom hincinj
   let resMap : LocalResidueField U →+* LocalResidueField W :=
     IsLocalRing.ResidueField.map (algebraMap (RingOfIntegers U) (RingOfIntegers W))
@@ -2066,7 +2066,7 @@ theorem unramifiedCarryTowerData_exists
     constructor
     · change AlgEquiv.restrictNormalHom L total.frobenius = lower.frobenius
       exact arithmeticFrobenius_restrict lower total
-    · letI : ValuativeExtension M M := ⟨Iff.rfl⟩
+    · let : ValuativeExtension M M := ⟨Iff.rfl⟩
       have hsub := arithmeticFrobenius_baseChange
         (K := K) (E := L) (U := M) (W := M) total upper
       have hresLower : residueDegree K L = Module.finrank K L := by
@@ -2117,9 +2117,9 @@ private theorem carryCocycle_inflation_cochain
   have hn : 0 < n := Module.finrank_pos
   have hd : 0 < d := Module.finrank_pos
   have hNpos : 0 < N := Module.finrank_pos
-  letI : NeZero n := ⟨hn.ne'⟩
-  letI : NeZero d := ⟨hd.ne'⟩
-  letI : NeZero N := ⟨hNpos.ne'⟩
+  let : NeZero n := ⟨hn.ne'⟩
+  let : NeZero d := ⟨hd.ne'⟩
+  let : NeZero N := ⟨hNpos.ne'⟩
   have horder : orderOf T.lower.frobenius = n := by
     rw [orderOf_eq_card_of_zpowers_eq_top T.lower.frobenius_generates,
       IsGalois.card_aut_eq_finrank K L]
@@ -2311,9 +2311,9 @@ private theorem carryCocycle_restriction_cochain
   have hn : 0 < n := Module.finrank_pos
   have hm : 0 < m := Module.finrank_pos
   have hNpos : 0 < N := Module.finrank_pos
-  letI : NeZero n := ⟨hn.ne'⟩
-  letI : NeZero m := ⟨hm.ne'⟩
-  letI : NeZero N := ⟨hNpos.ne'⟩
+  let : NeZero n := ⟨hn.ne'⟩
+  let : NeZero m := ⟨hm.ne'⟩
+  let : NeZero N := ⟨hNpos.ne'⟩
   have hcoord (σ : M ≃ₐ[L] M) :
       (T.total.frobeniusEquiv.symm (T.subgroupHom σ)).toAdd =
         (n * (T.upper.frobeniusEquiv.symm σ).toAdd.val : ℕ) := by
@@ -2614,8 +2614,8 @@ private theorem baseChange_source_valuation_cochain
     dsimp [m, f, N]
     rw [← B.intersection_degree]
     exact B.common_degree
-  letI : NeZero m := ⟨hm.ne'⟩
-  letI : NeZero N := ⟨Module.finrank_pos.ne'⟩
+  let : NeZero m := ⟨hm.ne'⟩
+  let : NeZero N := ⟨Module.finrank_pos.ne'⟩
   have hcoord (σ : W ≃ₐ[E] W) :
       (B.source.frobeniusEquiv.symm (B.sourceGroupHom σ)).toAdd =
         (f * (B.common.frobeniusEquiv.symm σ).toAdd.val : ℕ) := by
@@ -2645,7 +2645,7 @@ private theorem baseChange_source_valuation_cochain
     have heq : f * a.val + f * b.val < N ↔ a.val + b.val < m := by
       rw [← hN, ← Nat.mul_add, Nat.mul_comm m f, Nat.mul_lt_mul_left hf]
     simp only [heq]
-  letI : IsUnramifiedLocalExtension E W := B.common.unramified
+  let : IsUnramifiedLocalExtension E W := B.common.unramified
   have hval : normalizedValuation W
       (Units.map (algebraMap U W).toMonoidHom
         (Units.map (algebraMap K U).toMonoidHom πK.val)) =
@@ -2722,8 +2722,8 @@ private theorem baseChange_target_valuation_cochain
   have hm : r * e = m := by
     simpa [r, e, m] using (baseChange_degrees K E U R W B).symm
   have hmpos : 0 < m := Module.finrank_pos
-  letI : NeZero r := ⟨hr.ne'⟩
-  letI : NeZero m := ⟨hmpos.ne'⟩
+  let : NeZero r := ⟨hr.ne'⟩
+  let : NeZero m := ⟨hmpos.ne'⟩
   have horder : orderOf B.target.frobenius = r := by
     rw [orderOf_eq_card_of_zpowers_eq_top B.target.frobenius_generates,
       IsGalois.card_aut_eq_finrank E R]
@@ -2744,7 +2744,7 @@ private theorem baseChange_target_valuation_cochain
     rw [hq]
     change B.target.frobenius ^ a.val = B.target.frobenius ^ (a.val % r)
     rw [← horder, pow_mod_orderOf]
-  letI : IsUnramifiedLocalExtension E W := B.common.unramified
+  let : IsUnramifiedLocalExtension E W := B.common.unramified
   have hval : normalizedValuation W
       (Units.map (algebraMap R W).toMonoidHom
         (Units.map (algebraMap E R).toMonoidHom πE.val)) = 1 := by

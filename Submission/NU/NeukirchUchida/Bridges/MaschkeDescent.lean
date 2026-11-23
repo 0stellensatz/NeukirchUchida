@@ -49,7 +49,7 @@ private noncomputable def maschkeCyclotomicProjector
       (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
         ((chi delta)⁻¹ : ZMod (p : ℕ)) := by
   classical
-  letI := Fintype.ofFinite Delta
+  let := Fintype.ofFinite Delta
   unfold maschkeCyclotomicProjector
   rw [MonoidAlgebra.coeff_sum]
   change Finsupp.applyAddHom delta (∑ d : Delta,
@@ -79,7 +79,7 @@ private theorem maschkeCyclotomicProjector_translate
     MonoidAlgebra.single gamma 1 * maschkeCyclotomicProjector p hcard chi =
       (chi gamma : ZMod (p : ℕ)) • maschkeCyclotomicProjector p hcard chi := by
   classical
-  letI := Fintype.ofFinite Delta
+  let := Fintype.ofFinite Delta
   have hcoeff (d : Delta) :
       (maschkeCyclotomicProjector p hcard chi).coeff d =
         (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
@@ -104,7 +104,7 @@ private theorem maschkeCyclotomicProjector_idempotent
     (chi : Delta →* (ZMod (p : ℕ))ˣ) :
     IsIdempotentElem (maschkeCyclotomicProjector p hcard chi) := by
   classical
-  letI := Fintype.ofFinite Delta
+  let := Fintype.ofFinite Delta
   let R := ZMod (p : ℕ)
   let P := maschkeCyclotomicProjector p hcard chi
   let a : Delta → R := fun d =>
@@ -352,17 +352,17 @@ private theorem intermediateFieldRestrictionHom_continuous
       (1 : AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F) := hN
   rw [krullTopology_mem_nhds_one_iff] at hN'
   obtain ⟨L, hLfin, hLN⟩ := hN'
-  letI : FiniteDimensional F L := hLfin
+  let : FiniteDimensional F L := hLfin
   let e := intermediateFieldClosureEquiv F E
   let b := Module.Free.chooseBasis F L
-  letI : Fintype (Module.Free.ChooseBasisIndex F L) := Fintype.ofFinite _
+  let : Fintype (Module.Free.ChooseBasisIndex F L) := Fintype.ofFinite _
   let S : Set (AlgebraicClosure E) := Set.range
     (fun i : Module.Free.ChooseBasisIndex F L =>
       e.symm (((b i : L) : AlgebraicClosure F)))
-  letI : Fintype S := (Set.finite_range _).fintype
+  let : Fintype S := (Set.finite_range _).fintype
   let L' : IntermediateField E (AlgebraicClosure E) :=
     IntermediateField.adjoin E S
-  haveI : FiniteDimensional E L' := by
+  have : FiniteDimensional E L' := by
     apply IntermediateField.finiteDimensional_adjoin
     intro x _
     exact Algebra.IsIntegral.isIntegral x
@@ -475,7 +475,7 @@ private theorem localCyclotomic_characterPull_injective
       (localCyclotomicRestrictionContinuousHom F p)) := by
   let E := localCyclotomicExtension F p
   let H := E.fixingSubgroup
-  letI : H.Normal :=
+  let : H.Normal :=
     (InfiniteGalois.normal_iff_isGalois E).2 inferInstance
   intro a b hab
   let c : NU.LocalTheory.ContinuousCharacter
@@ -646,7 +646,7 @@ private theorem maschkeKummerProjectorMap_apply_of_eigen
         (chi gamma : ZMod (p : ℕ)) • x) :
     maschkeKummerProjectorMap p hcard chi x = x := by
   classical
-  letI := Fintype.ofFinite (E ≃ₐ[F] E)
+  let := Fintype.ofFinite (E ≃ₐ[F] E)
   unfold maschkeKummerProjectorMap
   unfold maschkeCyclotomicProjector
   rw [map_sum, LinearMap.sum_apply]
@@ -788,7 +788,7 @@ private theorem modN_finrank_zero_of_divisible
     (hdiv : ∀ x : G, ∃ y : G, (p : ℕ) • y = x) :
     Module.finrank (ZMod (p : ℕ))
       (ModN G (p : ℕ)) = 0 := by
-  letI : Subsingleton (ModN G (p : ℕ)) :=
+  let : Subsingleton (ModN G (p : ℕ)) :=
     modN_subsingleton_of_divisible (p : ℕ) hdiv
   exact Module.finrank_eq_zero_of_subsingleton _ _
 
@@ -935,18 +935,18 @@ private theorem completionResidueFinite
   let F := v.adicCompletion K
   let A := NU.LocalTheory.primeValuationSubring v
   let B := v.adicCompletionIntegers K
-  letI : Finite ((𝓞 K) ⧸ v.asIdeal) :=
+  let : Finite ((𝓞 K) ⧸ v.asIdeal) :=
     v.asIdeal.finiteQuotientOfFreeOfNeBot v.ne_bot
-  letI : Algebra (𝓞 K) A :=
+  let : Algebra (𝓞 K) A :=
     show Algebra (𝓞 K)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v) from
         inferInstance
-  letI : IsLocalization.AtPrime A v.asIdeal :=
+  let : IsLocalization.AtPrime A v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
         v.asIdeal from inferInstance
   let eA := IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal A
-  letI : Finite (IsLocalRing.ResidueField A) :=
+  let : Finite (IsLocalRing.ResidueField A) :=
     Finite.of_equiv ((𝓞 K) ⧸ v.asIdeal) eA.toEquiv
   let emb : K →+* F := algebraMap K F
   have hemb_mem (a : A) : emb (a : K) ∈ B := by
@@ -982,7 +982,7 @@ private theorem completionResidueFinite
         (v := v.valuation K)).mp hea
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
-  letI : IsLocalHom f :=
+  let : IsLocalHom f :=
     ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
   let rf : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
@@ -1038,26 +1038,26 @@ private theorem completionIsLocalField
     (v : NU.LocalTheory.FinitePlace K) :
     letI : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
     IsNonarchimedeanLocalField (v.adicCompletion K) := by
-  letI : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
-  letI : Finite ((𝓞 K) ⧸ v.asIdeal) :=
+  let : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
+  let : Finite ((𝓞 K) ⧸ v.asIdeal) :=
     v.asIdeal.finiteQuotientOfFreeOfNeBot v.ne_bot
-  letI : IsDiscreteValuationRing (Valued.integer (v.adicCompletion K)) := by
+  let : IsDiscreteValuationRing (Valued.integer (v.adicCompletion K)) := by
     change IsDiscreteValuationRing (v.adicCompletionIntegers K)
     infer_instance
-  letI : Finite (Valued.ResidueField (v.adicCompletion K)) :=
+  let : Finite (Valued.ResidueField (v.adicCompletion K)) :=
     completionResidueFinite v
-  letI : ProperSpace (v.adicCompletion K) :=
+  let : ProperSpace (v.adicCompletion K) :=
     (@Valued.integer.properSpace_iff_completeSpace_and_isDiscreteValuationRing_integer_and_finite_residueField
       (v.adicCompletion K) _ _ _ _).2 ⟨inferInstance, inferInstance, inferInstance⟩
-  letI : LocallyCompactSpace (v.adicCompletion K) := by infer_instance
+  let : LocallyCompactSpace (v.adicCompletion K) := by infer_instance
   let vF := (Valued.v : Valuation (v.adicCompletion K) _)
-  letI : vF.Compatible := Valuation.Compatible.ofValuation vF
-  letI : IsValuativeTopology (v.adicCompletion K) := by
+  let : vF.Compatible := Valuation.Compatible.ofValuation vF
+  let : IsValuativeTopology (v.adicCompletion K) := by
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using vF.exists_setOf_restrict_le_iff 0 s
-  letI : ValuativeRel.IsNontrivial (v.adicCompletion K) :=
+  let : ValuativeRel.IsNontrivial (v.adicCompletion K) :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vF).2 inferInstance
   exact
     { toIsValuativeTopology := inferInstance
@@ -1122,7 +1122,7 @@ private theorem pPowerTorsion_finite_of_isClosed
   have hcompact : IsCompact (P : Set (Units F)) :=
     IsCompact.of_isClosed_subset (localField_unitSphere_isCompact F)
       hclosed hsubset
-  letI : CompactSpace P := isCompact_iff_compactSpace.mp hcompact
+  let : CompactSpace P := isCompact_iff_compactSpace.mp hcompact
   let H (a : ℕ) : Subgroup P :=
     (powMonoidHom ((p : ℕ) ^ a) : P →* P).ker
   have hHclosed (a : ℕ) : IsClosed (H a : Set P) := by
@@ -1140,7 +1140,7 @@ private theorem pPowerTorsion_finite_of_isClosed
     obtain ⟨x, hx⟩ := ha
     exact (H a).isOpen_of_mem_nhds
       (mem_interior_iff_mem_nhds.mp hx)
-  letI : Finite (P ⧸ H a) :=
+  let : Finite (P ⧸ H a) :=
     (H a).quotient_finite_of_isOpen hHopen
   have hHa : Finite (H a) := by
     let emb : H a → rootsOfUnity ((p : ℕ) ^ a) F := fun x =>
@@ -1154,7 +1154,7 @@ private theorem pPowerTorsion_finite_of_isClosed
       exact congrArg
         (fun z : rootsOfUnity ((p : ℕ) ^ a) F =>
           ((z.1 : Units F) : F)) h)
-  letI : Finite (H a) := hHa
+  let : Finite (H a) := hHa
   exact Finite.of_subgroup_quotient (H a)
 
 /-- Multiplication by `p` on the `p`-power torsion has kernel `μ_p`. -/
@@ -1211,8 +1211,8 @@ private theorem pPowerMod_finrank_of_finite
   let H : AddSubgroup (Additive P) :=
     (LinearMap.range (LinearMap.lsmul ℤ (Additive P)
       (((p : ℕ) : ℤ)))).toAddSubgroup
-  letI : Finite (ModN (Additive P) (p : ℕ)) := Quotient.finite _
-  letI : Module.Finite (ZMod (p : ℕ))
+  let : Finite (ModN (Additive P) (p : ℕ)) := Quotient.finite _
+  let : Module.Finite (ZMod (p : ℕ))
       (ModN (Additive P) (p : ℕ)) := Module.Finite.of_finite
   have hH : H = f.range := by
     ext x
@@ -1235,7 +1235,7 @@ private theorem pPowerMod_finrank_of_finite
     split_ifs with h
     · simpa only [Nat.card_eq_fintype_card] using
         h.choose_spec.card_rootsOfUnity
-    · letI : Subsingleton (rootsOfUnity (p : ℕ) F) :=
+    · let : Subsingleton (rootsOfUnity (p : ℕ) F) :=
         ⟨fun x y => by
           have hxpow : (x.1 : Units F) ^ (p : ℕ) = 1 :=
             (mem_rootsOfUnity (p : ℕ) x.1).mp x.2
@@ -1277,11 +1277,11 @@ private theorem residueCharacteristic_eq_absNorm_under
     (v : NU.LocalTheory.FinitePlace K) :
     NU.LocalTheory.residueCharacteristic v =
       Ideal.absNorm (Ideal.under ℤ v.asIdeal) := by
-  letI : Algebra (𝓞 K) (NU.LocalTheory.primeValuationSubring v) :=
+  let : Algebra (𝓞 K) (NU.LocalTheory.primeValuationSubring v) :=
     show Algebra (𝓞 K)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v) from
         inferInstance
-  letI : IsLocalization.AtPrime
+  let : IsLocalization.AtPrime
       (NU.LocalTheory.primeValuationSubring v) v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
@@ -1350,7 +1350,7 @@ private theorem residueCharacteristic_coprime_norm_sub_one
     (p : ℕ).Coprime
       (NU.Chebotarev.PrimeIdeal.norm v - 1) := by
   let q := NU.LocalTheory.restrictFinitePlace ℚ v
-  letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
+  let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hnorm : NU.Chebotarev.PrimeIdeal.norm v =
       NU.Chebotarev.PrimeIdeal.norm q ^
         q.asIdeal.inertiaDeg' v.asIdeal := by
@@ -1387,7 +1387,7 @@ private theorem localUnitDecomposition_pPowerTorsion_isClosed
     exact fun h => v.isMaximal.ne_top
       (Ideal.absNorm_eq_one_iff.mp h)
   have hnormgt : 1 < NU.Chebotarev.PrimeIdeal.norm v := by omega
-  letI : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
+  let : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
     ⟨(Nat.sub_pos_of_lt hnormgt).ne'⟩
   let e := units.productEquiv
   have hcoords (u : Units F) :
@@ -1463,10 +1463,10 @@ private theorem localUnitDecomposition_pPowerTorsion_finite
     (units : LocalUnitDecompositionData v p (finitePlaceLocalDegree v)) :
     Finite units.pPowerTorsion := by
   let F := v.adicCompletion K
-  letI : CharZero F := charZero_of_injective_algebraMap
+  let : CharZero F := charZero_of_injective_algebraMap
     (algebraMap K F).injective
-  letI : ValuativeRel F := completionValuativeRel v
-  letI : IsNonarchimedeanLocalField F := completionIsLocalField v
+  let : ValuativeRel F := completionValuativeRel v
+  let : IsNonarchimedeanLocalField F := completionIsLocalField v
   exact pPowerTorsion_finite_of_isClosed F p units.pPowerTorsion
     (localUnitDecomposition_pPowerTorsion_isClosed v p hp units)
     units.pPowerTorsion_spec
@@ -1479,7 +1479,7 @@ private theorem localUnitDecomposition_pPowerTorsionMod_finrank
     Module.finrank (ZMod (p : ℕ))
       (ModN (Additive units.pPowerTorsion) (p : ℕ)) =
       primitiveRootCorrection (v.adicCompletion K) p := by
-  letI : Finite units.pPowerTorsion :=
+  let : Finite units.pPowerTorsion :=
     localUnitDecomposition_pPowerTorsion_finite v p hp units
   exact pPowerMod_finrank_of_finite
     (v.adicCompletion K) p units.pPowerTorsion
@@ -1511,7 +1511,7 @@ private theorem localUnitDecomposition_teichmullerMod_finrank
       exact fun h => v.isMaximal.ne_top
         (Ideal.absNorm_eq_one_iff.mp h)
     omega
-  letI : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
+  let : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
     ⟨(Nat.sub_pos_of_lt hnorm).ne'⟩
   rw [(modNLinearEquivOfAddEquiv (p : ℕ)
     units.teichmullerEquiv.toMulEquiv.toAdditive).finrank_eq]
@@ -1567,16 +1567,16 @@ private theorem localUnitDecomposition_kummerQuotient_finrank
     exact fun h => v.isMaximal.ne_top
       (Ideal.absNorm_eq_one_iff.mp h)
   have hnormgt : 1 < NU.Chebotarev.PrimeIdeal.norm v := by omega
-  letI : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
+  let : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
     ⟨(Nat.sub_pos_of_lt hnormgt).ne'⟩
   let k := ZMod (p : ℕ)
   let V := ModN (Additive units.valuationFactor) (p : ℕ)
   let T := ModN (Additive units.teichmullerFactor) (p : ℕ)
   let P := ModN (Additive units.pPowerTorsion) (p : ℕ)
   let L := ModN (Additive units.freePrincipalUnits) (p : ℕ)
-  letI : Finite units.pPowerTorsion :=
+  let : Finite units.pPowerTorsion :=
     localUnitDecomposition_pPowerTorsion_finite v p hp units
-  letI : Finite units.teichmullerFactor := Finite.of_equiv
+  let : Finite units.teichmullerFactor := Finite.of_equiv
     (Multiplicative
       (ZMod (NU.Chebotarev.PrimeIdeal.norm v - 1)))
     units.teichmullerEquiv.toEquiv.symm
@@ -1584,11 +1584,11 @@ private theorem localUnitDecomposition_kummerQuotient_finrank
     units.valuationEquiv.toMulEquiv.toAdditive).trans
       (modNLinearEquivOfAddEquiv (p : ℕ)
         (AddEquiv.additiveMultiplicative ℤ))
-  letI : Module.Finite k V := Module.Finite.equiv eV.symm
-  letI : Finite T := Quotient.finite _
-  letI : Module.Finite k T := Module.Finite.of_finite
-  letI : Finite P := Quotient.finite _
-  letI : Module.Finite k P := Module.Finite.of_finite
+  let : Module.Finite k V := Module.Finite.equiv eV.symm
+  let : Finite T := Quotient.finite _
+  let : Module.Finite k T := Module.Finite.of_finite
+  let : Finite P := Quotient.finite _
+  let : Module.Finite k P := Module.Finite.of_finite
   let d := finitePlaceLocalDegree v
   let eL := ((modNLinearEquivOfAddEquiv (p : ℕ)
     units.freePrincipalUnitsEquiv.toMulEquiv.toAdditive).trans
@@ -1596,7 +1596,7 @@ private theorem localUnitDecomposition_kummerQuotient_finrank
         (AddEquiv.additiveMultiplicative
           (Fin d → ℤ_[p])))).trans
       (padicVectorModLinearEquiv p d)
-  letI : Module.Finite k L := Module.Finite.equiv eL.symm
+  let : Module.Finite k L := Module.Finite.equiv eL.symm
   rw [(localUnitDecomposition_kummerQuotientLinearEquiv
     v p units).finrank_eq]
   change Module.finrank k (V × T × P × L) = _
@@ -1625,16 +1625,16 @@ private theorem localUnitDecomposition_kummerQuotient_moduleFinite
     exact fun h => v.isMaximal.ne_top
       (Ideal.absNorm_eq_one_iff.mp h)
   have hnormgt : 1 < NU.Chebotarev.PrimeIdeal.norm v := by omega
-  letI : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
+  let : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
     ⟨(Nat.sub_pos_of_lt hnormgt).ne'⟩
   let k := ZMod (p : ℕ)
   let V := ModN (Additive units.valuationFactor) (p : ℕ)
   let T := ModN (Additive units.teichmullerFactor) (p : ℕ)
   let P := ModN (Additive units.pPowerTorsion) (p : ℕ)
   let L := ModN (Additive units.freePrincipalUnits) (p : ℕ)
-  letI : Finite units.pPowerTorsion :=
+  let : Finite units.pPowerTorsion :=
     localUnitDecomposition_pPowerTorsion_finite v p hp units
-  letI : Finite units.teichmullerFactor := Finite.of_equiv
+  let : Finite units.teichmullerFactor := Finite.of_equiv
     (Multiplicative
       (ZMod (NU.Chebotarev.PrimeIdeal.norm v - 1)))
     units.teichmullerEquiv.toEquiv.symm
@@ -1642,11 +1642,11 @@ private theorem localUnitDecomposition_kummerQuotient_moduleFinite
     units.valuationEquiv.toMulEquiv.toAdditive).trans
       (modNLinearEquivOfAddEquiv (p : ℕ)
         (AddEquiv.additiveMultiplicative ℤ))
-  letI : Module.Finite k V := Module.Finite.equiv eV.symm
-  letI : Finite T := Quotient.finite _
-  letI : Module.Finite k T := Module.Finite.of_finite
-  letI : Finite P := Quotient.finite _
-  letI : Module.Finite k P := Module.Finite.of_finite
+  let : Module.Finite k V := Module.Finite.equiv eV.symm
+  let : Finite T := Quotient.finite _
+  let : Module.Finite k T := Module.Finite.of_finite
+  let : Finite P := Quotient.finite _
+  let : Module.Finite k P := Module.Finite.of_finite
   let d := finitePlaceLocalDegree v
   let eL := ((modNLinearEquivOfAddEquiv (p : ℕ)
     units.freePrincipalUnitsEquiv.toMulEquiv.toAdditive).trans
@@ -1654,7 +1654,7 @@ private theorem localUnitDecomposition_kummerQuotient_moduleFinite
         (AddEquiv.additiveMultiplicative
           (Fin d → ℤ_[p])))).trans
       (padicVectorModLinearEquiv p d)
-  letI : Module.Finite k L := Module.Finite.equiv eL.symm
+  let : Module.Finite k L := Module.Finite.equiv eL.symm
   exact Module.Finite.equiv
     (localUnitDecomposition_kummerQuotientLinearEquiv v p units).symm
 
@@ -1674,13 +1674,13 @@ private theorem localUnitAddHom_continuous
   let F := v.adicCompletion K
   let e := units.productEquiv
   let d := finitePlaceLocalDegree v
-  letI : Finite units.pPowerTorsion :=
+  let : Finite units.pPowerTorsion :=
     localUnitDecomposition_pPowerTorsion_finite v p hp units
-  letI : DiscreteTopology units.valuationFactor :=
+  let : DiscreteTopology units.valuationFactor :=
     units.valuationEquiv.toHomeomorph.symm.discreteTopology
-  letI : DiscreteTopology units.teichmullerFactor :=
+  let : DiscreteTopology units.teichmullerFactor :=
     units.teichmullerEquiv.toHomeomorph.symm.discreteTopology
-  letI : DiscreteTopology units.pPowerTorsion :=
+  let : DiscreteTopology units.pPowerTorsion :=
     Finite.instDiscreteTopology
   let m : Ideal ℤ_[p] := IsLocalRing.maximalIdeal ℤ_[p]
   let S : Set (Fin d → ℤ_[p]) := Set.univ.pi (fun _ => (m : Set ℤ_[p]))
@@ -1973,9 +1973,9 @@ private theorem finiteCharacterFamily_card_le_kummerFinrank
   classical
   let G := Field.absoluteGaloisGroup F
   let R := ZMod (p : ℕ)
-  letI : CompactSpace G :=
+  let : CompactSpace G :=
     NU.LocalTheory.absoluteGaloisGroup_compactSpace
-  letI : TotallyDisconnectedSpace G :=
+  let : TotallyDisconnectedSpace G :=
     NU.LocalTheory.absoluteGaloisGroup_totallyDisconnectedSpace
   let phi : G →* Multiplicative (ι → R) :=
     characterFamilyMonoidHom p a
@@ -1997,21 +1997,21 @@ private theorem finiteCharacterFamily_card_le_kummerFinrank
       (InfiniteGalois.IntermediateFieldEquivClosedSubgroup
         (k := F) (K := AlgebraicClosure F)).right_inv H
     exact congrArg ClosedSubgroup.toSubgroup h
-  letI : phi.ker.Normal := MonoidHom.normal_ker phi
+  let : phi.ker.Normal := MonoidHom.normal_ker phi
   have hHnormal : (H : Subgroup G).Normal := by
     dsimp [H]
     exact MonoidHom.normal_ker phi
-  haveI hHnormalI : (H : Subgroup G).Normal := hHnormal
-  letI hHquotientGroup : Group
+  have hHnormalI : (H : Subgroup G).Normal := hHnormal
+  let hHquotientGroup : Group
       (Field.absoluteGaloisGroup F ⧸
         (H : Subgroup (Field.absoluteGaloisGroup F))) :=
     @QuotientGroup.Quotient.group (Field.absoluteGaloisGroup F)
       inferInstance (H : Subgroup (Field.absoluteGaloisGroup F)) hHnormal
-  letI : FiniteDimensional F E :=
+  let : FiniteDimensional F E :=
     (InfiniteGalois.isOpen_iff_finite E).mp (by
       rw [hfix]
       exact hopen)
-  letI : IsGalois F E :=
+  let : IsGalois F E :=
     (InfiniteGalois.normal_iff_isGalois E).mp (by
       rw [hfix]
       change phi.ker.Normal
@@ -2028,7 +2028,7 @@ private theorem finiteCharacterFamily_card_le_kummerFinrank
       inferInstance H hHnormal
   let galoisEquiv : (E ≃ₐ[F] E) ≃* Multiplicative (ι → R) :=
     normalEquiv.symm.trans quotientEquiv
-  letI : CommGroup (E ≃ₐ[F] E) :=
+  let : CommGroup (E ≃ₐ[F] E) :=
     { (inferInstance : Group (E ≃ₐ[F] E)) with
       mul_comm := fun x y => galoisEquiv.injective (by
         rw [map_mul, map_mul, mul_comm]) }
@@ -2071,12 +2071,12 @@ private theorem finiteCharacterFamily_card_le_kummerFinrank
     exact hu
   let bK := Module.Free.chooseBasis R
     (NU.LocalTheory.KummerQuotient F (p : ℕ))
-  letI : Finite (Module.Free.ChooseBasisIndex R
+  let : Finite (Module.Free.ChooseBasisIndex R
       (NU.LocalTheory.KummerQuotient F (p : ℕ))) :=
     Module.Finite.finite_basis bK
-  letI : Finite (NU.LocalTheory.KummerQuotient F (p : ℕ)) :=
+  let : Finite (NU.LocalTheory.KummerQuotient F (p : ℕ)) :=
     Finite.of_injective bK.repr bK.repr.injective
-  letI : Finite (Additive
+  let : Finite (Additive
       (Units F ⧸ NU.LCFT.normSubgroup F E)) :=
     Finite.of_surjective fq hfq
   have hcardQuotient : Nat.card
@@ -2125,7 +2125,7 @@ private theorem absoluteCharacter_moduleFinite
   let I := Module.Free.ChooseBasisIndex R C
   have hIfinite : Finite I := by
     by_contra hfinite
-    letI : Infinite I := not_finite_iff_infinite.mp hfinite
+    let : Infinite I := not_finite_iff_infinite.mp hfinite
     obtain ⟨s : Finset I, hs⟩ := Infinite.exists_subset_card_eq I
       (Module.finrank R (NU.LocalTheory.KummerQuotient F (p : ℕ)) + 1)
     let family : s → C := fun i => b i.1
@@ -2140,7 +2140,7 @@ private theorem absoluteCharacter_moduleFinite
         (NU.LocalTheory.KummerQuotient F (p : ℕ)) := by
       simpa [R] using hle
     omega
-  letI : Finite I := hIfinite
+  let : Finite I := hIfinite
   exact Module.Finite.of_basis b
 
 private theorem absoluteCharacter_finrank_le_kummerFinrank
@@ -2155,14 +2155,14 @@ private theorem absoluteCharacter_finrank_le_kummerFinrank
           (Field.absoluteGaloisGroup F) (p : ℕ)) ≤
       Module.finrank (ZMod (p : ℕ))
         (NU.LocalTheory.KummerQuotient F (p : ℕ)) := by
-  letI : Module.Finite (ZMod (p : ℕ))
+  let : Module.Finite (ZMod (p : ℕ))
       (NU.LocalTheory.ContinuousCharacter
         (Field.absoluteGaloisGroup F) (p : ℕ)) :=
     absoluteCharacter_moduleFinite F p
   let b := Module.Free.chooseBasis (ZMod (p : ℕ))
     (NU.LocalTheory.ContinuousCharacter
       (Field.absoluteGaloisGroup F) (p : ℕ))
-  letI : Fintype (Module.Free.ChooseBasisIndex (ZMod (p : ℕ))
+  let : Fintype (Module.Free.ChooseBasisIndex (ZMod (p : ℕ))
       (NU.LocalTheory.ContinuousCharacter
         (Field.absoluteGaloisGroup F) (p : ℕ))) := Fintype.ofFinite _
   rw [Module.finrank_eq_card_basis b]
@@ -2193,21 +2193,21 @@ private theorem completionCharacter_finrank_via_finiteLevels
   let CG := NU.LocalTheory.ContinuousCharacter
     (Field.absoluteGaloisGroup F) (p : ℕ)
   let CU := NU.LocalTheory.ContinuousCharacter (Units F) (p : ℕ)
-  letI : CharZero F := charZero_of_injective_algebraMap
+  let : CharZero F := charZero_of_injective_algebraMap
     (algebraMap K F).injective
-  letI : ValuativeRel F := completionValuativeRel v
-  letI : IsNonarchimedeanLocalField F := completionIsLocalField v
-  letI : Module.Finite R QK :=
+  let : ValuativeRel F := completionValuativeRel v
+  let : IsNonarchimedeanLocalField F := completionIsLocalField v
+  let : Module.Finite R QK :=
     localUnitDecomposition_kummerQuotient_moduleFinite v p hp units
-  letI : Module.Finite R CG := absoluteCharacter_moduleFinite F p
+  let : Module.Finite R CG := absoluteCharacter_moduleFinite F p
   have hupper : Module.finrank R CG ≤ Module.finrank R QK :=
     absoluteCharacter_finrank_le_kummerFinrank F p
   let unitEquiv := localUnitCharacterDualLinearEquiv v p hp units
-  letI : Module.Finite R (Module.Dual R QK) := by infer_instance
-  letI : Module.Finite R CU := Module.Finite.equiv unitEquiv.symm
+  let : Module.Finite R (Module.Dual R QK) := by infer_instance
+  let : Module.Finite R CU := Module.Finite.equiv unitEquiv.symm
   let b := Module.Free.chooseBasis R CU
   let J := Module.Free.ChooseBasisIndex R CU
-  letI : Fintype J := Fintype.ofFinite J
+  let : Fintype J := Fintype.ofFinite J
   let unitEval : Units F →* Multiplicative (J → R) :=
     characterFamilyMonoidHom p b
   have hunitEvalContinuous : Continuous unitEval := by
@@ -2218,15 +2218,15 @@ private theorem completionCharacter_finrank_via_finiteLevels
     exact (isOpen_discrete ({1} : Set (Multiplicative (J → R)))).preimage
       hunitEvalContinuous
   let OU : OpenSubgroup (Units F) := ⟨unitEval.ker, hopen⟩
-  letI : Finite unitEval.range := Finite.of_injective
+  let : Finite unitEval.range := Finite.of_injective
     (fun x : unitEval.range => (x : Multiplicative (J → R)))
     Subtype.val_injective
-  letI : Finite (Units F ⧸ unitEval.ker) := Finite.of_equiv
+  let : Finite (Units F ⧸ unitEval.ker) := Finite.of_equiv
     unitEval.range (QuotientGroup.quotientKerEquivRange unitEval).symm.toEquiv
   let H : NU.LCFT.OpenFiniteIndexSubgroup (Units F) :=
     ⟨OU, Subgroup.finiteIndex_of_finite_quotient⟩
   let pi := NU.LCFT.defaultUniformizer F
-  letI : TopologicalSpace (AlgebraicClosure F) := ⊥
+  let : TopologicalSpace (AlgebraicClosure F) := ⊥
   obtain ⟨a, c, ha, hc, hrect⟩ :=
     NU.LCFT.rectangularSubgroup_cofinal F pi H
   let L := NU.LCFT.rectangularClassField F (AlgebraicClosure F) pi a c ha hc
@@ -2255,14 +2255,14 @@ private theorem completionCharacter_finrank_via_finiteLevels
     rw [Finset.sum_eq_zero fun j _ => hterm j] at hsum
     exact hsum.symm
   let D := NU.LCFT.localFieldExtensionData F L.field
-  letI : ValuativeRel L.field := D.valuativeRel
-  letI : TopologicalSpace L.field := D.topology
-  letI : IsNonarchimedeanLocalField L.field := D.localField
-  letI : ValuativeExtension F L.field := D.valuativeExtension
-  letI : ContinuousSMul F L.field := D.continuousSMul
+  let : ValuativeRel L.field := D.valuativeRel
+  let : TopologicalSpace L.field := D.topology
+  let : IsNonarchimedeanLocalField L.field := D.localField
+  let : ValuativeExtension F L.field := D.valuativeExtension
+  let : ContinuousSMul F L.field := D.continuousSMul
   have hNopen : IsOpen (N : Set (Units F)) := by
     exact NU.LCFT.normSubgroup_isOpen F L.field
-  letI : DiscreteTopology (Units F ⧸ N) :=
+  let : DiscreteTopology (Units F ⧸ N) :=
     QuotientGroup.discreteTopology hNopen
   let qhom : Units F →ₜ* Units F ⧸ N :=
     ContinuousMonoidHom.mk (QuotientGroup.mk' N) continuous_quot_mk
@@ -2297,7 +2297,7 @@ private theorem completionCharacter_finrank_via_finiteLevels
   let descend : CU ≃ₗ[R]
       NU.LocalTheory.ContinuousCharacter (Units F ⧸ N) (p : ℕ) :=
     (LinearEquiv.ofBijective pull hpull).symm
-  letI : CommGroup (L.field ≃ₐ[F] L.field) :=
+  let : CommGroup (L.field ≃ₐ[F] L.field) :=
     { (inferInstance : Group (L.field ≃ₐ[F] L.field)) with
       mul_comm := L.commutative }
   let artin : (Units F ⧸ N) ≃* (L.field ≃ₐ[F] L.field) :=
@@ -2473,7 +2473,7 @@ private theorem completionCharacterRank_maschkeDescent_residual
       1 + finitePlaceLocalDegree v +
         primitiveRootCorrection (v.adicCompletion K) p := by
   let F := v.adicCompletion K
-  letI : CharZero F := charZero_of_injective_algebraMap
+  let : CharZero F := charZero_of_injective_algebraMap
     (algebraMap K F).injective
   by_cases hroots : ∃ z : F, IsPrimitiveRoot z (p : ℕ)
   · obtain ⟨z, hz⟩ := hroots

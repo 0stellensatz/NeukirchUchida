@@ -120,7 +120,7 @@ theorem exists_tame_local_plane_of_alternating
   have hv : residueCharacteristic v ≠ ℓ := by
     intro hv
     have hrankD := localD_finrank_eq_one_of_residueChar v hv
-    letI : Module.Finite (ZMod ℓ)
+    let : Module.Finite (ZMod ℓ)
         (localD ℓ (primeValuationSubring v)) :=
       Module.finite_of_finrank_pos (by rw [hrankD]; exact Nat.zero_lt_one)
     have hle := Submodule.finrank_mono hA.1
@@ -128,7 +128,7 @@ theorem exists_tame_local_plane_of_alternating
     omega
   refine ⟨v, hv, ?_⟩
   have hrankD := localD_finrank_eq_two ζ hζ v hv
-  letI : Module.Finite (ZMod ℓ)
+  let : Module.Finite (ZMod ℓ)
       (localD ℓ (primeValuationSubring v)) :=
     Module.finite_of_finrank_pos (by rw [hrankD]; omega)
   exact Submodule.eq_of_le_of_finrank_eq hA.1
@@ -286,11 +286,11 @@ theorem cupZero_alternating_iff {M : Type*} [Field M] [NumberField M]
       let f : Polynomial M := Polynomial.X ^ ℓ - Polynomial.C (a : M)
       have hf : Irreducible f :=
         X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hpow
-      letI : Fact (Irreducible f) := ⟨hf⟩
+      let : Fact (Irreducible f) := ⟨hf⟩
       let E := AdjoinRoot f
-      letI : Field E := inferInstance
-      letI : Algebra M E := inferInstance
-      letI : FiniteDimensional M E :=
+      let : Field E := inferInstance
+      let : Algebra M E := inferInstance
+      let : FiniteDimensional M E :=
         (AdjoinRoot.powerBasis (Irreducible.ne_zero hf)).finite
       have hroot : (AdjoinRoot.root f : E) ^ ℓ =
           algebraMap M E (a : M) := by

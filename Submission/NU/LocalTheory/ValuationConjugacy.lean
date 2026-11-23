@@ -100,7 +100,7 @@ private theorem valuationIntegralCenter_comap
     valuationIntegralCenter (A.comap f) =
       (valuationIntegralCenter A).comap
         (NumberField.RingOfIntegers.mapRingHom f) := by
-  letI : IsLocalHom (valuationComapMap f A) :=
+  let : IsLocalHom (valuationComapMap f A) :=
     valuationComapMap_isLocal f A
   apply Ideal.ext
   intro x
@@ -190,10 +190,10 @@ private theorem valuationSubring_eq_of_integralCenter_eq
   apply ValuationSubring.ext
   intro x
   let L : IntermediateField K F := IntermediateField.adjoin K {x}
-  letI : FiniteDimensional K L :=
+  let : FiniteDimensional K L :=
     IntermediateField.finiteDimensional_adjoin (S := {x})
       (fun y _ => Algebra.IsIntegral.isIntegral y)
-  letI : NumberField L := NumberField.of_module_finite K L
+  let : NumberField L := NumberField.of_module_finite K L
   let AL : ValuationSubring L := A.comap L.val.toRingHom
   let BL : ValuationSubring L := B.comap L.val.toRingHom
   have hAL : AL ≠ ⊤ := by
@@ -258,10 +258,10 @@ theorem exists_valuationSubring_extension
     apply Subtype.ext
     simpa [e] using hxy
   let i : S.toSubring →+* A := Subring.inclusion hSA.1
-  letI : IsLocalHom e := IsLocalHom.of_surjective e he
-  letI : IsLocalHom i := hSA.2
+  let : IsLocalHom e := IsLocalHom.of_surjective e he
+  let : IsLocalHom i := hSA.2
   let d : B →+* A := i.comp e
-  letI : IsLocalHom d := RingHom.isLocalHom_comp i e
+  let : IsLocalHom d := RingHom.isLocalHom_comp i e
   have hBA : B.toLocalSubring ≤ (A.comap f).toLocalSubring := by
     let j : B →+* A.comap f :=
       { toFun := fun x => ⟨x, by
@@ -299,14 +299,14 @@ theorem exists_smul_of_valuationSubring_comap_eq
     (hB : B.comap (algebraMap K F) ≠ ⊤)
     (hcomap : A.comap Z.val.toRingHom = B.comap Z.val.toRingHom) :
     ∃ σ : Gal(F / Z), B = σ • A := by
-  letI : IsAlgClosure Z F := IsAlgClosure.mk inferInstance inferInstance
-  letI : Normal Z F := IsAlgClosure.normal Z F
-  letI : IsGalois Z F := IsGalois.mk
+  let : IsAlgClosure Z F := IsAlgClosure.mk inferInstance inferInstance
+  let : Normal Z F := IsAlgClosure.normal Z F
+  let : IsGalois Z F := IsGalois.mk
   let R := 𝓞 F
   let G := Gal(F / Z)
-  letI : TopologicalSpace R := ⊥
-  letI : DiscreteTopology R := ⟨rfl⟩
-  letI : ContinuousSMul G R :=
+  let : TopologicalSpace R := ⊥
+  let : DiscreteTopology R := ⟨rfl⟩
+  let : ContinuousSMul G R :=
     continuousSMul_iff_stabilizer_isOpen.mpr fun x => by
       have hx := stabilizer_isOpen_of_isIntegral (K := Z) (x : F)
       have heq : (MulAction.stabilizer G x : Set G) =
@@ -321,15 +321,15 @@ theorem exists_smul_of_valuationSubring_comap_eq
       rw [heq]
       exact hx
   let R₀ := FixedPoints.subring R G
-  letI : Algebra R₀ R := (Subring.subtype R₀).toAlgebra
-  letI : SMulCommClass G R₀ R :=
+  let : Algebra R₀ R := (Subring.subtype R₀).toAlgebra
+  let : SMulCommClass G R₀ R :=
     { smul_comm := fun g a x => by
         change g • ((a : R) * x) = (a : R) * (g • x)
         calc
           _ = (g • (a : R)) * (g • x) :=
             MulSemiringAction.smul_mul g (a : R) x
           _ = _ := by rw [a.property g] }
-  letI : Algebra.IsInvariant R₀ R G :=
+  let : Algebra.IsInvariant R₀ R G :=
     { isInvariant := fun x hx => ⟨⟨x, hx⟩, rfl⟩ }
   let P : Ideal R := valuationIntegralCenter A
   let Q : Ideal R := valuationIntegralCenter B
@@ -390,8 +390,8 @@ theorem valuationSubring_eq_top_of_comap_eq_top
   have hbase (x : K) : algebraMap K F x ∈ A := by
     exact (ValuationSubring.ext_iff.mp hA x).mpr trivial
   let f : K →+* A := (algebraMap K F).codRestrict A hbase
-  letI : Algebra K A := f.toAlgebra
-  letI : IsScalarTower K A F :=
+  let : Algebra K A := f.toAlgebra
+  let : IsScalarTower K A F :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   apply top_unique
   intro x _
@@ -417,7 +417,7 @@ theorem valuationSubring_eq_or_eq_top_of_algebraic
   let BK := B.comap (algebraMap K F)
   have hbaseLe : AK ≤ BK := fun x hx => hAB hx
   obtain ⟨v, hv, _⟩ := numberField_valuations AK hA
-  letI : Ring.KrullDimLE 1 AK := by
+  let : Ring.KrullDimLE 1 AK := by
     rw [hv]
     change Ring.KrullDimLE 1
       (HeightOneSpectrum.valuationSubringAtPrime K v)

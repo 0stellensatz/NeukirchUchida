@@ -106,7 +106,7 @@ private theorem primeValuationSubring_comap_restrict
       Valuation.mem_valuationSubring_iff] at hz
     rw [map_inv₀, Valuation.map_inv] at hz
     exact (not_le_of_gt hinv) hz
-  letI : Ring.KrullDimLE 1 (primeValuationSubring v) := by
+  let : Ring.KrullDimLE 1 (primeValuationSubring v) := by
     change Ring.KrullDimLE 1
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
     infer_instance
@@ -118,12 +118,12 @@ private theorem exists_galoisLevel_mem
     (x : AlgebraicClosure K) : ∃ L : GaloisLevel K, x ∈ L.field := by
   let A : IntermediateField K (AlgebraicClosure K) :=
     IntermediateField.adjoin K {x}
-  letI : FiniteDimensional K A :=
+  let : FiniteDimensional K A :=
     IntermediateField.adjoin.finiteDimensional
       (Algebra.IsIntegral.isIntegral x)
   let Nfield : IntermediateField K (AlgebraicClosure K) :=
     IntermediateField.normalClosure K A (AlgebraicClosure K)
-  letI : IsGalois K (AlgebraicClosure K) := by infer_instance
+  let : IsGalois K (AlgebraicClosure K) := by infer_instance
   let N : GaloisLevel K :=
     { field := Nfield
       finiteDimensional := normalClosure.is_finiteDimensional K A
@@ -151,7 +151,7 @@ theorem exists_union_valuationSubring
       (⟨x, hxi⟩ : (Λ i).field) ∈ primeValuationSubring (w i) ↔
         (⟨x, hij hxi⟩ : (Λ j).field) ∈
           primeValuationSubring (w j) := by
-    letI : Algebra (Λ i).field (Λ j).field :=
+    let : Algebra (Λ i).field (Λ j).field :=
       (IntermediateField.inclusion hij).toAlgebra
     have hcomap := primeValuationSubring_comap_restrict
       (Λ i).field (w j)
@@ -396,7 +396,7 @@ private theorem valuationIntegralCenter_comap
     valuationIntegralCenter (A.comap f) =
       (valuationIntegralCenter A).comap
         (NumberField.RingOfIntegers.mapRingHom f) := by
-  letI : IsLocalHom (valuationComapMap f A) :=
+  let : IsLocalHom (valuationComapMap f A) :=
     valuationComapMap_isLocal f A
   apply Ideal.ext
   intro x
@@ -487,10 +487,10 @@ private theorem valuationSubring_eq_of_integralCenter_eq
   apply ValuationSubring.ext
   intro x
   let L : IntermediateField K F := IntermediateField.adjoin K {x}
-  letI : FiniteDimensional K L :=
+  let : FiniteDimensional K L :=
     IntermediateField.finiteDimensional_adjoin (S := {x})
       (fun y _ => Algebra.IsIntegral.isIntegral y)
-  letI : NumberField L := NumberField.of_module_finite K L
+  let : NumberField L := NumberField.of_module_finite K L
   let AL : ValuationSubring L := A.comap L.val.toRingHom
   let BL : ValuationSubring L := B.comap L.val.toRingHom
   have hAL : AL ≠ ⊤ := by
@@ -541,14 +541,14 @@ private theorem exists_smul_of_valuationSubring_comap_eq
     (hB : B.comap (algebraMap K F) ≠ ⊤)
     (hcomap : A.comap Z.val.toRingHom = B.comap Z.val.toRingHom) :
     ∃ σ : Gal(F / Z), B = σ • A := by
-  letI : IsAlgClosure Z F := IsAlgClosure.mk inferInstance inferInstance
-  letI : Normal Z F := IsAlgClosure.normal Z F
-  letI : IsGalois Z F := IsGalois.mk
+  let : IsAlgClosure Z F := IsAlgClosure.mk inferInstance inferInstance
+  let : Normal Z F := IsAlgClosure.normal Z F
+  let : IsGalois Z F := IsGalois.mk
   let R := 𝓞 F
   let G := Gal(F / Z)
-  letI : TopologicalSpace R := ⊥
-  letI : DiscreteTopology R := ⟨rfl⟩
-  letI : ContinuousSMul G R :=
+  let : TopologicalSpace R := ⊥
+  let : DiscreteTopology R := ⟨rfl⟩
+  let : ContinuousSMul G R :=
     continuousSMul_iff_stabilizer_isOpen.mpr fun x => by
       have hx := stabilizer_isOpen_of_isIntegral (K := Z) (x : F)
       have heq : (MulAction.stabilizer G x : Set G) =
@@ -563,15 +563,15 @@ private theorem exists_smul_of_valuationSubring_comap_eq
       rw [heq]
       exact hx
   let R₀ := FixedPoints.subring R G
-  letI : Algebra R₀ R := (Subring.subtype R₀).toAlgebra
-  letI : SMulCommClass G R₀ R :=
+  let : Algebra R₀ R := (Subring.subtype R₀).toAlgebra
+  let : SMulCommClass G R₀ R :=
     { smul_comm := fun g a x => by
         change g • ((a : R) * x) = (a : R) * (g • x)
         calc
           _ = (g • (a : R)) * (g • x) :=
             MulSemiringAction.smul_mul g (a : R) x
           _ = _ := by rw [a.property g] }
-  letI : Algebra.IsInvariant R₀ R G :=
+  let : Algebra.IsInvariant R₀ R G :=
     { isInvariant := fun x hx => ⟨⟨x, hx⟩, rfl⟩ }
   let P : Ideal R := valuationIntegralCenter A
   let Q : Ideal R := valuationIntegralCenter B
@@ -661,7 +661,7 @@ theorem absoluteDecompositionGroup_finiteImage
     primeValuationSubring_centerFinitePlace A hA
   apply le_antisymm
   · rintro σ ⟨g, hg, rfl⟩
-    letI := finitePlaceAction K L.field
+    let := finitePlaceAction K L.field
     change conjugateFinitePlace K (absoluteRestriction L g) v = v
     have hgW :
         (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) • W = W := by
@@ -703,7 +703,7 @@ theorem absoluteDecompositionGroup_finiteImage
     exact (hu.choose_spec.2 _ hconjlevel.symm).trans
       (hu.choose_spec.2 v hlevel.symm).symm
   · intro σ hσ
-    letI := finitePlaceAction K L.field
+    let := finitePlaceAction K L.field
     change conjugateFinitePlace K σ v = v at hσ
     obtain ⟨τE, hτE⟩ := AlgEquiv.restrictNormalHom_surjective
       (AlgebraicClosure K) σ
@@ -792,10 +792,10 @@ private theorem subgroup_le_of_cofinal_images
   obtain ⟨E, hEfin, hEnormal, hEU⟩ :=
     (krullTopology_mem_nhds_one_iff_of_normal K
       (AlgebraicClosure K) U).mp hU
-  letI : FiniteDimensional K E := hEfin
-  letI : Normal K E := hEnormal
-  letI : NumberField E := NumberField.of_module_finite K E
-  letI : IsGalois K E := ⟨⟩
+  let : FiniteDimensional K E := hEfin
+  let : Normal K E := hEnormal
+  let : NumberField E := NumberField.of_module_finite K E
+  let : IsGalois K E := ⟨⟩
   let LE : GaloisLevel K :=
     { field := E
       finiteDimensional := hEfin
@@ -853,7 +853,7 @@ private theorem exists_irreducible_quadratic
     (F : Type*) [Field F] [Finite F] :
     ∃ q : F[X], q.Monic ∧ Irreducible q ∧ q.natDegree = 2 := by
   let ⟨p, hp⟩ := CharP.exists F
-  letI : Fact p.Prime := ⟨CharP.char_is_prime F p⟩
+  let : Fact p.Prime := ⟨CharP.char_is_prime F p⟩
   let E := FiniteField.Extension F p 2
   obtain ⟨x, hx⟩ := Field.exists_primitive_element F E
   refine ⟨minpoly F x, minpoly.monic (IsIntegral.of_finite F x),
@@ -894,7 +894,7 @@ private theorem decompositionGroup_eq_idealStabilizer
     (w : FinitePlace L) :
     decompositionGroup K w =
       MulAction.stabilizer (L ≃ₐ[K] L) w.asIdeal := by
-  letI := finitePlaceAction K L
+  let := finitePlaceAction K L
   ext σ
   change σ • w = w ↔ σ • w.asIdeal = w.asIdeal
   constructor
@@ -942,8 +942,8 @@ private theorem exists_local_klein_level
   have hπK : v.valuation K πK = WithZero.exp (-1 : ℤ) :=
     Classical.choose_spec (v.valuation_exists_uniformizer K)
   let k := (𝓞 K) ⧸ p
-  letI : Field k := Ideal.Quotient.field p
-  letI : Finite k := by dsimp [k, p]; infer_instance
+  let : Field k := Ideal.Quotient.field p
+  let : Finite k := by dsimp [k, p]; infer_instance
   obtain ⟨q, hqmon, hqirr, hqdeg⟩ := exists_irreducible_quadratic k
   obtain ⟨A, hA⟩ := Ideal.Quotient.mk_surjective (I := p) (q.coeff 1)
   obtain ⟨B, hB⟩ := Ideal.Quotient.mk_surjective (I := p) (q.coeff 0)
@@ -984,8 +984,8 @@ private theorem exists_local_klein_level
     IntermediateField.adjoin K {β}
   let E : IntermediateField K (AlgebraicClosure K) :=
     IntermediateField.adjoin K {α, β}
-  letI : FiniteDimensional K Eα := IntermediateField.adjoin.finiteDimensional hαint
-  letI : FiniteDimensional K Eβ := IntermediateField.adjoin.finiteDimensional hβint
+  let : FiniteDimensional K Eα := IntermediateField.adjoin.finiteDimensional hαint
+  let : FiniteDimensional K Eβ := IntermediateField.adjoin.finiteDimensional hβint
   have hEeq : E = Eα ⊔ Eβ := by
     change IntermediateField.adjoin K {α, β} =
       IntermediateField.adjoin K {α} ⊔ IntermediateField.adjoin K {β}
@@ -993,7 +993,7 @@ private theorem exists_local_klein_level
       ext x
       simp only [Set.mem_insert_iff, Set.mem_singleton_iff, Set.mem_union],
       IntermediateField.adjoin_union]
-  letI : FiniteDimensional K E := hEeq ▸ inferInstance
+  let : FiniteDimensional K E := hEeq ▸ inferInstance
   have hαfin : Module.finrank K Eα ≤ 2 := by
     rw [IntermediateField.adjoin.finrank hαint]
     have hdvd : minpoly K α ∣ pa := minpoly.dvd K α (by
@@ -1055,9 +1055,9 @@ private theorem exists_local_klein_level
         exact E.sub_mem (E.neg_mem
           (IntermediateField.subset_adjoin K ({α, β} : Set _) (by simp)))
           (E.algebraMap_mem aK)
-  letI : Normal K E := hnormal
-  letI : NumberField E := NumberField.of_module_finite K E
-  letI : IsGalois K E := ⟨⟩
+  let : Normal K E := hnormal
+  let : NumberField E := NumberField.of_module_finite K E
+  let : IsGalois K E := ⟨⟩
   let L : GaloisLevel K :=
     { field := E
       finiteDimensional := inferInstance
@@ -1122,7 +1122,7 @@ private theorem exists_local_klein_level
   have hwrest : restrictFinitePlace K w = v :=
     absolutePlaceAtLevel_restrict_base W
       (⟨hWne, v, hWbase⟩ : IsAbsoluteFinitePlace K W) L v hWbase
-  letI : w.asIdeal.LiesOver p := by
+  let : w.asIdeal.LiesOver p := by
     have h : w.asIdeal.LiesOver (restrictFinitePlace K w).asIdeal := ⟨rfl⟩
     simpa [p, hwrest] using h
   let αE : E :=
@@ -1157,14 +1157,14 @@ private theorem exists_local_klein_level
   have hβintOK : IsIntegral (𝓞 K) βE := by
     refine ⟨X ^ 2 + C A * X + C B, (quadratic_monic_natDegree A B).1, ?_⟩
     simpa using hβOE
-  letI : IsScalarTower ℤ (𝓞 K) E :=
+  let : IsScalarTower ℤ (𝓞 K) E :=
     IsScalarTower.of_algebraMap_eq (fun z => by
       apply Subtype.ext
       simp)
   have hβintZ : IsIntegral ℤ βE := isIntegral_trans βE hβintOK
   let βO : 𝓞 E := ⟨βE, hβintZ⟩
   let kE := (𝓞 E) ⧸ w.asIdeal
-  letI : Field kE := Ideal.Quotient.field w.asIdeal
+  let : Field kE := Ideal.Quotient.field w.asIdeal
   have hβOeq : βO ^ 2 + algebraMap (𝓞 K) (𝓞 E) A * βO +
       algebraMap (𝓞 K) (𝓞 E) B = 0 := by
     apply Subtype.ext
@@ -1185,7 +1185,7 @@ private theorem exists_local_klein_level
   have hmindeq : (minpoly k βbar).natDegree = 2 := by
     rw [hmineq, hqdeg]
   let kres : IntermediateField k kE := IntermediateField.adjoin k {βbar}
-  letI : FiniteDimensional k kres :=
+  let : FiniteDimensional k kres :=
     IntermediateField.adjoin.finiteDimensional (IsIntegral.of_finite k βbar)
   have hkres : Module.finrank k kres = 2 := by
     rw [IntermediateField.adjoin.finrank (IsIntegral.of_finite k βbar), hmindeq]
@@ -1225,7 +1225,7 @@ private theorem exists_local_klein_level
     have hc : Nat.card G = 1 :=
       (Nat.card_eq_one_iff_unique).2 ⟨hs, inferInstance⟩
     omega
-  letI : Nontrivial G := not_subsingleton_iff_nontrivial.mp hnsub
+  let : Nontrivial G := not_subsingleton_iff_nontrivial.mp hnsub
   have hexp_le : Monoid.exponent G ≤ 2 :=
     Monoid.exponent_min' 2 (by omega) hpow2
   have hexp_gt : 1 < Monoid.exponent G := Monoid.one_lt_exponent
@@ -1243,7 +1243,7 @@ theorem absoluteDecompositionGroup_has_biquadratic_quotient
         Multiplicative (ZMod 2 × ZMod 2),
       Function.Surjective f := by
   obtain ⟨L, hklein, hdecomp⟩ := exists_local_klein_level W hW
-  letI : IsKleinFour (L.field ≃ₐ[K] L.field) := hklein
+  let : IsKleinFour (L.field ≃ₐ[K] L.field) := hklein
   let e : (L.field ≃ₐ[K] L.field) ≃*
       Multiplicative (ZMod 2 × ZMod 2) :=
     Classical.choice IsKleinFour.nonempty_mulEquiv
@@ -1434,7 +1434,7 @@ private theorem restrictLevelPlace_refl
     {K : Type*} [Field K] [NumberField K]
     (L : GaloisLevel K) (w : FinitePlace L.field) :
     restrictLevelPlace (L := L) (M := L) le_rfl w = w := by
-  letI : Algebra L.field L.field :=
+  let : Algebra L.field L.field :=
     (IntermediateField.inclusion
       (by exact le_rfl : L.field ≤ L.field)).toAlgebra
   apply IsDedekindDomain.HeightOneSpectrum.ext
@@ -1453,11 +1453,11 @@ private theorem restrictLevelPlace_trans
     (w : FinitePlace N.field) :
     restrictLevelPlace hLM (restrictLevelPlace hMN w) =
       restrictLevelPlace (hLM.trans hMN) w := by
-  letI : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
-  letI : Algebra M.field N.field := (IntermediateField.inclusion hMN).toAlgebra
-  letI : Algebra L.field N.field :=
+  let : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
+  let : Algebra M.field N.field := (IntermediateField.inclusion hMN).toAlgebra
+  let : Algebra L.field N.field :=
     (IntermediateField.inclusion (hLM.trans hMN)).toAlgebra
-  letI : IsScalarTower L.field M.field N.field :=
+  let : IsScalarTower L.field M.field N.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   apply IsDedekindDomain.HeightOneSpectrum.ext
   unfold restrictLevelPlace
@@ -1503,19 +1503,19 @@ theorem inverse_limit_characterization
     obtain ⟨i₀, hanchor⟩ := hanchor_exists
     let J := {i : ι // (Λ i₀).LE (Λ i)}
     let Λ' : J → GaloisLevel K := fun i => Λ i.1
-    letI : Preorder J :=
+    let : Preorder J :=
       { le := fun i j => (Λ i.1).LE (Λ j.1)
         le_refl := fun _ => le_rfl
         le_trans := fun _ _ _ hij hjk => hij.trans hjk }
-    letI : IsDirected J (· ≤ ·) := IsDirected.mk fun i j => by
+    let : IsDirected J (· ≤ ·) := IsDirected.mk fun i j => by
       obtain ⟨k, hik, hjk⟩ := hΛ.2.1 i.1 j.1
       exact ⟨⟨k, i.2.trans hik⟩, hik, hjk⟩
     let S : J → Type _ := fun i =>
       {v : FinitePlace (Λ' i).field // v ∈ finiteWitnesses H (Λ' i)}
-    letI (i : J) : Finite (S i) :=
+    let (i : J) : Finite (S i) :=
       Set.finite_coe_iff.mpr
         (finite_witness_system Λ H i₀ hanchor hdecomp i.1 i.2).2
-    letI (i : J) : Nonempty (S i) := by
+    let (i : J) : Nonempty (S i) := by
       obtain ⟨v, hv⟩ :=
         (finite_witness_system Λ H i₀ hanchor hdecomp i.1 i.2).1
       exact ⟨⟨v, hv⟩⟩

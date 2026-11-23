@@ -120,17 +120,17 @@ private theorem intermediateFieldRestrictionHom_continuous
       (1 : AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F) := hN
   rw [krullTopology_mem_nhds_one_iff] at hN'
   obtain ⟨L, hLfin, hLN⟩ := hN'
-  letI : FiniteDimensional F L := hLfin
+  let : FiniteDimensional F L := hLfin
   let e := intermediateFieldClosureEquiv F E
   let b := Module.Free.chooseBasis F L
-  letI : Fintype (Module.Free.ChooseBasisIndex F L) := Fintype.ofFinite _
+  let : Fintype (Module.Free.ChooseBasisIndex F L) := Fintype.ofFinite _
   let S : Set (AlgebraicClosure E) := Set.range
     (fun i : Module.Free.ChooseBasisIndex F L =>
       e.symm (((b i : L) : AlgebraicClosure F)))
-  letI : Fintype S := (Set.finite_range _).fintype
+  let : Fintype S := (Set.finite_range _).fintype
   let L' : IntermediateField E (AlgebraicClosure E) :=
     IntermediateField.adjoin E S
-  haveI : FiniteDimensional E L' := by
+  have : FiniteDimensional E L' := by
     apply IntermediateField.finiteDimensional_adjoin
     intro x _
     exact Algebra.IsIntegral.isIntegral x
@@ -210,14 +210,14 @@ private theorem algebraicValuation_valueGroup_mulArchimedean
   obtain ⟨a, rfl⟩ := A.valuation_surjective x
   obtain ⟨b, rfl⟩ := A.valuation_surjective y
   let L : IntermediateField ℚ F := ℚ⟮a, b⟯
-  letI : Algebra ℚ L := L.algebra'
+  let : Algebra ℚ L := L.algebra'
   let aL : L := IntermediateField.AdjoinPair.gen₁ ℚ a b
   let bL : L := IntermediateField.AdjoinPair.gen₂ ℚ a b
-  letI : FiniteDimensional ℚ L :=
+  let : FiniteDimensional ℚ L :=
     IntermediateField.finiteDimensional_adjoin_pair
       (K := ℚ) (L := F)
       (Algebra.IsIntegral.isIntegral a) (Algebra.IsIntegral.isIntegral b)
-  letI : NumberField L := NumberField.of_module_finite ℚ L
+  let : NumberField L := NumberField.of_module_finite ℚ L
   let C : ValuationSubring L := A.comap L.val.toRingHom
   have hb_not : b ∉ A := by
     rw [← A.valuation_le_one_iff]
@@ -254,16 +254,16 @@ private theorem algebraicValuation_valueGroup_mulArchimedean
   have hyw : 1 < w bL := by
     rw [show 1 = w 1 from (map_one w).symm, ← not_le]
     exact (hequiv bL 1).not.mp hyL
-  letI : w.IsNontrivial := by
+  let : w.IsNontrivial := by
     rw [Valuation.IsNontrivial_iff_exists_one_lt]
     exact ⟨bL, hyw⟩
-  letI : w.RankOne := by
+  let : w.RankOne := by
     dsimp only [w]
     infer_instance
   have harch : MulArchimedean
       (MonoidWithZeroHom.ValueGroup₀ (.ofClass w)) :=
     w.nonempty_rankOne_iff_mulArchimedean.mp ⟨inferInstance⟩
-  letI := harch
+  let := harch
   have hywr : 1 < w.restrict bL := by
     rw [show 1 = w.restrict 1 from (map_one w.restrict).symm,
       Valuation.restrict_lt_iff]
@@ -431,8 +431,8 @@ private noncomputable def absoluteGaloisOfAlgClosure
     obtain ⟨L, hLfin, hLN⟩ := hN'
     let L' : IntermediateField F (AlgebraicClosure F) :=
       L.map e.symm.toAlgHom
-    haveI : FiniteDimensional F L := hLfin
-    haveI : FiniteDimensional F L' := by
+    have : FiniteDimensional F L := hLfin
+    have : FiniteDimensional F L' := by
       exact (L.equivMap e.symm.toAlgHom).toLinearEquiv.finiteDimensional
     apply mem_nhds_iff.mpr
     refine ⟨L'.fixingSubgroup, ?_,
@@ -521,15 +521,15 @@ private noncomputable def absoluteGaloisCongr
         (1 : AlgebraicClosure D ≃ₐ[D] AlgebraicClosure D) := hN
     rw [krullTopology_mem_nhds_one_iff] at hN'
     obtain ⟨L, hLfin, hLN⟩ := hN'
-    letI : FiniteDimensional D L := hLfin
+    let : FiniteDimensional D L := hLfin
     let b := Module.Free.chooseBasis D L
-    letI : Fintype (Module.Free.ChooseBasisIndex D L) := Fintype.ofFinite _
+    let : Fintype (Module.Free.ChooseBasisIndex D L) := Fintype.ofFinite _
     let S : Set (AlgebraicClosure F) := Set.range
       (fun i : Module.Free.ChooseBasisIndex D L =>
         c.symm (((b i : L) : AlgebraicClosure D)))
     let L' : IntermediateField F (AlgebraicClosure F) :=
       IntermediateField.adjoin F S
-    haveI : FiniteDimensional F L' := by
+    have : FiniteDimensional F L' := by
       apply IntermediateField.finiteDimensional_adjoin
       intro x _
       exact Algebra.IsIntegral.isIntegral x
@@ -618,7 +618,7 @@ private theorem completionGaloisEquivDecomposition
       NU.LocalTheory.absoluteDecompositionGroup K P.1) := by
   classical
   let Ω := AlgebraicClosure K
-  letI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
+  let : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
   let W : ValuationSubring Ω := P.1
   have hW : W ≠ ⊤ := by
     intro htop
@@ -627,18 +627,18 @@ private theorem completionGaloisEquivDecomposition
     change W.comap (algebraMap K Ω) = ⊤
     rw [htop]
     rfl
-  letI : W.valuation.IsNontrivial :=
+  let : W.valuation.IsNontrivial :=
     not_not.mp ((not_congr W.eq_top_iff).mp hW)
-  letI : MulArchimedean W.ValueGroup :=
+  let : MulArchimedean W.ValueGroup :=
     algebraicValuation_valueGroup_mulArchimedean W
-  letI : W.valuation.RankOne :=
+  let : W.valuation.RankOne :=
     (W.valuation.nonempty_rankOne_iff_mulArchimedean.mpr inferInstance).some
-  letI : Valued Ω W.ValueGroup := Valued.mk' W.valuation
-  letI : NontriviallyNormedField Ω :=
+  let : Valued Ω W.ValueGroup := Valued.mk' W.valuation
+  let : NontriviallyNormedField Ω :=
     Valued.toNontriviallyNormedField Ω W.ValueGroup
-  letI : IsUltrametricDist Ω :=
+  let : IsUltrametricDist Ω :=
     Valued.instIsUltrametricDist Ω W.ValueGroup
-  letI : UniformContinuousConstSMul K Ω :=
+  let : UniformContinuousConstSMul K Ω :=
     uniformContinuousConstSMul_of_continuousConstSMul K Ω
   let wK := W.valuation.comap (algebraMap K Ω)
   have hwKring : wK.valuationSubring =
@@ -656,18 +656,18 @@ private theorem completionGaloisEquivDecomposition
     (Valuation.isEquiv_iff_valuationSubring _ _).2
       (hvKring.trans hwKring.symm)
   let C := UniformSpace.Completion Ω
-  letI : NormedField C := inferInstance
-  letI : IsUltrametricDist C := IsUltrametricDist.of_normedAlgebra Ω
-  letI : NontriviallyNormedField C :=
+  let : NormedField C := inferInstance
+  let : IsUltrametricDist C := IsUltrametricDist.of_normedAlgebra Ω
+  let : NontriviallyNormedField C :=
     { non_trivial := by
         obtain ⟨x, hx⟩ := NontriviallyNormedField.non_trivial (α := Ω)
         exact ⟨(x : C), by
           change 1 < ‖(x : C)‖
           rw [UniformSpace.Completion.norm_coe]
           exact hx⟩ }
-  letI : CharZero C :=
+  let : CharZero C :=
     (RingHom.charZero_iff (algebraMap Ω C).injective).mp inferInstance
-  letI : IsAlgClosed C :=
+  let : IsAlgClosed C :=
     IsAlgClosed.of_denseRange UniformSpace.Completion.denseRange_coe
   let iC : K →+* C :=
     UniformSpace.Completion.coeRingHom.comp (algebraMap K Ω)
@@ -677,22 +677,22 @@ private theorem completionGaloisEquivDecomposition
   let eD : v.adicCompletion K ≃+* D := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv K v).trans eD0
   let kToD : K →+* D := iC.codRestrict D fun x =>
     Subfield.le_topologicalClosure iC.fieldRange ⟨x, rfl⟩
-  letI : IsClosed (D : Set C) := Subfield.isClosed_topologicalClosure _
-  letI : CompleteSpace D := IsClosed.completeSpace_coe
-  letI : Algebra K D :=
+  let : IsClosed (D : Set C) := Subfield.isClosed_topologicalClosure _
+  let : CompleteSpace D := IsClosed.completeSpace_coe
+  let : Algebra K D :=
     { toSMul := ⟨fun k x => kToD k * x⟩
       algebraMap := kToD
       commutes' := fun _ _ => mul_comm _ _
       smul_def' := fun _ _ => rfl }
-  letI : Algebra K C := inferInstance
-  letI : IsScalarTower K D C :=
+  let : Algebra K C := inferInstance
+  let : IsScalarTower K D C :=
     IsScalarTower.of_algebraMap_eq (R := K) (S := D) (A := C) fun x => by
       change iC x = (kToD x : C)
       rfl
   let E : IntermediateField D C := algebraicClosure D C
-  letI : Algebra K E :=
+  let : Algebra K E :=
     ((algebraMap D E).comp (algebraMap K D)).toAlgebra
-  letI : IsScalarTower K D E :=
+  let : IsScalarTower K D E :=
     IsScalarTower.of_algebraMap_eq (R := K) (S := D) (A := E) fun _ => rfl
   let omegaToC : Ω →ₐ[K] C :=
     { UniformSpace.Completion.coeRingHom with
@@ -706,9 +706,9 @@ private theorem completionGaloisEquivDecomposition
       commutes' := fun _ => rfl }
   let omegaEquiv := AlgEquiv.ofInjectiveField omegaToE
   let normalO : Normal K omegaToE.fieldRange := by
-    letI : Normal K Ω := IsAlgClosure.normal K Ω
+    let : Normal K Ω := IsAlgClosure.normal K Ω
     exact Normal.of_algEquiv omegaEquiv
-  letI normalOInst : Normal K omegaToE.fieldRange := normalO
+  let normalOInst : Normal K omegaToE.fieldRange := normalO
   let restrictScalarsHom : (E ≃ₐ[D] E) →* (E ≃ₐ[K] E) :=
     { toFun := fun τ => τ.restrictScalars K
       map_one' := rfl
@@ -730,7 +730,7 @@ private theorem completionGaloisEquivDecomposition
       _ = τ (omegaToE x) := by
         exact @AlgEquiv.restrictNormalHom_apply K _ E _ _ omegaToE.fieldRange normalOInst
           (restrictScalarsHom τ) (omegaEquiv x)
-  letI : NontriviallyNormedField D :=
+  let : NontriviallyNormedField D :=
     { non_trivial := by
         obtain ⟨a, ha0, ha1⟩ :=
           Valuation.IsNontrivial.exists_val_nontrivial
@@ -762,7 +762,7 @@ private theorem completionGaloisEquivDecomposition
           rw [UniformSpace.Completion.norm_coe,
             Valued.toNormedField.one_lt_norm_iff]
           exact hwa }
-  letI : NormedAlgebra D E :=
+  let : NormedAlgebra D E :=
     { norm_smul_le := fun r x => by
         change ‖(r : C) * (x : C)‖ ≤ ‖(r : C)‖ * ‖(x : C)‖
         exact norm_mul_le _ _ }
@@ -880,11 +880,11 @@ private theorem completionGaloisEquivDecomposition
       · exact d.2
     let sigmaAlg : C ≃ₐ[D] C :=
       { sigmaC with commutes' := sigmaC_fix_D }
-    letI : IsAlgClosure D E := by
+    let : IsAlgClosure D E := by
       dsimp [E]
       infer_instance
     let normalE : Normal D E := IsAlgClosure.normal D E
-    letI normalEInst : Normal D E := normalE
+    let normalEInst : Normal D E := normalE
     let tau : E ≃ₐ[D] E := sigmaAlg.restrictNormal E
     refine ⟨tau, ?_⟩
     apply Subtype.ext
@@ -901,7 +901,7 @@ private theorem completionGaloisEquivDecomposition
       exact AlgEquiv.restrictNormal_commutes sigmaAlg E (omegaToE x)]
     change sigmaC (x : C) = (σ x : C)
     exact sigmaC_coe x
-  letI closureE : IsAlgClosure D E := by
+  let closureE : IsAlgClosure D E := by
     dsimp [E]
     infer_instance
   have hrestrict_cont : Continuous restrictOmega := by
@@ -911,13 +911,13 @@ private theorem completionGaloisEquivDecomposition
     have hN' : N ∈ nhds (1 : Ω ≃ₐ[K] Ω) := hN
     rw [krullTopology_mem_nhds_one_iff] at hN'
     obtain ⟨L, hLfin, hLN⟩ := hN'
-    letI : FiniteDimensional K L := hLfin
+    let : FiniteDimensional K L := hLfin
     obtain ⟨s, hs⟩ := IntermediateField.fg_top K L
     let S : Set E := (fun z : L => omegaToE (z : Ω)) '' (s : Set L)
-    letI : Fintype S :=
+    let : Fintype S :=
       (s.finite_toSet.image (fun z : L => omegaToE (z : Ω))).fintype
     let L' : IntermediateField D E := IntermediateField.adjoin D S
-    haveI : FiniteDimensional D L' := by
+    have : FiniteDimensional D L' := by
       apply IntermediateField.finiteDimensional_adjoin
       intro x _
       exact Algebra.IsIntegral.isIntegral x
@@ -953,12 +953,12 @@ private theorem completionGaloisEquivDecomposition
       NU.LocalTheory.absoluteDecompositionGroup K W :=
     MulEquiv.ofBijective r ⟨r_injective, r_surjective⟩
   have hm : Continuous m := hr_cont
-  letI : CompactSpace (Field.absoluteGaloisGroup D) :=
+  let : CompactSpace (Field.absoluteGaloisGroup D) :=
     NU.LocalTheory.absoluteGaloisGroup_compactSpace
-  letI : CompactSpace (E ≃ₐ[D] E) :=
+  let : CompactSpace (E ≃ₐ[D] E) :=
     (absoluteGaloisOfAlgClosure D E).toHomeomorph.compactSpace
-  letI : T2Space (Field.absoluteGaloisGroup K) := krullTopology_t2
-  letI : T2Space
+  let : T2Space (Field.absoluteGaloisGroup K) := krullTopology_t2
+  let : T2Space
       (NU.LocalTheory.absoluteDecompositionGroup K W) := inferInstance
   let h := hm.homeoOfEquivCompactToT2
   let er : (E ≃ₐ[D] E) ≃ₜ*

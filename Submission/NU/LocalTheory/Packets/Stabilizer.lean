@@ -422,7 +422,7 @@ private theorem principalUnitGroup_automorphism_forward
     exact hu.le⟩
   have hz : z ∈ IsLocalRing.maximalIdeal A :=
     (A.valuation_lt_one_iff z).2 hu
-  letI : IsLocalHom e.toRingHom :=
+  let : IsLocalHom e.toRingHom :=
     IsLocalHom.of_surjective e.toRingHom e.surjective
   have hez : e z ∈ IsLocalRing.maximalIdeal B :=
     map_nonunit e.toRingHom z hz
@@ -716,8 +716,8 @@ theorem tower_surjectivity (K L M : Type*)
     Subgroup.map (galoisRestriction K L M)
       (decompositionGroup K w) =
         decompositionGroup K (restrictFinitePlace L w) := by
-  letI := finitePlaceAction K M
-  letI := finitePlaceAction K L
+  let := finitePlaceAction K M
+  let := finitePlaceAction K L
   apply le_antisymm
   · rintro τ ⟨σ, hσ, rfl⟩
     change conjugateFinitePlace K σ w = w at hσ
@@ -743,10 +743,10 @@ theorem tower_surjectivity (K L M : Type*)
       rw [← under_galoisRestriction_smul, hσ0]
       change p = τ • (restrictFinitePlace L w).asIdeal
       exact congrArg HeightOneSpectrum.asIdeal hτ.symm
-    letI : P0.LiesOver p := hP0over
+    let : P0.LiesOver p := hP0over
     have hwOver : w.asIdeal.LiesOver p := ⟨rfl⟩
-    letI : w.asIdeal.LiesOver p := hwOver
-    letI : IsGalois L M := IsGalois.tower_top_of_isGalois K L M
+    let : w.asIdeal.LiesOver p := hwOver
+    let : IsGalois L M := IsGalois.tower_top_of_isGalois K L M
     obtain ⟨δ, hδ⟩ := Ideal.exists_smul_eq_of_isGaloisGroup
       p P0 w.asIdeal (M ≃ₐ[L] M)
     let δK : M ≃ₐ[K] M := δ.restrictScalars K

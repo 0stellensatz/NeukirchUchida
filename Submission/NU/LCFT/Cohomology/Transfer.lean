@@ -176,14 +176,14 @@ variable {S : Subgroup G} (T : ExplicitTransversal S ι)
 
 private theorem rho_inv_rho (M : Rep ℤ G) (g : G) (x : M) :
     M.ρ g⁻¹ (M.ρ g x) = x := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   rw [← Module.End.mul_apply, ← map_mul]
   simp
 
 private theorem rho_action_factorization (M : Rep ℤ G) (i : ι) (g : G) (x : M) :
     M.ρ g (M.ρ (T.rep (T.next i g))⁻¹ x) =
       M.ρ (T.rep i)⁻¹ (M.ρ (T.factor i g : G) x) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   rw [← Module.End.mul_apply, ← map_mul, T.action_factorization,
     map_mul, Module.End.mul_apply]
 
@@ -219,7 +219,7 @@ private theorem rho_sum_reindex (M : Rep ℤ G) (g : G) (f : ι → M) :
     M.ρ g (∑ i : ι, M.ρ (T.rep i)⁻¹ (f i)) =
       ∑ i : ι, M.ρ (T.rep i)⁻¹
         (M.ρ (T.factor i g : G) (f (T.next i g))) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   rw [map_sum]
   calc
     (∑ i : ι, M.ρ g (M.ρ (T.rep i)⁻¹ (f i))) =
@@ -236,7 +236,7 @@ private theorem rho_sum_reindex (M : Rep ℤ G) (g : G) (f : ι → M) :
 /-- Concrete transfer commutes with `d⁰`. -/
 theorem corC0_d0 (M : Rep ℤ G) (a : C0 (Rep.res S.subtype M)) :
     corC1 T M (d0 (Rep.res S.subtype M) a) = d0 M (corC0 T M a) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   ext g
   change (∑ i : ι, M.ρ (T.rep i)⁻¹
       (M.ρ (T.factor i g : G) a - a)) =
@@ -258,7 +258,7 @@ theorem corC0_d0 (M : Rep ℤ G) (a : C0 (Rep.res S.subtype M)) :
 /-- Concrete transfer commutes with `d¹`. -/
 theorem corC1_d1 (M : Rep ℤ G) (b : C1 (Rep.res S.subtype M)) :
     corC2 T M (d1 (Rep.res S.subtype M) b) = d1 M (corC1 T M b) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   ext g h
   change (∑ i : ι, M.ρ (T.rep i)⁻¹
       (M.ρ (T.factor i g : G) (b (T.factor (T.next i g) h)) -
@@ -273,7 +273,7 @@ theorem corC1_d1 (M : Rep ℤ G) (b : C1 (Rep.res S.subtype M)) :
 /-- Concrete transfer commutes with `d²`. -/
 theorem corC2_d2 (M : Rep ℤ G) (c : C2 (Rep.res S.subtype M)) :
     corC3 T M (d2 (Rep.res S.subtype M) c) = d2 M (corC2 T M c) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   ext g h k
   change (∑ i : ι, M.ρ (T.rep i)⁻¹
       (M.ρ (T.factor i g : G)
@@ -410,7 +410,7 @@ private theorem corC1_restrict_summand (M : Rep ℤ G) (b : C1 M)
     M.ρ (T.rep i)⁻¹ (b (T.factor i g : G)) =
       b g + M.ρ (T.rep i)⁻¹ (b (T.rep i)) -
         M.ρ g (M.ρ (T.rep (T.next i g))⁻¹ (b (T.rep (T.next i g)))) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   have hmul (x y : G) : b (x * y) = M.ρ x (b y) + b x := by
     have h := congrFun (congrFun hb x) y
     change M.ρ x (b y) - b (x * y) + b x = 0 at h
@@ -446,7 +446,7 @@ coboundary.  Exact equality on all cochains is false; this is the standard corre
 theorem corC1_restrict (M : Rep ℤ G) (b : C1 M) (hb : d1 M b = 0) :
     corC1 T M (restrictC1 S.subtype M b) =
       Fintype.card ι • b + d0 M (restrictionCorPrimitive1 T M b) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   ext g
   change (∑ i : ι, M.ρ (T.rep i)⁻¹ (b (T.factor i g : G))) =
     Fintype.card ι • b g +
@@ -495,7 +495,7 @@ private theorem homogeneous2_equivariant (M : Rep ℤ G) (c : C2 M)
     (g x₀ x₁ x₂ : G) :
     M.ρ g (homogeneous2 M c x₀ x₁ x₂) =
       homogeneous2 M c (g * x₀) (g * x₁) (g * x₂) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   simp only [homogeneous2]
   rw [← Module.End.mul_apply, ← map_mul]
   congr 2 <;> simp [mul_assoc]
@@ -504,7 +504,7 @@ private theorem homogeneous2_cocycle (M : Rep ℤ G) (c : C2 M)
     (hc : d2 M c = 0) (x₀ x₁ x₂ x₃ : G) :
     homogeneous2 M c x₁ x₂ x₃ - homogeneous2 M c x₀ x₂ x₃ +
       homogeneous2 M c x₀ x₁ x₃ - homogeneous2 M c x₀ x₁ x₂ = 0 := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   have h := congrFun (congrFun (congrFun hc (x₀⁻¹ * x₁))
     (x₁⁻¹ * x₂)) (x₂⁻¹ * x₃)
   change M.ρ (x₀⁻¹ * x₁) (c (x₁⁻¹ * x₂) (x₂⁻¹ * x₃)) -
@@ -603,7 +603,7 @@ private theorem d1_restrictionCorPrimitive2 (M : Rep ℤ G) (c : C2 M)
     (hc : d2 M c = 0) :
     d1 M (restrictionCorPrimitive2 T M c) =
       corC2 T M (restrictC2 S.subtype M c) - Fintype.card ι • c := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   ext g h
   change M.ρ g (∑ i : ι, restrictionCorPrismTerm T M c i h) -
       (∑ i : ι, restrictionCorPrismTerm T M c i (g * h)) +
@@ -678,7 +678,7 @@ private theorem corC1_change_summand (M : Rep ℤ G)
       M.ρ g (M.ρ (T.rep (T.next i g))⁻¹
           (b.1 (C.gauge (T.next i g))⁻¹)) -
         M.ρ (T.rep i)⁻¹ (b.1 (C.gauge i)⁻¹) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   have hmul (x y : S) : b.1 (x * y) = M.ρ (x : G) (b.1 y) + b.1 x := by
     have h := congrFun (congrFun b.2.1 x) y
     change M.ρ (x : G) (b.1 y) - b.1 (x * y) + b.1 x = 0 at h
@@ -718,7 +718,7 @@ private theorem corC1_change_summand (M : Rep ℤ G)
 /-- Changing the explicit transversal changes transfer of a one-cocycle by a coboundary. -/
 theorem corC1_change (M : Rep ℤ G) (b : cocycles1 (Rep.res S.subtype M)) :
     corC1 U M b.1 - corC1 T M b.1 = d0 M (primitive1 C M b.1) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   ext g
   change (∑ i : ι, M.ρ (U.rep i)⁻¹ (b.1 (U.factor i g))) -
       (∑ i : ι, M.ρ (T.rep i)⁻¹ (b.1 (T.factor i g))) =
@@ -743,7 +743,7 @@ theorem corC1_change (M : Rep ℤ G) (b : cocycles1 (Rep.res S.subtype M)) :
 /-- Transfer on invariant zero-cochains is independent of the transversal. -/
 theorem corH0_eq (C : TransversalChange T U) (M : Rep ℤ G) :
     corH0 U M = corH0 T M := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   apply AddMonoidHom.ext
   intro a
   apply Subtype.ext
@@ -798,7 +798,7 @@ private theorem homogeneous2_change_new (M : Rep ℤ G)
           (T.factor i g * (C.gauge (T.next i g))⁻¹)
           (T.factor i g * T.factor (T.next i g) h *
             (C.gauge (T.next (T.next i g) h))⁻¹)) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   rw [C.rep_eq, mul_inv_rev, map_mul, Module.End.mul_apply]
   congr 1
   simp only [homogeneous2, Rep.res_obj_ρ, MonoidHom.coe_comp,
@@ -877,7 +877,7 @@ private theorem corC2_change_local (M : Rep ℤ G)
 coboundary. -/
 theorem corC2_change (M : Rep ℤ G) (c : cocycles2 (Rep.res S.subtype M)) :
     corC2 U M c.1 - corC2 T M c.1 = d1 M (primitive2 C M c.1) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   ext g h
   change (∑ i : ι, M.ρ (U.rep i)⁻¹
       (c.1 (U.factor i g) (U.factor (U.next i g) h))) -
@@ -1063,7 +1063,7 @@ def cosetSum (T : ExplicitTransversal S ι) (M : Rep ℤ G) : M →+ M where
 theorem norm_eq_subgroupNorm_cosetSum (T : ExplicitTransversal S ι)
     (M : Rep ℤ G) (a : M) :
     M.norm.asHom.hom a = (Rep.res S.subtype M).norm.asHom.hom (cosetSum T M a) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   rw [Rep.norm_apply, Rep.norm_apply, Representation.norm, Representation.norm]
   simp only [LinearMap.sum_apply, cosetSum, AddMonoidHom.coe_mk, ZeroHom.coe_mk,
     map_sum]
@@ -1095,7 +1095,7 @@ for Tate corestriction. -/
 theorem norm_eq_cor_subgroupNorm (T : ExplicitTransversal S ι)
     (M : Rep ℤ G) (a : M) :
     M.norm.asHom.hom a = corC0 T M ((Rep.res S.subtype M).norm.asHom.hom a) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   rw [Rep.norm_apply, Rep.norm_apply, Representation.norm, Representation.norm]
   simp only [LinearMap.sum_apply, corC0, AddMonoidHom.coe_mk, ZeroHom.coe_mk,
     map_sum]
@@ -1229,7 +1229,7 @@ private theorem cosetSum_generator_mem_augmentation
     (T : ExplicitTransversal S ι) (M : Rep ℤ G) (g : G) (a : M) :
     cosetSum T M (M.ρ g a - a) ∈
       TateLowDegree.augmentation (Rep.res S.subtype M) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   have hreindex :
       (∑ i : ι, M.ρ (T.rep (T.next i g)) a) =
         ∑ i : ι, M.ρ (T.rep i) a := by

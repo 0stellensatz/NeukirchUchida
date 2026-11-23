@@ -69,7 +69,7 @@ private theorem normalizedGeneratorPackage
   have hcardeq : Nat.card A = n :=
     Nat.le_antisymm hcard (Nat.le_of_dvd hcardpos hna)
   let H := AddSubgroup.zmultiples a
-  letI : Finite H := Finite.of_injective H.subtype H.subtype_injective
+  let : Finite H := Finite.of_injective H.subtype H.subtype_injective
   have hHcard : Nat.card H = Nat.card A := by
     rw [Nat.card_zmultiples, ha, hcardeq]
   have hHtop : H = ⊤ := AddSubgroup.eq_top_of_card_eq H hHcard
@@ -480,18 +480,18 @@ private theorem finite_and_card_le_of_exact
   have h : p.range = q.ker := by
     ext x
     exact (hexact x).symm
-  letI : Finite p.range := Finite.of_surjective p.rangeRestrict fun y => by
+  let : Finite p.range := Finite.of_surjective p.rangeRestrict fun y => by
     obtain ⟨a, ha⟩ := y.2
     exact ⟨a, Subtype.ext ha⟩
-  letI : Finite q.ker := Finite.of_injective (fun x : q.ker =>
+  let : Finite q.ker := Finite.of_injective (fun x : q.ker =>
     (⟨x, by rw [h]; exact x.2⟩ : p.range)) (fun x y hxy => by
       apply Subtype.ext
       exact congrArg (fun z : p.range => (z : B)) hxy)
-  letI : Finite q.range := Finite.of_injective (fun x : q.range => (x : C))
+  let : Finite q.range := Finite.of_injective (fun x : q.range => (x : C))
     Subtype.val_injective
   have hB : Finite B :=
     (q.finite_iff_finite_ker_range).2 ⟨inferInstance, inferInstance⟩
-  letI : Finite B := hB
+  let : Finite B := hB
   refine ⟨hB, ?_⟩
   have hcard : Nat.card B = Nat.card q.ker * Nat.card q.range := by
     rw [← q.ker.card_mul_index, AddSubgroup.index_ker]
@@ -520,16 +520,16 @@ private theorem local_H2_upperBound_of_isPGroup
       Nat.card (Inhomogeneous.H2 (MulRep K L)) ≤ Module.finrank K L := by
   classical
   by_cases hcyc : IsCyclic (L ≃ₐ[K] L)
-  · letI : IsCyclic (L ≃ₐ[K] L) := hcyc
+  · let : IsCyclic (L ≃ₐ[K] L) := hcyc
     exact ⟨cyclic_local_H2_finite K L, (cyclic_local_H2_card K L).le⟩
   · let G := L ≃ₐ[K] L
-    haveI : Nontrivial G := by
+    have : Nontrivial G := by
       rw [← not_subsingleton_iff_nontrivial]
       intro hG
-      letI : Subsingleton G := hG
+      let : Subsingleton G := hG
       exact hcyc isCyclic_of_subsingleton
     have hcenterP : IsPGroup p (Subgroup.center G) := hP.to_subgroup _
-    letI : Nontrivial (Subgroup.center G) := hP.center_nontrivial
+    let : Nontrivial (Subgroup.center G) := hP.center_nontrivial
     have hpCenter : p ∣ Nat.card (Subgroup.center G) :=
       hcenterP.card_eq_or_dvd.resolve_left (by
         intro hcard
@@ -540,7 +540,7 @@ private theorem local_H2_upperBound_of_isPGroup
     let N : Subgroup G := Subgroup.zpowers (z : G)
     have hNcenter : N ≤ Subgroup.center G := by
       exact Subgroup.zpowers_le.mpr z.2
-    letI : N.Normal := ⟨by
+    let : N.Normal := ⟨by
       intro n hn g
       have hn' := (Subgroup.mem_center_iff.mp (hNcenter hn)) g
       have heq : g * n * g⁻¹ = n := by
@@ -555,10 +555,10 @@ private theorem local_H2_upperBound_of_isPGroup
       exact (Nat.card_zpowers (z : G)).trans hzG
     let E := IntermediateField.fixedField N
     let D := fixedFieldLocalData (K := K) (L := L) N
-    letI : ValuativeRel E := D.valuativeRel
-    letI : IsNonarchimedeanLocalField E := D.localField
-    letI : ValuativeExtension K E := D.lowerExtension
-    letI : ValuativeExtension E L := D.upperExtension
+    let : ValuativeRel E := D.valuativeRel
+    let : IsNonarchimedeanLocalField E := D.localField
+    let : ValuativeExtension K E := D.lowerExtension
+    let : ValuativeExtension E L := D.upperExtension
     let eQG : G ⧸ N ≃* (E ≃ₐ[K] E) := IsGalois.normalAutEquivQuotient N
     have hPE : IsPGroup p (E ≃ₐ[K] E) := (hP.to_quotient N).of_equiv eQG
     have hquot_lt : Nat.card (G ⧸ N) < Nat.card G := by
@@ -571,17 +571,17 @@ private theorem local_H2_upperBound_of_isPGroup
       rw [← Nat.card_congr eQG.toEquiv]
       exact hquot_lt
     have hLower := local_H2_upperBound_of_isPGroup K E p hPE
-    letI : IsCyclic (L ≃ₐ[E] L) :=
+    let : IsCyclic (L ≃ₐ[E] L) :=
       (IntermediateField.subgroupEquivAlgEquiv N).isCyclic.mp
         (Subgroup.isCyclic_zpowers (z : G))
     let eQ := quotientH2Equiv N
     let eN := restrictedH2Equiv N
-    letI : Finite (Inhomogeneous.H2 (MulRep K E)) := hLower.1
-    letI : Finite (Inhomogeneous.H2 ((MulRep K L).quotientToInvariants N)) :=
+    let : Finite (Inhomogeneous.H2 (MulRep K E)) := hLower.1
+    let : Finite (Inhomogeneous.H2 ((MulRep K L).quotientToInvariants N)) :=
       Finite.of_equiv _ eQ.symm.toEquiv
-    letI : Finite (Inhomogeneous.H2 (MulRep E L)) :=
+    let : Finite (Inhomogeneous.H2 (MulRep E L)) :=
       cyclic_local_H2_finite E L
-    letI : Finite
+    let : Finite
         (Inhomogeneous.H2 (Rep.res N.subtype (MulRep K L))) :=
       Finite.of_equiv _ eN.symm.toEquiv
     have hcount := finite_and_card_le_of_exact
@@ -612,20 +612,20 @@ private theorem sylow_restricted_H2_bound
   let E := IntermediateField.fixedField (P : Subgroup (L ≃ₐ[K] L))
   let D := fixedFieldLocalData (K := K) (L := L)
     (P : Subgroup (L ≃ₐ[K] L))
-  letI : ValuativeRel E := D.valuativeRel
-  letI : IsNonarchimedeanLocalField E := D.localField
-  letI : ValuativeExtension K E := D.lowerExtension
-  letI : ValuativeExtension E L := D.upperExtension
+  let : ValuativeRel E := D.valuativeRel
+  let : IsNonarchimedeanLocalField E := D.localField
+  let : ValuativeExtension K E := D.lowerExtension
+  let : ValuativeExtension E L := D.upperExtension
   let eG := IntermediateField.subgroupEquivAlgEquiv
     (P : Subgroup (L ≃ₐ[K] L))
   have hPG : IsPGroup p (L ≃ₐ[E] L) := P.isPGroup'.of_equiv eG
   have hlocal := local_H2_upperBound_of_isPGroup E L p hPG
   let eH := restrictedH2Equiv (P : Subgroup (L ≃ₐ[K] L))
-  letI : Finite (Inhomogeneous.H2 (MulRep E L)) := hlocal.1
+  let : Finite (Inhomogeneous.H2 (MulRep E L)) := hlocal.1
   have hfin : Finite (Inhomogeneous.H2
       (Rep.res (P : Subgroup (L ≃ₐ[K] L)).subtype (MulRep K L))) :=
     Finite.of_equiv _ eH.symm.toEquiv
-  letI := hfin
+  let := hfin
   refine ⟨hfin, ?_⟩
   calc
     Nat.card (Inhomogeneous.H2
@@ -649,12 +649,12 @@ private theorem local_H2_upperBound_sylow_induction :
   let M := MulRep K L
   let A := Inhomogeneous.H2 M
   let primes := (Nat.card G).primeFactors
-  letI primeFact (r : primes) : Fact (Nat.Prime (r : ℕ)) :=
+  let primeFact (r : primes) : Fact (Nat.Prime (r : ℕ)) :=
     ⟨(Nat.mem_primeFactors.mp r.2).1⟩
   let P (r : primes) : Sylow (r : ℕ) G := default
   let B (r : primes) := Inhomogeneous.H2
     (Rep.res ((P r : Sylow (r : ℕ) G) : Subgroup G).subtype M)
-  letI finiteB (r : primes) : Finite (B r) :=
+  let finiteB (r : primes) : Finite (B r) :=
     (sylow_restricted_H2_bound (K := K) (L := L) (r : ℕ) (P r)).1
   let resProd : A → (∀ r : primes, B r) := fun x r =>
     Inhomogeneous.restrictionH2
@@ -689,7 +689,7 @@ private theorem local_H2_upperBound_sylow_induction :
         rw [map_sub, hr, sub_self]
       let ι := Quotient (QuotientGroup.rightRel
         ((P r : Sylow q G) : Subgroup G))
-      letI : Fintype ι := Fintype.ofFinite ι
+      let : Fintype ι := Fintype.ofFinite ι
       let T := subgroupTransversal ((P r : Sylow q G) : Subgroup G)
       have hindex : ((P r : Sylow q G) : Subgroup G).index • d = 0 := by
         rw [← Inhomogeneous.Transfer.corH2_restriction T M d, hresd, map_zero]
@@ -699,21 +699,21 @@ private theorem local_H2_upperBound_sylow_induction :
       exact (P r).not_dvd_index (hqord.trans hordIndex)
     exact hd0
   have hfinite : Finite A := Finite.of_injective resProd hresProd
-  letI : Finite A := hfinite
+  let : Finite A := hfinite
   have hfactor : (Nat.card A).factorization ≤ (Nat.card G).factorization := by
     rw [Finsupp.le_def]
     intro q
     by_cases hq : Nat.Prime q
-    · letI : Fact (Nat.Prime q) := ⟨hq⟩
+    · let : Fact (Nat.Prime q) := ⟨hq⟩
       let PA : Sylow q (Multiplicative A) := default
       let PG : Sylow q G := default
       let C := Inhomogeneous.H2
         (Rep.res ((PG : Sylow q G) : Subgroup G).subtype M)
-      letI : Finite C :=
+      let : Finite C :=
         (sylow_restricted_H2_bound (K := K) (L := L) q PG).1
       let ι := Quotient (QuotientGroup.rightRel
         ((PG : Sylow q G) : Subgroup G))
-      letI : Fintype ι := Fintype.ofFinite ι
+      let : Fintype ι := Fintype.ofFinite ι
       let T := subgroupTransversal ((PG : Sylow q G) : Subgroup G)
       have hresPA : Function.Injective (fun x : PA =>
           Inhomogeneous.restrictionH2
@@ -1077,7 +1077,7 @@ private noncomputable def selfUnramifiedCyclicExtensionData
   · intro x
     exact ⟨x, rfl⟩
   · intro x y hy
-    letI : Fintype (LocalResidueField F) := Fintype.ofFinite _
+    let : Fintype (LocalResidueField F) := Fintype.ofFinite _
     have hxy : y = x := by
       apply Subtype.ext
       simpa [frob] using hy
@@ -1462,9 +1462,9 @@ private theorem towerTransportedH2_infRes
         (transportedH2 (towerSubgroupHom K E M)
           (towerRestrictionCoefficient K E M)) := by
   classical
-  letI : IsGalois E M := IsGalois.tower_top_of_isGalois K E M
+  let : IsGalois E M := IsGalois.tower_top_of_isGalois K E M
   let N := (towerQuotientHom K E M).ker
-  letI : N.Normal := (towerQuotientHom K E M).normal_ker
+  let : N.Normal := (towerQuotientHom K E M).normal_ker
   let qE := towerQuotientH2Equiv K E M
   let kE := towerKernelH2Equiv K E M
   have hH1 : Subsingleton
@@ -1614,15 +1614,15 @@ private theorem envelopeValuativeExtension_of_algEquiv
     (e : L ≃ₐ[K] E) :
     letI : Algebra L E := e.toRingEquiv.toRingHom.toAlgebra
     ValuativeExtension L E := by
-  letI : Algebra L E := e.toRingEquiv.toRingHom.toAlgebra
-  letI : IsScalarTower K L E := IsScalarTower.of_algebraMap_eq fun x => (e.commutes x).symm
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : Algebra L E := e.toRingEquiv.toRingHom.toAlgebra
+  let : IsScalarTower K L E := IsScalarTower.of_algebraMap_eq fun x => (e.commutes x).symm
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Module.Finite (RingOfIntegers K) (RingOfIntegers L) :=
+  let : Module.Finite (RingOfIntegers K) (RingOfIntegers L) :=
     ringOfIntegers_module_finite K L
-  letI : Module.Finite (RingOfIntegers K) (RingOfIntegers E) :=
+  let : Module.Finite (RingOfIntegers K) (RingOfIntegers E) :=
     ringOfIntegers_module_finite K E
   have hmemL (x : L) :
       x ∈ (ValuativeRel.valuation L).integer ↔ IsIntegral (RingOfIntegers K) x := by
@@ -1653,7 +1653,7 @@ private theorem envelopeValuativeExtension_of_algEquiv
       x ∈ (ValuativeRel.valuation L).integer
     rw [hmemE, hmemL]
     exact isIntegral_algHom_iff (e.toAlgHom.restrictScalars (RingOfIntegers K)) e.injective
-  letI : (ValuativeRel.valuation L).HasExtension (ValuativeRel.valuation E) :=
+  let : (ValuativeRel.valuation L).HasExtension (ValuativeRel.valuation E) :=
     Valuation.HasExtension.ofComapInteger hinteger
   constructor
   intro x y
@@ -1878,17 +1878,17 @@ private noncomputable def envelopeUnramifiedCyclicDataBaseTransport
     ext x
     exact halg x
   have hunr : IsUnramifiedLocalExtension K M := by
-    letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation M) :=
+    let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation M) :=
       ⟨ValuativeRel.isEquiv _ _⟩
-    letI : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation M) :=
+    let : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation M) :=
       ⟨ValuativeRel.isEquiv _ _⟩
     let kK := LocalResidueField K
     let kE := LocalResidueField E
     let kM := LocalResidueField M
-    letI : Algebra kK kM := Ideal.Quotient.algebraOfLiesOver
+    let : Algebra kK kM := Ideal.Quotient.algebraOfLiesOver
       (IsLocalRing.maximalIdeal (RingOfIntegers M))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
-    letI : Algebra kE kM := Ideal.Quotient.algebraOfLiesOver
+    let : Algebra kE kM := Ideal.Quotient.algebraOfLiesOver
       (IsLocalRing.maximalIdeal (RingOfIntegers M))
       (IsLocalRing.maximalIdeal (RingOfIntegers E))
     have hresK : Module.finrank kK kM = residueDegree K M :=
@@ -2011,23 +2011,23 @@ private theorem envelopeUnramifiedCyclicDataExists
   have hmpos : 0 < m := Module.finrank_pos
   have hm : m - 1 + 1 = m := Nat.sub_add_cancel hmpos
   let W := T.field (m - 1)
-  letI : FiniteDimensional E W := T.finiteDimensional (m - 1)
-  letI : IsGalois E W := T.isGalois (m - 1)
-  letI : ValuativeRel W :=
+  let : FiniteDimensional E W := T.finiteDimensional (m - 1)
+  let : IsGalois E W := T.isGalois (m - 1)
+  let : ValuativeRel W :=
     unramifiedIntermediateFieldValuativeRel E Esep W (T.unramified (m - 1))
-  letI : TopologicalSpace W :=
+  let : TopologicalSpace W :=
     unramifiedIntermediateFieldTopology E Esep W (T.unramified (m - 1))
-  letI : IsNonarchimedeanLocalField W :=
+  let : IsNonarchimedeanLocalField W :=
     unramifiedIntermediateFieldLocalField E Esep W (T.unramified (m - 1))
-  letI : ValuativeExtension E W :=
+  let : ValuativeExtension E W :=
     unramifiedIntermediateFieldValuativeExtension E Esep W (T.unramified (m - 1))
-  letI : ContinuousSMul E W :=
+  let : ContinuousSMul E W :=
     unramifiedIntermediateFieldContinuousSMul E Esep W (T.unramified (m - 1))
-  letI : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation C) :=
+  let : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation C) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let kE := LocalResidueField E
   let kC := LocalResidueField C
-  letI : Algebra kE kC :=
+  let : Algebra kE kC :=
     Ideal.Quotient.algebraOfLiesOver
       (IsLocalRing.maximalIdeal (RingOfIntegers C))
       (IsLocalRing.maximalIdeal (RingOfIntegers E))
@@ -2042,7 +2042,7 @@ private theorem envelopeUnramifiedCyclicDataExists
     apply UnramifiedTower.field_le_fieldRange_of_dvd_residueFinrank
       (K := E) (Ksep := Esep) T C j (m - 1)
     rw [hm, hres, hresdeg]
-  letI : FiniteDimensional E j.fieldRange :=
+  let : FiniteDimensional E j.fieldRange :=
     j.equivFieldRange.toLinearEquiv.finiteDimensional
   have hrange : Module.finrank E j.fieldRange = m := by
     rw [← j.equivFieldRange.toLinearEquiv.finrank_eq]
@@ -2085,7 +2085,7 @@ private theorem envelope_zpowers_pow_eq_gcd
 private theorem envelope_subgroup_eq_of_isCyclic_of_index_eq
     {G : Type} [Group G] [Finite G] [IsCyclic G]
     (H J : Subgroup G) (hindex : H.index = J.index) : H = J := by
-  letI : CommGroup G := IsCyclic.commGroup
+  let : CommGroup G := IsCyclic.commGroup
   obtain ⟨g, hg⟩ := isCyclic_iff_exists_zpowers_eq_top.mp (inferInstance : IsCyclic G)
   obtain ⟨a, rfl⟩ := (Subgroup.le_zpowers_iff g H).mp (by rw [hg]; exact le_top)
   obtain ⟨b, rfl⟩ := (Subgroup.le_zpowers_iff g J).mp (by rw [hg]; exact le_top)
@@ -2111,7 +2111,7 @@ private theorem envelope_intermediateField_eq_of_cyclic_of_finrank_eq
     (hrank : Module.finrank K A = Module.finrank K B) : A = B := by
   let A' : IntermediateField K U := A.restrict hA
   let B' : IntermediateField K U := B.restrict hB
-  letI : IsCyclic (U ≃ₐ[K] U) := hcyc
+  let : IsCyclic (U ≃ₐ[K] U) := hcyc
   have hAfin : Module.finrank K A' = Module.finrank K A := by
     calc
       Module.finrank K A' = Module.finrank K (IntermediateField.lift A') :=
@@ -2146,12 +2146,12 @@ private theorem envelope_compositum_relative_finrank
     Module.finrank E C = Module.finrank (E ⊓ U : IntermediateField K Ω) U := by
   let I : IntermediateField K Ω := E ⊓ U
   let C : IntermediateField K Ω := E ⊔ U
-  letI : Algebra E C := intermediateFieldInclusionAlgebra K Ω le_sup_left
-  letI : Algebra U C := intermediateFieldInclusionAlgebra K Ω le_sup_right
-  letI : IsScalarTower K E C := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : IsScalarTower K U C := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : FiniteDimensional K C := IntermediateField.finiteDimensional_sup E U
-  letI : FiniteDimensional E C := FiniteDimensional.right K E C
+  let : Algebra E C := intermediateFieldInclusionAlgebra K Ω le_sup_left
+  let : Algebra U C := intermediateFieldInclusionAlgebra K Ω le_sup_right
+  let : IsScalarTower K E C := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsScalarTower K U C := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : FiniteDimensional K C := IntermediateField.finiteDimensional_sup E U
+  let : FiniteDimensional E C := FiniteDimensional.right K E C
   let EC : IntermediateField K C := E.restrict le_sup_left
   let UC : IntermediateField K C := U.restrict le_sup_right
   have hIC : I ≤ C := inf_le_left.trans le_sup_left
@@ -2186,9 +2186,9 @@ private theorem envelope_compositum_relative_finrank
       IntermediateField.extendScalars_restrictScalars,
       IntermediateField.extendScalars_restrictScalars,
       IntermediateField.restrictScalars_bot_eq_self, hECinfUC]
-  letI : Algebra I E := intermediateFieldInclusionAlgebra K Ω inf_le_left
-  letI : IsScalarTower K I E := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : FiniteDimensional I E := FiniteDimensional.right K I E
+  let : Algebra I E := intermediateFieldInclusionAlgebra K Ω inf_le_left
+  let : IsScalarTower K I E := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : FiniteDimensional I E := FiniteDimensional.right K I E
   have hIE : IsGalois I E := IsGalois.tower_top_of_isGalois K I E
   let eI : I ≃+* IC :=
     { toFun := fun x =>
@@ -2228,13 +2228,13 @@ private theorem envelope_compositum_relative_finrank
       eE.toRingHom.comp (algebraMap I E) := by
     ext x
     rfl
-  letI : IsGalois IC A := IsGalois.of_equiv_equiv
+  let : IsGalois IC A := IsGalois.of_equiv_equiv
     (F := I) (E := E) (M := IC) (N := A) (f := eI) (g := eE) (h := hIE) hcompIE
-  letI : FiniteDimensional IC C := FiniteDimensional.right K IC C
-  letI : FiniteDimensional IC A := by
+  let : FiniteDimensional IC C := FiniteDimensional.right K IC C
+  let : FiniteDimensional IC A := by
     apply FiniteDimensional.of_injective A.val.toLinearMap
     exact A.val.injective
-  letI : FiniteDimensional IC B := by
+  let : FiniteDimensional IC B := by
     apply FiniteDimensional.of_injective B.val.toLinearMap
     exact B.val.injective
   have hlin : A.LinearDisjoint B :=
@@ -2262,11 +2262,11 @@ private theorem envelope_tower_intersection_finrank
     Module.finrank K
       (j.fieldRange ⊓ T.field (Module.finrank K L - 1) : IntermediateField K Ksep) =
         residueDegree K L := by
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let k := LocalResidueField K
   let kL := LocalResidueField L
-  letI : Algebra k kL :=
+  let : Algebra k kL :=
     Ideal.Quotient.algebraOfLiesOver
       (IsLocalRing.maximalIdeal (RingOfIntegers L))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
@@ -2280,10 +2280,10 @@ private theorem envelope_tower_intersection_finrank
   let E := j.fieldRange
   let U := T.field (n - 1)
   let I : IntermediateField K Ksep := E ⊓ U
-  letI : FiniteDimensional K E := j.equivFieldRange.toLinearEquiv.finiteDimensional
-  letI : FiniteDimensional K U := T.finiteDimensional (n - 1)
-  letI : IsGalois K U := T.isGalois (n - 1)
-  letI : FiniteDimensional K I :=
+  let : FiniteDimensional K E := j.equivFieldRange.toLinearEquiv.finiteDimensional
+  let : FiniteDimensional K U := T.finiteDimensional (n - 1)
+  let : IsGalois K U := T.isGalois (n - 1)
+  let : FiniteDimensional K I :=
     FiniteDimensional.of_injective
       (IntermediateField.inclusion (by exact inf_le_right : I ≤ U)).toLinearMap
       (IntermediateField.inclusion_injective (by exact inf_le_right : I ≤ U))
@@ -2295,7 +2295,7 @@ private theorem envelope_tower_intersection_finrank
     rw [T.finrank (n - 1), hn] at hdiv
     exact hdiv
   let V := T.field (d - 1)
-  letI : FiniteDimensional K V := T.finiteDimensional (d - 1)
+  let : FiniteDimensional K V := T.finiteDimensional (d - 1)
   have hVU : V ≤ U := T.le_of_dvd (by simpa [hd, hn] using hdn)
   have hcyc : IsCyclic (U ≃ₐ[K] U) :=
     isCyclic_iff_exists_zpowers_eq_top.mpr
@@ -2354,66 +2354,66 @@ private theorem unramifiedEnvelopeGeometry_exists
   classical
   let n := Module.finrank K L
   have hn : n - 1 + 1 = n := Nat.sub_add_cancel Module.finrank_pos
-  letI : IsSepClosed Ksep := IsSepClosure.sep_closed K
+  let : IsSepClosed Ksep := IsSepClosure.sep_closed K
   let j : L →ₐ[K] Ksep := IsSepClosed.lift
   let E : IntermediateField K Ksep := j.fieldRange
   let eLE : L ≃ₐ[K] E := j.equivFieldRange
-  letI : FiniteDimensional K E := eLE.toLinearEquiv.finiteDimensional
-  letI : IsGalois K E := IsGalois.of_algEquiv eLE
+  let : FiniteDimensional K E := eLE.toLinearEquiv.finiteDimensional
+  let : IsGalois K E := IsGalois.of_algEquiv eLE
   let DE := envelopeFiniteLocalFieldData K E
-  letI : ValuativeRel E := DE.valuativeRel
-  letI : TopologicalSpace E := DE.topology
-  letI : IsNonarchimedeanLocalField E := DE.localField
-  letI : ValuativeExtension K E := DE.valuativeExtension
-  letI : ContinuousSMul K E := DE.continuousSMul
-  letI : Algebra L E := eLE.toRingEquiv.toRingHom.toAlgebra
-  letI : IsScalarTower K L E :=
+  let : ValuativeRel E := DE.valuativeRel
+  let : TopologicalSpace E := DE.topology
+  let : IsNonarchimedeanLocalField E := DE.localField
+  let : ValuativeExtension K E := DE.valuativeExtension
+  let : ContinuousSMul K E := DE.continuousSMul
+  let : Algebra L E := eLE.toRingEquiv.toRingHom.toAlgebra
+  let : IsScalarTower K L E :=
     IsScalarTower.of_algebraMap_eq fun x => (eLE.commutes x).symm
-  letI : ValuativeExtension L E := envelopeValuativeExtension_of_algEquiv K L E eLE
+  let : ValuativeExtension L E := envelopeValuativeExtension_of_algEquiv K L E eLE
   let U := T.field (n - 1)
-  letI : FiniteDimensional K U := T.finiteDimensional (n - 1)
-  letI : IsGalois K U := T.isGalois (n - 1)
-  letI : ValuativeRel U :=
+  let : FiniteDimensional K U := T.finiteDimensional (n - 1)
+  let : IsGalois K U := T.isGalois (n - 1)
+  let : ValuativeRel U :=
     unramifiedIntermediateFieldValuativeRel K Ksep U (T.unramified (n - 1))
-  letI : TopologicalSpace U :=
+  let : TopologicalSpace U :=
     unramifiedIntermediateFieldTopology K Ksep U (T.unramified (n - 1))
-  letI : IsNonarchimedeanLocalField U :=
+  let : IsNonarchimedeanLocalField U :=
     unramifiedIntermediateFieldLocalField K Ksep U (T.unramified (n - 1))
-  letI : ValuativeExtension K U :=
+  let : ValuativeExtension K U :=
     unramifiedIntermediateFieldValuativeExtension K Ksep U (T.unramified (n - 1))
-  letI : ContinuousSMul K U :=
+  let : ContinuousSMul K U :=
     unramifiedIntermediateFieldContinuousSMul K Ksep U (T.unramified (n - 1))
   let C : IntermediateField K Ksep := E ⊔ U
   let DC := (T.compositum_localField E (inferInstance : IsGalois K E) (n - 1)).some
-  letI : Algebra E C := intermediateFieldInclusionAlgebra K Ksep le_sup_left
-  letI : Algebra U C := intermediateFieldInclusionAlgebra K Ksep le_sup_right
-  letI : IsScalarTower K E C := DC.scalarTower_left
-  letI : IsScalarTower K U C := DC.scalarTower_right
-  letI : FiniteDimensional E C := DC.finiteDimensional_left
-  letI : FiniteDimensional U C := DC.finiteDimensional_right
-  letI : FiniteDimensional K C := FiniteDimensional.trans K E C
-  letI : IsGalois K C := DC.isGalois_base
-  letI : IsGalois E C := DC.isGalois_left
-  letI : ValuativeRel C := DC.compositumValuativeRel
-  letI : TopologicalSpace C := DC.compositumTopology
-  letI : IsNonarchimedeanLocalField C := DC.compositumLocalField
-  letI : ValuativeExtension K C := DC.valuativeExtension_base
-  letI : ValuativeExtension E C := DC.valuativeExtension_left
-  letI : ValuativeExtension U C := DC.valuativeExtension_right
-  letI : ContinuousSMul K C := DC.continuousSMul_base
-  letI : ContinuousSMul E C := DC.continuousSMul_left
-  letI : ContinuousSMul U C := DC.continuousSMul_right
-  letI : Algebra L C :=
+  let : Algebra E C := intermediateFieldInclusionAlgebra K Ksep le_sup_left
+  let : Algebra U C := intermediateFieldInclusionAlgebra K Ksep le_sup_right
+  let : IsScalarTower K E C := DC.scalarTower_left
+  let : IsScalarTower K U C := DC.scalarTower_right
+  let : FiniteDimensional E C := DC.finiteDimensional_left
+  let : FiniteDimensional U C := DC.finiteDimensional_right
+  let : FiniteDimensional K C := FiniteDimensional.trans K E C
+  let : IsGalois K C := DC.isGalois_base
+  let : IsGalois E C := DC.isGalois_left
+  let : ValuativeRel C := DC.compositumValuativeRel
+  let : TopologicalSpace C := DC.compositumTopology
+  let : IsNonarchimedeanLocalField C := DC.compositumLocalField
+  let : ValuativeExtension K C := DC.valuativeExtension_base
+  let : ValuativeExtension E C := DC.valuativeExtension_left
+  let : ValuativeExtension U C := DC.valuativeExtension_right
+  let : ContinuousSMul K C := DC.continuousSMul_base
+  let : ContinuousSMul E C := DC.continuousSMul_left
+  let : ContinuousSMul U C := DC.continuousSMul_right
+  let : Algebra L C :=
     ((algebraMap E C).comp eLE.toRingEquiv.toRingHom).toAlgebra
-  letI : IsScalarTower L E C := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : IsScalarTower K L C := IsScalarTower.of_algebraMap_eq fun x => by
+  let : IsScalarTower L E C := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsScalarTower K L C := IsScalarTower.of_algebraMap_eq fun x => by
     calc
       algebraMap K C x = algebraMap E C (algebraMap K E x) :=
         (IsScalarTower.algebraMap_apply K E C x).symm
       _ = algebraMap E C (eLE (algebraMap K L x)) :=
         congrArg (algebraMap E C) (eLE.commutes x).symm
-  letI : FiniteDimensional L C := FiniteDimensional.right K L C
-  letI : IsGalois L C := IsGalois.tower_top_of_isGalois K L C
+  let : FiniteDimensional L C := FiniteDimensional.right K L C
+  let : IsGalois L C := IsGalois.tower_top_of_isGalois K L C
   let hLC : ValuativeExtension L C := by
     constructor
     intro x y
@@ -2421,10 +2421,10 @@ private theorem unramifiedEnvelopeGeometry_exists
     rw [ValuativeExtension.vle_iff_vle (A := E) (B := C)]
     change algebraMap L E x ≤ᵥ algebraMap L E y ↔ x ≤ᵥ y
     exact ValuativeExtension.vle_iff_vle (A := L) (B := E) (a := x) (b := y)
-  letI : ValuativeExtension L C := hLC
+  let : ValuativeExtension L C := hLC
   let hcontLE : Continuous eLE :=
     envelopeAlgEquiv_continuous K L E eLE (fun _ => rfl)
-  letI : ContinuousSMul L C := by
+  let : ContinuousSMul L C := by
     constructor
     change Continuous (fun p : L × C => algebraMap E C (eLE p.1) * p.2)
     have hs : Continuous (fun p : E × C => p.1 • p.2) := continuous_smul
@@ -2432,20 +2432,20 @@ private theorem unramifiedEnvelopeGeometry_exists
       (hcontLE.comp continuous_fst).prodMk continuous_snd
     simpa only [Algebra.smul_def, Function.comp_def] using hs.comp hp
   let I : IntermediateField K Ksep := E ⊓ U
-  letI : Algebra I U := intermediateFieldInclusionAlgebra K Ksep inf_le_right
-  letI : IsScalarTower K I U := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : Module.Free I U := Module.Free.of_divisionRing I U
-  letI : FiniteDimensional I U := FiniteDimensional.right K I U
+  let : Algebra I U := intermediateFieldInclusionAlgebra K Ksep inf_le_right
+  let : IsScalarTower K I U := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : Module.Free I U := Module.Free.of_divisionRing I U
+  let : FiniteDimensional I U := FiniteDimensional.right K I U
   have hIC : I ≤ C := inf_le_left.trans le_sup_left
   let IC : IntermediateField K C := I.restrict hIC
   let source : UnramifiedCyclicExtensionData K U :=
     envelopeTowerUnramifiedCyclicData K Ksep T (n - 1)
   have hunrEC : IsUnramifiedLocalExtension E C := DC.unramified_left
-  letI : Algebra C Ksep := C.val.toRingHom.toAlgebra
-  letI : Algebra E Ksep := E.val.toRingHom.toAlgebra
+  let : Algebra C Ksep := C.val.toRingHom.toAlgebra
+  let : Algebra E Ksep := E.val.toRingHom.toAlgebra
   let hECT : IsScalarTower E C Ksep := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : IsScalarTower E C Ksep := hECT
-  letI : IsSepClosure E Ksep :=
+  let : IsScalarTower E C Ksep := hECT
+  let : IsSepClosure E Ksep :=
     { sep_closed := IsSepClosure.sep_closed K
       separable := ⟨fun x =>
         IsSeparable.tower_top E (Algebra.IsSeparable.isSeparable K x)⟩ }
@@ -2596,7 +2596,7 @@ private theorem inflatedCarry_restricts_zero
     transportedH2 (towerSubgroupHom K L M) (towerRestrictionCoefficient K L M)
       (transportedH2 (towerQuotientHom K U M) (towerInflationCoefficient K U M)
         C.class) = 0 := by
-  letI : ValuativeExtension L L := selfValuativeExtension L
+  let : ValuativeExtension L L := selfValuativeExtension L
   let target : UnramifiedCyclicExtensionData L L :=
     selfUnramifiedCyclicExtensionData L
   have hsourceDegree : Module.finrank K U =
@@ -2846,35 +2846,35 @@ theorem unramifiedEnvelope_descentData (π : Uniformizer K) :
     fdKU, fdKM, fdLM, fdUM, galKU, galKM, galLM,
     vU, tU, locU, vM, tM, locM, veKU, veKM, veLM, veUM,
     csKU, csKM, csLM, csUM, ?_⟩
-  letI : Field U := fU
-  letI : Field M := fM
-  letI : Algebra K U := aKU
-  letI : Algebra K M := aKM
-  letI : Algebra L M := aLM
-  letI : Algebra U M := aUM
-  letI : IsScalarTower K L M := stKLM
-  letI : IsScalarTower K U M := stKUM
-  letI : FiniteDimensional K U := fdKU
-  letI : FiniteDimensional K M := fdKM
-  letI : FiniteDimensional L M := fdLM
-  letI : FiniteDimensional U M := fdUM
-  letI : IsGalois K U := galKU
-  letI : IsGalois K M := galKM
-  letI : IsGalois L M := galLM
-  letI : ValuativeRel U := vU
-  letI : TopologicalSpace U := tU
-  letI : IsNonarchimedeanLocalField U := locU
-  letI : ValuativeRel M := vM
-  letI : TopologicalSpace M := tM
-  letI : IsNonarchimedeanLocalField M := locM
-  letI : ValuativeExtension K U := veKU
-  letI : ValuativeExtension K M := veKM
-  letI : ValuativeExtension L M := veLM
-  letI : ValuativeExtension U M := veUM
-  letI : ContinuousSMul K U := csKU
-  letI : ContinuousSMul K M := csKM
-  letI : ContinuousSMul L M := csLM
-  letI : ContinuousSMul U M := csUM
+  let : Field U := fU
+  let : Field M := fM
+  let : Algebra K U := aKU
+  let : Algebra K M := aKM
+  let : Algebra L M := aLM
+  let : Algebra U M := aUM
+  let : IsScalarTower K L M := stKLM
+  let : IsScalarTower K U M := stKUM
+  let : FiniteDimensional K U := fdKU
+  let : FiniteDimensional K M := fdKM
+  let : FiniteDimensional L M := fdLM
+  let : FiniteDimensional U M := fdUM
+  let : IsGalois K U := galKU
+  let : IsGalois K M := galKM
+  let : IsGalois L M := galLM
+  let : ValuativeRel U := vU
+  let : TopologicalSpace U := tU
+  let : IsNonarchimedeanLocalField U := locU
+  let : ValuativeRel M := vM
+  let : TopologicalSpace M := tM
+  let : IsNonarchimedeanLocalField M := locM
+  let : ValuativeExtension K U := veKU
+  let : ValuativeExtension K M := veKM
+  let : ValuativeExtension L M := veLM
+  let : ValuativeExtension U M := veUM
+  let : ContinuousSMul K U := csKU
+  let : ContinuousSMul K M := csKM
+  let : ContinuousSMul L M := csLM
+  let : ContinuousSMul U M := csUM
   obtain ⟨G⟩ := hG
   exact unramifiedEnvelopeData_of_geometry K L U M π G
 
@@ -2917,11 +2917,11 @@ private theorem envelopeSourceRange_eq_tower
     j.fieldRange = T.field (Module.finrank K U - 1) := by
   let n := Module.finrank K U
   have hn : n - 1 + 1 = n := Nat.sub_add_cancel Module.finrank_pos
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let kK := LocalResidueField K
   let kU := LocalResidueField U
-  letI : Algebra kK kU :=
+  let : Algebra kK kU :=
     Ideal.Quotient.algebraOfLiesOver
       (IsLocalRing.maximalIdeal (RingOfIntegers U))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
@@ -2935,7 +2935,7 @@ private theorem envelopeSourceRange_eq_tower
     apply UnramifiedTower.field_le_fieldRange_of_dvd_residueFinrank
       (K := K) (Ksep := Ksep) T U j (n - 1)
     rw [hn, hres, hresdeg]
-  letI : FiniteDimensional K j.fieldRange :=
+  let : FiniteDimensional K j.fieldRange :=
     j.equivFieldRange.toLinearEquiv.finiteDimensional
   apply (IntermediateField.eq_of_le_of_finrank_eq hle ?_).symm
   rw [T.finrank (n - 1), hn]
@@ -3076,18 +3076,18 @@ private theorem unramifiedEnvelope_equivs
       (∀ l : L, eM (algebraMap L M₁ l) = algebraMap L M₂ l) ∧
       (∀ u : U₁, eM (algebraMap U₁ M₁ u) = algebraMap U₂ M₂ (eU u)) := by
   classical
-  letI : IsSepClosed Ksep := IsSepClosure.sep_closed K
+  let : IsSepClosed Ksep := IsSepClosure.sep_closed K
   let jL : L →ₐ[K] Ksep := IsSepClosed.lift
-  letI : Algebra L Ksep := jL.toRingHom.toAlgebra
-  letI : IsScalarTower K L Ksep :=
+  let : Algebra L Ksep := jL.toRingHom.toAlgebra
+  let : IsScalarTower K L Ksep :=
     IsScalarTower.of_algebraMap_eq fun x => (jL.commutes x).symm
-  letI : IsSepClosure L Ksep :=
+  let : IsSepClosure L Ksep :=
     { sep_closed := IsSepClosure.sep_closed K
       separable := ⟨fun x =>
         IsSeparable.tower_top L (Algebra.IsSeparable.isSeparable K x)⟩ }
-  letI : Algebra.IsSeparable L M₁ :=
+  let : Algebra.IsSeparable L M₁ :=
     ⟨fun x => IsSeparable.tower_top L (Algebra.IsSeparable.isSeparable K x)⟩
-  letI : Algebra.IsSeparable L M₂ :=
+  let : Algebra.IsSeparable L M₂ :=
     ⟨fun x => IsSeparable.tower_top L (Algebra.IsSeparable.isSeparable K x)⟩
   let jM₁L : M₁ →ₐ[L] Ksep := IsSepClosed.lift
   let jM₂L : M₂ →ₐ[L] Ksep := IsSepClosed.lift
@@ -3167,12 +3167,12 @@ private theorem unramifiedSourceClass_transport
     (he : ∀ x : U₁, algebraMap U₁ U₂ x = e x) :
     transportedH2 (envelopeConjHom K U₁ U₂ e)
       (envelopeConjCoefficient K U₁ U₂ e) C₁.class = C₂.class := by
-  letI : ValuativeExtension K K := ⟨Iff.rfl⟩
-  letI : ContinuousSMul K K := inferInstance
-  letI : ValuativeExtension U₂ U₂ := ⟨Iff.rfl⟩
-  letI : ContinuousSMul U₂ U₂ := inferInstance
-  letI : IsScalarTower K K U₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : IsScalarTower K U₂ U₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : ValuativeExtension K K := ⟨Iff.rfl⟩
+  let : ContinuousSMul K K := inferInstance
+  let : ValuativeExtension U₂ U₂ := ⟨Iff.rfl⟩
+  let : ContinuousSMul U₂ U₂ := inferInstance
+  let : IsScalarTower K K U₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsScalarTower K U₂ U₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl
   have hresKK : residueDegree K K = 1 := by
     have h := finrank_eq_ramificationIndex_mul_residueDegree K K
     rw [Module.finrank_self, self_ramificationIndex K, one_mul] at h
@@ -3480,21 +3480,21 @@ theorem unramifiedEnvelopePreimage_commonRefinement
     unramifiedEnvelope_equivs K L Ksep U₁ M₁ U₂ M₂ T
       D₁.source D₂.source (D₁.source_degree.trans D₂.source_degree.symm)
       D₁.compositum_eq_top D₂.compositum_eq_top
-  letI : Algebra U₁ U₂ := eU.toRingEquiv.toRingHom.toAlgebra
-  letI : IsScalarTower K U₁ U₂ :=
+  let : Algebra U₁ U₂ := eU.toRingEquiv.toRingHom.toAlgebra
+  let : IsScalarTower K U₁ U₂ :=
     IsScalarTower.of_algebraMap_eq fun x => (eU.commutes x).symm
-  letI : FiniteDimensional U₁ U₂ := by
+  let : FiniteDimensional U₁ U₂ := by
     apply FiniteDimensional.of_surjective (Algebra.linearMap U₁ U₂)
     intro y
     obtain ⟨x, hx⟩ := eU.surjective y
     refine ⟨x, ?_⟩
     change eU x = y
     exact hx
-  letI : ValuativeExtension U₁ U₂ :=
+  let : ValuativeExtension U₁ U₂ :=
     envelopeValuativeExtension_of_algEquiv K U₁ U₂ eU
   let hcont : Continuous eU :=
     envelopeAlgEquiv_continuous K U₁ U₂ eU (fun _ => rfl)
-  letI : ContinuousSMul U₁ U₂ := by
+  let : ContinuousSMul U₁ U₂ := by
     constructor
     change Continuous (fun p : U₁ × U₂ => eU p.1 * p.2)
     exact (hcont.comp continuous_fst).mul continuous_snd
@@ -3546,7 +3546,7 @@ private theorem localFundamentalClass_of_descent
     (hfinite : Finite (Inhomogeneous.H2 (MulRep K L)))
     (hcard : Nat.card (Inhomogeneous.H2 (MulRep K L)) ≤ Module.finrank K L) :
     Nonempty (LocalFundamentalClass K L) := by
-  letI : Finite (Inhomogeneous.H2 (MulRep K L)) := hfinite
+  let : Finite (Inhomogeneous.H2 (MulRep K L)) := hfinite
   obtain ⟨hgen, e, he, heuniq⟩ :=
     normalizedGeneratorPackage (Module.finrank K L) α horder hcard
   exact ⟨{
@@ -3570,35 +3570,35 @@ theorem localFundamentalClass_exists : Nonempty (LocalFundamentalClass K L) := b
       vU, tU, locU, vM, tM, locM, veKU, veKM, veLM, veUM,
       csKU, csKM, csLM, csUM, hD⟩ :=
     unramifiedEnvelope_descentData K L π
-  letI : Field U := fU
-  letI : Field M := fM
-  letI : Algebra K U := aKU
-  letI : Algebra K M := aKM
-  letI : Algebra L M := aLM
-  letI : Algebra U M := aUM
-  letI : IsScalarTower K L M := stKLM
-  letI : IsScalarTower K U M := stKUM
-  letI : FiniteDimensional K U := fdKU
-  letI : FiniteDimensional K M := fdKM
-  letI : FiniteDimensional L M := fdLM
-  letI : FiniteDimensional U M := fdUM
-  letI : IsGalois K U := galKU
-  letI : IsGalois K M := galKM
-  letI : IsGalois L M := galLM
-  letI : ValuativeRel U := vU
-  letI : TopologicalSpace U := tU
-  letI : IsNonarchimedeanLocalField U := locU
-  letI : ValuativeRel M := vM
-  letI : TopologicalSpace M := tM
-  letI : IsNonarchimedeanLocalField M := locM
-  letI : ValuativeExtension K U := veKU
-  letI : ValuativeExtension K M := veKM
-  letI : ValuativeExtension L M := veLM
-  letI : ValuativeExtension U M := veUM
-  letI : ContinuousSMul K U := csKU
-  letI : ContinuousSMul K M := csKM
-  letI : ContinuousSMul L M := csLM
-  letI : ContinuousSMul U M := csUM
+  let : Field U := fU
+  let : Field M := fM
+  let : Algebra K U := aKU
+  let : Algebra K M := aKM
+  let : Algebra L M := aLM
+  let : Algebra U M := aUM
+  let : IsScalarTower K L M := stKLM
+  let : IsScalarTower K U M := stKUM
+  let : FiniteDimensional K U := fdKU
+  let : FiniteDimensional K M := fdKM
+  let : FiniteDimensional L M := fdLM
+  let : FiniteDimensional U M := fdUM
+  let : IsGalois K U := galKU
+  let : IsGalois K M := galKM
+  let : IsGalois L M := galLM
+  let : ValuativeRel U := vU
+  let : TopologicalSpace U := tU
+  let : IsNonarchimedeanLocalField U := locU
+  let : ValuativeRel M := vM
+  let : TopologicalSpace M := tM
+  let : IsNonarchimedeanLocalField M := locM
+  let : ValuativeExtension K U := veKU
+  let : ValuativeExtension K M := veKM
+  let : ValuativeExtension L M := veLM
+  let : ValuativeExtension U M := veUM
+  let : ContinuousSMul K U := csKU
+  let : ContinuousSMul K M := csKM
+  let : ContinuousSMul L M := csLM
+  let : ContinuousSMul U M := csUM
   obtain ⟨D⟩ := hD
   let Ksep := SeparableClosure K
   let T : UnramifiedTower K Ksep := unramifiedTower K Ksep
@@ -3655,13 +3655,13 @@ private theorem envelopeValuativeExtension_of_tower
     [ValuativeRel B] [TopologicalSpace B] [IsNonarchimedeanLocalField B]
     [ValuativeExtension F A] [ValuativeExtension F B] :
     ValuativeExtension A B := by
-  letI : (ValuativeRel.valuation F).HasExtension (ValuativeRel.valuation A) :=
+  let : (ValuativeRel.valuation F).HasExtension (ValuativeRel.valuation A) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : (ValuativeRel.valuation F).HasExtension (ValuativeRel.valuation B) :=
+  let : (ValuativeRel.valuation F).HasExtension (ValuativeRel.valuation B) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : Module.Finite (RingOfIntegers F) (RingOfIntegers A) :=
+  let : Module.Finite (RingOfIntegers F) (RingOfIntegers A) :=
     ringOfIntegers_module_finite F A
-  letI : Module.Finite (RingOfIntegers F) (RingOfIntegers B) :=
+  let : Module.Finite (RingOfIntegers F) (RingOfIntegers B) :=
     ringOfIntegers_module_finite F B
   have hmemA (x : A) :
       x ∈ (ValuativeRel.valuation A).integer ↔ IsIntegral (RingOfIntegers F) x := by
@@ -3694,7 +3694,7 @@ private theorem envelopeValuativeExtension_of_tower
     exact isIntegral_algHom_iff
       ((IsScalarTower.toAlgHom F A B).restrictScalars (RingOfIntegers F))
       (algebraMap A B).injective
-  letI : (ValuativeRel.valuation A).HasExtension (ValuativeRel.valuation B) :=
+  let : (ValuativeRel.valuation A).HasExtension (ValuativeRel.valuation B) :=
     Valuation.HasExtension.ofComapInteger hinteger
   constructor
   intro x y
@@ -3749,30 +3749,30 @@ private theorem unramifiedEnvelope_inflation_embeddings
         algebraMap B M₂ (algebraMap A B a)) ∧
       (∀ u : U₁, eM (algebraMap U₁ M₁ u) = algebraMap U₂ M₂ (eU u)) := by
   classical
-  letI : IsSepClosed Fsep := IsSepClosure.sep_closed F
+  let : IsSepClosed Fsep := IsSepClosure.sep_closed F
   let jB : B →ₐ[F] Fsep := IsSepClosed.lift
   let jA : A →ₐ[F] Fsep := jB.comp (IsScalarTower.toAlgHom F A B)
-  letI : Algebra A Fsep := jA.toRingHom.toAlgebra
-  letI : IsScalarTower F A Fsep :=
+  let : Algebra A Fsep := jA.toRingHom.toAlgebra
+  let : IsScalarTower F A Fsep :=
     IsScalarTower.of_algebraMap_eq fun x => (jA.commutes x).symm
-  letI : IsSepClosure A Fsep :=
+  let : IsSepClosure A Fsep :=
     { sep_closed := IsSepClosure.sep_closed F
       separable := ⟨fun x =>
         IsSeparable.tower_top A (Algebra.IsSeparable.isSeparable F x)⟩ }
-  letI : Algebra.IsSeparable A M₁ :=
+  let : Algebra.IsSeparable A M₁ :=
     ⟨fun x => IsSeparable.tower_top A (Algebra.IsSeparable.isSeparable F x)⟩
   let jM₁A : M₁ →ₐ[A] Fsep := IsSepClosed.lift
   let jM₁ : M₁ →ₐ[F] Fsep := jM₁A.restrictScalars F
   let jU₁ : U₁ →ₐ[F] Fsep :=
     jM₁.comp (IsScalarTower.toAlgHom F U₁ M₁)
-  letI : Algebra B Fsep := jB.toRingHom.toAlgebra
-  letI : IsScalarTower F B Fsep :=
+  let : Algebra B Fsep := jB.toRingHom.toAlgebra
+  let : IsScalarTower F B Fsep :=
     IsScalarTower.of_algebraMap_eq fun x => (jB.commutes x).symm
-  letI : IsSepClosure B Fsep :=
+  let : IsSepClosure B Fsep :=
     { sep_closed := IsSepClosure.sep_closed F
       separable := ⟨fun x =>
         IsSeparable.tower_top B (Algebra.IsSeparable.isSeparable F x)⟩ }
-  letI : Algebra.IsSeparable B M₂ :=
+  let : Algebra.IsSeparable B M₂ :=
     ⟨fun x => IsSeparable.tower_top B (Algebra.IsSeparable.isSeparable F x)⟩
   let jM₂B : M₂ →ₐ[B] Fsep := IsSepClosed.lift
   let jM₂ : M₂ →ₐ[F] Fsep := jM₂B.restrictScalars F
@@ -3992,101 +3992,101 @@ private theorem actualFundamentalInflation_square :
       vU₁, tU₁, locU₁, vM₁, tM₁, locM₁, veKU₁, veKM₁, veLM₁, veU₁M₁,
       csKU₁, csKM₁, csLM₁, csU₁M₁, hD₁⟩ :=
     unramifiedEnvelope_descentData K L π
-  letI : Field U₁ := fU₁
-  letI : Field M₁ := fM₁
-  letI : Algebra K U₁ := aKU₁
-  letI : Algebra K M₁ := aKM₁
-  letI : Algebra L M₁ := aLM₁
-  letI : Algebra U₁ M₁ := aU₁M₁
-  letI : IsScalarTower K L M₁ := stKLM₁
-  letI : IsScalarTower K U₁ M₁ := stKU₁M₁
-  letI : FiniteDimensional K U₁ := fdKU₁
-  letI : FiniteDimensional K M₁ := fdKM₁
-  letI : FiniteDimensional L M₁ := fdLM₁
-  letI : FiniteDimensional U₁ M₁ := fdU₁M₁
-  letI : IsGalois K U₁ := galKU₁
-  letI : IsGalois K M₁ := galKM₁
-  letI : IsGalois L M₁ := galLM₁
-  letI : ValuativeRel U₁ := vU₁
-  letI : TopologicalSpace U₁ := tU₁
-  letI : IsNonarchimedeanLocalField U₁ := locU₁
-  letI : ValuativeRel M₁ := vM₁
-  letI : TopologicalSpace M₁ := tM₁
-  letI : IsNonarchimedeanLocalField M₁ := locM₁
-  letI : ValuativeExtension K U₁ := veKU₁
-  letI : ValuativeExtension K M₁ := veKM₁
-  letI : ValuativeExtension L M₁ := veLM₁
-  letI : ValuativeExtension U₁ M₁ := veU₁M₁
-  letI : ContinuousSMul K U₁ := csKU₁
-  letI : ContinuousSMul K M₁ := csKM₁
-  letI : ContinuousSMul L M₁ := csLM₁
-  letI : ContinuousSMul U₁ M₁ := csU₁M₁
+  let : Field U₁ := fU₁
+  let : Field M₁ := fM₁
+  let : Algebra K U₁ := aKU₁
+  let : Algebra K M₁ := aKM₁
+  let : Algebra L M₁ := aLM₁
+  let : Algebra U₁ M₁ := aU₁M₁
+  let : IsScalarTower K L M₁ := stKLM₁
+  let : IsScalarTower K U₁ M₁ := stKU₁M₁
+  let : FiniteDimensional K U₁ := fdKU₁
+  let : FiniteDimensional K M₁ := fdKM₁
+  let : FiniteDimensional L M₁ := fdLM₁
+  let : FiniteDimensional U₁ M₁ := fdU₁M₁
+  let : IsGalois K U₁ := galKU₁
+  let : IsGalois K M₁ := galKM₁
+  let : IsGalois L M₁ := galLM₁
+  let : ValuativeRel U₁ := vU₁
+  let : TopologicalSpace U₁ := tU₁
+  let : IsNonarchimedeanLocalField U₁ := locU₁
+  let : ValuativeRel M₁ := vM₁
+  let : TopologicalSpace M₁ := tM₁
+  let : IsNonarchimedeanLocalField M₁ := locM₁
+  let : ValuativeExtension K U₁ := veKU₁
+  let : ValuativeExtension K M₁ := veKM₁
+  let : ValuativeExtension L M₁ := veLM₁
+  let : ValuativeExtension U₁ M₁ := veU₁M₁
+  let : ContinuousSMul K U₁ := csKU₁
+  let : ContinuousSMul K M₁ := csKM₁
+  let : ContinuousSMul L M₁ := csLM₁
+  let : ContinuousSMul U₁ M₁ := csU₁M₁
   obtain ⟨D₁⟩ := hD₁
   obtain ⟨U₂, M₂, fU₂, fM₂, aKU₂, aKM₂, aEM₂, aU₂M₂, stKEM₂, stKU₂M₂,
       fdKU₂, fdKM₂, fdEM₂, fdU₂M₂, galKU₂, galKM₂, galEM₂,
       vU₂, tU₂, locU₂, vM₂, tM₂, locM₂, veKU₂, veKM₂, veEM₂, veU₂M₂,
       csKU₂, csKM₂, csEM₂, csU₂M₂, hD₂⟩ :=
     unramifiedEnvelope_descentData K E π
-  letI : Field U₂ := fU₂
-  letI : Field M₂ := fM₂
-  letI : Algebra K U₂ := aKU₂
-  letI : Algebra K M₂ := aKM₂
-  letI : Algebra E M₂ := aEM₂
-  letI : Algebra U₂ M₂ := aU₂M₂
-  letI : IsScalarTower K E M₂ := stKEM₂
-  letI : IsScalarTower K U₂ M₂ := stKU₂M₂
-  letI : FiniteDimensional K U₂ := fdKU₂
-  letI : FiniteDimensional K M₂ := fdKM₂
-  letI : FiniteDimensional E M₂ := fdEM₂
-  letI : FiniteDimensional U₂ M₂ := fdU₂M₂
-  letI : IsGalois K U₂ := galKU₂
-  letI : IsGalois K M₂ := galKM₂
-  letI : IsGalois E M₂ := galEM₂
-  letI : ValuativeRel U₂ := vU₂
-  letI : TopologicalSpace U₂ := tU₂
-  letI : IsNonarchimedeanLocalField U₂ := locU₂
-  letI : ValuativeRel M₂ := vM₂
-  letI : TopologicalSpace M₂ := tM₂
-  letI : IsNonarchimedeanLocalField M₂ := locM₂
-  letI : ValuativeExtension K U₂ := veKU₂
-  letI : ValuativeExtension K M₂ := veKM₂
-  letI : ValuativeExtension E M₂ := veEM₂
-  letI : ValuativeExtension U₂ M₂ := veU₂M₂
-  letI : ContinuousSMul K U₂ := csKU₂
-  letI : ContinuousSMul K M₂ := csKM₂
-  letI : ContinuousSMul E M₂ := csEM₂
-  letI : ContinuousSMul U₂ M₂ := csU₂M₂
+  let : Field U₂ := fU₂
+  let : Field M₂ := fM₂
+  let : Algebra K U₂ := aKU₂
+  let : Algebra K M₂ := aKM₂
+  let : Algebra E M₂ := aEM₂
+  let : Algebra U₂ M₂ := aU₂M₂
+  let : IsScalarTower K E M₂ := stKEM₂
+  let : IsScalarTower K U₂ M₂ := stKU₂M₂
+  let : FiniteDimensional K U₂ := fdKU₂
+  let : FiniteDimensional K M₂ := fdKM₂
+  let : FiniteDimensional E M₂ := fdEM₂
+  let : FiniteDimensional U₂ M₂ := fdU₂M₂
+  let : IsGalois K U₂ := galKU₂
+  let : IsGalois K M₂ := galKM₂
+  let : IsGalois E M₂ := galEM₂
+  let : ValuativeRel U₂ := vU₂
+  let : TopologicalSpace U₂ := tU₂
+  let : IsNonarchimedeanLocalField U₂ := locU₂
+  let : ValuativeRel M₂ := vM₂
+  let : TopologicalSpace M₂ := tM₂
+  let : IsNonarchimedeanLocalField M₂ := locM₂
+  let : ValuativeExtension K U₂ := veKU₂
+  let : ValuativeExtension K M₂ := veKM₂
+  let : ValuativeExtension E M₂ := veEM₂
+  let : ValuativeExtension U₂ M₂ := veU₂M₂
+  let : ContinuousSMul K U₂ := csKU₂
+  let : ContinuousSMul K M₂ := csKM₂
+  let : ContinuousSMul E M₂ := csEM₂
+  let : ContinuousSMul U₂ M₂ := csU₂M₂
   obtain ⟨D₂⟩ := hD₂
   let Ksep := SeparableClosure K
   let T : UnramifiedTower K Ksep := unramifiedTower K Ksep
   obtain ⟨eU, eM, hLM, hUM⟩ :=
     unramifiedEnvelope_inflation_embeddings K L E Ksep U₁ M₁ U₂ M₂ T D₁ D₂
-  letI : Algebra U₁ U₂ := eU.toRingHom.toAlgebra
-  letI : IsScalarTower K U₁ U₂ :=
+  let : Algebra U₁ U₂ := eU.toRingHom.toAlgebra
+  let : IsScalarTower K U₁ U₂ :=
     IsScalarTower.of_algebraMap_eq fun x => (eU.commutes x).symm
-  letI : FiniteDimensional U₁ U₂ := FiniteDimensional.right K U₁ U₂
-  letI : IsGalois U₁ U₂ := IsGalois.tower_top_of_isGalois K U₁ U₂
-  letI : ValuativeExtension U₁ U₂ := envelopeValuativeExtension_of_tower K U₁ U₂
+  let : FiniteDimensional U₁ U₂ := FiniteDimensional.right K U₁ U₂
+  let : IsGalois U₁ U₂ := IsGalois.tower_top_of_isGalois K U₁ U₂
+  let : ValuativeExtension U₁ U₂ := envelopeValuativeExtension_of_tower K U₁ U₂
   let hcontU : Continuous eU := by
-    letI : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
-    letI : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
-    letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+    let : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
+    let : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
+    let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
       { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
           MonoidWithZeroHom.ValueGroup₀.embedding
         strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
           MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-    letI : NontriviallyNormedField K :=
+    let : NontriviallyNormedField K :=
       Valued.toNontriviallyNormedField K (ValuativeRel.ValueGroupWithZero K)
-    letI : UniformSpace U₁ := IsTopologicalAddGroup.rightUniformSpace U₁
-    letI : IsUniformAddGroup U₁ := isUniformAddGroup_of_addCommGroup
-    letI : ValuativeRel.IsNontrivial U₁ :=
+    let : UniformSpace U₁ := IsTopologicalAddGroup.rightUniformSpace U₁
+    let : IsUniformAddGroup U₁ := isUniformAddGroup_of_addCommGroup
+    let : ValuativeRel.IsNontrivial U₁ :=
       IsNonarchimedeanLocalField.toIsNontrivial
     exact LinearMap.continuous_of_finiteDimensional (𝕜 := K) eU.toLinearMap
-  letI : ContinuousSMul U₁ U₂ := by
+  let : ContinuousSMul U₁ U₂ := by
     constructor
     change Continuous (fun p : U₁ × U₂ => eU p.1 * p.2)
     exact (hcontU.comp continuous_fst).mul continuous_snd
-  letI : IsUnramifiedLocalExtension U₁ U₂ := by
+  let : IsUnramifiedLocalExtension U₁ U₂ := by
     constructor
     let ϖ := defaultUniformizer K
     let x : Units U₁ := Units.map (algebraMap K U₁) ϖ.val
@@ -4119,10 +4119,10 @@ private theorem actualFundamentalInflation_square :
     norm_num at heq
     exact_mod_cast heq.symm
   let U₁sep := SeparableClosure U₁
-  letI : IsSepClosed U₁sep := IsSepClosure.sep_closed U₁
+  let : IsSepClosed U₁sep := IsSepClosure.sep_closed U₁
   let jU₂ : U₂ →ₐ[U₁] U₁sep := IsSepClosed.lift
-  letI : Algebra U₂ U₁sep := jU₂.toRingHom.toAlgebra
-  letI : IsScalarTower U₁ U₂ U₁sep :=
+  let : Algebra U₂ U₁sep := jU₂.toRingHom.toAlgebra
+  let : IsScalarTower U₁ U₂ U₁sep :=
     IsScalarTower.of_algebraMap_eq fun x => (jU₂.commutes x).symm
   obtain ⟨upper⟩ := envelopeUnramifiedCyclicDataExists U₁ U₂ U₁sep inferInstance
   obtain ⟨C, hClower, hCtotal, -⟩ :=
@@ -4161,34 +4161,34 @@ private theorem actualFundamentalInflation_square :
         (Module.finrank L E : ℤ) • D₂.sourceClass.class := by
     rw [← hC₁, ← hC₂, ← hdegree]
     exact hcarryMap.symm.trans hcarryC
-  letI : Algebra L M₂ :=
+  let : Algebra L M₂ :=
     ((algebraMap E M₂).comp (algebraMap L E)).toAlgebra
-  letI : IsScalarTower L E M₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : IsScalarTower K L M₂ := IsScalarTower.of_algebraMap_eq fun x => by
+  let : IsScalarTower L E M₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsScalarTower K L M₂ := IsScalarTower.of_algebraMap_eq fun x => by
     calc
       algebraMap K M₂ x = algebraMap E M₂ (algebraMap K E x) :=
         IsScalarTower.algebraMap_apply K E M₂ x
       _ = algebraMap E M₂ (algebraMap L E (algebraMap K L x)) := by
         rw [IsScalarTower.algebraMap_apply K L E]
       _ = algebraMap L M₂ (algebraMap K L x) := rfl
-  letI : Algebra U₁ M₂ :=
+  let : Algebra U₁ M₂ :=
     ((algebraMap U₂ M₂).comp eU.toRingHom).toAlgebra
-  letI : IsScalarTower U₁ U₂ M₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : IsScalarTower K U₁ M₂ := IsScalarTower.of_algebraMap_eq fun x => by
+  let : IsScalarTower U₁ U₂ M₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsScalarTower K U₁ M₂ := IsScalarTower.of_algebraMap_eq fun x => by
     calc
       algebraMap K M₂ x = algebraMap U₂ M₂ (algebraMap K U₂ x) :=
         IsScalarTower.algebraMap_apply K U₂ M₂ x
       _ = algebraMap U₂ M₂ (eU (algebraMap K U₁ x)) := by
         rw [eU.commutes]
       _ = algebraMap U₁ M₂ (algebraMap K U₁ x) := rfl
-  letI : Algebra M₁ M₂ := eM.toRingHom.toAlgebra
-  letI : IsScalarTower K M₁ M₂ :=
+  let : Algebra M₁ M₂ := eM.toRingHom.toAlgebra
+  let : IsScalarTower K M₁ M₂ :=
     IsScalarTower.of_algebraMap_eq fun x => (eM.commutes x).symm
-  letI : IsScalarTower L M₁ M₂ :=
+  let : IsScalarTower L M₁ M₂ :=
     IsScalarTower.of_algebraMap_eq fun x => (hLM x).symm
-  letI : IsScalarTower U₁ M₁ M₂ :=
+  let : IsScalarTower U₁ M₁ M₂ :=
     IsScalarTower.of_algebraMap_eq fun x => (hUM x).symm
-  letI : FiniteDimensional M₁ M₂ := FiniteDimensional.right K M₁ M₂
+  let : FiniteDimensional M₁ M₂ := FiniteDimensional.right K M₁ M₂
   have hD₁descentQ : D₁.descentQuotient = towerQuotientHom K L M₁ := by
     apply MonoidHom.ext
     intro σ
@@ -4377,8 +4377,8 @@ private theorem envelope_tower_intersection_finrank_of_dvd
     apply T.le_of_dvd
     simpa only [hn] using hdiv
   let I : IntermediateField F Fsep := j.fieldRange ⊓ T.field m
-  letI : FiniteDimensional F (T.field m) := T.finiteDimensional m
-  letI : FiniteDimensional F I :=
+  let : FiniteDimensional F (T.field m) := T.finiteDimensional m
+  let : FiniteDimensional F I :=
     FiniteDimensional.of_injective
       (IntermediateField.inclusion (by exact inf_le_right : I ≤ T.field m)).toLinearMap
       (IntermediateField.inclusion_injective (by exact inf_le_right : I ≤ T.field m))
@@ -4389,15 +4389,15 @@ private theorem envelope_tower_intersection_finrank_of_dvd
       (by exact inf_le_right : I ≤ T.field m)
     rwa [T.finrank m] at h
   have hdn : d ∣ n := by
-    letI : FiniteDimensional F j.fieldRange :=
+    let : FiniteDimensional F j.fieldRange :=
       j.equivFieldRange.toLinearEquiv.finiteDimensional
     have h := IntermediateField.finrank_dvd_of_le_right
       (by exact inf_le_left : I ≤ j.fieldRange)
     rw [← j.equivFieldRange.toLinearEquiv.finrank_eq] at h
     exact h
-  letI : IsGalois F (T.field m) := T.isGalois m
+  let : IsGalois F (T.field m) := T.isGalois m
   let V := T.field (d - 1)
-  letI : FiniteDimensional F V := T.finiteDimensional (d - 1)
+  let : FiniteDimensional F V := T.finiteDimensional (d - 1)
   have hVm : V ≤ T.field m := T.le_of_dvd (by simpa only [hd] using hdm)
   have hcyc : IsCyclic (T.field m ≃ₐ[F] T.field m) :=
     isCyclic_iff_exists_zpowers_eq_top.mpr
@@ -4533,89 +4533,89 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       vU₁, tU₁, locU₁, vM₁, tM₁, locM₁, veKU₁, veKM₁, veLM₁, veU₁M₁,
       csKU₁, csKM₁, csLM₁, csU₁M₁, hD₁⟩ :=
     unramifiedEnvelope_descentData K L πK
-  letI : Field U₁ := fU₁
-  letI : Field M₁ := fM₁
-  letI : Algebra K U₁ := aKU₁
-  letI : Algebra K M₁ := aKM₁
-  letI : Algebra L M₁ := aLM₁
-  letI : Algebra U₁ M₁ := aU₁M₁
-  letI : IsScalarTower K L M₁ := stKLM₁
-  letI : IsScalarTower K U₁ M₁ := stKU₁M₁
-  letI : FiniteDimensional K U₁ := fdKU₁
-  letI : FiniteDimensional K M₁ := fdKM₁
-  letI : FiniteDimensional L M₁ := fdLM₁
-  letI : FiniteDimensional U₁ M₁ := fdU₁M₁
-  letI : IsGalois K U₁ := galKU₁
-  letI : IsGalois K M₁ := galKM₁
-  letI : IsGalois L M₁ := galLM₁
-  letI : ValuativeRel U₁ := vU₁
-  letI : TopologicalSpace U₁ := tU₁
-  letI : IsNonarchimedeanLocalField U₁ := locU₁
-  letI : ValuativeRel M₁ := vM₁
-  letI : TopologicalSpace M₁ := tM₁
-  letI : IsNonarchimedeanLocalField M₁ := locM₁
-  letI : ValuativeExtension K U₁ := veKU₁
-  letI : ValuativeExtension K M₁ := veKM₁
-  letI : ValuativeExtension L M₁ := veLM₁
-  letI : ValuativeExtension U₁ M₁ := veU₁M₁
-  letI : ContinuousSMul K U₁ := csKU₁
-  letI : ContinuousSMul K M₁ := csKM₁
-  letI : ContinuousSMul L M₁ := csLM₁
-  letI : ContinuousSMul U₁ M₁ := csU₁M₁
+  let : Field U₁ := fU₁
+  let : Field M₁ := fM₁
+  let : Algebra K U₁ := aKU₁
+  let : Algebra K M₁ := aKM₁
+  let : Algebra L M₁ := aLM₁
+  let : Algebra U₁ M₁ := aU₁M₁
+  let : IsScalarTower K L M₁ := stKLM₁
+  let : IsScalarTower K U₁ M₁ := stKU₁M₁
+  let : FiniteDimensional K U₁ := fdKU₁
+  let : FiniteDimensional K M₁ := fdKM₁
+  let : FiniteDimensional L M₁ := fdLM₁
+  let : FiniteDimensional U₁ M₁ := fdU₁M₁
+  let : IsGalois K U₁ := galKU₁
+  let : IsGalois K M₁ := galKM₁
+  let : IsGalois L M₁ := galLM₁
+  let : ValuativeRel U₁ := vU₁
+  let : TopologicalSpace U₁ := tU₁
+  let : IsNonarchimedeanLocalField U₁ := locU₁
+  let : ValuativeRel M₁ := vM₁
+  let : TopologicalSpace M₁ := tM₁
+  let : IsNonarchimedeanLocalField M₁ := locM₁
+  let : ValuativeExtension K U₁ := veKU₁
+  let : ValuativeExtension K M₁ := veKM₁
+  let : ValuativeExtension L M₁ := veLM₁
+  let : ValuativeExtension U₁ M₁ := veU₁M₁
+  let : ContinuousSMul K U₁ := csKU₁
+  let : ContinuousSMul K M₁ := csKM₁
+  let : ContinuousSMul L M₁ := csLM₁
+  let : ContinuousSMul U₁ M₁ := csU₁M₁
   obtain ⟨D₁⟩ := hD₁
   obtain ⟨U₂, M₂, fU₂, fM₂, aEU₂, aEM₂, aLM₂, aU₂M₂, stELM₂, stEU₂M₂,
       fdEU₂, fdEM₂, fdLM₂, fdU₂M₂, galEU₂, galEM₂, galLM₂,
       vU₂, tU₂, locU₂, vM₂, tM₂, locM₂, veEU₂, veEM₂, veLM₂, veU₂M₂,
       csEU₂, csEM₂, csLM₂, csU₂M₂, hD₂⟩ :=
     unramifiedEnvelope_descentData E L πE
-  letI : Field U₂ := fU₂
-  letI : Field M₂ := fM₂
-  letI : Algebra E U₂ := aEU₂
-  letI : Algebra E M₂ := aEM₂
-  letI : Algebra L M₂ := aLM₂
-  letI : Algebra U₂ M₂ := aU₂M₂
-  letI : IsScalarTower E L M₂ := stELM₂
-  letI : IsScalarTower E U₂ M₂ := stEU₂M₂
-  letI : FiniteDimensional E U₂ := fdEU₂
-  letI : FiniteDimensional E M₂ := fdEM₂
-  letI : FiniteDimensional L M₂ := fdLM₂
-  letI : FiniteDimensional U₂ M₂ := fdU₂M₂
-  letI : IsGalois E U₂ := galEU₂
-  letI : IsGalois E M₂ := galEM₂
-  letI : IsGalois L M₂ := galLM₂
-  letI : ValuativeRel U₂ := vU₂
-  letI : TopologicalSpace U₂ := tU₂
-  letI : IsNonarchimedeanLocalField U₂ := locU₂
-  letI : ValuativeRel M₂ := vM₂
-  letI : TopologicalSpace M₂ := tM₂
-  letI : IsNonarchimedeanLocalField M₂ := locM₂
-  letI : ValuativeExtension E U₂ := veEU₂
-  letI : ValuativeExtension E M₂ := veEM₂
-  letI : ValuativeExtension L M₂ := veLM₂
-  letI : ValuativeExtension U₂ M₂ := veU₂M₂
-  letI : ContinuousSMul E U₂ := csEU₂
-  letI : ContinuousSMul E M₂ := csEM₂
-  letI : ContinuousSMul L M₂ := csLM₂
-  letI : ContinuousSMul U₂ M₂ := csU₂M₂
+  let : Field U₂ := fU₂
+  let : Field M₂ := fM₂
+  let : Algebra E U₂ := aEU₂
+  let : Algebra E M₂ := aEM₂
+  let : Algebra L M₂ := aLM₂
+  let : Algebra U₂ M₂ := aU₂M₂
+  let : IsScalarTower E L M₂ := stELM₂
+  let : IsScalarTower E U₂ M₂ := stEU₂M₂
+  let : FiniteDimensional E U₂ := fdEU₂
+  let : FiniteDimensional E M₂ := fdEM₂
+  let : FiniteDimensional L M₂ := fdLM₂
+  let : FiniteDimensional U₂ M₂ := fdU₂M₂
+  let : IsGalois E U₂ := galEU₂
+  let : IsGalois E M₂ := galEM₂
+  let : IsGalois L M₂ := galLM₂
+  let : ValuativeRel U₂ := vU₂
+  let : TopologicalSpace U₂ := tU₂
+  let : IsNonarchimedeanLocalField U₂ := locU₂
+  let : ValuativeRel M₂ := vM₂
+  let : TopologicalSpace M₂ := tM₂
+  let : IsNonarchimedeanLocalField M₂ := locM₂
+  let : ValuativeExtension E U₂ := veEU₂
+  let : ValuativeExtension E M₂ := veEM₂
+  let : ValuativeExtension L M₂ := veLM₂
+  let : ValuativeExtension U₂ M₂ := veU₂M₂
+  let : ContinuousSMul E U₂ := csEU₂
+  let : ContinuousSMul E M₂ := csEM₂
+  let : ContinuousSMul L M₂ := csLM₂
+  let : ContinuousSMul U₂ M₂ := csU₂M₂
   obtain ⟨D₂⟩ := hD₂
   let Ksep := SeparableClosure K
-  letI : IsSepClosed Ksep := IsSepClosure.sep_closed K
+  let : IsSepClosed Ksep := IsSepClosure.sep_closed K
   let jL : L →ₐ[K] Ksep := IsSepClosed.lift
-  letI : Algebra L Ksep := jL.toRingHom.toAlgebra
-  letI : IsScalarTower K L Ksep :=
+  let : Algebra L Ksep := jL.toRingHom.toAlgebra
+  let : IsScalarTower K L Ksep :=
     IsScalarTower.of_algebraMap_eq fun x => (jL.commutes x).symm
   let jM₁ : M₁ →ₐ[L] Ksep := IsSepClosed.lift
   let jM₂ : M₂ →ₐ[L] Ksep := IsSepClosed.lift
   let jU₁ : U₁ →ₐ[K] Ksep :=
     (jM₁.restrictScalars K).comp (IsScalarTower.toAlgHom K U₁ M₁)
   let jE : E →ₐ[K] Ksep := jL.comp (IsScalarTower.toAlgHom K E L)
-  letI : Algebra E Ksep := jE.toRingHom.toAlgebra
-  letI : IsScalarTower K E Ksep :=
+  let : Algebra E Ksep := jE.toRingHom.toAlgebra
+  let : IsScalarTower K E Ksep :=
     IsScalarTower.of_algebraMap_eq fun x => (jE.commutes x).symm
-  letI : IsScalarTower E L Ksep := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsScalarTower E L Ksep := IsScalarTower.of_algebraMap_eq fun _ => rfl
   let jU₂ : U₂ →ₐ[E] Ksep :=
     (jM₂.restrictScalars E).comp (IsScalarTower.toAlgHom E U₂ M₂)
-  letI : IsSepClosure E Ksep :=
+  let : IsSepClosure E Ksep :=
     { sep_closed := IsSepClosure.sep_closed K
       separable := ⟨fun x =>
         IsSeparable.tower_top E (Algebra.IsSeparable.isSeparable K x)⟩ }
@@ -4647,37 +4647,37 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
     exact Nat.pos_of_mul_pos_right hprod
   have hm : m - 1 + 1 = m := Nat.sub_add_cancel hmpos
   let W : IntermediateField E Ksep := TE.field (m - 1)
-  letI : FiniteDimensional E W := TE.finiteDimensional (m - 1)
-  letI : IsGalois E W := TE.isGalois (m - 1)
-  letI : ValuativeRel W :=
+  let : FiniteDimensional E W := TE.finiteDimensional (m - 1)
+  let : IsGalois E W := TE.isGalois (m - 1)
+  let : ValuativeRel W :=
     unramifiedIntermediateFieldValuativeRel E Ksep W (TE.unramified (m - 1))
-  letI : TopologicalSpace W :=
+  let : TopologicalSpace W :=
     unramifiedIntermediateFieldTopology E Ksep W (TE.unramified (m - 1))
-  letI : IsNonarchimedeanLocalField W :=
+  let : IsNonarchimedeanLocalField W :=
     unramifiedIntermediateFieldLocalField E Ksep W (TE.unramified (m - 1))
-  letI : ValuativeExtension E W :=
+  let : ValuativeExtension E W :=
     unramifiedIntermediateFieldValuativeExtension E Ksep W (TE.unramified (m - 1))
-  letI : ContinuousSMul E W :=
+  let : ContinuousSMul E W :=
     unramifiedIntermediateFieldContinuousSMul E Ksep W (TE.unramified (m - 1))
   let aKW : Algebra K W :=
     ((algebraMap E W).comp (algebraMap K E)).toAlgebra
-  letI : Algebra K W := aKW
-  letI : Module K W := aKW.toModule
-  letI : IsScalarTower K E W := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : Algebra K W := aKW
+  let : Module K W := aKW.toModule
+  let : IsScalarTower K E W := IsScalarTower.of_algebraMap_eq fun _ => rfl
   let fdKW : FiniteDimensional K W := FiniteDimensional.trans K E W
-  letI : FiniteDimensional K W := fdKW
+  let : FiniteDimensional K W := fdKW
   let hveKW : ValuativeExtension K W := by
     constructor
     intro x y
     change algebraMap E W (algebraMap K E x) ≤ᵥ
         algebraMap E W (algebraMap K E y) ↔ x ≤ᵥ y
     rw [ValuativeExtension.vle_iff_vle, ValuativeExtension.vle_iff_vle]
-  letI : ValuativeExtension K W := hveKW
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
+  let : ValuativeExtension K W := hveKW
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation E) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation W) :=
+  let : (ValuativeRel.valuation E).HasExtension (ValuativeRel.valuation W) :=
     ⟨ValuativeRel.isEquiv _ _⟩
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation W) :=
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation W) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   have hepos : 0 < e := by
     have hKE : 0 < Module.finrank K E := Module.finrank_pos
@@ -4728,7 +4728,7 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       _ = e * n := by rw [← hmf]; ac_rfl
   let kK := LocalResidueField K
   let kW := LocalResidueField W
-  letI : Algebra kK kW :=
+  let : Algebra kK kW :=
     Ideal.Quotient.algebraOfLiesOver (IsLocalRing.maximalIdeal (RingOfIntegers W))
       (IsLocalRing.maximalIdeal (RingOfIntegers K))
   have hresKW : Module.finrank kK kW = n :=
@@ -4775,28 +4775,28 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       (jU₁.fieldRange ⊓ jE.fieldRange : IntermediateField K Ksep) = f
     rw [inf_comm]
     exact hintersection₀
-  letI : FiniteDimensional K jE.fieldRange :=
+  let : FiniteDimensional K jE.fieldRange :=
     jE.equivFieldRange.toLinearEquiv.finiteDimensional
-  letI : FiniteDimensional K jU₁.fieldRange :=
+  let : FiniteDimensional K jU₁.fieldRange :=
     jU₁.equivFieldRange.toLinearEquiv.finiteDimensional
-  letI : FiniteDimensional K I₀ :=
+  let : FiniteDimensional K I₀ :=
     FiniteDimensional.of_injective
       (IntermediateField.inclusion (by exact inf_le_left : I₀ ≤ jU₁.fieldRange)).toLinearMap
       (IntermediateField.inclusion_injective
         (by exact inf_le_left : I₀ ≤ jU₁.fieldRange))
-  letI : FiniteDimensional K C₀ :=
+  let : FiniteDimensional K C₀ :=
     IntermediateField.finiteDimensional_sup jU₁.fieldRange jE.fieldRange
-  letI : IsGalois K jU₁.fieldRange := IsGalois.of_algEquiv jU₁.equivFieldRange
-  letI : Algebra jU₁.fieldRange C₀ :=
+  let : IsGalois K jU₁.fieldRange := IsGalois.of_algEquiv jU₁.equivFieldRange
+  let : Algebra jU₁.fieldRange C₀ :=
     intermediateFieldInclusionAlgebra K Ksep le_sup_left
-  letI : IsScalarTower K jU₁.fieldRange C₀ :=
+  let : IsScalarTower K jU₁.fieldRange C₀ :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : FiniteDimensional jU₁.fieldRange C₀ := FiniteDimensional.right K _ _
-  letI : Algebra I₀ jE.fieldRange :=
+  let : FiniteDimensional jU₁.fieldRange C₀ := FiniteDimensional.right K _ _
+  let : Algebra I₀ jE.fieldRange :=
     intermediateFieldInclusionAlgebra K Ksep inf_le_right
-  letI : IsScalarTower K I₀ jE.fieldRange :=
+  let : IsScalarTower K I₀ jE.fieldRange :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : FiniteDimensional I₀ jE.fieldRange := FiniteDimensional.right K _ _
+  let : FiniteDimensional I₀ jE.fieldRange := FiniteDimensional.right K _ _
   have hrelative : Module.finrank jU₁.fieldRange C₀ =
       Module.finrank I₀ jE.fieldRange := by
     exact envelope_compositum_relative_finrank K Ksep jU₁.fieldRange jE.fieldRange
@@ -4837,7 +4837,7 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       commutes' := fun x => by
         apply Subtype.ext
         exact jE.commutes x }
-  letI : FiniteDimensional K (W.restrictScalars K) :=
+  let : FiniteDimensional K (W.restrictScalars K) :=
     eWW.toLinearEquiv.finiteDimensional
   have hC₀rank : Module.finrank K C₀ = Module.finrank K (W.restrictScalars K) :=
     hC₀rankW.trans eWW.toLinearEquiv.finrank_eq
@@ -4853,12 +4853,12 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
   let eU₁ : U₁ →ₐ[K] W := eWW.symm.toAlgHom.comp eU₁'
   let eU₂ : U₂ →ₐ[E] W :=
     jU₂.codRestrict W.toSubalgebra (fun x => hU₂W ⟨x, rfl⟩)
-  letI : Algebra U₁ W := eU₁.toRingHom.toAlgebra
-  letI : IsScalarTower K U₁ W :=
+  let : Algebra U₁ W := eU₁.toRingHom.toAlgebra
+  let : IsScalarTower K U₁ W :=
     IsScalarTower.of_algebraMap_eq fun x => (eU₁.commutes x).symm
-  letI : FiniteDimensional U₁ W := FiniteDimensional.right K U₁ W
-  letI : ValuativeExtension U₁ W := envelopeValuativeExtension_of_tower K U₁ W
-  letI : ContinuousSMul K W := by
+  let : FiniteDimensional U₁ W := FiniteDimensional.right K U₁ W
+  let : ValuativeExtension U₁ W := envelopeValuativeExtension_of_tower K U₁ W
+  let : ContinuousSMul K W := by
     constructor
     have hKE : Continuous (algebraMap K E) := by
       have h := (continuous_smul : Continuous (fun p : K × E => p.1 • p.2)).comp
@@ -4886,43 +4886,43 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       (hKW.comp continuous_fst).mul continuous_snd
     simpa only [Algebra.smul_def] using hcont
   let hcontU₁ : Continuous eU₁ := by
-    letI : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
-    letI : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
-    letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+    let : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
+    let : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
+    let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
       { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
           MonoidWithZeroHom.ValueGroup₀.embedding
         strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
           MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-    letI : NontriviallyNormedField K :=
+    let : NontriviallyNormedField K :=
       Valued.toNontriviallyNormedField K (ValuativeRel.ValueGroupWithZero K)
-    letI : UniformSpace U₁ := IsTopologicalAddGroup.rightUniformSpace U₁
-    letI : IsUniformAddGroup U₁ := isUniformAddGroup_of_addCommGroup
-    letI : ValuativeRel.IsNontrivial U₁ := IsNonarchimedeanLocalField.toIsNontrivial
+    let : UniformSpace U₁ := IsTopologicalAddGroup.rightUniformSpace U₁
+    let : IsUniformAddGroup U₁ := isUniformAddGroup_of_addCommGroup
+    let : ValuativeRel.IsNontrivial U₁ := IsNonarchimedeanLocalField.toIsNontrivial
     exact LinearMap.continuous_of_finiteDimensional (𝕜 := K) eU₁.toLinearMap
-  letI : ContinuousSMul U₁ W := by
+  let : ContinuousSMul U₁ W := by
     constructor
     change Continuous (fun p : U₁ × W => eU₁ p.1 * p.2)
     exact (hcontU₁.comp continuous_fst).mul continuous_snd
-  letI : Algebra U₂ W := eU₂.toRingHom.toAlgebra
-  letI : IsScalarTower E U₂ W :=
+  let : Algebra U₂ W := eU₂.toRingHom.toAlgebra
+  let : IsScalarTower E U₂ W :=
     IsScalarTower.of_algebraMap_eq fun x => (eU₂.commutes x).symm
-  letI : FiniteDimensional U₂ W := FiniteDimensional.right E U₂ W
-  letI : ValuativeExtension U₂ W := envelopeValuativeExtension_of_tower E U₂ W
+  let : FiniteDimensional U₂ W := FiniteDimensional.right E U₂ W
+  let : ValuativeExtension U₂ W := envelopeValuativeExtension_of_tower E U₂ W
   let hcontU₂ : Continuous eU₂ := by
-    letI : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
-    letI : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
-    letI : (Valued.v (R := E) (Γ₀ := ValuativeRel.ValueGroupWithZero E)).RankOne :=
+    let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
+    let : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
+    let : (Valued.v (R := E) (Γ₀ := ValuativeRel.ValueGroupWithZero E)).RankOne :=
       { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := E).comp
           MonoidWithZeroHom.ValueGroup₀.embedding
         strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
           MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-    letI : NontriviallyNormedField E :=
+    let : NontriviallyNormedField E :=
       Valued.toNontriviallyNormedField E (ValuativeRel.ValueGroupWithZero E)
-    letI : UniformSpace U₂ := IsTopologicalAddGroup.rightUniformSpace U₂
-    letI : IsUniformAddGroup U₂ := isUniformAddGroup_of_addCommGroup
-    letI : ValuativeRel.IsNontrivial U₂ := IsNonarchimedeanLocalField.toIsNontrivial
+    let : UniformSpace U₂ := IsTopologicalAddGroup.rightUniformSpace U₂
+    let : IsUniformAddGroup U₂ := isUniformAddGroup_of_addCommGroup
+    let : ValuativeRel.IsNontrivial U₂ := IsNonarchimedeanLocalField.toIsNontrivial
     exact LinearMap.continuous_of_finiteDimensional (𝕜 := E) eU₂.toLinearMap
-  letI : ContinuousSMul U₂ W := by
+  let : ContinuousSMul U₂ W := by
     constructor
     change Continuous (fun p : U₂ × W => eU₂ p.1 * p.2)
     exact (hcontU₂.comp continuous_fst).mul continuous_snd
@@ -5028,18 +5028,18 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       hsourceDegree hcommonDegree htargetDegree
   let C₁ : UnramifiedClassData K U₁ B.source πK := hBS.symm ▸ D₁.sourceClass
   let C₂ : UnramifiedClassData E U₂ B.target πE := hBT.symm ▸ D₂.sourceClass
-  letI : Algebra E M₁ :=
+  let : Algebra E M₁ :=
     ((algebraMap L M₁).comp (algebraMap E L)).toAlgebra
-  letI : IsScalarTower E L M₁ := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : IsScalarTower K E M₁ := IsScalarTower.of_algebraMap_eq fun x => by
+  let : IsScalarTower E L M₁ := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsScalarTower K E M₁ := IsScalarTower.of_algebraMap_eq fun x => by
     calc
       algebraMap K M₁ x = algebraMap L M₁ (algebraMap K L x) :=
         IsScalarTower.algebraMap_apply K L M₁ x
       _ = algebraMap L M₁ (algebraMap E L (algebraMap K E x)) := by
         rw [IsScalarTower.algebraMap_apply K E L]
       _ = algebraMap E M₁ (algebraMap K E x) := rfl
-  letI : FiniteDimensional E M₁ := FiniteDimensional.right K E M₁
-  letI : IsGalois E M₁ := IsGalois.tower_top_of_isGalois K E M₁
+  let : FiniteDimensional E M₁ := FiniteDimensional.right K E M₁
+  let : IsGalois E M₁ := IsGalois.tower_top_of_isGalois K E M₁
   let jM₁K : M₁ →ₐ[K] Ksep := jM₁.restrictScalars K
   let jM₁E : M₁ →ₐ[E] Ksep := jM₁.restrictScalars E
   have hU₁M₁range : jU₁.fieldRange ≤ jM₁K.fieldRange := by
@@ -5069,13 +5069,13 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       ((IntermediateField.inclusion hWM₁range) w)) = (w : Ksep)
     exact congrArg Subtype.val (jM₁E.equivFieldRange.apply_symm_apply
       ((IntermediateField.inclusion hWM₁range) w))
-  letI : Algebra W M₁ := eW.toRingHom.toAlgebra
-  letI : IsScalarTower E W M₁ :=
+  let : Algebra W M₁ := eW.toRingHom.toAlgebra
+  let : IsScalarTower E W M₁ :=
     IsScalarTower.of_algebraMap_eq fun x => (eW.commutes x).symm
-  letI : FiniteDimensional W M₁ := FiniteDimensional.right E W M₁
-  letI : IsGalois W M₁ := IsGalois.tower_top_of_isGalois E W M₁
+  let : FiniteDimensional W M₁ := FiniteDimensional.right E W M₁
+  let : IsGalois W M₁ := IsGalois.tower_top_of_isGalois E W M₁
   have heU₁Ksep (u : U₁) : ((eU₁ u : W) : Ksep) = jU₁ u := heU₁ u
-  letI : IsScalarTower U₁ W M₁ := IsScalarTower.of_algebraMap_eq fun u => by
+  let : IsScalarTower U₁ W M₁ := IsScalarTower.of_algebraMap_eq fun u => by
     apply jM₁E.injective
     have hleft : jM₁E (algebraMap U₁ M₁ u) = jU₁ u := rfl
     have hright : jM₁E (algebraMap W M₁ (algebraMap U₁ W u)) =
@@ -5110,11 +5110,11 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       ((IntermediateField.inclusion hM₂M₁range) (jM₂E.equivFieldRange x))) = jM₂E x
     exact congrArg Subtype.val (jM₁E.equivFieldRange.apply_symm_apply
       ((IntermediateField.inclusion hM₂M₁range) (jM₂E.equivFieldRange x)))
-  letI : Algebra M₂ M₁ := eM.toRingHom.toAlgebra
-  letI : IsScalarTower E M₂ M₁ :=
+  let : Algebra M₂ M₁ := eM.toRingHom.toAlgebra
+  let : IsScalarTower E M₂ M₁ :=
     IsScalarTower.of_algebraMap_eq fun x => (eM.commutes x).symm
-  letI : FiniteDimensional M₂ M₁ := FiniteDimensional.right E M₂ M₁
-  letI : IsGalois M₂ M₁ := IsGalois.tower_top_of_isGalois E M₂ M₁
+  let : FiniteDimensional M₂ M₁ := FiniteDimensional.right E M₂ M₁
+  let : IsGalois M₂ M₁ := IsGalois.tower_top_of_isGalois E M₂ M₁
   have hLM (l : L) : eM (algebraMap L M₂ l) = algebraMap L M₁ l := by
     apply jM₁E.injective
     calc
@@ -5122,12 +5122,12 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       _ = jLE l := (jM₂.commutes l).trans (hjLE l).symm
       _ = jM₁E (algebraMap L M₁ l) :=
         ((jM₁.commutes l).trans (hjLE l).symm).symm
-  letI : IsScalarTower L M₂ M₁ :=
+  let : IsScalarTower L M₂ M₁ :=
     IsScalarTower.of_algebraMap_eq fun l => (hLM l).symm
-  letI : Algebra U₂ M₁ :=
+  let : Algebra U₂ M₁ :=
     ((algebraMap W M₁).comp (algebraMap U₂ W)).toAlgebra
-  letI : IsScalarTower U₂ W M₁ := IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : IsScalarTower E U₂ M₁ := IsScalarTower.of_algebraMap_eq fun x => by
+  let : IsScalarTower U₂ W M₁ := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  let : IsScalarTower E U₂ M₁ := IsScalarTower.of_algebraMap_eq fun x => by
     calc
       algebraMap E M₁ x = algebraMap W M₁ (algebraMap E W x) :=
         IsScalarTower.algebraMap_apply E W M₁ x
@@ -5144,7 +5144,7 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
       jM₁E (eM (algebraMap U₂ M₂ u)) = jM₂E (algebraMap U₂ M₂ u) := heM _
       _ = jU₂ u := rfl
       _ = jM₁E (algebraMap U₂ M₁ u) := (hU₂M₁Ksep u).symm
-  letI : IsScalarTower U₂ M₂ M₁ :=
+  let : IsScalarTower U₂ M₂ M₁ :=
     IsScalarTower.of_algebraMap_eq fun u => (hUM u).symm
   have hC₁class : C₁.class = D₁.sourceClass.class :=
     unramifiedClassData_transport_class hBS.symm πK D₁.sourceClass
@@ -5576,35 +5576,35 @@ private theorem descendsFromUnramifiedEnvelopes_unique
       vU, tU, locU, vM, tM, locM, veKU, veKM, veLM, veUM,
       csKU, csKM, csLM, csUM, hD⟩ :=
     unramifiedEnvelope_descentData K L π
-  letI : Field U := fU
-  letI : Field M := fM
-  letI : Algebra K U := aKU
-  letI : Algebra K M := aKM
-  letI : Algebra L M := aLM
-  letI : Algebra U M := aUM
-  letI : IsScalarTower K L M := stKLM
-  letI : IsScalarTower K U M := stKUM
-  letI : FiniteDimensional K U := fdKU
-  letI : FiniteDimensional K M := fdKM
-  letI : FiniteDimensional L M := fdLM
-  letI : FiniteDimensional U M := fdUM
-  letI : IsGalois K U := galKU
-  letI : IsGalois K M := galKM
-  letI : IsGalois L M := galLM
-  letI : ValuativeRel U := vU
-  letI : TopologicalSpace U := tU
-  letI : IsNonarchimedeanLocalField U := locU
-  letI : ValuativeRel M := vM
-  letI : TopologicalSpace M := tM
-  letI : IsNonarchimedeanLocalField M := locM
-  letI : ValuativeExtension K U := veKU
-  letI : ValuativeExtension K M := veKM
-  letI : ValuativeExtension L M := veLM
-  letI : ValuativeExtension U M := veUM
-  letI : ContinuousSMul K U := csKU
-  letI : ContinuousSMul K M := csKM
-  letI : ContinuousSMul L M := csLM
-  letI : ContinuousSMul U M := csUM
+  let : Field U := fU
+  let : Field M := fM
+  let : Algebra K U := aKU
+  let : Algebra K M := aKM
+  let : Algebra L M := aLM
+  let : Algebra U M := aUM
+  let : IsScalarTower K L M := stKLM
+  let : IsScalarTower K U M := stKUM
+  let : FiniteDimensional K U := fdKU
+  let : FiniteDimensional K M := fdKM
+  let : FiniteDimensional L M := fdLM
+  let : FiniteDimensional U M := fdUM
+  let : IsGalois K U := galKU
+  let : IsGalois K M := galKM
+  let : IsGalois L M := galLM
+  let : ValuativeRel U := vU
+  let : TopologicalSpace U := tU
+  let : IsNonarchimedeanLocalField U := locU
+  let : ValuativeRel M := vM
+  let : TopologicalSpace M := tM
+  let : IsNonarchimedeanLocalField M := locM
+  let : ValuativeExtension K U := veKU
+  let : ValuativeExtension K M := veKM
+  let : ValuativeExtension L M := veLM
+  let : ValuativeExtension U M := veUM
+  let : ContinuousSMul K U := csKU
+  let : ContinuousSMul K M := csKM
+  let : ContinuousSMul L M := csLM
+  let : ContinuousSMul U M := csUM
   obtain ⟨D⟩ := hD
   apply D.descent_injective
   exact (hα π U M D).trans (hβ π U M D).symm

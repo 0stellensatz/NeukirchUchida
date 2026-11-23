@@ -992,7 +992,7 @@ noncomputable def galoisLevelOfOpenNormal
       (absoluteOpenNormalClosedSubgroup K U)]
     exact U.isOpen'
   numberField := by
-    letI : FiniteDimensional K
+    let : FiniteDimensional K
         (IntermediateField.fixedField
           (absoluteOpenNormalClosedSubgroup K U).toSubgroup) := by
       apply (InfiniteGalois.isOpen_iff_finite
@@ -1100,9 +1100,9 @@ theorem markedLevels_cofinal
       ((V : Set (Field.absoluteGaloisGroup K)) ∩
         (cyclotomicKernel K (p : ℕ) : Set (Field.absoluteGaloisGroup K))) :=
     ⟨V.one_mem, (cyclotomicKernel K (p : ℕ)).one_mem⟩
-  letI : CompactSpace (Field.absoluteGaloisGroup K) :=
+  let : CompactSpace (Field.absoluteGaloisGroup K) :=
     absoluteGaloisGroup_compactSpace
-  letI : TotallyDisconnectedSpace (Field.absoluteGaloisGroup K) :=
+  let : TotallyDisconnectedSpace (Field.absoluteGaloisGroup K) :=
     absoluteGaloisGroup_totallyDisconnectedSpace
   obtain ⟨N, hN⟩ :=
     ProfiniteGrp.exist_openNormalSubgroup_sub_open_nhds_of_one hopen hone
@@ -1373,10 +1373,10 @@ prime ideal contracted to `ℤ`. -/
 private theorem residueCharacteristic_eq_absNorm_under_aux
     {K : Type*} [Field K] [NumberField K] (v : FinitePlace K) :
     residueCharacteristic v = Ideal.absNorm (Ideal.under ℤ v.asIdeal) := by
-  letI : Algebra (𝓞 K) (primeValuationSubring v) :=
+  let : Algebra (𝓞 K) (primeValuationSubring v) :=
     show Algebra (𝓞 K)
       (HeightOneSpectrum.valuationSubringAtPrime K v) from inferInstance
-  letI : IsLocalization.AtPrime (primeValuationSubring v) v.asIdeal :=
+  let : IsLocalization.AtPrime (primeValuationSubring v) v.asIdeal :=
     show IsLocalization.AtPrime
       (HeightOneSpectrum.valuationSubringAtPrime K v) v.asIdeal from inferInstance
   let e := IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
@@ -1465,7 +1465,7 @@ private theorem primeValuationSubring_comap_restrict_aux
       Valuation.mem_valuationSubring_iff] at hz
     rw [map_inv₀, Valuation.map_inv] at hz
     exact (not_le_of_gt hinv) hz
-  letI : Ring.KrullDimLE 1 (primeValuationSubring v) := by
+  let : Ring.KrullDimLE 1 (primeValuationSubring v) := by
     change Ring.KrullDimLE 1
       (HeightOneSpectrum.valuationSubringAtPrime K v)
     infer_instance
@@ -1477,7 +1477,7 @@ private theorem restrictLevelPlace_refl
     {K : Type*} [Field K] [NumberField K]
     (L : GaloisLevel K) (w : FinitePlace L.field) :
     restrictLevelPlace (L := L) (M := L) le_rfl w = w := by
-  letI : Algebra L.field L.field :=
+  let : Algebra L.field L.field :=
     (IntermediateField.inclusion (show L.field ≤ L.field from le_rfl)).toAlgebra
   apply HeightOneSpectrum.ext
   unfold restrictLevelPlace
@@ -1496,11 +1496,11 @@ private theorem restrictLevelPlace_trans
     (w : FinitePlace N.field) :
     restrictLevelPlace hLM (restrictLevelPlace hMN w) =
       restrictLevelPlace (hLM.trans hMN) w := by
-  letI : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
-  letI : Algebra M.field N.field := (IntermediateField.inclusion hMN).toAlgebra
-  letI : Algebra L.field N.field :=
+  let : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
+  let : Algebra M.field N.field := (IntermediateField.inclusion hMN).toAlgebra
+  let : Algebra L.field N.field :=
     (IntermediateField.inclusion (hLM.trans hMN)).toAlgebra
-  letI : IsScalarTower L.field M.field N.field :=
+  let : IsScalarTower L.field M.field N.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   apply HeightOneSpectrum.ext
   unfold restrictLevelPlace
@@ -1522,7 +1522,7 @@ private theorem exists_finitePlace_over_level
     {K : Type*} [Field K] [NumberField K]
     {L M : GaloisLevel K} (hLM : L.LE M) (w : FinitePlace L.field) :
     ∃ v : FinitePlace M.field, restrictLevelPlace hLM v = w := by
-  letI : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
+  let : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
   let q := Classical.choice
     (w.asIdeal.nonempty_primesOver (S := 𝓞 M.field))
   have hq0 : q.1 ≠ ⊥ := by
@@ -1545,7 +1545,7 @@ private theorem finite_places_over_level
     {K : Type*} [Field K] [NumberField K]
     {L M : GaloisLevel K} (hLM : L.LE M) (w : FinitePlace L.field) :
     Set.Finite {v : FinitePlace M.field | restrictLevelPlace hLM v = w} := by
-  letI : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
+  let : Algebra L.field M.field := (IntermediateField.inclusion hLM).toAlgebra
   let f : {v : FinitePlace M.field | restrictLevelPlace hLM v = w} →
       w.asIdeal.primesOver (𝓞 M.field) := fun v =>
     ⟨v.1.asIdeal, v.1.isPrime, by
@@ -1557,9 +1557,9 @@ private theorem finite_places_over_level
     apply Subtype.ext
     apply HeightOneSpectrum.ext
     exact congrArg Subtype.val hvz
-  letI : Fintype (w.asIdeal.primesOver (𝓞 M.field)) :=
+  let : Fintype (w.asIdeal.primesOver (𝓞 M.field)) :=
     (IsDedekindDomain.primesOver_finite w.asIdeal (𝓞 M.field)).fintype
-  letI : Finite {v : FinitePlace M.field |
+  let : Finite {v : FinitePlace M.field |
       restrictLevelPlace hLM v = w} := Finite.of_injective f hf
   exact Set.finite_coe_iff.mp inferInstance
 
@@ -1583,11 +1583,11 @@ private theorem exists_absolutePlace_over_level
         W.comap L.field.val.toRingHom = primeValuationSubring w := by
   let ι := {M : GaloisLevel K // L.LE M}
   let Λ : ι → GaloisLevel K := fun M => M.1
-  letI : Preorder ι :=
+  let : Preorder ι :=
     { le := fun M N => M.1.LE N.1
       le_refl := fun _ => le_rfl
       le_trans := fun _ _ _ h₁ h₂ => h₁.trans h₂ }
-  letI : IsDirected ι (· ≤ ·) := IsDirected.mk fun M N => by
+  let : IsDirected ι (· ≤ ·) := IsDirected.mk fun M N => by
     let T := placeSupGaloisLevel M.1 N.1
     let i : ι := ⟨T, M.2.trans le_sup_left⟩
     refine ⟨i, ?_, ?_⟩
@@ -1597,9 +1597,9 @@ private theorem exists_absolutePlace_over_level
       exact le_sup_right
   let S : ι → Type _ := fun M =>
     {v : FinitePlace (Λ M).field // restrictLevelPlace M.2 v = w}
-  letI (M : ι) : Finite (S M) :=
+  let (M : ι) : Finite (S M) :=
     Set.finite_coe_iff.mpr (finite_places_over_level M.2 w)
-  letI (M : ι) : Nonempty (S M) := by
+  let (M : ι) : Nonempty (S M) := by
     obtain ⟨v, hv⟩ := exists_finitePlace_over_level M.2 w
     exact ⟨⟨v, hv⟩⟩
   let r : ∀ {M N : ι}, M ≤ N → S N → S M := fun {M N} h v =>
@@ -2089,11 +2089,11 @@ prime ideal contracted to `ℤ`. -/
 private theorem residueCharacteristic_eq_absNorm_under
     {K : Type*} [Field K] [NumberField K] (v : FinitePlace K) :
     residueCharacteristic v = Ideal.absNorm (Ideal.under ℤ v.asIdeal) := by
-  letI : Algebra (𝓞 K) (primeValuationSubring v) :=
+  let : Algebra (𝓞 K) (primeValuationSubring v) :=
     show Algebra (𝓞 K)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v) from
         inferInstance
-  letI : IsLocalization.AtPrime (primeValuationSubring v) v.asIdeal :=
+  let : IsLocalization.AtPrime (primeValuationSubring v) v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
         v.asIdeal from inferInstance
@@ -2199,21 +2199,21 @@ theorem bare_recovery_sound
     · exact hU.trans (inf_le_left.trans inf_le_left)
   let ι := {U : OpenNormalSubgroup (Field.absoluteGaloisGroup K) // Good U}
   let Λ : ι → GaloisLevel K := fun U => galoisLevelOfOpenNormal K U.1
-  letI : Preorder ι :=
+  let : Preorder ι :=
     { le := fun U V => V.1.LE U.1
       le_refl := fun _ => le_rfl
       le_trans := fun _ _ _ hUV hVW => hVW.trans hUV }
-  letI : IsDirected ι (· ≤ ·) := IsDirected.mk fun U V => by
+  let : IsDirected ι (· ≤ ·) := IsDirected.mk fun U V => by
     obtain ⟨W, hW, hWU, hWV⟩ :=
       cofinalOpenNormalSet_directed {T | Good T} hGood U.1 U.2 V.1 V.2
     exact ⟨⟨W, hW⟩, hWU, hWV⟩
   let S : ι → Type _ := fun U =>
     {w : FinitePlace (Λ U).field // w ∈ bareFiniteWitnesses K p H U.1}
-  letI (U : ι) : Finite (S U) :=
+  let (U : ι) : Finite (S U) :=
     Set.finite_coe_iff.mpr
       (bareFiniteWitnesses_nonempty_finite_of_anchor K p H U₀ U.1
         hanchor U.2.2.2 U.2.1 U.2.2.1).2
-  letI (U : ι) : Nonempty (S U) := by
+  let (U : ι) : Nonempty (S U) := by
     obtain ⟨w, hw⟩ :=
       (bareFiniteWitnesses_nonempty_finite_of_anchor K p H U₀ U.1
         hanchor U.2.2.2 U.2.1 U.2.2.1).1
@@ -2664,14 +2664,14 @@ private theorem henselianBridge_valueGroup_mulArchimedean
   obtain ⟨a, rfl⟩ := A.valuation_surjective x
   obtain ⟨b, rfl⟩ := A.valuation_surjective y
   let L : IntermediateField ℚ F := ℚ⟮a, b⟯
-  letI : Algebra ℚ L := L.algebra'
+  let : Algebra ℚ L := L.algebra'
   let aL : L := IntermediateField.AdjoinPair.gen₁ ℚ a b
   let bL : L := IntermediateField.AdjoinPair.gen₂ ℚ a b
-  letI : FiniteDimensional ℚ L :=
+  let : FiniteDimensional ℚ L :=
     IntermediateField.finiteDimensional_adjoin_pair
       (K := ℚ) (L := F)
       (Algebra.IsIntegral.isIntegral a) (Algebra.IsIntegral.isIntegral b)
-  letI : NumberField L := NumberField.of_module_finite ℚ L
+  let : NumberField L := NumberField.of_module_finite ℚ L
   let C : ValuationSubring L := A.comap L.val.toRingHom
   have hb_not : b ∉ A := by
     rw [← A.valuation_le_one_iff]
@@ -2706,15 +2706,15 @@ private theorem henselianBridge_valueGroup_mulArchimedean
   have hyw : 1 < w bL := by
     rw [show 1 = w 1 from (map_one w).symm, ← not_le]
     exact (hequiv bL 1).not.mp hyL
-  letI : w.IsNontrivial := by
+  let : w.IsNontrivial := by
     rw [Valuation.IsNontrivial_iff_exists_one_lt]
     exact ⟨bL, hyw⟩
-  letI : w.RankOne := by
+  let : w.RankOne := by
     dsimp only [w]
     infer_instance
   have harch : MulArchimedean (MonoidWithZeroHom.ValueGroup₀ (.ofClass w)) :=
     w.nonempty_rankOne_iff_mulArchimedean.mp ⟨inferInstance⟩
-  letI := harch
+  let := harch
   have hywr : 1 < w.restrict bL := by
     rw [show 1 = w.restrict 1 from (map_one w.restrict).symm,
       Valuation.restrict_lt_iff]
@@ -3202,11 +3202,11 @@ private theorem exists_henselian_realValuation_of_subring
   let j : Z →ₐ[ℚ] Ω :=
     { toRingHom := Z.toSubfield.subtype
       commutes' := fun q => by norm_num }
-  letI : Algebra.IsAlgebraic ℚ Z :=
+  let : Algebra.IsAlgebraic ℚ Z :=
     Algebra.IsAlgebraic.of_injective j j.injective
   have hnon : A.valuation.IsNontrivial :=
     not_not.mp ((not_congr A.eq_top_iff).mp hA_nontrivial)
-  letI : A.valuation.IsNontrivial := hnon
+  let : A.valuation.IsNontrivial := hnon
   obtain ⟨π, hπval0, hπval1⟩ :=
     Valuation.IsNontrivial.exists_val_nontrivial (v := A.valuation)
   have hπ0 : π ≠ 0 := A.valuation.ne_zero_iff.mp hπval0
@@ -3215,12 +3215,12 @@ private theorem exists_henselian_realValuation_of_subring
     henselianBridge_normalizedRealValuation_subring A π hπ0 hπval1
   refine ⟨v, hvA, ?_⟩
   intro E _ _ hE
-  letI : Algebra.IsAlgebraic Z E := hE
-  letI : Algebra ℚ E :=
+  let : Algebra.IsAlgebraic Z E := hE
+  let : Algebra ℚ E :=
     ((algebraMap Z E).comp (algebraMap ℚ Z)).toAlgebra
-  letI : IsScalarTower ℚ Z E :=
+  let : IsScalarTower ℚ Z E :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : Algebra.IsAlgebraic ℚ E :=
+  let : Algebra.IsAlgebraic ℚ E :=
     Algebra.IsAlgebraic.trans ℚ Z E
   obtain ⟨B, hB, hBuniq⟩ :=
     henselianBridge_unique_valuationSubring_extension Z A hA_henselian E hE
@@ -3324,7 +3324,7 @@ theorem absoluteDecompositionGroup_ne_of_ne
     absoluteDecompositionGroup K P ≠
       absoluteDecompositionGroup K Q := by
   intro hgroups
-  letI : Algebra.IsAlgebraic ℚ (AlgebraicClosure K) :=
+  let : Algebra.IsAlgebraic ℚ (AlgebraicClosure K) :=
     Algebra.IsAlgebraic.trans ℚ K (AlgebraicClosure K)
   let Z : IntermediateField ℚ (AlgebraicClosure K) :=
     (decompositionField K P).restrictScalars ℚ
@@ -3471,7 +3471,7 @@ rational prime `2`. -/
 private theorem finitePlace_nonempty
     (K : Type*) [Field K] [NumberField K] : Nonempty (FinitePlace K) := by
   let p : Ideal ℤ := Ideal.span {(2 : ℤ)}
-  letI : p.IsPrime :=
+  let : p.IsPrime :=
     (Ideal.span_singleton_prime (by norm_num)).2 (by norm_num)
   let q := Classical.choice (p.nonempty_primesOver (S := 𝓞 K))
   have hq0 : q.1 ≠ ⊥ := by
@@ -3658,7 +3658,7 @@ private theorem primeValuationSubring_comap_restrict
       Valuation.mem_valuationSubring_iff] at hz
     rw [map_inv₀, Valuation.map_inv] at hz
     exact (not_le_of_gt hinv) hz
-  letI : Ring.KrullDimLE 1 (primeValuationSubring v) := by
+  let : Ring.KrullDimLE 1 (primeValuationSubring v) := by
     change Ring.KrullDimLE 1
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
     infer_instance

@@ -540,7 +540,7 @@ noncomputable def restrictionComparison (f : H →* G) (M : Rep ℤ G) :
     commutes1 := ?_
     commutes2 := ?_ }
   · intro x
-    letI : Module ℤ M := M.hV2
+    let : Module ℤ M := M.hV2
     apply (ModuleCat.mono_iff_injective
       (groupCohomology.H0Iso (Rep.res f M)).hom).1 inferInstance
     apply Subtype.ext

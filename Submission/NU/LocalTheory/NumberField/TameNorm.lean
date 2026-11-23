@@ -396,40 +396,40 @@ private theorem tame_cyclic_norm_factorization_core
         Units.map (Algebra.norm Q) z = q ^ ℓ * a ^ m * u := by
   classical
   let vQ : Valuation Q ℤᵐ⁰ := Valued.v
-  letI : vQ.RankOne :=
+  let : vQ.RankOne :=
     Valuation.IsRankOneDiscrete.rankOne (e := (2 : NNReal)) vQ (by norm_num)
-  letI : NontriviallyNormedField Q :=
+  let : NontriviallyNormedField Q :=
     Valued.toNontriviallyNormedField Q ℤᵐ⁰
-  letI : IsDiscreteValuationRing (valuedIntegerRing Q) :=
+  let : IsDiscreteValuationRing (valuedIntegerRing Q) :=
     Valuation.valuationSubring_isDiscreteValuationRing vQ
-  letI : IsDiscreteValuationRing (Valued.integer Q) := by
+  let : IsDiscreteValuationRing (Valued.integer Q) := by
     change IsDiscreteValuationRing (valuedIntegerRing Q)
     infer_instance
-  letI : Finite (Valued.ResidueField Q) :=
+  let : Finite (Valued.ResidueField Q) :=
     inferInstanceAs (Finite (IsLocalRing.ResidueField (valuedIntegerRing Q)))
-  letI : ProperSpace Q :=
+  let : ProperSpace Q :=
     (@Valued.integer.properSpace_iff_completeSpace_and_isDiscreteValuationRing_integer_and_finite_residueField
       Q ℤᵐ⁰ _ _ _ _).2 ⟨inferInstance, inferInstance, inferInstance⟩
-  letI : LocallyCompactSpace Q := by infer_instance
-  letI : ValuativeRel Q := ValuativeRel.ofValuation vQ
-  letI : vQ.Compatible := Valuation.Compatible.ofValuation vQ
-  letI : IsValuativeTopology Q := by
+  let : LocallyCompactSpace Q := by infer_instance
+  let : ValuativeRel Q := ValuativeRel.ofValuation vQ
+  let : vQ.Compatible := Valuation.Compatible.ofValuation vQ
+  let : IsValuativeTopology Q := by
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using vQ.exists_setOf_restrict_le_iff 0 s
-  letI : ValuativeRel.IsNontrivial Q :=
+  let : ValuativeRel.IsNontrivial Q :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vQ).2 inferInstance
-  letI : IsNonarchimedeanLocalField Q :=
+  let : IsNonarchimedeanLocalField Q :=
     { toIsValuativeTopology := inferInstance
       toLocallyCompactSpace := inferInstance
       toIsNontrivial := inferInstance }
 
-  letI : NontriviallyNormedField R :=
+  let : NontriviallyNormedField R :=
     spectralNorm.nontriviallyNormedField Q R
-  letI : NormedSpace Q R := spectralNorm.normedSpace Q R
-  letI : NormedAlgebra Q R := spectralNorm.normedAlgebra Q R
-  letI : IsUltrametricDist R := ⟨by
+  let : NormedSpace Q R := spectralNorm.normedSpace Q R
+  let : NormedAlgebra Q R := spectralNorm.normedAlgebra Q R
+  let : IsUltrametricDist R := ⟨by
     intro x y z
     rw [dist_eq_norm, dist_eq_norm, dist_eq_norm]
     change spectralNorm Q R (x - z) ≤
@@ -437,27 +437,27 @@ private theorem tame_cyclic_norm_factorization_core
     rw [show x - z = (x - y) + (y - z) by abel]
     exact isNonarchimedean_spectralNorm (K := Q) (L := R) _ _⟩
   let vR : Valuation R NNReal := NormedField.valuation
-  letI : ValuativeRel R := ValuativeRel.ofValuation vR
-  letI : vR.Compatible := Valuation.Compatible.ofValuation vR
-  letI : Valued R NNReal := NormedField.toValued
-  haveI : (Valued.v : Valuation R NNReal).Compatible := by
+  let : ValuativeRel R := ValuativeRel.ofValuation vR
+  let : vR.Compatible := Valuation.Compatible.ofValuation vR
+  let : Valued R NNReal := NormedField.toValued
+  have : (Valued.v : Valuation R NNReal).Compatible := by
     rw [show (Valued.v : Valuation R NNReal) = NormedField.valuation from rfl]
     infer_instance
-  letI : IsValuativeTopology R := by
+  let : IsValuativeTopology R := by
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
       (Valued.v : Valuation R NNReal).exists_setOf_restrict_le_iff 0 s
-  letI : ProperSpace R := FiniteDimensional.proper Q R
-  letI : LocallyCompactSpace R := by infer_instance
-  letI : ValuativeRel.IsNontrivial R :=
+  let : ProperSpace R := FiniteDimensional.proper Q R
+  let : LocallyCompactSpace R := by infer_instance
+  let : ValuativeRel.IsNontrivial R :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vR).2 inferInstance
-  letI : IsNonarchimedeanLocalField R :=
+  let : IsNonarchimedeanLocalField R :=
     { toIsValuativeTopology := inferInstance
       toLocallyCompactSpace := inferInstance
       toIsNontrivial := inferInstance }
-  letI : ValuativeExtension Q R := ⟨by
+  let : ValuativeExtension Q R := ⟨by
     intro x y
     rw [Valuation.Compatible.vle_iff_le (v := vR),
       Valuation.Compatible.vle_iff_le (v := vQ)]
@@ -467,7 +467,7 @@ private theorem tame_cyclic_norm_factorization_core
       spectralNorm Q R (algebraMap Q R y) ↔ vQ x ≤ vQ y
     rw [spectralNorm_extends, spectralNorm_extends]
     exact Valued.toNormedField.norm_le_iff⟩
-  letI : ContinuousSMul Q R := by infer_instance
+  let : ContinuousSMul Q R := by infer_instance
 
   have hα0 : α ≠ 0 := by
     intro h
@@ -610,7 +610,7 @@ private theorem tame_cyclic_norm_factorization_core
         map_mul' := by intro x y; ext; simp
         map_zero' := by ext; simp
         map_add' := by intro x y; ext; simp }
-    letI : IsLocalHom intMap := by
+    let : IsLocalHom intMap := by
       apply IsLocalHom.mk
       intro x hx
       rw [B.valuation_eq_one_iff] at hx
@@ -642,7 +642,7 @@ private theorem tame_cyclic_norm_factorization_core
     let kQ := IsLocalRing.ResidueField A
     let kR := IsLocalRing.ResidueField B
     let resMap : kQ →+* kR := IsLocalRing.ResidueField.map intMap
-    letI : Algebra kQ kR := resMap.toAlgebra
+    let : Algebra kQ kR := resMap.toAlgebra
     let bA : A := ⟨(b : Q), by
       change vQ (b : Q) ≤ 1
       exact hbval.le⟩
@@ -1170,10 +1170,10 @@ theorem tame_norm_line {Q R : Type*} [Field Q] [Field R]
   let f : Polynomial Q := Polynomial.X ^ ℓ - Polynomial.C (a : Q)
   have hf : Irreducible f :=
     X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hnoPow
-  letI : Fact (Irreducible f) := ⟨hf⟩
+  let : Fact (Irreducible f) := ⟨hf⟩
   have hprim : (primitiveRoots ℓ Q).Nonempty :=
     ⟨ζ, (mem_primitiveRoots (Fact.out : ℓ.Prime).pos).2 hζ⟩
-  letI : Polynomial.IsSplittingField Q R f := by
+  let : Polynomial.IsSplittingField Q R f := by
     constructor
     · change (Polynomial.X ^ ℓ - Polynomial.C (a : Q)).map
           (algebraMap Q R) |>.Splits
@@ -1188,9 +1188,9 @@ theorem tame_norm_line {Q R : Type*} [Field Q] [Field R]
       change α ∈ f.rootSet R
       rw [Polynomial.mem_rootSet_of_ne (Irreducible.ne_zero hf)]
       simp [f, hαpow]
-  letI : IsGalois Q R :=
+  let : IsGalois Q R :=
     isGalois_of_isSplittingField_X_pow_sub_C hprim hf R
-  letI : IsCyclic (R ≃ₐ[Q] R) :=
+  let : IsCyclic (R ≃ₐ[Q] R) :=
     isCyclic_of_isSplittingField_X_pow_sub_C hprim hf R
   intro z
   obtain ⟨m, q, u, hu, hfactor⟩ :=
@@ -1228,10 +1228,10 @@ theorem norm_completion_compatibility
       Algebra.norm (v.adicCompletion M)
         (Units.map j.toMonoidHom z : Eᵥ) := by
   let K := v.adicCompletion M
-  letI : Algebra M Eᵥ :=
+  let : Algebra M Eᵥ :=
     RingHom.toAlgebra ((algebraMap K Eᵥ).comp
       (NumberField.FinitePlace.embedding v))
-  letI : IsScalarTower M K Eᵥ := IsScalarTower.of_algebraMap_eq' rfl
+  let : IsScalarTower M K Eᵥ := IsScalarTower.of_algebraMap_eq' rfl
   let jAlg : E →ₐ[M] Eᵥ :=
     { j with
       commutes' := fun x => DFunLike.congr_fun hj x }
@@ -1448,11 +1448,11 @@ theorem global_norm_local_line {M E : Type*} [Field M] [Field E]
   let fK : Polynomial K := Polynomial.X ^ ℓ - Polynomial.C (aK : K)
   have hfK : Irreducible fK :=
     X_pow_sub_C_irreducible_of_prime (Fact.out : ℓ.Prime) hnoPow
-  letI : Fact (Irreducible fK) := ⟨hfK⟩
+  let : Fact (Irreducible fK) := ⟨hfK⟩
   let R := AdjoinRoot fK
-  letI : Field R := inferInstance
-  letI : Algebra K R := inferInstance
-  letI : FiniteDimensional K R :=
+  let : Field R := inferInstance
+  let : Algebra K R := inferInstance
+  let : FiniteDimensional K R :=
     (AdjoinRoot.powerBasis (Irreducible.ne_zero hfK)).finite
   have hrootK : (AdjoinRoot.root fK : R) ^ ℓ =
       algebraMap K R (aK : K) := by
@@ -1529,14 +1529,14 @@ theorem global_norm_local_line {M E : Type*} [Field M] [Field E]
           algebraMap M K (Algebra.norm M (z : E)) := by
         simpa [K, zR] using hnormcomp.symm
       _ = emb (b : M) := by rw [hz]; rfl
-  letI : Finite (IsLocalRing.ResidueField (primeValuationSubring v)) :=
+  let : Finite (IsLocalRing.ResidueField (primeValuationSubring v)) :=
     residueFieldAt_finite' v
-  letI : Finite (IsLocalRing.ResidueField (valuedIntegerRing K)) := by
+  let : Finite (IsLocalRing.ResidueField (valuedIntegerRing K)) := by
     change Finite (IsLocalRing.ResidueField (v.adicCompletionIntegers M))
     exact Finite.of_surjective (completionResidueMap' v)
       (completionResidueMap_surjective' v)
-  letI : CompleteSpace K := inferInstance
-  letI : (Valued.v : Valuation K ℤᵐ⁰).IsRankOneDiscrete := inferInstance
+  let : CompleteSpace K := inferInstance
+  let : (Valued.v : Valuation K ℤᵐ⁰).IsRankOneDiscrete := inferInstance
   have hresK : valuedResidueCharacteristic K ≠ ℓ := by
     rw [completion_residueCharacteristic_eq' v]
     exact hv

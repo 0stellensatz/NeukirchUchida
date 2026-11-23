@@ -73,7 +73,7 @@ theorem higherDegreePrimes_hasDirichletDensity_zero
   have hset : (degreeOnePrimeSet L)ᶜ = S := by
     ext v
     rw [Set.mem_compl_iff]
-    letI : v.asIdeal.LiesOver (Ideal.under (𝓞 ℚ) v.asIdeal) := ⟨rfl⟩
+    let : v.asIdeal.LiesOver (Ideal.under (𝓞 ℚ) v.asIdeal) := ⟨rfl⟩
     change absoluteResidueDegree L v ≠ 1 ↔
       2 ≤ (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal
     rw [absoluteResidueDegree_eq_inertiaDeg,
@@ -119,24 +119,24 @@ theorem chebotarev_containment
       finite := IntermediateField.finiteDimensional_sup K.field L.field }
   have hKM : K.field ≤ M.field := le_sup_left
   have hLM : L.field ≤ M.field := le_sup_right
-  letI : Algebra ℚ M.field := M.field.algebra'
-  letI : NumberField M.field := NumberField.of_module_finite ℚ M.field
-  letI : Algebra K.field M.field :=
+  let : Algebra ℚ M.field := M.field.algebra'
+  let : NumberField M.field := NumberField.of_module_finite ℚ M.field
+  let : Algebra K.field M.field :=
     (IntermediateField.inclusion hKM).toRingHom.toAlgebra
-  letI : Algebra L.field M.field :=
+  let : Algebra L.field M.field :=
     (IntermediateField.inclusion hLM).toRingHom.toAlgebra
-  letI : IsScalarTower ℚ K.field M.field := by
+  let : IsScalarTower ℚ K.field M.field := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
-  letI : IsScalarTower ℚ L.field M.field := by
+  let : IsScalarTower ℚ L.field M.field := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
   let K' : IntermediateField ℚ M.field := IntermediateField.restrict hKM
   let L' : IntermediateField ℚ M.field := IntermediateField.restrict hLM
-  letI : Algebra ℚ K' := K'.algebra'
-  letI : Algebra ℚ L' := L'.algebra'
+  let : Algebra ℚ K' := K'.algebra'
+  let : Algebra ℚ L' := L'.algebra'
   have htop : K' ⊔ L' = ⊤ := by
     apply IntermediateField.lift_injective M.field
     rw [IntermediateField.lift_sup, IntermediateField.lift_restrict,
@@ -148,7 +148,7 @@ theorem chebotarev_containment
       (f := RingEquiv.refl ℚ) (g := eK.toRingEquiv)
     ext x
     simp
-  letI : IsGalois ℚ K' := hK'
+  let : IsGalois ℚ K' := hK'
   have hL'M : IsGalois L' M.field := IsGalois.sup_right K' L' htop
   have hLMgal : IsGalois L.field M.field := by
     apply IsGalois.of_equiv_equiv (h := hL'M)
@@ -156,8 +156,8 @@ theorem chebotarev_containment
     ext x
     change (eL.symm x).1 = x.1.1
     exact congrArg (fun y : L' => y.1.1) (eL.apply_symm_apply x)
-  letI : IsGalois L.field M.field := hLMgal
-  letI : Finite (M.field ≃ₐ[L.field] M.field) :=
+  let : IsGalois L.field M.field := hLMgal
+  let : Finite (M.field ≃ₐ[L.field] M.field) :=
     Finite.of_injective (AlgEquiv.restrictScalarsHom ℚ)
       (AlgEquiv.restrictScalarsHom_injective ℚ)
 
@@ -237,7 +237,7 @@ theorem chebotarev_containment
     have hover : u.asIdeal.LiesOver q.asIdeal := ⟨by
       rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal]
       rfl⟩
-    letI : u.asIdeal.LiesOver q.asIdeal := hover
+    let : u.asIdeal.LiesOver q.asIdeal := hover
     have hcard : Nat.card
         (MulAction.stabilizer (K.field ≃ₐ[ℚ] K.field) u.asIdeal) = 1 := by
       rw [Ideal.card_stabilizer_eq q.asIdeal u.asIdeal,
@@ -351,8 +351,8 @@ theorem chebotarev_containment
   have badRam_finite : badRam.Finite := by
     let I : Ideal (𝓞 L.field) := differentIdeal (𝓞 ℚ) (𝓞 L.field)
     have hI : I ≠ ⊥ := differentIdeal_ne_bot
-    letI : NeZero I := ⟨hI⟩
-    letI : Finite ((𝓞 L.field) ⧸ I) :=
+    let : NeZero I := ⟨hI⟩
+    let : Finite ((𝓞 L.field) ⧸ I) :=
       Ring.HasFiniteQuotients.finiteQuotient hI
     apply Set.Finite.of_finite_image
       (f := fun v : NU.Chebotarev.PrimeIdeal L.field =>
@@ -395,8 +395,8 @@ theorem chebotarev_containment
     have hover : v.asIdeal.LiesOver (rationalPrime L v).asIdeal := ⟨by
       rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal]
       rfl⟩
-    letI : v.asIdeal.LiesOver (rationalPrime L v).asIdeal := hover
-    letI : Algebra.IsUnramifiedAt (𝓞 ℚ) v.asIdeal := hunrv
+    let : v.asIdeal.LiesOver (rationalPrime L v).asIdeal := hover
+    let : Algebra.IsUnramifiedAt (𝓞 ℚ) v.asIdeal := hunrv
     have he : absoluteRamificationIndex L v = 1 := by
       change v.asIdeal.ramificationIdx (𝓞 ℚ) = 1
       rw [← Ideal.ramificationIdx_eq_ramificationIdx'
@@ -408,7 +408,7 @@ theorem chebotarev_containment
     have hunr : NU.Chebotarev.IsUnramifiedPrime
         (K := L.field) (L := M.field) v := by
       intro W hWv
-      letI : W.asIdeal.LiesOver v.asIdeal := hWv
+      let : W.asIdeal.LiesOver v.asIdeal := hWv
       have hstab := stabilizer_eq_bot_of_split v hsplitK W hWv
       have hcard : Nat.card
           (MulAction.stabilizer (M.field ≃ₐ[L.field] M.field) W.asIdeal) = 1 := by
@@ -487,7 +487,7 @@ theorem chebotarev_containment
     {v | 2 ≤ (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal}
   have hDD' : D = D' := by
     ext v
-    letI : v.asIdeal.LiesOver (Ideal.under (𝓞 ℚ) v.asIdeal) := ⟨rfl⟩
+    let : v.asIdeal.LiesOver (Ideal.under (𝓞 ℚ) v.asIdeal) := ⟨rfl⟩
     change absoluteResidueDegree L v ≠ 1 ↔
       2 ≤ (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal
     rw [hresidue, ← Ideal.inertiaDeg_eq_inertiaDeg'
@@ -570,7 +570,7 @@ theorem chebotarev_containment
   have hfinrank : Module.finrank L.field M.field = 1 := by
     rw [← IsGalois.card_aut_eq_finrank]
     exact hcard
-  letI : Module.Free L.field M.field :=
+  let : Module.Free L.field M.field :=
     Module.Free.of_divisionRing L.field M.field
   have hbij : Function.Bijective (algebraMap L.field M.field) :=
     Algebra.finrank_eq_one_iff_bijective_algebraMap.mp hfinrank
@@ -594,20 +594,20 @@ theorem galois_of_degreeOnePrime_splitsCompletely
     { field := Nfield
       finite := normalClosure.is_finiteDimensional ℚ L.field Omega }
   have hLN : L.field ≤ N.field := IntermediateField.le_normalClosure L.field
-  letI : NumberField N.field :=
+  let : NumberField N.field :=
     @NumberField.of_module_finite ℚ N.field _ _ (inferInstance : NumberField ℚ)
       N.field.algebra' N.finite
-  letI : Algebra L.field N.field :=
+  let : Algebra L.field N.field :=
     (IntermediateField.inclusion hLN).toRingHom.toAlgebra
-  letI : IsScalarTower ℚ L.field N.field := by
+  let : IsScalarTower ℚ L.field N.field := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
   have hOmega : IsGalois ℚ Omega := by
-    letI : IsAlgClosure ℚ Omega :=
+    let : IsAlgClosure ℚ Omega :=
       ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
     exact ⟨⟩
-  letI : IsGalois ℚ Omega := hOmega
+  let : IsGalois ℚ Omega := hOmega
   have hNgal : IsGalois ℚ N.field := by
     have hraw : @IsGalois ℚ _ N.field _ N.field.algebra' :=
       IsGalois.normalClosure ℚ L.field Omega
@@ -615,10 +615,10 @@ theorem galois_of_degreeOnePrime_splitsCompletely
       (f := RingEquiv.refl ℚ) (g := RingEquiv.refl N.field)
     ext x
     simp
-  letI : IsGalois ℚ N.field := hNgal
-  letI : IsGalois L.field N.field :=
+  let : IsGalois ℚ N.field := hNgal
+  let : IsGalois L.field N.field :=
     IsGalois.tower_top_of_isGalois ℚ L.field N.field
-  letI : Finite (N.field ≃ₐ[L.field] N.field) :=
+  let : Finite (N.field ≃ₐ[L.field] N.field) :=
     Finite.of_injective (AlgEquiv.restrictScalarsHom ℚ)
       (AlgEquiv.restrictScalarsHom_injective ℚ)
   let inclusionHom : L.field →ₐ[ℚ] N.field :=
@@ -667,17 +667,17 @@ theorem galois_of_degreeOnePrime_splitsCompletely
     let v := NU.LocalTheory.restrictFinitePlace L.field w
     have hvq : rationalPrime L v = q := restriction_eq q w hwq
     have hwv : w.asIdeal.LiesOver v.asIdeal := ⟨by rfl⟩
-    letI : w.asIdeal.LiesOver q.asIdeal := hwq
-    letI : w.asIdeal.LiesOver v.asIdeal := hwv
+    let : w.asIdeal.LiesOver q.asIdeal := hwq
+    let : w.asIdeal.LiesOver v.asIdeal := hwv
     have hvq' : v.asIdeal.LiesOver q.asIdeal := ⟨by
       rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal,
         ← hvq]
       rfl⟩
-    letI : v.asIdeal.LiesOver q.asIdeal := hvq'
+    let : v.asIdeal.LiesOver q.asIdeal := hvq'
     have hvbase : v.asIdeal.LiesOver (rationalPrime L v).asIdeal := ⟨by
       rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal]
       rfl⟩
-    letI : v.asIdeal.LiesOver (rationalPrime L v).asIdeal := hvbase
+    let : v.asIdeal.LiesOver (rationalPrime L v).asIdeal := hvbase
     let Dq := MulAction.stabilizer (N.field ≃ₐ[ℚ] N.field) w.asIdeal
     let Dl := MulAction.stabilizer (N.field ≃ₐ[L.field] N.field) w.asIdeal
     let inc : Dl → Dq := fun tau =>
@@ -709,7 +709,7 @@ theorem galois_of_degreeOnePrime_splitsCompletely
           (N.field ≃ₐ[L.field] N.field),
         Ideal.inertiaDegIn_eq_inertiaDeg v.asIdeal w.asIdeal
           (N.field ≃ₐ[L.field] N.field)]
-    letI := Localization.AtPrime.algebraOfLiesOver v.asIdeal w.asIdeal
+    let := Localization.AtPrime.algebraOfLiesOver v.asIdeal w.asIdeal
     have hcard : Nat.card Dq =
         (absoluteRamificationIndex L v * absoluteResidueDegree L v) *
           Nat.card Dl := by
@@ -724,8 +724,8 @@ theorem galois_of_degreeOnePrime_splitsCompletely
         rw [hlocal.1, hlocal.2, one_mul]
       have hcards : Nat.card Dq = Nat.card Dl := by
         rw [hcard, hdeg, one_mul]
-      letI : Fintype Dl := Fintype.ofFinite Dl
-      letI : Fintype Dq := Fintype.ofFinite Dq
+      let : Fintype Dl := Fintype.ofFinite Dl
+      let : Fintype Dq := Fintype.ofFinite Dq
       have hbij : Function.Bijective inc :=
         (Fintype.bijective_iff_injective_and_card inc).2
           ⟨hinc, by simpa only [Nat.card_eq_fintype_card] using hcards.symm⟩
@@ -887,7 +887,7 @@ theorem galois_of_degreeOnePrime_splitsCompletely
   have hnormal' : L'.fixingSubgroup.Normal := by
     rw [← hH]
     exact hnormal
-  letI : L'.fixingSubgroup.Normal := hnormal'
+  let : L'.fixingSubgroup.Normal := hnormal'
   have hgalFixed : IsGalois ℚ
       (IntermediateField.fixedField L'.fixingSubgroup) :=
     IsGalois.of_fixedField_normal_subgroup L'.fixingSubgroup
@@ -969,8 +969,8 @@ private theorem splitsCompletelyAt_of_degreeOne_of_isGalois
     rw [Ideal.under_def, ← NU.LocalTheory.restrictFinitePlace_asIdeal,
       ← hvq]
     rfl⟩
-  letI : v₀.asIdeal.LiesOver q.asIdeal := hv₀over
-  letI : v.asIdeal.LiesOver q.asIdeal := hvover
+  let : v₀.asIdeal.LiesOver q.asIdeal := hv₀over
+  let : v.asIdeal.LiesOver q.asIdeal := hvover
   have heq_e : v₀.asIdeal.ramificationIdx
       (NumberField.RingOfIntegers ℚ) =
       v.asIdeal.ramificationIdx (NumberField.RingOfIntegers ℚ) :=
@@ -1015,7 +1015,7 @@ theorem normal_correspondingField_fixed
     exact hs₂
   have hgal₂ : IsGalois ℚ K₂.field :=
     galois_of_degreeOnePrime_splitsCompletely K₂ ∅ hcrit₂
-  letI : IsGalois ℚ K₂.field := hgal₂
+  let : IsGalois ℚ K₂.field := hgal₂
   have h₁₂ : K₁.field.field ≤ K₂.field := by
     apply chebotarev_containment K₁.field K₂ ∅
     intro q _ hq₂

@@ -292,11 +292,11 @@ theorem residueCharacteristic_prime
     {K : Type*} [Field K] [NumberField K]
     (v : NU.LocalTheory.FinitePlace K) :
     (NU.LocalTheory.residueCharacteristic v).Prime := by
-  letI : Algebra (𝓞 K) (NU.LocalTheory.primeValuationSubring v) :=
+  let : Algebra (𝓞 K) (NU.LocalTheory.primeValuationSubring v) :=
     show Algebra (𝓞 K)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v) from
         inferInstance
-  letI : IsLocalization.AtPrime
+  let : IsLocalization.AtPrime
       (NU.LocalTheory.primeValuationSubring v) v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
@@ -305,7 +305,7 @@ theorem residueCharacteristic_prime
       NU.LocalTheory.ResidueFieldAt v :=
     (IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
       (NU.LocalTheory.primeValuationSubring v)).toRingEquiv
-  letI : Finite (NU.LocalTheory.ResidueFieldAt v) :=
+  let : Finite (NU.LocalTheory.ResidueFieldAt v) :=
     Finite.of_equiv (𝓞 K ⧸ v.asIdeal) e.toEquiv
   exact CharP.prime_ringChar _
 
@@ -508,11 +508,11 @@ theorem residueCharacteristic_eq_absNorm_under
     (v : NU.LocalTheory.FinitePlace K) :
     NU.LocalTheory.residueCharacteristic v =
       Ideal.absNorm (Ideal.under ℤ v.asIdeal) := by
-  letI : Algebra (𝓞 K) (NU.LocalTheory.primeValuationSubring v) :=
+  let : Algebra (𝓞 K) (NU.LocalTheory.primeValuationSubring v) :=
     show Algebra (𝓞 K)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v) from
         inferInstance
-  letI : IsLocalization.AtPrime
+  let : IsLocalization.AtPrime
       (NU.LocalTheory.primeValuationSubring v) v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
@@ -612,7 +612,7 @@ private theorem primeValuationSubring_restrictFinitePlace
       Valuation.mem_valuationSubring_iff] at hz
     rw [map_inv₀, Valuation.map_inv] at hz
     exact (not_le_of_gt hinv) hz
-  letI : Ring.KrullDimLE 1
+  let : Ring.KrullDimLE 1
       (NU.LocalTheory.primeValuationSubring v) := by
     change Ring.KrullDimLE 1
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
@@ -713,9 +713,9 @@ private theorem thetaMarkedLevels_cofinal
           (C₁ : Set (Field.absoluteGaloisGroup K₁))) ∩
         alpha ⁻¹' (C₂ : Set (Field.absoluteGaloisGroup K₂))) :=
     ⟨⟨V.one_mem, C₁.one_mem⟩, by simp [C₂]⟩
-  letI : CompactSpace (Field.absoluteGaloisGroup K₁) :=
+  let : CompactSpace (Field.absoluteGaloisGroup K₁) :=
     NU.LocalTheory.absoluteGaloisGroup_compactSpace
-  letI : TotallyDisconnectedSpace (Field.absoluteGaloisGroup K₁) :=
+  let : TotallyDisconnectedSpace (Field.absoluteGaloisGroup K₁) :=
     NU.LocalTheory.absoluteGaloisGroup_totallyDisconnectedSpace
   obtain ⟨N, hN⟩ :=
     ProfiniteGrp.exist_openNormalSubgroup_sub_open_nhds_of_one hopen hone
@@ -804,8 +804,8 @@ private theorem primitiveRoot_residueFieldAt_matrix
       ((quotientEquivResidueFieldAt_matrix v)
         (Ideal.Quotient.mk v.asIdeal hzeta.toInteger)) ell := by
   let k := ResidueFieldAt v
-  letI : Finite k := residueFieldAt_finite_matrix v
-  letI := Fintype.ofFinite k
+  let : Finite k := residueFieldAt_finite_matrix v
+  let := Fintype.ofFinite k
   have hnorm : Ideal.absNorm v.asIdeal = Nat.card k :=
     absNorm_eq_natCard_residueFieldAt_matrix v
   obtain ⟨d, hp, hkcard⟩ :=
@@ -830,14 +830,14 @@ private theorem finiteField_ringEquiv_eq_pow_matrix
     {k : Type*} [Field k] [Finite k] (tau : k ≃+* k) :
     ∃ a : ℕ, ∀ x : k, tau x = x ^ ((ringChar k) ^ a) := by
   let p := ringChar k
-  letI : Fact p.Prime := ⟨CharP.prime_ringChar k⟩
-  letI : Algebra (ZMod p) k := ZMod.algebra k p
+  let : Fact p.Prime := ⟨CharP.prime_ringChar k⟩
+  let : Algebra (ZMod p) k := ZMod.algebra k p
   let taua : k ≃ₐ[ZMod p] k := AlgEquiv.ofRingEquiv (f := tau) (by
     intro z
     have hhom : tau.toRingHom.comp (algebraMap (ZMod p) k) =
         algebraMap (ZMod p) k := RingHom.ext_zmod _ _
     exact DFunLike.congr_fun hhom z)
-  letI := Fintype.ofFinite (ZMod p)
+  let := Fintype.ofFinite (ZMod p)
   obtain ⟨a, ha⟩ :=
     (FiniteField.bijective_frobeniusAlgEquivOfAlgebraic_pow (ZMod p) k).2 taua
   refine ⟨a.1, ?_⟩
@@ -859,7 +859,7 @@ private theorem finiteField_algEquiv_eq_pow_matrix
       ∀ b : ℕ, (∀ x : F,
         x ^ (Nat.card k ^ a) = x ^ (Nat.card k ^ b)) →
           Nat.ModEq d a b := by
-  letI := Fintype.ofFinite k
+  let := Fintype.ofFinite k
   let frob := FiniteField.frobeniusAlgEquivOfAlgebraic k F
   obtain ⟨a, ha⟩ :=
     (FiniteField.bijective_frobeniusAlgEquivOfAlgebraic_pow k F).2 tau
@@ -937,15 +937,15 @@ private theorem localD_twisted_pullback_sub_localI
       localI ell (primeValuationSubring v) := by
   let A := primeValuationSubring v
   let k := ResidueFieldAt v
-  letI : Algebra (𝓞 M) A :=
+  let : Algebra (𝓞 M) A :=
     show Algebra (𝓞 M)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime M v) from
       inferInstance
-  letI : IsLocalization.AtPrime A v.asIdeal :=
+  let : IsLocalization.AtPrime A v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime M v)
       v.asIdeal from inferInstance
-  letI : Finite k := residueFieldAt_finite_matrix v
+  let : Finite k := residueFieldAt_finite_matrix v
   have hinvplace : conjugateFinitePlace K sigma.symm v = v := by
     apply HeightOneSpectrum.ext
     rw [conjugateFinitePlace_asIdeal]
@@ -1076,15 +1076,15 @@ private theorem localI_pullback_fixed
     (hp : p ∈ localI ell (primeValuationSubring v)) :
     pullbackCharacter ell sigma.symm.toRingEquiv.toRingHom p = p := by
   let A := primeValuationSubring v
-  letI : Algebra (𝓞 M) A :=
+  let : Algebra (𝓞 M) A :=
     show Algebra (𝓞 M)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime M v) from
       inferInstance
-  letI : IsLocalization.AtPrime A v.asIdeal :=
+  let : IsLocalization.AtPrime A v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime M v)
       v.asIdeal from inferInstance
-  letI : IsDiscreteValuationRing A :=
+  let : IsDiscreteValuationRing A :=
     IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain
       (𝓞 M) v.ne_bot A
   let e : A ≃+* A := stableValuationRingEquiv_matrix K M sigma v hv
@@ -1217,7 +1217,7 @@ private theorem packetAction_localPlane_triangular
     rw [hEq, hPrank] at h
     omega
   obtain ⟨x, hxP, hxY⟩ := SetLike.exists_of_lt hYlt
-  letI : Module.Finite (ZMod ell) Y :=
+  let : Module.Finite (ZMod ell) Y :=
     Module.finite_of_finrank_pos (by rw [hYrank]; omega)
   let byY : Module.Basis (Fin 1) (ZMod ell) Y :=
     Module.finBasisOfFinrankEq (ZMod ell) Y hYrank
@@ -1246,7 +1246,7 @@ private theorem packetAction_localPlane_triangular
     rcases hz with rfl | rfl
     · exact hxP
     · exact hyP
-  letI : Module.Finite (ZMod ell) P :=
+  let : Module.Finite (ZMod ell) P :=
     Module.finite_of_finrank_pos (by rw [hPrank]; omega)
   have hspanrank :
       Module.finrank (ZMod ell) (pairSpan (k := ZMod ell) x y) = 2 := by
@@ -1374,7 +1374,7 @@ private theorem absoluteCyclotomicScalar_eq_one_iff
     (g : Field.absoluteGaloisGroup K) :
     absoluteCyclotomicScalar K ell g = 1 ↔
       g ∈ NU.LocalTheory.cyclotomicKernel K (ell : ℕ) := by
-  letI : Fact (1 < (ell : ℕ)) := ⟨ell.1.2.one_lt⟩
+  let : Fact (1 < (ell : ℕ)) := ⟨ell.1.2.one_lt⟩
   let zeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
     (AlgebraicClosure K) (ell : ℕ)).choose
   let hzeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
@@ -2697,17 +2697,17 @@ private theorem intermediateFieldRestrictionHom_continuous
       (1 : AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F) := hN
   rw [krullTopology_mem_nhds_one_iff] at hN'
   obtain ⟨L, hLfin, hLN⟩ := hN'
-  letI : FiniteDimensional F L := hLfin
+  let : FiniteDimensional F L := hLfin
   let e := intermediateFieldClosureEquiv F E
   let b := Module.Free.chooseBasis F L
-  letI : Fintype (Module.Free.ChooseBasisIndex F L) := Fintype.ofFinite _
+  let : Fintype (Module.Free.ChooseBasisIndex F L) := Fintype.ofFinite _
   let S : Set (AlgebraicClosure E) := Set.range
     (fun i : Module.Free.ChooseBasisIndex F L =>
       e.symm (((b i : L) : AlgebraicClosure F)))
-  letI : Fintype S := (Set.finite_range _).fintype
+  let : Fintype S := (Set.finite_range _).fintype
   let L' : IntermediateField E (AlgebraicClosure E) :=
     IntermediateField.adjoin E S
-  haveI : FiniteDimensional E L' := by
+  have : FiniteDimensional E L' := by
     apply IntermediateField.finiteDimensional_adjoin
     intro x _
     exact Algebra.IsIntegral.isIntegral x
@@ -2875,18 +2875,18 @@ private theorem completionResidueFinite
   let F := v.adicCompletion K
   let A := NU.LocalTheory.primeValuationSubring v
   let B := v.adicCompletionIntegers K
-  letI : Finite ((𝓞 K) ⧸ v.asIdeal) :=
+  let : Finite ((𝓞 K) ⧸ v.asIdeal) :=
     v.asIdeal.finiteQuotientOfFreeOfNeBot v.ne_bot
-  letI : Algebra (𝓞 K) A :=
+  let : Algebra (𝓞 K) A :=
     show Algebra (𝓞 K)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v) from
         inferInstance
-  letI : IsLocalization.AtPrime A v.asIdeal :=
+  let : IsLocalization.AtPrime A v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
         v.asIdeal from inferInstance
   let eA := IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal A
-  letI : Finite (IsLocalRing.ResidueField A) :=
+  let : Finite (IsLocalRing.ResidueField A) :=
     Finite.of_equiv ((𝓞 K) ⧸ v.asIdeal) eA.toEquiv
   let emb : K →+* F := algebraMap K F
   have hemb_mem (a : A) : emb (a : K) ∈ B := by
@@ -2922,7 +2922,7 @@ private theorem completionResidueFinite
         (v := v.valuation K)).mp hea
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
-  letI : IsLocalHom f :=
+  let : IsLocalHom f :=
     ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
   let rf : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
@@ -2979,28 +2979,28 @@ private theorem completionIsLocalField
     (v : NU.LocalTheory.FinitePlace K) :
     letI : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
     IsNonarchimedeanLocalField (v.adicCompletion K) := by
-  letI : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
-  letI : Finite ((𝓞 K) ⧸ v.asIdeal) :=
+  let : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
+  let : Finite ((𝓞 K) ⧸ v.asIdeal) :=
     v.asIdeal.finiteQuotientOfFreeOfNeBot v.ne_bot
-  letI : IsDiscreteValuationRing
+  let : IsDiscreteValuationRing
       (Valued.integer (v.adicCompletion K)) := by
     change IsDiscreteValuationRing (v.adicCompletionIntegers K)
     infer_instance
-  letI : Finite (Valued.ResidueField (v.adicCompletion K)) :=
+  let : Finite (Valued.ResidueField (v.adicCompletion K)) :=
     completionResidueFinite v
-  letI : ProperSpace (v.adicCompletion K) :=
+  let : ProperSpace (v.adicCompletion K) :=
     (@Valued.integer.properSpace_iff_completeSpace_and_isDiscreteValuationRing_integer_and_finite_residueField
       (v.adicCompletion K) _ _ _ _).2
         ⟨inferInstance, inferInstance, inferInstance⟩
-  letI : LocallyCompactSpace (v.adicCompletion K) := by infer_instance
+  let : LocallyCompactSpace (v.adicCompletion K) := by infer_instance
   let vF := (Valued.v : Valuation (v.adicCompletion K) _)
-  letI : vF.Compatible := Valuation.Compatible.ofValuation vF
-  letI : IsValuativeTopology (v.adicCompletion K) := by
+  let : vF.Compatible := Valuation.Compatible.ofValuation vF
+  let : IsValuativeTopology (v.adicCompletion K) := by
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using vF.exists_setOf_restrict_le_iff 0 s
-  letI : ValuativeRel.IsNontrivial (v.adicCompletion K) :=
+  let : ValuativeRel.IsNontrivial (v.adicCompletion K) :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vF).2 inferInstance
   exact
     { toIsValuativeTopology := inferInstance
@@ -3029,8 +3029,8 @@ private theorem completion_residueCharacteristic_eq
     ringChar (NU.LCFT.LocalResidueField (v.adicCompletion K)) =
       NU.LocalTheory.residueCharacteristic v := by
   let F := v.adicCompletion K
-  letI : ValuativeRel F := completionValuativeRel v
-  letI : (Valued.v : Valuation F _).Compatible :=
+  let : ValuativeRel F := completionValuativeRel v
+  let : (Valued.v : Valuation F _).Compatible :=
     Valuation.Compatible.ofValuation _
   have hring : NU.LCFT.RingOfIntegers F =
       (v.adicCompletionIntegers K).toSubring := by
@@ -3040,18 +3040,18 @@ private theorem completion_residueCharacteristic_eq
           (Valued.v : Valuation F _)))
   let er : NU.LCFT.RingOfIntegers F ≃+*
       v.adicCompletionIntegers K := RingEquiv.subringCongr hring
-  letI : IsLocalHom er.toRingHom :=
+  let : IsLocalHom er.toRingHom :=
     IsLocalHom.of_surjective er.toRingHom er.surjective
   let r1 : NU.LCFT.LocalResidueField F →+*
       IsLocalRing.ResidueField (v.adicCompletionIntegers K) :=
     IsLocalRing.ResidueField.map er.toRingHom
   let A := NU.LocalTheory.primeValuationSubring v
   let B := v.adicCompletionIntegers K
-  letI : Algebra (𝓞 K) A :=
+  let : Algebra (𝓞 K) A :=
     show Algebra (𝓞 K)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v) from
         inferInstance
-  letI : IsLocalization.AtPrime A v.asIdeal :=
+  let : IsLocalization.AtPrime A v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
         v.asIdeal from inferInstance
@@ -3089,7 +3089,7 @@ private theorem completion_residueCharacteristic_eq
         (v := v.valuation K)).mp hea
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
-  letI : IsLocalHom f :=
+  let : IsLocalHom f :=
     ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
   let r2 : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
@@ -3280,10 +3280,10 @@ private theorem localCyclotomic_characterPull_injective
       (ell : ℕ)) :
     Function.Injective (continuousCharacterPullLinearMap (ell : ℕ)
       (localCyclotomicRestrictionContinuousHom F ell)) := by
-  letI : Fact (ell : ℕ).Prime := ⟨ell.2⟩
+  let : Fact (ell : ℕ).Prime := ⟨ell.2⟩
   let E := localCyclotomicExtension F ell
   let H := E.fixingSubgroup
-  letI : H.Normal :=
+  let : H.Normal :=
     (InfiniteGalois.normal_iff_isGalois E).2 inferInstance
   intro a b hab
   let c : NU.LocalTheory.ContinuousCharacter
@@ -3333,11 +3333,11 @@ private theorem localFieldIntegers_isAdicComplete
     IsAdicComplete
       (IsLocalRing.maximalIdeal (NU.LCFT.RingOfIntegers F))
       (NU.LCFT.RingOfIntegers F) := by
-  letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
-  letI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
-  letI : CompleteSpace (NU.LCFT.RingOfIntegers F) :=
+  let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
+  let : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
+  let : CompleteSpace (NU.LCFT.RingOfIntegers F) :=
     (Valued.isClosed_valuationSubring F).completeSpace_coe
-  letI : CompactSpace (NU.LCFT.RingOfIntegers F) := inferInstance
+  let : CompactSpace (NU.LCFT.RingOfIntegers F) := inferInstance
   refine { prec' := ?_ }
   intro f hf
   let S n : Set (NU.LCFT.RingOfIntegers F) := f n +ᵥ
@@ -3371,8 +3371,8 @@ private theorem localFieldPrincipalUnit_is_primeDivisible
     ∃ y : Units F, y ^ (ell : ℕ) = u := by
   let m := NU.LCFT.LocalMaximalIdeal F
   let k := NU.LCFT.LocalResidueField F
-  letI : IsAdicComplete m (NU.LCFT.RingOfIntegers F) := localFieldIntegers_isAdicComplete F
-  letI : HenselianRing (NU.LCFT.RingOfIntegers F) m := IsAdicComplete.henselianRing _ _
+  let : IsAdicComplete m (NU.LCFT.RingOfIntegers F) := localFieldIntegers_isAdicComplete F
+  let : HenselianRing (NU.LCFT.RingOfIntegers F) m := IsAdicComplete.henselianRing _ _
   obtain ⟨a, ha, hau⟩ := hu
   have hares : Ideal.Quotient.mk m (a : (NU.LCFT.RingOfIntegers F)) = 1 := by
     have h := congrArg Units.val ha
@@ -3448,43 +3448,43 @@ private theorem finiteExtension_localFieldStructure
       ∃ hE : IsNonarchimedeanLocalField E,
         letI : IsNonarchimedeanLocalField E := hE
         ValuativeExtension F E := by
-  letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
-  letI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
-  letI : (Valued.v (R := F)
+  let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
+  let : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
+  let : (Valued.v (R := F)
       (Γ₀ := ValuativeRel.ValueGroupWithZero F)).RankOne :=
     { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := F).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' :=
         ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
           MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI : NontriviallyNormedField F :=
+  let : NontriviallyNormedField F :=
     Valued.toNontriviallyNormedField F
       (ValuativeRel.ValueGroupWithZero F)
   let nE : NontriviallyNormedField E :=
     spectralNorm.nontriviallyNormedField F E
-  letI : NontriviallyNormedField E := nE
-  letI : IsUltrametricDist E :=
+  let : NontriviallyNormedField E := nE
+  let : IsUltrametricDist E :=
     IsUltrametricDist.isUltrametricDist_of_isNonarchimedean_norm
       (isNonarchimedean_spectralNorm (K := F) (L := E))
-  letI : NormedAlgebra F E := spectralNorm.normedAlgebra F E
+  let : NormedAlgebra F E := spectralNorm.normedAlgebra F E
   let tE : TopologicalSpace E := inferInstance
   let vE : ValuativeRel E :=
     ValuativeRel.ofValuation (NormedField.valuation (K := E))
   refine ⟨vE, tE, ?_⟩
-  letI : ValuativeRel E := vE
-  letI : (NormedField.valuation (K := E)).Compatible :=
+  let : ValuativeRel E := vE
+  let : (NormedField.valuation (K := E)).Compatible :=
     Valuation.Compatible.ofValuation (NormedField.valuation (K := E))
-  letI : TopologicalSpace E := tE
-  letI : Valued E NNReal := NormedField.toValued
-  haveI htop : IsValuativeTopology E := by
+  let : TopologicalSpace E := tE
+  let : Valued E NNReal := NormedField.toValued
+  have htop : IsValuativeTopology E := by
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using
       (Valued.v : Valuation E NNReal).exists_setOf_restrict_le_iff 0 s
-  haveI hloc : LocallyCompactSpace E :=
+  have hloc : LocallyCompactSpace E :=
     LocallyCompactSpace.of_finiteDimensional_of_complete F E
-  haveI hnontriv : ValuativeRel.IsNontrivial E := by
+  have hnontriv : ValuativeRel.IsNontrivial E := by
     rw [ValuativeRel.isNontrivial_iff_isNontrivial
       (NormedField.valuation (K := E))]
     infer_instance
@@ -3493,7 +3493,7 @@ private theorem finiteExtension_localFieldStructure
       toLocallyCompactSpace := hloc
       toIsNontrivial := hnontriv }
   refine ⟨hE, ?_⟩
-  letI : IsNonarchimedeanLocalField E := hE
+  let : IsNonarchimedeanLocalField E := hE
   constructor
   intro a b
   change NormedField.valuation (algebraMap F E a) ≤
@@ -3515,12 +3515,12 @@ private theorem finiteValuativeExtension_residueChar
     [ValuativeRel F] [ValuativeRel E] [ValuativeExtension F E] :
     ringChar (LocalResidueField F) =
       ringChar (LocalResidueField E) := by
-  letI : (ValuativeRel.valuation F).HasExtension
+  let : (ValuativeRel.valuation F).HasExtension
       (ValuativeRel.valuation E) := by
     constructor
     exact ValuativeRel.isEquiv _ _
   let i : RingOfIntegers F →+* RingOfIntegers E := algebraMap _ _
-  letI : IsLocalHom i := inferInstance
+  let : IsLocalHom i := inferInstance
   let rf : LocalResidueField F →+* LocalResidueField E :=
     IsLocalRing.ResidueField.map i
   symm
@@ -3722,7 +3722,7 @@ private theorem localField_tameKummerQuotient_finrank_le_two
     (hchar : ringChar (NU.LCFT.LocalResidueField F) ≠ (ell : ℕ)) :
     Module.finrank (ZMod (ell : ℕ))
       (NU.LocalTheory.KummerQuotient F (ell : ℕ)) ≤ 2 := by
-  letI : Module.Finite (ZMod (ell : ℕ))
+  let : Module.Finite (ZMod (ell : ℕ))
       (NU.LocalTheory.KummerQuotient F (ell : ℕ)) :=
     localField_tameKummerQuotient_moduleFinite F ell hchar
   obtain ⟨gens, hspan⟩ :=
@@ -3772,7 +3772,7 @@ private theorem residueCharacteristic_coprime_norm_sub_one
     (NU.LocalTheory.residueCharacteristic v).Coprime
       (NU.Chebotarev.PrimeIdeal.norm v - 1) := by
   let q := NU.LocalTheory.restrictFinitePlace ℚ v
-  letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
+  let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hnorm : NU.Chebotarev.PrimeIdeal.norm v =
       NU.Chebotarev.PrimeIdeal.norm q ^
         q.asIdeal.inertiaDeg' v.asIdeal := by
@@ -3824,7 +3824,7 @@ private theorem primePowerTorsion_is_primeDivisible
       apply hne
       exact Subtype.ext h)
       |>.pow_right a
-  letI : NeZero N := ⟨pow_ne_zero _ p.2.ne_zero⟩
+  let : NeZero N := ⟨pow_ne_zero _ p.2.ne_zero⟩
   let e : (ZMod N)ˣ := (ZMod.unitOfCoprime (ell : ℕ) hcop)⁻¹
   let k : ℕ := (e : ZMod N).val
   have hmod : Nat.ModEq N ((ell : ℕ) * k) 1 := by
@@ -3892,7 +3892,7 @@ residue field is `ZMod p`. -/
 private theorem padicInt_quotient_finite
     (p : Nat.Primes) (I : Ideal ℤ_[p]) (hI : I ≠ ⊥) :
     Finite (ℤ_[p] ⧸ I) := by
-  letI : Finite (IsLocalRing.ResidueField ℤ_[p]) :=
+  let : Finite (IsLocalRing.ResidueField ℤ_[p]) :=
     Finite.of_equiv (ZMod (p : ℕ))
       PadicInt.residueField.toEquiv.symm
   rw [IsLocalRing.finite_quotient_iff]
@@ -3911,18 +3911,18 @@ private theorem padicModule_torsion_finite
     [Module.Finite ℤ_[p] M] :
     Finite (Submodule.torsion ℤ_[p] M) := by
   let T := Submodule.torsion ℤ_[p] M
-  letI : Module.Finite ℤ_[p] T := inferInstance
+  let : Module.Finite ℤ_[p] T := inferInstance
   obtain ⟨ι, fi, q, hq, e, ⟨equiv⟩⟩ :=
     Module.equiv_directSum_of_isTorsion
       (R := ℤ_[p]) (M := T)
       (Submodule.torsion_isTorsion (R := ℤ_[p]) (M := M))
-  letI : Fintype ι := fi
+  let : Fintype ι := fi
   have hquot (i : ι) :
       Finite (ℤ_[p] ⧸ ℤ_[p] ∙ q i ^ e i) := by
     apply padicInt_quotient_finite p
     exact fun h => pow_ne_zero (e i) (hq i).ne_zero
       (Submodule.span_singleton_eq_bot.mp h)
-  letI (i : ι) : Finite (ℤ_[p] ⧸ ℤ_[p] ∙ q i ^ e i) :=
+  let (i : ι) : Finite (ℤ_[p] ⧸ ℤ_[p] ∙ q i ^ e i) :=
     hquot i
   let de := DirectSum.linearEquivFunOnFintype ℤ_[p] ι
     (fun i => ℤ_[p] ⧸ ℤ_[p] ∙ q i ^ e i)
@@ -3951,8 +3951,8 @@ private theorem padicModule_torsionProdQuotientLinearEquiv
         Submodule.torsion ℤ_[p] M ×
           (M ⧸ Submodule.torsion ℤ_[p] M)) := by
   let Q := M ⧸ Submodule.torsion ℤ_[p] M
-  letI : Module.Finite ℤ_[p] Q := inferInstance
-  letI : Module.Free ℤ_[p] Q :=
+  let : Module.Finite ℤ_[p] Q := inferInstance
+  let : Module.Free ℤ_[p] Q :=
     padicModule_free_of_finite_torsionFree p Q
   obtain ⟨s, hs⟩ := Module.projective_lifting_property
     (P := Q) (Submodule.mkQ (Submodule.torsion ℤ_[p] M))
@@ -4020,10 +4020,10 @@ private theorem padicModule_torsionProdQuotientContinuousAddEquiv
           (M ⧸ Submodule.torsion ℤ_[p] M)) ≃ₜ+ M) := by
   let T := Submodule.torsion ℤ_[p] M
   let Q := M ⧸ T
-  letI : Finite T := padicModule_torsion_finite p M
+  let : Finite T := padicModule_torsion_finite p M
   have hTfinite : (T : Set M).Finite := Set.toFinite _
-  letI : IsClosed (T : Set M) := hTfinite.isClosed
-  letI : CompactSpace Q := isCompact_univ_iff.mp (by
+  let : IsClosed (T : Set M) := hTfinite.isClosed
+  let : CompactSpace Q := isCompact_univ_iff.mp (by
     have hcomp :=
       (isCompact_univ : IsCompact (Set.univ : Set M)).image
         T.continuous_mkQ
@@ -4031,8 +4031,8 @@ private theorem padicModule_torsionProdQuotientContinuousAddEquiv
       Submodule.Quotient.mk_surjective T
     rw [Set.image_univ, Set.range_eq_univ.mpr hsurj] at hcomp
     exact hcomp)
-  letI : Module.Finite ℤ_[p] Q := inferInstance
-  letI : Module.Free ℤ_[p] Q :=
+  let : Module.Finite ℤ_[p] Q := inferInstance
+  let : Module.Free ℤ_[p] Q :=
     padicModule_free_of_finite_torsionFree p Q
   obtain ⟨s, hs⟩ := Module.projective_lifting_property
     (P := Q) (Submodule.mkQ T)
@@ -4078,7 +4078,7 @@ private theorem padicModule_continuousAddEquivPi_of_finite_torsionFree
     [Module.Finite ℤ_[p] M] [Module.IsTorsionFree ℤ_[p] M] :
     Nonempty
       ((Fin (Module.finrank ℤ_[p] M) → ℤ_[p]) ≃ₜ+ M) := by
-  letI : Module.Free ℤ_[p] M :=
+  let : Module.Free ℤ_[p] M :=
     padicModule_free_of_finite_torsionFree p M
   obtain ⟨n, b⟩ := Module.basisOfFiniteTypeTorsionFree'
     (R := ℤ_[p]) (M := M)
@@ -4115,10 +4115,10 @@ private theorem padicModule_torsionProdFreeContinuousAddEquiv
             (M ⧸ Submodule.torsion ℤ_[p] M)) → ℤ_[p])) ≃ₜ+ M) := by
   let T := Submodule.torsion ℤ_[p] M
   let Q := M ⧸ T
-  letI : Finite T := padicModule_torsion_finite p M
+  let : Finite T := padicModule_torsion_finite p M
   have hTfinite : (T : Set M).Finite := Set.toFinite _
-  letI : IsClosed (T : Set M) := hTfinite.isClosed
-  letI : Module.Finite ℤ_[p] Q := inferInstance
+  let : IsClosed (T : Set M) := hTfinite.isClosed
+  let : Module.Finite ℤ_[p] Q := inferInstance
   obtain ⟨freeEquiv⟩ :=
     padicModule_continuousAddEquivPi_of_finite_torsionFree p Q
   obtain ⟨splitEquiv⟩ :=
@@ -4290,7 +4290,7 @@ private theorem modN_finrank_zero_of_divisible
     (hdiv : ∀ x : G, ∃ y : G, (p : ℕ) • y = x) :
     Module.finrank (ZMod (p : ℕ))
       (ModN G (p : ℕ)) = 0 := by
-  letI : Subsingleton (ModN G (p : ℕ)) :=
+  let : Subsingleton (ModN G (p : ℕ)) :=
     modN_subsingleton_of_divisible (p : ℕ) hdiv
   exact Module.finrank_eq_zero_of_subsingleton _ _
 
@@ -4504,7 +4504,7 @@ private theorem pPowerTorsion_finite_of_isClosed
   have hcompact : IsCompact (P : Set (Units F)) :=
     IsCompact.of_isClosed_subset (localField_unitSphere_isCompact F)
       hclosed hsubset
-  letI : CompactSpace P := isCompact_iff_compactSpace.mp hcompact
+  let : CompactSpace P := isCompact_iff_compactSpace.mp hcompact
   let H (a : ℕ) : Subgroup P :=
     (powMonoidHom ((p : ℕ) ^ a) : P →* P).ker
   have hHclosed (a : ℕ) : IsClosed (H a : Set P) := by
@@ -4522,7 +4522,7 @@ private theorem pPowerTorsion_finite_of_isClosed
     obtain ⟨x, hx⟩ := ha
     exact (H a).isOpen_of_mem_nhds
       (mem_interior_iff_mem_nhds.mp hx)
-  letI : Finite (P ⧸ H a) :=
+  let : Finite (P ⧸ H a) :=
     (H a).quotient_finite_of_isOpen hHopen
   have hHa : Finite (H a) := by
     let emb : H a → rootsOfUnity ((p : ℕ) ^ a) F := fun x =>
@@ -4536,7 +4536,7 @@ private theorem pPowerTorsion_finite_of_isClosed
       exact congrArg
         (fun z : rootsOfUnity ((p : ℕ) ^ a) F =>
           ((z.1 : Units F) : F)) h)
-  letI : Finite (H a) := hHa
+  let : Finite (H a) := hHa
   exact Finite.of_subgroup_quotient (H a)
 
 /-- The root-of-unity correction, in a form usable before the local
@@ -4602,8 +4602,8 @@ private theorem pPowerMod_finrank_of_finite
   let H : AddSubgroup (Additive P) :=
     (LinearMap.range (LinearMap.lsmul ℤ (Additive P)
       (((p : ℕ) : ℤ)))).toAddSubgroup
-  letI : Finite (ModN (Additive P) (p : ℕ)) := Quotient.finite _
-  letI : Module.Finite (ZMod (p : ℕ))
+  let : Finite (ModN (Additive P) (p : ℕ)) := Quotient.finite _
+  let : Module.Finite (ZMod (p : ℕ))
       (ModN (Additive P) (p : ℕ)) := Module.Finite.of_finite
   have hH : H = f.range := by
     ext x
@@ -4626,7 +4626,7 @@ private theorem pPowerMod_finrank_of_finite
     split_ifs with h
     · simpa only [Nat.card_eq_fintype_card] using
         h.choose_spec.card_rootsOfUnity
-    · letI : Subsingleton (rootsOfUnity (p : ℕ) F) :=
+    · let : Subsingleton (rootsOfUnity (p : ℕ) F) :=
         ⟨fun x y => by
           have hxpow : (x.1 : Units F) ^ (p : ℕ) = 1 :=
             (mem_rootsOfUnity (p : ℕ) x.1).mp x.2
@@ -4679,7 +4679,7 @@ private theorem localUnitDecomposition_pPowerTorsion_isClosed
     exact fun h => v.isMaximal.ne_top
       (Ideal.absNorm_eq_one_iff.mp h)
   have hnormgt : 1 < NU.Chebotarev.PrimeIdeal.norm v := by omega
-  letI : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
+  let : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
     ⟨(Nat.sub_pos_of_lt hnormgt).ne'⟩
   let e := units.productEquiv
   have hcoords (u : Units F) :
@@ -4753,10 +4753,10 @@ private theorem localUnitDecomposition_pPowerTorsion_finite
     (units : LocalUnitDecompositionData v) :
     Finite units.pPowerTorsion := by
   let F := v.adicCompletion K
-  letI : CharZero F := charZero_of_injective_algebraMap
+  let : CharZero F := charZero_of_injective_algebraMap
     (algebraMap K F).injective
-  letI : ValuativeRel F := completionValuativeRel v
-  letI : IsNonarchimedeanLocalField F := completionIsLocalField v
+  let : ValuativeRel F := completionValuativeRel v
+  let : IsNonarchimedeanLocalField F := completionIsLocalField v
   exact pPowerTorsion_finite_of_isClosed F (residuePrime v)
     units.pPowerTorsion
     (localUnitDecomposition_pPowerTorsion_isClosed v units)
@@ -4772,7 +4772,7 @@ private theorem localUnitDecomposition_pPowerTorsionMod_finrank
       (ModN (Additive units.pPowerTorsion)
         (residuePrime v : ℕ)) =
       primitiveRootCorrection (v.adicCompletion K) (residuePrime v) := by
-  letI : Finite units.pPowerTorsion :=
+  let : Finite units.pPowerTorsion :=
     localUnitDecomposition_pPowerTorsion_finite v units
   exact pPowerMod_finrank_of_finite
     (v.adicCompletion K) (residuePrime v)
@@ -4809,7 +4809,7 @@ private theorem localUnitDecomposition_teichmullerMod_finrank
       exact fun h => v.isMaximal.ne_top
         (Ideal.absNorm_eq_one_iff.mp h)
     omega
-  letI : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
+  let : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
     ⟨(Nat.sub_pos_of_lt hnorm).ne'⟩
   rw [(modNLinearEquivOfAddEquiv (residuePrime v : ℕ)
     units.teichmullerEquiv.toMulEquiv.toAdditive).finrank_eq]
@@ -4870,16 +4870,16 @@ private theorem localUnitDecomposition_kummerQuotient_finrank
     exact fun h => v.isMaximal.ne_top
       (Ideal.absNorm_eq_one_iff.mp h)
   have hnormgt : 1 < NU.Chebotarev.PrimeIdeal.norm v := by omega
-  letI : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
+  let : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
     ⟨(Nat.sub_pos_of_lt hnormgt).ne'⟩
   let k := ZMod (residuePrime v : ℕ)
   let V := ModN (Additive units.valuationFactor) (residuePrime v : ℕ)
   let T := ModN (Additive units.teichmullerFactor) (residuePrime v : ℕ)
   let P := ModN (Additive units.pPowerTorsion) (residuePrime v : ℕ)
   let L := ModN (Additive units.freePrincipalUnits) (residuePrime v : ℕ)
-  letI : Finite units.pPowerTorsion :=
+  let : Finite units.pPowerTorsion :=
     localUnitDecomposition_pPowerTorsion_finite v units
-  letI : Finite units.teichmullerFactor := Finite.of_equiv
+  let : Finite units.teichmullerFactor := Finite.of_equiv
     (Multiplicative
       (ZMod (NU.Chebotarev.PrimeIdeal.norm v - 1)))
     units.teichmullerEquiv.toEquiv.symm
@@ -4887,11 +4887,11 @@ private theorem localUnitDecomposition_kummerQuotient_finrank
     units.valuationEquiv.toMulEquiv.toAdditive).trans
       (modNLinearEquivOfAddEquiv (residuePrime v : ℕ)
         (AddEquiv.additiveMultiplicative ℤ))
-  letI : Module.Finite k V := Module.Finite.equiv eV.symm
-  letI : Finite T := Quotient.finite _
-  letI : Module.Finite k T := Module.Finite.of_finite
-  letI : Finite P := Quotient.finite _
-  letI : Module.Finite k P := Module.Finite.of_finite
+  let : Module.Finite k V := Module.Finite.equiv eV.symm
+  let : Finite T := Quotient.finite _
+  let : Module.Finite k T := Module.Finite.of_finite
+  let : Finite P := Quotient.finite _
+  let : Module.Finite k P := Module.Finite.of_finite
   let d := finitePlaceLocalDegree v
   let eL := ((modNLinearEquivOfAddEquiv (residuePrime v : ℕ)
     units.freePrincipalUnitsEquiv.toMulEquiv.toAdditive).trans
@@ -4899,7 +4899,7 @@ private theorem localUnitDecomposition_kummerQuotient_finrank
         (AddEquiv.additiveMultiplicative
           (Fin d → ℤ_[residuePrime v])))).trans
       (padicVectorModLinearEquiv (residuePrime v) d)
-  letI : Module.Finite k L := Module.Finite.equiv eL.symm
+  let : Module.Finite k L := Module.Finite.equiv eL.symm
   rw [(localUnitDecomposition_kummerQuotientLinearEquiv
     v units).finrank_eq]
   change Module.finrank k (V × T × P × L) = _
@@ -4927,7 +4927,7 @@ private theorem localUnitDecomposition_kummerQuotient_finrank_le_two
     change Ideal.absNorm v.asIdeal ≠ 1
     exact fun h => v.isMaximal.ne_top (Ideal.absNorm_eq_one_iff.mp h)
   have hnormgt : 1 < NU.Chebotarev.PrimeIdeal.norm v := by omega
-  letI : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
+  let : NeZero (NU.Chebotarev.PrimeIdeal.norm v - 1) :=
     ⟨(Nat.sub_pos_of_lt hnormgt).ne'⟩
   let v0 : units.valuationFactor :=
     units.valuationEquiv.symm (Multiplicative.ofAdd (1 : ℤ))
@@ -5093,7 +5093,7 @@ private theorem continuousCharacterRank_equiv
     [IsTopologicalGroup G] [IsTopologicalGroup H]
     (ell : Nat.Primes) (e : G ≃ₜ* H) :
     continuousCharacterRank G ell = continuousCharacterRank H ell := by
-  letI : Fact (ell : ℕ).Prime := ⟨ell.2⟩
+  let : Fact (ell : ℕ).Prime := ⟨ell.2⟩
   exact (PacketTransport.pullCharacterLinearEquiv
     (ell : ℕ) e).finrank_eq.symm
 
@@ -5157,20 +5157,20 @@ private theorem kummerDimension_away_without_roots
     continuousCharacterRank
       (Field.absoluteGaloisGroup (v.adicCompletion K)) ell ≤ 2 := by
   classical
-  letI : Fact (ell : ℕ).Prime := ⟨ell.2⟩
+  let : Fact (ell : ℕ).Prime := ⟨ell.2⟩
   let F := v.adicCompletion K
-  letI : CharZero F :=
+  let : CharZero F :=
     charZero_of_injective_algebraMap (algebraMap K F).injective
-  letI : ValuativeRel F := completionValuativeRel v
+  let : ValuativeRel F := completionValuativeRel v
   let hF : IsNonarchimedeanLocalField F := completionIsLocalField v
-  letI : IsNonarchimedeanLocalField F := hF
+  let : IsNonarchimedeanLocalField F := hF
   let E := localCyclotomicExtension F ell
   obtain ⟨vE, tE, hE, hExt⟩ :=
     finiteExtension_localFieldStructure F E
-  letI : ValuativeRel E := vE
-  letI : TopologicalSpace E := tE
-  letI : IsNonarchimedeanLocalField E := hE
-  letI : ValuativeExtension F E := hExt
+  let : ValuativeRel E := vE
+  let : TopologicalSpace E := tE
+  let : IsNonarchimedeanLocalField E := hE
+  let : ValuativeExtension F E := hExt
   have hcharF : ringChar (NU.LCFT.LocalResidueField F) ≠
       (ell : ℕ) := by
     rw [completion_residueCharacteristic_eq v]
@@ -5188,10 +5188,10 @@ private theorem kummerDimension_away_without_roots
   let zeta : E := localCyclotomicRootInExtension F ell
   have hzeta : IsPrimitiveRoot zeta (ell : ℕ) :=
     localCyclotomicRootInExtension_spec F ell
-  letI : Module.Finite (ZMod (ell : ℕ))
+  let : Module.Finite (ZMod (ell : ℕ))
       (NU.LocalTheory.KummerQuotient E (ell : ℕ)) :=
     localField_tameKummerQuotient_moduleFinite E ell hcharE
-  letI : Module.Finite (ZMod (ell : ℕ))
+  let : Module.Finite (ZMod (ell : ℕ))
       (NU.LocalTheory.ContinuousCharacter
         (Field.absoluteGaloisGroup E) (ell : ℕ)) :=
     Module.Finite.equiv (NU.LocalTheory.kummerEquiv zeta hzeta)
@@ -5335,7 +5335,7 @@ private theorem factorization_orderOf_eq_of_not_primePower
       x ^ (lambda : ℕ) = (b : ZMod (ell : ℕ))) :
     (residueMultiplicativeOrder b ell).factorization (lambda : ℕ) =
       ((ell : ℕ) - 1).factorization (lambda : ℕ) := by
-  letI : Fact (ell : ℕ).Prime := ⟨ell.2⟩
+  let : Fact (ell : ℕ).Prime := ⟨ell.2⟩
   have hb0 : (b : ZMod (ell : ℕ)) ≠ 0 := by
     intro hzero
     exact hb ((ZMod.natCast_eq_zero_iff b (ell : ℕ)).mp hzero)
@@ -5443,7 +5443,7 @@ private theorem factorization_residueOrder_pow_ge_sub
     (residueMultiplicativeOrder b ell).factorization (lambda : ℕ) - h ≤
       (residueMultiplicativeOrder (b ^ ((lambda : ℕ) ^ h)) ell).factorization
         (lambda : ℕ) := by
-  letI : Fact (ell : ℕ).Prime := ⟨ell.2⟩
+  let : Fact (ell : ℕ).Prime := ⟨ell.2⟩
   have hb0 : (b : ZMod (ell : ℕ)) ≠ 0 := by
     intro hzero
     exact hb ((ZMod.natCast_eq_zero_iff b (ell : ℕ)).mp hzero)
@@ -5607,27 +5607,27 @@ private theorem odd_kummer_raw
   let N : ℕ := (lambda : ℕ) ^ M
   have hN : 0 < N := pow_pos lambda.2.pos M
   let F := CyclotomicField N ℚ
-  letI : Field F := inferInstance
-  letI : Algebra ℚ F := inferInstance
-  letI : NeZero N := ⟨hN.ne'⟩
-  letI : IsCyclotomicExtension {N} ℚ F :=
+  let : Field F := inferInstance
+  let : Algebra ℚ F := inferInstance
+  let : NeZero N := ⟨hN.ne'⟩
+  let : IsCyclotomicExtension {N} ℚ F :=
     CyclotomicField.isCyclotomicExtension N ℚ
-  letI : NumberField F :=
+  let : NumberField F :=
     IsCyclotomicExtension.numberField {N} ℚ F
-  letI : FiniteDimensional ℚ F :=
+  let : FiniteDimensional ℚ F :=
     IsCyclotomicExtension.finiteDimensional {N} ℚ F
-  letI : IsGalois ℚ F :=
+  let : IsGalois ℚ F :=
     IsCyclotomicExtension.isGalois {N} ℚ F
-  letI : Normal ℚ F := IsGalois.to_normal
+  let : Normal ℚ F := IsGalois.to_normal
   let a : F := algebraMap ℚ F b
   let pF : F[X] := X ^ (lambda : ℕ) - C a
   have HpF : Irreducible pF := by simpa [F, N, a, pF] using H
-  letI : Fact (Irreducible pF) := ⟨HpF⟩
+  let : Fact (Irreducible pF) := ⟨HpF⟩
   let E := AdjoinRoot pF
-  letI : Field E := AdjoinRoot.instField
-  letI : Algebra F E := inferInstance
-  letI : Algebra ℚ E := inferInstance
-  letI : IsScalarTower ℚ F E := inferInstance
+  let : Field E := AdjoinRoot.instField
+  let : Algebra F E := inferInstance
+  let : Algebra ℚ E := inferInstance
+  let : IsScalarTower ℚ F E := inferInstance
   let zetaN : F := IsCyclotomicExtension.zeta N ℚ F
   have hzetaN : IsPrimitiveRoot zetaN N :=
     IsCyclotomicExtension.zeta_spec N ℚ F
@@ -5641,7 +5641,7 @@ private theorem odd_kummer_raw
     exact hzetaN.pow hN hNfac
   have hroots : (primitiveRoots (lambda : ℕ) F).Nonempty := by
     refine ⟨zeta, (mem_primitiveRoots lambda.2.pos).2 hzeta⟩
-  letI : Polynomial.IsSplittingField F E pF := by
+  let : Polynomial.IsSplittingField F E pF := by
     exact isSplittingField_AdjoinRoot_X_pow_sub_C hroots HpF
   let f : ℚ[X] := X ^ N - 1
   let g : ℚ[X] := X ^ (lambda : ℕ) - C (b : ℚ)
@@ -5650,19 +5650,19 @@ private theorem odd_kummer_raw
   have hg : g ≠ 0 := X_pow_sub_C_ne_zero lambda.2.pos (b : ℚ)
   have hmapg : g.map (algebraMap ℚ F) = pF := by
     simp [g, pF, a]
-  letI : Polynomial.IsSplittingField F E (g.map (algebraMap ℚ F)) := by
+  let : Polynomial.IsSplittingField F E (g.map (algebraMap ℚ F)) := by
     rw [hmapg]
     infer_instance
-  letI : Polynomial.IsSplittingField ℚ F f := by
+  let : Polynomial.IsSplittingField ℚ F f := by
     simpa [f] using
       (IsCyclotomicExtension.isSplittingField_X_pow_sub_one N ℚ F)
-  letI : Polynomial.IsSplittingField ℚ E (f * g) :=
+  let : Polynomial.IsSplittingField ℚ E (f * g) :=
     Polynomial.IsSplittingField.mul (F := ℚ) (K := F) E f g hf hg
-  letI : FiniteDimensional ℚ E :=
+  let : FiniteDimensional ℚ E :=
     Polynomial.IsSplittingField.finiteDimensional E (f * g)
-  letI : NumberField E := NumberField.of_module_finite ℚ E
-  letI : Normal ℚ E := Normal.of_isSplittingField (f * g)
-  letI : IsGalois ℚ E := IsGalois.mk
+  let : NumberField E := NumberField.of_module_finite ℚ E
+  let : Normal ℚ E := Normal.of_isSplittingField (f * g)
+  let : IsGalois ℚ E := IsGalois.mk
   let eta : rootsOfUnity (lambda : ℕ) F := hzeta.toRootsOfUnity
   let sigmaF : E ≃ₐ[F] E := autAdjoinRootXPowSubC (lambda : ℕ) a eta
   let sigma : E ≃ₐ[ℚ] E := sigmaF.restrictScalars ℚ
@@ -5776,8 +5776,8 @@ private theorem odd_kummer_raw
         (NU.NeukirchUchida.LocalInvariants.residueCharacteristic_prime v) lambda.2).mp hell_dvd_lambda)
     have hQunr : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers ℚ) Q.asIdeal := by
-      letI : P.asIdeal.LiesOver Q.asIdeal := hPQ
-      letI : Algebra.IsUnramifiedAt
+      let : P.asIdeal.LiesOver Q.asIdeal := hPQ
+      let : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers ℚ) P.asIdeal := hPunr
       exact Algebra.IsUnramifiedAt.of_liesOver
         (NumberField.RingOfIntegers ℚ) Q.asIdeal P.asIdeal
@@ -5851,15 +5851,15 @@ private theorem odd_kummer_raw
       rw [← NU.NeukirchUchida.LocalInvariants.residueCharacteristic_restrictFinitePlace ℚ P,
         hrestrictP]
     let k := NumberField.RingOfIntegers E ⧸ P.asIdeal
-    letI : Field k := Ideal.Quotient.field P.asIdeal
-    letI : Fintype k := Fintype.ofFinite k
+    let : Field k := Ideal.Quotient.field P.asIdeal
+    let : Fintype k := Fintype.ofFinite k
     have hringChar : ringChar k = NU.LocalTheory.residueCharacteristic v := by
       rw [Ideal.ringChar_quot,
         ← NU.NeukirchUchida.LocalInvariants.residueCharacteristic_eq_absNorm_under,
         hcharP]
-    letI : CharP k (NU.LocalTheory.residueCharacteristic v) :=
+    let : CharP k (NU.LocalTheory.residueCharacteristic v) :=
       (ringChar.eq_iff).mp hringChar
-    letI : P.asIdeal.LiesOver v.asIdeal := hPv
+    let : P.asIdeal.LiesOver v.asIdeal := hPv
     have hnormPcoprime : (Ideal.absNorm P.asIdeal).Coprime (lambda : ℕ) := by
       rw [Ideal.absNorm_eq_pow_inertiaDeg_of_liesOver
         P.asIdeal v.asIdeal inferInstance v.ne_bot]
@@ -5977,7 +5977,7 @@ private theorem odd_kummer_raw
         _ = rxi := hrbeta_power
     refine ⟨hmodResult, ?_⟩
     intro hbadPower
-    letI : Algebra (ZMod (NU.LocalTheory.residueCharacteristic v)) k :=
+    let : Algebra (ZMod (NU.LocalTheory.residueCharacteristic v)) k :=
       ZMod.algebra k (NU.LocalTheory.residueCharacteristic v)
     have hmapped := congrArg
       (algebraMap (ZMod (NU.LocalTheory.residueCharacteristic v)) k)
@@ -6033,7 +6033,7 @@ private theorem odd_kummer_raw
     apply hnotC
     exact dvd_mul_of_dvd_left hdvd (lambda : ℕ)
   obtain ⟨hmod, hpower⟩ := hmod_for_prime v hvS hell hbprime
-  letI : Fact (NU.LocalTheory.residueCharacteristic v).Prime :=
+  let : Fact (NU.LocalTheory.residueCharacteristic v).Prime :=
     ⟨NU.NeukirchUchida.LocalInvariants.residueCharacteristic_prime v⟩
   refine ⟨hcoprimeTarget, hmod, ?_⟩
   rintro ⟨x, hx⟩
@@ -6073,9 +6073,9 @@ private theorem oddPrime_adjoinRoot_not_normal
     letI : Fact (Irreducible (X ^ (p : ℕ) - C (b : ℚ))) := ⟨H⟩
     ¬ Normal ℚ (AdjoinRoot (X ^ (p : ℕ) - C (b : ℚ))) := by
   let poly : ℚ[X] := X ^ (p : ℕ) - C (b : ℚ)
-  letI : Fact (Irreducible poly) := ⟨by simpa [poly] using H⟩
+  let : Fact (Irreducible poly) := ⟨by simpa [poly] using H⟩
   intro hnormal
-  letI : Normal ℚ (AdjoinRoot poly) := by
+  let : Normal ℚ (AdjoinRoot poly) := by
     simpa [poly] using hnormal
   have hpoly0 : poly ≠ 0 := by
     exact (by exact Fact.out : Irreducible poly).ne_zero
@@ -6138,19 +6138,19 @@ private theorem oddPrime_not_pow_in_cyclotomic
   let N : ℕ := (p : ℕ) ^ M
   have hN : 0 < N := pow_pos p.2.pos M
   let F := CyclotomicField N ℚ
-  letI : Field F := inferInstance
-  letI : Algebra ℚ F := inferInstance
-  letI : NeZero N := ⟨hN.ne'⟩
-  letI : IsCyclotomicExtension {N} ℚ F :=
+  let : Field F := inferInstance
+  let : Algebra ℚ F := inferInstance
+  let : NeZero N := ⟨hN.ne'⟩
+  let : IsCyclotomicExtension {N} ℚ F :=
     CyclotomicField.isCyclotomicExtension N ℚ
-  letI : IsAbelianGalois ℚ F :=
+  let : IsAbelianGalois ℚ F :=
     IsCyclotomicExtension.isAbelianGalois {N} ℚ F
   let poly : ℚ[X] := X ^ (p : ℕ) - C (b : ℚ)
   have hpoly : Irreducible poly := by simpa [poly] using H
-  letI : Fact (Irreducible poly) := ⟨hpoly⟩
+  let : Fact (Irreducible poly) := ⟨hpoly⟩
   let A := AdjoinRoot poly
-  letI : Field A := AdjoinRoot.instField
-  letI : Algebra ℚ A := inferInstance
+  let : Field A := AdjoinRoot.instField
+  let : Algebra ℚ A := inferInstance
   let cF : F := by simpa [F, N] using c
   have hcF : cF ^ (p : ℕ) = algebraMap ℚ F b := by
     simpa [cF, F, N] using hc
@@ -6158,7 +6158,7 @@ private theorem oddPrime_not_pow_in_cyclotomic
     simp [poly, hcF]
   let emb : A →ₐ[ℚ] F :=
     AdjoinRoot.liftAlgHom poly (Algebra.ofId ℚ F) cF heval
-  letI : IsAbelianGalois ℚ A := IsAbelianGalois.of_algHom emb
+  let : IsAbelianGalois ℚ A := IsAbelianGalois.of_algHom emb
   have hnormal : Normal ℚ A := IsGalois.to_normal
   exact oddPrime_adjoinRoot_not_normal p hp2 b hb H hnormal
 
@@ -6251,19 +6251,19 @@ private theorem no_square_in_twoPower_cyclotomic_of_oddFactor
   let N : ℕ := 2 ^ M
   have hN : 0 < N := pow_pos (by omega) M
   let F := CyclotomicField N ℚ
-  letI : Field F := inferInstance
-  letI : Algebra ℚ F := inferInstance
-  letI : NeZero N := ⟨hN.ne'⟩
-  letI : IsCyclotomicExtension {N} ℚ F :=
+  let : Field F := inferInstance
+  let : Algebra ℚ F := inferInstance
+  let : NeZero N := ⟨hN.ne'⟩
+  let : IsCyclotomicExtension {N} ℚ F :=
     CyclotomicField.isCyclotomicExtension N ℚ
-  letI : NumberField F :=
+  let : NumberField F :=
     IsCyclotomicExtension.numberField {N} ℚ F
-  letI : IsScalarTower ℤ ℚ F :=
+  let : IsScalarTower ℤ ℚ F :=
     IsScalarTower.of_algebraMap_eq' (by ext; simp)
-  letI : Fact (p : ℕ).Prime := ⟨p.2⟩
+  let : Fact (p : ℕ).Prime := ⟨p.2⟩
   intro c hc
   let q : Ideal ℤ := Ideal.span {((p : ℕ) : ℤ)}
-  letI : q.IsMaximal := by
+  let : q.IsMaximal := by
     simpa [q] using Int.ideal_span_isMaximal_of_prime (p : ℕ)
   obtain ⟨P, hPmax, hPq⟩ :=
     Ideal.exists_maximal_ideal_liesOver_of_isIntegral
@@ -6288,8 +6288,8 @@ private theorem no_square_in_twoPower_cyclotomic_of_oddFactor
   let w : IsDedekindDomain.HeightOneSpectrum
       (NumberField.RingOfIntegers F) :=
     ⟨P, hPmax.isPrime, hP0⟩
-  letI : P.LiesOver q := hPq
-  letI : w.asIdeal.LiesOver v.asIdeal := by
+  let : P.LiesOver q := hPq
+  let : w.asIdeal.LiesOver v.asIdeal := by
     simpa [v, w] using hPq
   have hpdvd : ¬(p : ℕ) ∣ N := by
     intro hdiv
@@ -6431,9 +6431,9 @@ private theorem quartic_adjoinRoot_not_normal
     letI : Fact (Irreducible (X ^ 4 - C (b : ℚ))) := ⟨H⟩
     ¬ Normal ℚ (AdjoinRoot (X ^ 4 - C (b : ℚ))) := by
   let poly : ℚ[X] := X ^ 4 - C (b : ℚ)
-  letI : Fact (Irreducible poly) := ⟨by simpa [poly] using H⟩
+  let : Fact (Irreducible poly) := ⟨by simpa [poly] using H⟩
   intro hnormal
-  letI : Normal ℚ (AdjoinRoot poly) := by
+  let : Normal ℚ (AdjoinRoot poly) := by
     simpa [poly] using hnormal
   have hpoly0 : poly ≠ 0 :=
     (by exact Fact.out : Irreducible poly).ne_zero
@@ -6515,20 +6515,20 @@ private theorem no_fourthPower_in_twoPower_cyclotomic
   let N : ℕ := 2 ^ M
   have hN : 0 < N := pow_pos (by omega) M
   let F := CyclotomicField N ℚ
-  letI : Field F := inferInstance
-  letI : Algebra ℚ F := inferInstance
-  letI : NeZero N := ⟨hN.ne'⟩
-  letI : IsCyclotomicExtension {N} ℚ F :=
+  let : Field F := inferInstance
+  let : Algebra ℚ F := inferInstance
+  let : NeZero N := ⟨hN.ne'⟩
+  let : IsCyclotomicExtension {N} ℚ F :=
     CyclotomicField.isCyclotomicExtension N ℚ
-  letI : IsAbelianGalois ℚ F :=
+  let : IsAbelianGalois ℚ F :=
     IsCyclotomicExtension.isAbelianGalois {N} ℚ F
   let poly : ℚ[X] := X ^ 4 - C (b : ℚ)
   have hpoly : Irreducible poly := by
     simpa [poly] using quartic_radical_irreducible b hb hbmax
-  letI : Fact (Irreducible poly) := ⟨hpoly⟩
+  let : Fact (Irreducible poly) := ⟨hpoly⟩
   let A := AdjoinRoot poly
-  letI : Field A := AdjoinRoot.instField
-  letI : Algebra ℚ A := inferInstance
+  let : Field A := AdjoinRoot.instField
+  let : Algebra ℚ A := inferInstance
   let cF : F := by simpa [F, N] using c
   have hcF : cF ^ 4 = algebraMap ℚ F b := by
     simpa [cF, F, N] using hc
@@ -6536,7 +6536,7 @@ private theorem no_fourthPower_in_twoPower_cyclotomic
     simp [poly, hcF]
   let emb : A →ₐ[ℚ] F :=
     AdjoinRoot.liftAlgHom poly (Algebra.ofId ℚ F) cF heval
-  letI : IsAbelianGalois ℚ A := IsAbelianGalois.of_algHom emb
+  let : IsAbelianGalois ℚ A := IsAbelianGalois.of_algHom emb
   have hnormal : Normal ℚ A := IsGalois.to_normal
   exact quartic_adjoinRoot_not_normal b hb
     (quartic_radical_irreducible b hb hbmax) hnormal
@@ -6552,10 +6552,10 @@ private theorem exists_squareRoot_in_exceptional_cyclotomic
   let N : ℕ := 2 ^ (M + 2)
   have hN : 0 < N := pow_pos (by omega) (M + 2)
   let F := CyclotomicField N ℚ
-  letI : Field F := inferInstance
-  letI : Algebra ℚ F := inferInstance
-  letI : NeZero N := ⟨hN.ne'⟩
-  letI : IsCyclotomicExtension {N} ℚ F :=
+  let : Field F := inferInstance
+  let : Algebra ℚ F := inferInstance
+  let : NeZero N := ⟨hN.ne'⟩
+  let : IsCyclotomicExtension {N} ℚ F :=
     CyclotomicField.isCyclotomicExtension N ℚ
   let zetaN : F := IsCyclotomicExtension.zeta N ℚ F
   have hzetaN : IsPrimitiveRoot zetaN N :=
@@ -6631,29 +6631,29 @@ private theorem twoPrime_exceptional_kummer_raw
   let N : ℕ := 2 ^ (M + 2)
   have hN : 0 < N := pow_pos (by omega) (M + 2)
   let F := CyclotomicField N ℚ
-  letI : Field F := inferInstance
-  letI : Algebra ℚ F := inferInstance
-  letI : NeZero N := ⟨hN.ne'⟩
-  letI : IsCyclotomicExtension {N} ℚ F :=
+  let : Field F := inferInstance
+  let : Algebra ℚ F := inferInstance
+  let : NeZero N := ⟨hN.ne'⟩
+  let : IsCyclotomicExtension {N} ℚ F :=
     CyclotomicField.isCyclotomicExtension N ℚ
-  letI : NumberField F :=
+  let : NumberField F :=
     IsCyclotomicExtension.numberField {N} ℚ F
-  letI : FiniteDimensional ℚ F :=
+  let : FiniteDimensional ℚ F :=
     IsCyclotomicExtension.finiteDimensional {N} ℚ F
-  letI : IsGalois ℚ F :=
+  let : IsGalois ℚ F :=
     IsCyclotomicExtension.isGalois {N} ℚ F
-  letI : Normal ℚ F := IsGalois.to_normal
+  let : Normal ℚ F := IsGalois.to_normal
   let aF : F := by simpa [F, N] using a
   have haF : aF ^ 2 = algebraMap ℚ F b := by
     simpa [aF, F, N] using ha
   let pF : F[X] := X ^ 2 - C aF
   have HpF : Irreducible pF := by simpa [F, N, aF, pF] using H
-  letI : Fact (Irreducible pF) := ⟨HpF⟩
+  let : Fact (Irreducible pF) := ⟨HpF⟩
   let E := AdjoinRoot pF
-  letI : Field E := AdjoinRoot.instField
-  letI : Algebra F E := inferInstance
-  letI : Algebra ℚ E := inferInstance
-  letI : IsScalarTower ℚ F E := inferInstance
+  let : Field E := AdjoinRoot.instField
+  let : Algebra F E := inferInstance
+  let : Algebra ℚ E := inferInstance
+  let : IsScalarTower ℚ F E := inferInstance
   let zetaN : F := IsCyclotomicExtension.zeta N ℚ F
   have hzetaN : IsPrimitiveRoot zetaN N :=
     IsCyclotomicExtension.zeta_spec N ℚ F
@@ -6665,7 +6665,7 @@ private theorem twoPrime_exceptional_kummer_raw
   have hzeta2 : IsPrimitiveRoot zeta2 2 := hzetaN.pow hN hNfac2
   have hroots2 : (primitiveRoots 2 F).Nonempty := by
     refine ⟨zeta2, (mem_primitiveRoots (by norm_num)).2 hzeta2⟩
-  letI : Polynomial.IsSplittingField F E pF := by
+  let : Polynomial.IsSplittingField F E pF := by
     exact isSplittingField_AdjoinRoot_X_pow_sub_C hroots2 HpF
   let d4 : ℕ := 2 ^ M
   have hNfac4 : N = d4 * 4 := by
@@ -6689,7 +6689,7 @@ private theorem twoPrime_exceptional_kummer_raw
     rw [halpha4F, IsScalarTower.algebraMap_apply ℚ F E]
   let gF : F[X] := X ^ 4 - C (algebraMap ℚ F b)
   have hgF0 : gF ≠ 0 := X_pow_sub_C_ne_zero (by norm_num) _
-  letI : Polynomial.IsSplittingField F E gF := by
+  let : Polynomial.IsSplittingField F E gF := by
     constructor
     · dsimp [gF]
       simpa using X_pow_sub_C_splits_of_isPrimitiveRoot
@@ -6707,19 +6707,19 @@ private theorem twoPrime_exceptional_kummer_raw
   have hg : g ≠ 0 := X_pow_sub_C_ne_zero (by norm_num) (b : ℚ)
   have hmapg : g.map (algebraMap ℚ F) = gF := by
     simp [g, gF]
-  letI : Polynomial.IsSplittingField F E (g.map (algebraMap ℚ F)) := by
+  let : Polynomial.IsSplittingField F E (g.map (algebraMap ℚ F)) := by
     rw [hmapg]
     infer_instance
-  letI : Polynomial.IsSplittingField ℚ F f := by
+  let : Polynomial.IsSplittingField ℚ F f := by
     simpa [f] using
       (IsCyclotomicExtension.isSplittingField_X_pow_sub_one N ℚ F)
-  letI : Polynomial.IsSplittingField ℚ E (f * g) :=
+  let : Polynomial.IsSplittingField ℚ E (f * g) :=
     Polynomial.IsSplittingField.mul (F := ℚ) (K := F) E f g hf hg
-  letI : FiniteDimensional ℚ E :=
+  let : FiniteDimensional ℚ E :=
     Polynomial.IsSplittingField.finiteDimensional E (f * g)
-  letI : NumberField E := NumberField.of_module_finite ℚ E
-  letI : Normal ℚ E := Normal.of_isSplittingField (f * g)
-  letI : IsGalois ℚ E := IsGalois.mk
+  let : NumberField E := NumberField.of_module_finite ℚ E
+  let : Normal ℚ E := Normal.of_isSplittingField (f * g)
+  let : IsGalois ℚ E := IsGalois.mk
   let eta : rootsOfUnity 2 F := hzeta2.toRootsOfUnity
   let sigmaF : E ≃ₐ[F] E := autAdjoinRootXPowSubC 2 aF eta
   let sigma : E ≃ₐ[ℚ] E := sigmaF.restrictScalars ℚ
@@ -6837,8 +6837,8 @@ private theorem twoPrime_exceptional_kummer_raw
         Nat.prime_two).mp hell_dvd_two)
     have hQunr : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers ℚ) Q.asIdeal := by
-      letI : P.asIdeal.LiesOver Q.asIdeal := hPQ
-      letI : Algebra.IsUnramifiedAt
+      let : P.asIdeal.LiesOver Q.asIdeal := hPQ
+      let : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers ℚ) P.asIdeal := hPunr
       exact Algebra.IsUnramifiedAt.of_liesOver
         (NumberField.RingOfIntegers ℚ) Q.asIdeal P.asIdeal
@@ -6903,15 +6903,15 @@ private theorem twoPrime_exceptional_kummer_raw
       rw [← NU.NeukirchUchida.LocalInvariants.residueCharacteristic_restrictFinitePlace ℚ P,
         hrestrictP]
     let k := NumberField.RingOfIntegers E ⧸ P.asIdeal
-    letI : Field k := Ideal.Quotient.field P.asIdeal
-    letI : Fintype k := Fintype.ofFinite k
+    let : Field k := Ideal.Quotient.field P.asIdeal
+    let : Fintype k := Fintype.ofFinite k
     have hringChar : ringChar k = NU.LocalTheory.residueCharacteristic v := by
       rw [Ideal.ringChar_quot,
         ← NU.NeukirchUchida.LocalInvariants.residueCharacteristic_eq_absNorm_under,
         hcharP]
-    letI : CharP k (NU.LocalTheory.residueCharacteristic v) :=
+    let : CharP k (NU.LocalTheory.residueCharacteristic v) :=
       (ringChar.eq_iff).mp hringChar
-    letI : P.asIdeal.LiesOver v.asIdeal := hPv
+    let : P.asIdeal.LiesOver v.asIdeal := hPv
     have hnormPcoprime : (Ideal.absNorm P.asIdeal).Coprime 2 := by
       rw [Ideal.absNorm_eq_pow_inertiaDeg_of_liesOver
         P.asIdeal v.asIdeal inferInstance v.ne_bot]
@@ -7027,9 +7027,9 @@ private theorem twoPrime_exceptional_kummer_raw
               rw [hmuldiv]
         _ = rxi := hrbeta_power
     refine ⟨hmodResult, ?_⟩
-    letI : Fact (NU.LocalTheory.residueCharacteristic v).Prime :=
+    let : Fact (NU.LocalTheory.residueCharacteristic v).Prime :=
       ⟨NU.NeukirchUchida.LocalInvariants.residueCharacteristic_prime v⟩
-    letI : Algebra (ZMod (NU.LocalTheory.residueCharacteristic v)) k :=
+    let : Algebra (ZMod (NU.LocalTheory.residueCharacteristic v)) k :=
       ZMod.algebra k (NU.LocalTheory.residueCharacteristic v)
     apply (algebraMap
       (ZMod (NU.LocalTheory.residueCharacteristic v)) k).injective
@@ -7102,7 +7102,7 @@ private theorem twoPrime_exceptional_case
   have hraw := twoPrime_exceptional_kummer_raw M b hM hb a ha hfield
   apply hraw.mono
   rintro ell ⟨hell, hmod, hquarter⟩
-  letI : Fact (ell : ℕ).Prime := ⟨ell.2⟩
+  let : Fact (ell : ℕ).Prime := ⟨ell.2⟩
   have hellb : ¬(ell : ℕ) ∣ b := by
     intro hdvd
     exact hell (dvd_trans hdvd (dvd_mul_left b 2))
@@ -7176,7 +7176,7 @@ private theorem twoPrime_exceptional_orderPrimes
   have hraw := twoPrime_exceptional_case M b hM hb hbmax hcase
   apply hraw.mono
   rintro ell ⟨hell, hmod, ⟨y, hy⟩, hfourth⟩
-  letI : Fact (ell : ℕ).Prime := ⟨ell.2⟩
+  let : Fact (ell : ℕ).Prime := ⟨ell.2⟩
   have hellb : ¬(ell : ℕ) ∣ b := by
     intro hdvd
     exact hell (dvd_trans hdvd (dvd_mul_left b 2))
@@ -7385,7 +7385,7 @@ private theorem profiniteInteger_nat_dvd_of_eq_mul
     exact ha (Nat.cast_injective htwo)
   apply (Nat.factorization_prime_le_iff_dvd hb ha).mp
   intro p hp
-  letI : Fact p.Prime := ⟨hp⟩
+  let : Fact p.Prime := ⟨hp⟩
   let P : Nat.Primes := ⟨p, hp⟩
   let k := b.factorization p
   have hcoord := congrFun h P
@@ -7615,9 +7615,9 @@ private theorem finiteLevelAbsoluteValuationMap_isLocal
     IsLocalHom (finiteLevelAbsoluteValuationMap P L) := by
   let e := finiteLevelValuationEquivComap P L
   let f := valuationComapInclusion L.field.val.toRingHom P.1
-  letI : IsLocalHom e.toRingHom :=
+  let : IsLocalHom e.toRingHom :=
     IsLocalHom.of_surjective e.toRingHom e.surjective
-  letI : IsLocalHom f := valuationComapInclusion_isLocal _ _
+  let : IsLocalHom f := valuationComapInclusion_isLocal _ _
   exact RingHom.isLocalHom_comp f e.toRingHom
 
 /-- Embedding of a finite residue field into the absolute residue field. -/
@@ -7640,7 +7640,7 @@ private theorem finiteLevelAbsoluteResidueMap_residue
       (NU.LocalTheory.absolutePlaceAtLevel P.1 P.2 L)) :
     finiteLevelAbsoluteResidueMap P L (IsLocalRing.residue _ x) =
       IsLocalRing.residue P.1 (finiteLevelAbsoluteValuationMap P L x) := by
-  letI : IsLocalHom (finiteLevelAbsoluteValuationMap P L) :=
+  let : IsLocalHom (finiteLevelAbsoluteValuationMap P L) :=
     finiteLevelAbsoluteValuationMap_isLocal P L
   exact IsLocalRing.ResidueField.map_residue _ _
 
@@ -7665,7 +7665,7 @@ private theorem finiteLevelResidueMap_residue
       (NU.LocalTheory.absolutePlaceAtLevel P.1 P.2 L)) :
     finiteLevelResidueMap P hLM (IsLocalRing.residue _ x) =
       IsLocalRing.residue _ (finiteLevelValuationMap P hLM x) := by
-  letI : IsLocalHom (finiteLevelValuationMap P hLM) :=
+  let : IsLocalHom (finiteLevelValuationMap P hLM) :=
     finiteLevelValuationMap_isLocal P hLM
   exact IsLocalRing.ResidueField.map_residue _ _
 
@@ -7708,7 +7708,7 @@ private theorem finiteLevelResidueAction_natural
     (NU.LocalTheory.absolutePlaceAtLevel P.1 P.2 M)
     (absoluteRestriction_stabilizes_place P g hg M)
   let f := finiteLevelValuationMap P hLM
-  letI : IsLocalHom f := finiteLevelValuationMap_isLocal P hLM
+  let : IsLocalHom f := finiteLevelValuationMap_isLocal P hLM
   apply residueMap_mapEquiv_commute f eL eM
   intro x
   apply Subtype.ext
@@ -7758,7 +7758,7 @@ private theorem absolutePlaceAtLevel_residueCharP
   have hA : NU.LocalTheory.primeValuationSubring w = A :=
     NU.LocalTheory.primeValuationSubring_centerFinitePlace _ _
   let f := valuationComapInclusion L.field.val.toRingHom P.1
-  letI : IsLocalHom f := valuationComapInclusion_isLocal _ _
+  let : IsLocalHom f := valuationComapInclusion_isLocal _ _
   let rm := IsLocalRing.ResidueField.map f
   have hcharA : CharP (IsLocalRing.ResidueField A) p :=
     (rm.charP_iff_charP p).mpr inferInstance
@@ -7832,11 +7832,11 @@ private theorem ambientResidueField_charP
   let p := NU.LocalTheory.residueCharacteristic v
   have hA : NU.LocalTheory.primeValuationSubring v = A :=
     primeValuationSubring_ambientFinitePlace P
-  letI hcharA : CharP (IsLocalRing.ResidueField A) p := by
+  let hcharA : CharP (IsLocalRing.ResidueField A) p := by
     rw [← hA]
     exact ringChar.charP _
   let f := valuationComapInclusion (algebraMap K Omega) P.1
-  letI : IsLocalHom f := valuationComapInclusion_isLocal _ _
+  let : IsLocalHom f := valuationComapInclusion_isLocal _ _
   let rm := IsLocalRing.ResidueField.map f
   exact (rm.charP_iff_charP p).mp hcharA
 
@@ -7867,15 +7867,15 @@ private theorem finiteLevelResidueAction_eq_primePower_of_cyclotomic
   let wL := NU.LocalTheory.absolutePlaceAtLevel P.1 P.2 L
   let k0 := NU.LocalTheory.ResidueFieldAt w0
   let kL := NU.LocalTheory.ResidueFieldAt wL
-  letI : Finite k0 := residueFieldAt_finite_matrix w0
-  letI : Finite kL := residueFieldAt_finite_matrix wL
-  letI : Fintype k0 := Fintype.ofFinite k0
-  letI : Fintype kL := Fintype.ofFinite kL
+  let : Finite k0 := residueFieldAt_finite_matrix w0
+  let : Finite kL := residueFieldAt_finite_matrix wL
+  let : Fintype k0 := Fintype.ofFinite k0
+  let : Fintype kL := Fintype.ofFinite kL
   have h0L : L0.LE L := by
     exact bot_le
   let iL : k0 →+* kL := finiteLevelResidueMap P h0L
-  letI : Algebra k0 kL := iL.toAlgebra
-  letI : Module k0 kL := @Algebra.toModule k0 kL _ _ iL.toAlgebra
+  let : Algebra k0 kL := iL.toAlgebra
+  let : Module k0 kL := @Algebra.toModule k0 kL _ _ iL.toAlgebra
   let tauL : kL ≃+* kL := finiteLevelResidueAction P g hg L
   let tauLAlg : kL ≃ₐ[k0] kL := AlgEquiv.ofRingEquiv (f := tauL) (by
     intro z
@@ -7891,9 +7891,9 @@ private theorem finiteLevelResidueAction_eq_primePower_of_cyclotomic
     rw [hd, Nat.card_eq_fintype_card, Nat.card_eq_fintype_card]
     exact Module.card_eq_pow_finrank
   let p := NU.LocalTheory.residueCharacteristic (ambientFinitePlace P)
-  letI : CharP (IsLocalRing.ResidueField P.1) p :=
+  let : CharP (IsLocalRing.ResidueField P.1) p :=
     ambientResidueField_charP P
-  letI : CharP k0 p := absolutePlaceAtLevel_residueCharP P L0 p
+  let : CharP k0 p := absolutePlaceAtLevel_residueCharP P L0 p
   obtain ⟨f, hp, hk0⟩ := FiniteField.card k0 p
   let fdeg : ℕ := f
   have hk0card : Nat.card k0 = p ^ fdeg := by
@@ -7928,9 +7928,9 @@ private theorem finiteLevelResidueAction_eq_primePower_of_cyclotomic
     have h0M : L0.LE M := le_trans h0L hLM
     let wM := NU.LocalTheory.absolutePlaceAtLevel P.1 P.2 M
     let kM := NU.LocalTheory.ResidueFieldAt wM
-    letI : Finite kM := residueFieldAt_finite_matrix wM
+    let : Finite kM := residueFieldAt_finite_matrix wM
     let iM : k0 →+* kM := finiteLevelResidueMap P h0M
-    letI : Algebra k0 kM := iM.toAlgebra
+    let : Algebra k0 kM := iM.toAlgebra
     let tauM : kM ≃+* kM := finiteLevelResidueAction P g hg M
     let tauMAlg : kM ≃ₐ[k0] kM := AlgEquiv.ofRingEquiv (f := tauM) (by
       intro z
@@ -7966,7 +7966,7 @@ private theorem finiteLevelResidueAction_eq_primePower_of_cyclotomic
       rootOfUnity_mem_valuationSubring AM (ell : ℕ) ell.2.ne_zero
         zetaM hpowM⟩
     let r : kM := IsLocalRing.residue AM zetaA
-    letI : CharP kM p := absolutePlaceAtLevel_residueCharP P M p
+    let : CharP kM p := absolutePlaceAtLevel_residueCharP P M p
     have hrpow : r ^ (ell : ℕ) = 1 := by
       rw [← map_pow]
       apply congrArg (IsLocalRing.residue AM)
@@ -8069,9 +8069,9 @@ private theorem finiteLevelResidueAction_eq_primePower_of_cyclotomic
       intro lambda m hlambda hlambdaDiv
       exact (Nat.modEq_iff_dvd' hle').1
         (hprimeMod lambda m hlambda hlambdaDiv).symm
-  letI : Fact p.Prime := ⟨hp⟩
-  letI : CharP kL p := absolutePlaceAtLevel_residueCharP P L p
-  letI : Algebra (ZMod p) kL := ZMod.algebra kL p
+  let : Fact p.Prime := ⟨hp⟩
+  let : CharP kL p := absolutePlaceAtLevel_residueCharP P L p
+  let : Algebra (ZMod p) kL := ZMod.algebra kL p
   have hfinrank : Module.finrank (ZMod p) kL = fdeg * d := by
     apply Nat.pow_right_injective hp.two_le
     calc
@@ -8237,7 +8237,7 @@ theorem ambientResidueNorm_eq_pow
         ambientResidueDegree P := by
   let v := ambientFinitePlace P
   let q := ambientRationalPrime P
-  letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
+  let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   rw [ambientResidueNorm, ambientResidueDegree]
   change NU.Chebotarev.PrimeIdeal.norm v =
     NU.Chebotarev.PrimeIdeal.norm q ^
@@ -8329,11 +8329,11 @@ private theorem openNormal_inter_decomposition_index_ge_four
       rw [hO]
       exact f.toMonoidHom.ker.one_mem
     exact h
-  letI : CompactSpace (Field.absoluteGaloisGroup K) :=
+  let : CompactSpace (Field.absoluteGaloisGroup K) :=
     NU.LocalTheory.absoluteGaloisGroup_compactSpace
-  letI : TotallyDisconnectedSpace (Field.absoluteGaloisGroup K) :=
+  let : TotallyDisconnectedSpace (Field.absoluteGaloisGroup K) :=
     NU.LocalTheory.absoluteGaloisGroup_totallyDisconnectedSpace
-  letI : CompactSpace D :=
+  let : CompactSpace D :=
     (NU.LocalTheory.absoluteDecompositionGroup_isClosed K P.1)
       |>.isClosedEmbedding_subtypeVal.compactSpace
   obtain ⟨N, hNO⟩ :=
@@ -8347,8 +8347,8 @@ private theorem openNormal_inter_decomposition_index_ge_four
   let U := Subgroup.comap D.subtype N.toSubgroup
   have hUopen : IsOpen (U : Set D) :=
     N.isOpen'.preimage continuous_subtype_val
-  letI : Finite (D ⧸ U) := U.quotient_finite_of_isOpen hUopen
-  letI : U.FiniteIndex := Subgroup.finiteIndex_of_finite_quotient
+  let : Finite (D ⧸ U) := U.quotient_finite_of_isOpen hUopen
+  let : U.FiniteIndex := Subgroup.finiteIndex_of_finite_quotient
   have hUker : U ≤ f.toMonoidHom.ker := by
     intro g hg
     have hgO : (g : Field.absoluteGaloisGroup K) ∈ O := hNO hg
@@ -8609,7 +8609,7 @@ private theorem finiteLevel_relativeDegree_eq_index
   let U := Subgroup.comap D.subtype N.toSubgroup
   have hrestrict : NU.LocalTheory.restrictFinitePlace K w = v :=
     restrictFinitePlace_finiteLevelAbsolutePlace P N
-  letI : w.asIdeal.LiesOver v.asIdeal := by
+  let : w.asIdeal.LiesOver v.asIdeal := by
     constructor
     rw [← hrestrict, NU.LocalTheory.restrictFinitePlace_asIdeal]
   have hdecomp : NU.LocalTheory.decompositionGroup K w =
@@ -8689,10 +8689,10 @@ private theorem finiteLevel_localDegree_eq_index_mul
             (NU.LocalTheory.restrictFinitePlace K w) :=
         (residueCharacteristic_restrictFinitePlace K w).symm
       _ = NU.LocalTheory.residueCharacteristic v := by rw [hrestrict]
-  letI : w.asIdeal.LiesOver v.asIdeal := by
+  let : w.asIdeal.LiesOver v.asIdeal := by
     constructor
     rw [← hrestrict, NU.LocalTheory.restrictFinitePlace_asIdeal]
-  letI : v.asIdeal.LiesOver q.asIdeal := by
+  let : v.asIdeal.LiesOver q.asIdeal := by
     constructor
     rfl
   have hrel : w.asIdeal.ramificationIdx (NumberField.RingOfIntegers K) *
@@ -8705,7 +8705,7 @@ private theorem finiteLevel_localDegree_eq_index_mul
       finitePlaceLocalDegree v *
         (w.asIdeal.ramificationIdx (NumberField.RingOfIntegers K) *
           w.asIdeal.inertiaDeg (NumberField.RingOfIntegers K)) := by
-    letI := Localization.AtPrime.algebraOfLiesOver v.asIdeal w.asIdeal
+    let := Localization.AtPrime.algebraOfLiesOver v.asIdeal w.asIdeal
     unfold finitePlaceLocalDegree
     set_option synthInstance.maxHeartbeats 400000 in
     rw [Ideal.ramificationIdx'_tower' v.asIdeal w.asIdeal,
@@ -9032,7 +9032,7 @@ private theorem ambientCyclotomicScalar_eq_natCast_of_power
       (ambientFinitePlace P) ≠ (ell : ℕ)) :
     ambientCyclotomicScalar R ell g = (N : ZMod (ell : ℕ)) := by
   let p := NU.LocalTheory.residueCharacteristic (ambientFinitePlace P)
-  letI : CharP (IsLocalRing.ResidueField P.1) p :=
+  let : CharP (IsLocalRing.ResidueField P.1) p :=
     ambientResidueField_charP P
   have hrootPower : ∀ zeta : Omega, zeta ^ (ell : ℕ) = 1 →
       g • zeta = zeta ^ N := by
@@ -9160,7 +9160,7 @@ private theorem ambientCyclotomicScalar_eq_one_of_inertia
       (ambientFinitePlace P) ≠ (ell : ℕ)) :
     ambientCyclotomicScalar R ell g = 1 := by
   let p := NU.LocalTheory.residueCharacteristic (ambientFinitePlace P)
-  letI : CharP (IsLocalRing.ResidueField P.1) p :=
+  let : CharP (IsLocalRing.ResidueField P.1) p :=
     ambientResidueField_charP P
   have hrootfix : ∀ zeta : Omega, zeta ^ (ell : ℕ) = 1 →
       g • zeta = zeta := by
@@ -9617,7 +9617,7 @@ private theorem ambientAlgebraicResidueTowerData
     (P : AmbientAbsolutePlace K Omega) :
     AmbientAlgebraicResidueTower P where
   residue_isAlgClosed := by
-    letI : IsAlgClosed Omega := ambientField_isAlgClosed R
+    let : IsAlgClosed Omega := ambientField_isAlgClosed R
     exact valuationSubring_residue_isAlgClosed P.1
   residue_charP := ambientResidueField_charP P
 
@@ -9666,13 +9666,13 @@ private theorem finiteLevelArithmeticFrobenius_exists
   let R := 𝓞 K
   let S := 𝓞 L.field
   let p : Ideal R := w.asIdeal.under R
-  letI : p.IsPrime := inferInstance
-  letI : p.IsMaximal := inferInstance
-  letI : w.asIdeal.LiesOver p := ⟨rfl⟩
-  letI : Field (R ⧸ p) := Ideal.Quotient.field p
-  letI : Field (S ⧸ w.asIdeal) := Ideal.Quotient.field w.asIdeal
-  letI : Fintype (R ⧸ p) := Fintype.ofFinite _
-  letI : Fintype (S ⧸ w.asIdeal) := Fintype.ofFinite _
+  let : p.IsPrime := inferInstance
+  let : p.IsMaximal := inferInstance
+  let : w.asIdeal.LiesOver p := ⟨rfl⟩
+  let : Field (R ⧸ p) := Ideal.Quotient.field p
+  let : Field (S ⧸ w.asIdeal) := Ideal.Quotient.field w.asIdeal
+  let : Fintype (R ⧸ p) := Fintype.ofFinite _
+  let : Fintype (S ⧸ w.asIdeal) := Fintype.ofFinite _
   let frob : (S ⧸ w.asIdeal) ≃ₐ[R ⧸ p] (S ⧸ w.asIdeal) :=
     FiniteField.frobeniusAlgEquivOfAlgebraic _ _
   obtain ⟨sigma, hsigma⟩ :=
@@ -9700,7 +9700,7 @@ private theorem finiteLevelArithmeticFrobenius_exists
       (Ideal.Quotient.mk w.asIdeal a)
     rw [Ideal.Quotient.stabilizerHom_apply] at h
     exact h.trans (hfrob _)
-  letI := NU.LocalTheory.finitePlaceAction K L.field
+  let := NU.LocalTheory.finitePlaceAction K L.field
   let sigmaD : NU.LocalTheory.decompositionGroup K w :=
     ⟨sigma.1, by
       apply IsDedekindDomain.HeightOneSpectrum.ext
@@ -9716,7 +9716,7 @@ private theorem finiteLevelArithmeticFrobenius_exists
   obtain ⟨z, rfl⟩ := e.surjective x
   obtain ⟨a, rfl⟩ := Ideal.Quotient.mk_surjective z
   let A := NU.LocalTheory.primeValuationSubring w
-  letI hfrac : IsFractionRing S L.field := inferInstance
+  let hfrac : IsFractionRing S L.field := inferInstance
   let bA (b : S) : A := ⟨(b : L.field), by
     rw [NU.LocalTheory.mem_primeValuationSubring_iff]
     exact ⟨b, 1, (Ideal.ne_top_iff_one w.asIdeal).mp w.isPrime.ne_top, by
@@ -9889,9 +9889,9 @@ private theorem absoluteArithmeticFrobenius_exists
     exact ⟨N,
       isFiniteLevelArithmeticFrobenius_antitone P le_sup_left,
       isFiniteLevelArithmeticFrobenius_antitone P le_sup_right⟩
-  letI : CompactSpace (Field.absoluteGaloisGroup K) :=
+  let : CompactSpace (Field.absoluteGaloisGroup K) :=
     NU.LocalTheory.absoluteGaloisGroup_compactSpace
-  letI : CompactSpace D :=
+  let : CompactSpace D :=
     (NU.LocalTheory.absoluteDecompositionGroup_isClosed K P.1)
       |>.isClosedEmbedding_subtypeVal.compactSpace
   obtain ⟨g, hg⟩ :=
@@ -9934,9 +9934,9 @@ private theorem finiteField_degree_dvd_of_frobenius_pow_eq
     (p f a : ℕ) (hp : p.Prime) [CharP F p]
     (hcard : Nat.card F = p ^ f)
     (hfix : ∀ x : F, x ^ (p ^ a) = x) : f ∣ a := by
-  letI : Fact p.Prime := ⟨hp⟩
-  letI : Fintype F := Fintype.ofFinite F
-  letI : Algebra (ZMod p) F := ZMod.algebra F p
+  let : Fact p.Prime := ⟨hp⟩
+  let : Fintype F := Fintype.ofFinite F
+  let : Algebra (ZMod p) F := ZMod.algebra F p
   let frob := FiniteField.frobeniusAlgEquivOfAlgebraic (ZMod p) F
   have hfrob : frob ^ a = 1 := by
     apply DFunLike.ext _ _
@@ -9990,7 +9990,7 @@ private theorem ambientResidueDegree_dvd_powerExponent
       IsLocalRing.ResidueField A :=
     IsLocalRing.ResidueField.mapEquiv eA
   let inc := valuationComapInclusion (algebraMap K Omega) P.1
-  letI : IsLocalHom inc := valuationComapInclusion_isLocal _ _
+  let : IsLocalHom inc := valuationComapInclusion_isLocal _ _
   let rm := IsLocalRing.ResidueField.map inc
   let i : NU.LocalTheory.ResidueFieldAt v →+*
       IsLocalRing.ResidueField P.1 := rm.comp er.toRingHom
@@ -10032,7 +10032,7 @@ private theorem ambientResidueDegree_dvd_powerExponent
       _ = g • algebraMap K Omega (x : K) := by
         simp [ga]
   let k := NU.LocalTheory.ResidueFieldAt v
-  letI : Finite k := residueFieldAt_finite_matrix v
+  let : Finite k := residueFieldAt_finite_matrix v
   have hcard : Nat.card k = p ^ fdeg := by
     calc
       Nat.card k = Ideal.absNorm v.asIdeal :=
@@ -10040,7 +10040,7 @@ private theorem ambientResidueDegree_dvd_powerExponent
       _ = ambientResidueNorm P := rfl
       _ = p ^ fdeg :=
         ambientResidueNorm_eq_residueCharacteristic_pow P
-  letI : CharP k p := ringChar.charP k
+  let : CharP k p := ringChar.charP k
   exact finiteField_degree_dvd_of_frobenius_pow_eq p fdeg a
     (residueCharacteristic_prime v) hcard hfix
 
@@ -10197,7 +10197,7 @@ private theorem actsAsPowerOnResidue_primePower_exponent_unique
     (ha : ActsAsPowerOnResidue P.1 g (p ^ a))
     (hb : ActsAsPowerOnResidue P.1 g (p ^ b)) : a = b := by
   let F := IsLocalRing.ResidueField P.1
-  letI : IsAlgClosed F := tower.residue_isAlgClosed
+  let : IsAlgClosed F := tower.residue_isAlgClosed
   have hpowers : ∀ z : F, z ^ (p ^ a) = z ^ (p ^ b) := by
     intro z
     obtain ⟨x, rfl⟩ := IsLocalRing.residue_surjective z
@@ -10431,9 +10431,9 @@ private theorem actsAsPowerOnResidue_exponent_primePower
       NU.LocalTheory.residueCharacteristic (ambientFinitePlace P) ^ a := by
   let p := NU.LocalTheory.residueCharacteristic (ambientFinitePlace P)
   let F := IsLocalRing.ResidueField P.1
-  letI : IsAlgClosed F := tower.residue_isAlgClosed
-  letI : CharP F p := tower.residue_charP
-  letI : Fact p.Prime := ⟨residueCharacteristic_prime (ambientFinitePlace P)⟩
+  let : IsAlgClosed F := tower.residue_isAlgClosed
+  let : CharP F p := tower.residue_charP
+  let : Fact p.Prime := ⟨residueCharacteristic_prime (ambientFinitePlace P)⟩
   exact additive_power_exponent_eq_primePower p N
     (actsAsPowerOnResidue_ne_zero P.1 g N hpower)
     (actsAsPowerOnResidue_additive P.1 g N hg hpower)
@@ -10593,7 +10593,7 @@ private theorem actsAsPowerOnResidue_iff_coordinate_nat
     have hf : ambientResidueDegree P ≠ 0 := by
       let v := ambientFinitePlace P
       let p := ambientRationalPrime P
-      letI : v.asIdeal.LiesOver p.asIdeal := ⟨rfl⟩
+      let : v.asIdeal.LiesOver p.asIdeal := ⟨rfl⟩
       exact (Ideal.inertiaDeg_pos v.asIdeal
         (NumberField.RingOfIntegers ℚ)).ne'
     have hcoordinate : D.coordinate g = profiniteIntegerOfNat j := by
@@ -10719,7 +10719,7 @@ private theorem ambientUnramifiedLocalData_exists
   have hfne : ambientResidueDegree P₁ ≠ 0 := by
     let v := ambientFinitePlace P₁
     let p := ambientRationalPrime P₁
-    letI : v.asIdeal.LiesOver p.asIdeal := ⟨rfl⟩
+    let : v.asIdeal.LiesOver p.asIdeal := ⟨rfl⟩
     exact (Ideal.inertiaDeg_pos v.asIdeal
       (NumberField.RingOfIntegers ℚ)).ne'
   have htheta (g : G₁)
@@ -10930,7 +10930,7 @@ private theorem ambientResidueDegree_pos
     0 < ambientResidueDegree P := by
   let v := ambientFinitePlace P
   let p := ambientRationalPrime P
-  letI : v.asIdeal.LiesOver p.asIdeal := ⟨rfl⟩
+  let : v.asIdeal.LiesOver p.asIdeal := ⟨rfl⟩
   exact Ideal.inertiaDeg_pos v.asIdeal
     (NumberField.RingOfIntegers ℚ)
 

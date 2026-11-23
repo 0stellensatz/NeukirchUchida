@@ -134,7 +134,7 @@ private theorem affineLatticeIndexSet_finite (v : E) {S : Set E} (hS : IsBounded
 /-- The ambient intersection of a bounded set with an affine lattice is finite. -/
 theorem finite_affineLatticePointSubtype (v : E) {S : Set E} (hS : IsBounded S) :
     Finite {x : E // x ∈ S ∧ x - v ∈ L} := by
-  letI : Fintype (affineLatticeIndexSet L v S) :=
+  let : Fintype (affineLatticeIndexSet L v S) :=
     (affineLatticeIndexSet_finite L v hS).fintype
   exact Finite.of_equiv _ (affineLatticePointEquiv L v S)
 
@@ -237,7 +237,7 @@ theorem abs_affineLatticePointCount_sub_volume_div_covolume_le_boundaryCells
       simpa only [A, affineLatticeIndexSet, Set.mem_setOf_eq] using
         (fun hl => hlt (hAt hl))
     rw [inter_fundamentalCell_eq_empty_of_not_mem L b v S l hlB hlA, measure_empty]
-  letI : VAddInvariantMeasure L E μ :=
+  let : VAddInvariantMeasure L E μ :=
     ⟨fun l s _ => by
       simpa only [Submodule.vadd_def, vadd_eq_add] using
         measure_preimage_add μ (l : E) s⟩

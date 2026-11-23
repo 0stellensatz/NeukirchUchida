@@ -453,15 +453,15 @@ noncomputable def ambientAbsoluteGaloisEquiv (F : NumberFieldInOmega) :
     obtain ⟨E, hEfin, hEs⟩ :=
       (krullTopology_mem_nhds_one_iff F.field
         (AlgebraicClosure F.field) s).mp hs'
-    letI : FiniteDimensional F.field E := hEfin
+    let : FiniteDimensional F.field E := hEfin
     let EΩ : IntermediateField F.field Omega :=
       E.map (ambientClosureEquiv F).toAlgHom
     let eE : E ≃ₐ[F.field] EΩ := by
       exact E.toSubalgebra.equivMapOfInjective
         (ambientClosureEquiv F).toAlgHom (ambientClosureEquiv F).injective
-    letI : FiniteDimensional F.field EΩ :=
+    let : FiniteDimensional F.field EΩ :=
       Module.Finite.equiv eE.toLinearEquiv
-    letI : FiniteDimensional ℚ EΩ := FiniteDimensional.trans ℚ F.field EΩ
+    let : FiniteDimensional ℚ EΩ := FiniteDimensional.trans ℚ F.field EΩ
     let Eℚ : IntermediateField ℚ Omega := EΩ.restrictScalars ℚ
     let eRestrict : EΩ ≃ₐ[ℚ] Eℚ :=
       { toFun := fun x => ⟨x.1, x.2⟩
@@ -471,7 +471,7 @@ noncomputable def ambientAbsoluteGaloisEquiv (F : NumberFieldInOmega) :
         map_mul' := fun _ _ => rfl
         map_add' := fun _ _ => rfl
         commutes' := fun _ => rfl }
-    letI : FiniteDimensional ℚ Eℚ :=
+    let : FiniteDimensional ℚ Eℚ :=
       Module.Finite.equiv eRestrict.toLinearEquiv
     have hEℚopen : IsOpen
         (Subtype.val ⁻¹'

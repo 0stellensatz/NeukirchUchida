@@ -142,7 +142,7 @@ private theorem completionResidueFinite
     {K : Type*} [Field K] [NumberField K]
     (v : NU.LocalTheory.FinitePlace K) :
     Finite (Valued.ResidueField (v.adicCompletion K)) := by
-  letI : Finite ((𝓞 K) ⧸ v.asIdeal) :=
+  let : Finite ((𝓞 K) ⧸ v.asIdeal) :=
     v.asIdeal.finiteQuotientOfFreeOfNeBot v.ne_bot
   exact Finite.of_equiv ((𝓞 K) ⧸ v.asIdeal)
     (completionResidueEquiv v).toEquiv
@@ -162,26 +162,26 @@ private theorem completionIsLocalField
     (v : NU.LocalTheory.FinitePlace K) :
     letI : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
     IsNonarchimedeanLocalField (v.adicCompletion K) := by
-  letI : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
-  letI : Finite ((𝓞 K) ⧸ v.asIdeal) :=
+  let : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
+  let : Finite ((𝓞 K) ⧸ v.asIdeal) :=
     v.asIdeal.finiteQuotientOfFreeOfNeBot v.ne_bot
-  letI : IsDiscreteValuationRing (Valued.integer (v.adicCompletion K)) := by
+  let : IsDiscreteValuationRing (Valued.integer (v.adicCompletion K)) := by
     change IsDiscreteValuationRing (v.adicCompletionIntegers K)
     infer_instance
-  letI : Finite (Valued.ResidueField (v.adicCompletion K)) :=
+  let : Finite (Valued.ResidueField (v.adicCompletion K)) :=
     completionResidueFinite v
-  letI : ProperSpace (v.adicCompletion K) :=
+  let : ProperSpace (v.adicCompletion K) :=
     (@Valued.integer.properSpace_iff_completeSpace_and_isDiscreteValuationRing_integer_and_finite_residueField
       (v.adicCompletion K) _ _ _ _).2 ⟨inferInstance, inferInstance, inferInstance⟩
-  letI : LocallyCompactSpace (v.adicCompletion K) := by infer_instance
+  let : LocallyCompactSpace (v.adicCompletion K) := by infer_instance
   let vF := (Valued.v : Valuation (v.adicCompletion K) _)
-  letI : vF.Compatible := Valuation.Compatible.ofValuation vF
-  letI : IsValuativeTopology (v.adicCompletion K) := by
+  let : vF.Compatible := Valuation.Compatible.ofValuation vF
+  let : IsValuativeTopology (v.adicCompletion K) := by
     apply IsValuativeTopology.of_zero
     intro s
     rw [Valued.is_topological_valuation s]
     simpa using vF.exists_setOf_restrict_le_iff 0 s
-  letI : ValuativeRel.IsNontrivial (v.adicCompletion K) :=
+  let : ValuativeRel.IsNontrivial (v.adicCompletion K) :=
     (ValuativeRel.isNontrivial_iff_isNontrivial vF).2 inferInstance
   exact
     { toIsValuativeTopology := inferInstance
@@ -197,9 +197,9 @@ private theorem completionResidueCard_eq_norm
     residueCard (v.adicCompletion K) =
       NU.Chebotarev.PrimeIdeal.norm v := by
   let F := v.adicCompletion K
-  letI : ValuativeRel F := completionValuativeRel v
+  let : ValuativeRel F := completionValuativeRel v
   let vF := (Valued.v : Valuation F _)
-  letI : vF.Compatible := Valuation.Compatible.ofValuation vF
+  let : vF.Compatible := Valuation.Compatible.ofValuation vF
   have hv : (ValuativeRel.valuation F).IsEquiv vF :=
     ValuativeRel.isEquiv _ _
   have hsub : (ValuativeRel.valuation F).valuationSubring =
@@ -222,11 +222,11 @@ private theorem residueCharacteristic_eq_absNorm_under
     (v : NU.LocalTheory.FinitePlace K) :
     NU.LocalTheory.residueCharacteristic v =
       Ideal.absNorm (Ideal.under ℤ v.asIdeal) := by
-  letI : Algebra (𝓞 K) (NU.LocalTheory.primeValuationSubring v) :=
+  let : Algebra (𝓞 K) (NU.LocalTheory.primeValuationSubring v) :=
     show Algebra (𝓞 K)
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v) from
         inferInstance
-  letI : IsLocalization.AtPrime
+  let : IsLocalization.AtPrime
       (NU.LocalTheory.primeValuationSubring v) v.asIdeal :=
     show IsLocalization.AtPrime
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
@@ -247,13 +247,13 @@ private theorem rational_residueCharacteristic_eq_norm
     (q : NU.LocalTheory.FinitePlace ℚ) :
     NU.LocalTheory.residueCharacteristic q =
       NU.Chebotarev.PrimeIdeal.norm q := by
-  letI : q.asIdeal.IsMaximal := q.isMaximal
+  let : q.asIdeal.IsMaximal := q.isMaximal
   let J : Ideal ℤ := Ideal.map Rat.ringOfIntegersEquiv q.asIdeal
-  letI : J.IsMaximal :=
+  let : J.IsMaximal :=
     Ideal.map_isMaximal_of_equiv Rat.ringOfIntegersEquiv
-  letI : Field ((𝓞 ℚ) ⧸ q.asIdeal) :=
+  let : Field ((𝓞 ℚ) ⧸ q.asIdeal) :=
     Ideal.Quotient.field q.asIdeal
-  letI : Field (ℤ ⧸ J) := Ideal.Quotient.field J
+  let : Field (ℤ ⧸ J) := Ideal.Quotient.field J
   let e : ((𝓞 ℚ) ⧸ q.asIdeal) ≃+* (ℤ ⧸ J) :=
     Ideal.quotientEquiv q.asIdeal J Rat.ringOfIntegersEquiv rfl
   have hchar : ringChar ((𝓞 ℚ) ⧸ q.asIdeal) =
@@ -276,12 +276,12 @@ private theorem rational_residueCharacteristic_eq_norm
     NU.LocalTheory.residueCharacteristic q =
         ringChar ((𝓞 ℚ) ⧸ q.asIdeal) := by
       rw [NU.LocalTheory.residueCharacteristic, ringChar.eq_iff]
-      letI : Algebra (𝓞 ℚ)
+      let : Algebra (𝓞 ℚ)
           (NU.LocalTheory.primeValuationSubring q) :=
         show Algebra (𝓞 ℚ)
           (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime ℚ q) from
             inferInstance
-      letI : IsLocalization.AtPrime
+      let : IsLocalization.AtPrime
           (NU.LocalTheory.primeValuationSubring q) q.asIdeal :=
         show IsLocalization.AtPrime
           (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime ℚ q)
@@ -347,7 +347,7 @@ private theorem residueCharacteristic_coprime_norm_sub_one
     (hp : (p : ℕ) = NU.LocalTheory.residueCharacteristic v) :
     (p : ℕ).Coprime (NU.Chebotarev.PrimeIdeal.norm v - 1) := by
   let q := NU.LocalTheory.restrictFinitePlace ℚ v
-  letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
+  let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hnorm : NU.Chebotarev.PrimeIdeal.norm v =
       NU.Chebotarev.PrimeIdeal.norm q ^
         q.asIdeal.inertiaDeg' v.asIdeal := by
@@ -425,7 +425,7 @@ private theorem rationalCompletionMap_hasExtension
     (Valued.v : Valuation (q.adicCompletion ℚ) ℤᵐ⁰).HasExtension
       (Valued.v : Valuation (v.adicCompletion K) ℤᵐ⁰) := by
   let q := NU.LocalTheory.restrictFinitePlace ℚ v
-  letI : Algebra (q.adicCompletion ℚ) (v.adicCompletion K) :=
+  let : Algebra (q.adicCompletion ℚ) (v.adicCompletion K) :=
     (rationalCompletionMap v).toAlgebra
   apply Valuation.HasExtension.ofComapInteger
   ext x
@@ -466,7 +466,7 @@ private theorem rationalCompletionMap_hasExtension
   simp only [Function.comp_apply, Algebra.algebraMap_self, RingHom.id_apply]
   rw [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation',
     IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
-  letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
+  let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   rw [← IsDedekindDomain.HeightOneSpectrum.valuation_liesOver K q v a]
   exact (pow_le_one_iff (M := ℤᵐ⁰)
     (Ideal.ramificationIdx_pos (q := v.asIdeal) (𝓞 ℚ)).ne').symm
@@ -492,9 +492,9 @@ private theorem rationalCompletionMap_module_finite
       (rationalCompletionMap v).toAlgebra
     Module.Finite (q.adicCompletion ℚ) (v.adicCompletion K) := by
   let q := NU.LocalTheory.restrictFinitePlace ℚ v
-  letI : Algebra (q.adicCompletion ℚ) (v.adicCompletion K) :=
+  let : Algebra (q.adicCompletion ℚ) (v.adicCompletion K) :=
     (rationalCompletionMap v).toAlgebra
-  letI : ContinuousSMul (q.adicCompletion ℚ) (v.adicCompletion K) :=
+  let : ContinuousSMul (q.adicCompletion ℚ) (v.adicCompletion K) :=
     ⟨by
       have h := ((continuous_rationalCompletionMap v).comp continuous_fst).mul
         continuous_snd
@@ -502,7 +502,7 @@ private theorem rationalCompletionMap_module_finite
         rationalCompletionMap v z.1 * z.2
       convert h using 1
       rfl⟩
-  letI : IsScalarTower ℚ (q.adicCompletion ℚ) (v.adicCompletion K) :=
+  let : IsScalarTower ℚ (q.adicCompletion ℚ) (v.adicCompletion K) :=
     .of_algebraMap_eq fun x => by
       rw [RingHom.algebraMap_toAlgebra]
       exact (rationalCompletionMap_algebraMap v x).symm
@@ -527,34 +527,34 @@ private theorem rationalCompletionIntegers_module_finite
   let q := NU.LocalTheory.restrictFinitePlace ℚ v
   let Fb := q.adicCompletion ℚ
   let F := v.adicCompletion K
-  letI : Algebra Fb F := (rationalCompletionMap v).toAlgebra
-  letI : ContinuousSMul Fb F :=
+  let : Algebra Fb F := (rationalCompletionMap v).toAlgebra
+  let : ContinuousSMul Fb F :=
     ⟨by
       have h := ((continuous_rationalCompletionMap v).comp continuous_fst).mul
         continuous_snd
       change Continuous fun z : Fb × F => rationalCompletionMap v z.1 * z.2
       convert h using 1
       rfl⟩
-  letI : IsScalarTower ℚ Fb F :=
+  let : IsScalarTower ℚ Fb F :=
     .of_algebraMap_eq fun x => by
       rw [RingHom.algebraMap_toAlgebra]
       exact (rationalCompletionMap_algebraMap v x).symm
-  letI : Module.Finite Fb F := rationalCompletionMap_module_finite v
-  letI : (Valued.v : Valuation Fb ℤᵐ⁰).HasExtension
+  let : Module.Finite Fb F := rationalCompletionMap_module_finite v
+  let : (Valued.v : Valuation Fb ℤᵐ⁰).HasExtension
       (Valued.v : Valuation F ℤᵐ⁰) :=
     rationalCompletionMap_hasExtension v
-  letI : Algebra (q.adicCompletionIntegers ℚ)
+  let : Algebra (q.adicCompletionIntegers ℚ)
       (v.adicCompletionIntegers K) :=
     Valuation.HasExtension.instAlgebraInteger
-  letI : ValuativeRel Fb := completionValuativeRel q
-  letI : ValuativeRel F := completionValuativeRel v
+  let : ValuativeRel Fb := completionValuativeRel q
+  let : ValuativeRel F := completionValuativeRel v
   let vFb := (Valued.v : Valuation Fb ℤᵐ⁰)
   let vF := (Valued.v : Valuation F ℤᵐ⁰)
-  letI : vFb.Compatible := Valuation.Compatible.ofValuation vFb
-  letI : vF.Compatible := Valuation.Compatible.ofValuation vF
-  letI : IsNonarchimedeanLocalField Fb := completionIsLocalField q
-  letI : IsNonarchimedeanLocalField F := completionIsLocalField v
-  letI : ValuativeExtension Fb F := ⟨fun {a b} => by
+  let : vFb.Compatible := Valuation.Compatible.ofValuation vFb
+  let : vF.Compatible := Valuation.Compatible.ofValuation vF
+  let : IsNonarchimedeanLocalField Fb := completionIsLocalField q
+  let : IsNonarchimedeanLocalField F := completionIsLocalField v
+  let : ValuativeExtension Fb F := ⟨fun {a b} => by
     rw [Valuation.Compatible.vle_iff_le
         (v := ValuativeRel.valuation F),
       Valuation.Compatible.vle_iff_le
@@ -562,7 +562,7 @@ private theorem rationalCompletionIntegers_module_finite
       (ValuativeRel.isEquiv (ValuativeRel.valuation F) vF).le_iff_le,
       (ValuativeRel.isEquiv (ValuativeRel.valuation Fb) vFb).le_iff_le]
     exact Valuation.HasExtension.val_map_le_iff vFb vF a b⟩
-  letI : (ValuativeRel.valuation Fb).HasExtension
+  let : (ValuativeRel.valuation Fb).HasExtension
       (ValuativeRel.valuation F) := by
     constructor
     exact ValuativeRel.isEquiv _ _
@@ -582,7 +582,7 @@ private theorem rationalCompletionIntegers_module_finite
   let eF : (ValuativeRel.valuation F).valuationSubring ≃+*
       vF.valuationSubring :=
     RingEquiv.subringCongr (congrArg ValuationSubring.toSubring hF)
-  letI : Module.Finite
+  let : Module.Finite
       ((ValuativeRel.valuation Fb).valuationSubring)
       ((ValuativeRel.valuation F).valuationSubring) := hfin
   exact Module.Finite.of_equiv_equiv eFb eF (by
@@ -625,42 +625,42 @@ private theorem rationalCompletion_finrank_eq_localDegree
   let q := NU.LocalTheory.restrictFinitePlace ℚ v
   let Fb := q.adicCompletion ℚ
   let F := v.adicCompletion K
-  letI : Algebra Fb F := (rationalCompletionMap v).toAlgebra
-  letI : ContinuousSMul Fb F :=
+  let : Algebra Fb F := (rationalCompletionMap v).toAlgebra
+  let : ContinuousSMul Fb F :=
     ⟨by
       have h := ((continuous_rationalCompletionMap v).comp continuous_fst).mul
         continuous_snd
       change Continuous fun z : Fb × F => rationalCompletionMap v z.1 * z.2
       convert h using 1
       rfl⟩
-  letI : IsScalarTower ℚ Fb F :=
+  let : IsScalarTower ℚ Fb F :=
     .of_algebraMap_eq fun x => by
       rw [RingHom.algebraMap_toAlgebra]
       exact (rationalCompletionMap_algebraMap v x).symm
-  letI : Module.Finite Fb F := rationalCompletionMap_module_finite v
+  let : Module.Finite Fb F := rationalCompletionMap_module_finite v
   let vFb := (Valued.v : Valuation Fb ℤᵐ⁰)
   let vF := (Valued.v : Valuation F ℤᵐ⁰)
   let A := vFb.valuationSubring
   let B := vF.valuationSubring
-  letI : vFb.HasExtension vF := rationalCompletionMap_hasExtension v
-  letI : Algebra A B := Valuation.HasExtension.instAlgebraInteger
-  letI : IsScalarTower A Fb F :=
+  let : vFb.HasExtension vF := rationalCompletionMap_hasExtension v
+  let : Algebra A B := Valuation.HasExtension.instAlgebraInteger
+  let : IsScalarTower A Fb F :=
     Valuation.HasExtension.instIsScalarTower_valuationSubring vFb
-  letI : IsScalarTower A B F :=
+  let : IsScalarTower A B F :=
     Valuation.HasExtension.instIsScalarTower_valuationSubring' vFb vF
-  letI : Module.Finite A B :=
+  let : Module.Finite A B :=
     rationalCompletionIntegers_module_finite v
   let pA : Ideal A := IsLocalRing.maximalIdeal A
   let pB : Ideal B := IsLocalRing.maximalIdeal B
-  letI : pA.IsMaximal := IsLocalRing.maximalIdeal.isMaximal A
-  letI : pB.IsMaximal := IsLocalRing.maximalIdeal.isMaximal B
-  letI : Field (A ⧸ pA) := Ideal.Quotient.field pA
-  letI : Field (B ⧸ pB) := Ideal.Quotient.field pB
-  letI : pB.LiesOver pA := ⟨by
+  let : pA.IsMaximal := IsLocalRing.maximalIdeal.isMaximal A
+  let : pB.IsMaximal := IsLocalRing.maximalIdeal.isMaximal B
+  let : Field (A ⧸ pA) := Ideal.Quotient.field pA
+  let : Field (B ⧸ pB) := Ideal.Quotient.field pB
+  let : pB.LiesOver pA := ⟨by
     ext x
     exact (Valuation.HasExtension.algebraMap_mem_maximalIdeal_iff
       vFb vF).symm⟩
-  letI : Algebra (A ⧸ pA) (B ⧸ pB) :=
+  let : Algebra (A ⧸ pA) (B ⧸ pB) :=
     Ideal.Quotient.algebraOfLiesOver pB pA
   have hcardA : Nat.card (A ⧸ pA) =
       NU.Chebotarev.PrimeIdeal.norm q := by
@@ -678,7 +678,7 @@ private theorem rationalCompletion_finrank_eq_localDegree
         pA.inertiaDeg' pB = NU.Chebotarev.PrimeIdeal.norm v := by
     rw [← hcardA, ← hcardB, Ideal.inertiaDeg_algebraMap]
     exact hlocalCard.symm
-  letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
+  let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hglobalPow : NU.Chebotarev.PrimeIdeal.norm q ^
         q.asIdeal.inertiaDeg' v.asIdeal =
       NU.Chebotarev.PrimeIdeal.norm v := by
@@ -1030,27 +1030,27 @@ private theorem padicIntegerCompletion_module_finite_finrank
   let B := v.adicCompletionIntegers K
   let eQ := padicRationalCompletionEquiv v p hp
   let eZ := padicIntegerRationalCompletionEquiv v p hp
-  letI : Algebra Fb F := (rationalCompletionMap v).toAlgebra
-  letI : ContinuousSMul Fb F :=
+  let : Algebra Fb F := (rationalCompletionMap v).toAlgebra
+  let : ContinuousSMul Fb F :=
     ⟨by
       have h := ((continuous_rationalCompletionMap v).comp continuous_fst).mul
         continuous_snd
       change Continuous fun z : Fb × F => rationalCompletionMap v z.1 * z.2
       convert h using 1
       rfl⟩
-  letI : IsScalarTower ℚ Fb F :=
+  let : IsScalarTower ℚ Fb F :=
     .of_algebraMap_eq fun x => by
       rw [RingHom.algebraMap_toAlgebra]
       exact (rationalCompletionMap_algebraMap v x).symm
-  letI : Module.Finite Fb F := rationalCompletionMap_module_finite v
-  letI : (Valued.v : Valuation Fb ℤᵐ⁰).HasExtension
+  let : Module.Finite Fb F := rationalCompletionMap_module_finite v
+  let : (Valued.v : Valuation Fb ℤᵐ⁰).HasExtension
       (Valued.v : Valuation F ℤᵐ⁰) := rationalCompletionMap_hasExtension v
-  letI : Algebra A B := Valuation.HasExtension.instAlgebraInteger
-  letI : Module.Finite A B := rationalCompletionIntegers_module_finite v
-  letI : Algebra ℚ_[p] F := (padicPlaceMap v p hp).toAlgebra
-  letI : Algebra ℤ_[p] B := (padicIntegerPlaceMap v p hp).toAlgebra
-  letI : Algebra ℤ_[p] ℚ_[p] := inferInstance
-  letI : Algebra ℤ_[p] F :=
+  let : Algebra A B := Valuation.HasExtension.instAlgebraInteger
+  let : Module.Finite A B := rationalCompletionIntegers_module_finite v
+  let : Algebra ℚ_[p] F := (padicPlaceMap v p hp).toAlgebra
+  let : Algebra ℤ_[p] B := (padicIntegerPlaceMap v p hp).toAlgebra
+  let : Algebra ℤ_[p] ℚ_[p] := inferInstance
+  let : Algebra ℤ_[p] F :=
     ((padicPlaceMap v p hp).comp (algebraMap ℤ_[p] ℚ_[p])).toAlgebra
   have hsquareZ : (algebraMap ℤ_[p] B).comp eZ.symm.toRingEquiv.toRingHom =
       (RingEquiv.refl B).toRingHom.comp (algebraMap A B) := by
@@ -1061,7 +1061,7 @@ private theorem padicIntegerCompletion_module_finite_finrank
     change rationalCompletionIntegerMap v (eZ (eZ.symm x)) =
       rationalCompletionIntegerMap v x
     rw [eZ.apply_symm_apply]
-  letI : Module.Finite ℤ_[p] B :=
+  let : Module.Finite ℤ_[p] B :=
     Module.Finite.of_equiv_equiv eZ.symm.toRingEquiv (RingEquiv.refl B)
       hsquareZ
   have hsquareQ : (algebraMap ℚ_[p] F).comp eQ.symm.toRingEquiv.toRingHom =
@@ -1071,17 +1071,17 @@ private theorem padicIntegerCompletion_module_finite_finrank
     change rationalCompletionMap v (eQ (eQ.symm x)) =
       rationalCompletionMap v x
     rw [eQ.apply_symm_apply]
-  letI : Module.Finite ℚ_[p] F :=
+  let : Module.Finite ℚ_[p] F :=
     Module.Finite.of_equiv_equiv eQ.symm.toRingEquiv (RingEquiv.refl F)
       hsquareQ
-  letI : IsScalarTower ℤ_[p] ℚ_[p] F :=
+  let : IsScalarTower ℤ_[p] ℚ_[p] F :=
     .of_algebraMap_eq fun _ => rfl
-  letI : Algebra B F := inferInstance
-  letI : IsScalarTower ℤ_[p] B F :=
+  let : Algebra B F := inferInstance
+  let : IsScalarTower ℤ_[p] B F :=
     .of_algebraMap_eq fun x => by
       rw [RingHom.algebraMap_toAlgebra]
       exact (padicIntegerPlaceMap_coe v p hp x).symm
-  letI : FaithfulSMul ℤ_[p] B :=
+  let : FaithfulSMul ℤ_[p] B :=
     (faithfulSMul_iff_algebraMap_injective ℤ_[p] B).2 (by
       intro x y hxy
       change padicIntegerPlaceMap v p hp x =
@@ -1134,7 +1134,7 @@ private def continuousMulEquivProdCongr
 private theorem padicInt_quotient_finite
     (p : Nat.Primes) (I : Ideal ℤ_[p]) (hI : I ≠ ⊥) :
     Finite (ℤ_[p] ⧸ I) := by
-  letI : Finite (IsLocalRing.ResidueField ℤ_[p]) :=
+  let : Finite (IsLocalRing.ResidueField ℤ_[p]) :=
     Finite.of_equiv (ZMod (p : ℕ))
       PadicInt.residueField.toEquiv.symm
   rw [IsLocalRing.finite_quotient_iff]
@@ -1151,18 +1151,18 @@ private theorem padicModule_torsion_finite
     [Module.Finite ℤ_[p] M] :
     Finite (Submodule.torsion ℤ_[p] M) := by
   let T := Submodule.torsion ℤ_[p] M
-  letI : Module.Finite ℤ_[p] T := inferInstance
+  let : Module.Finite ℤ_[p] T := inferInstance
   obtain ⟨ι, fi, q, hq, e, ⟨equiv⟩⟩ :=
     Module.equiv_directSum_of_isTorsion
       (R := ℤ_[p]) (M := T)
       (Submodule.torsion_isTorsion (R := ℤ_[p]) (M := M))
-  letI : Fintype ι := fi
+  let : Fintype ι := fi
   have hquot (i : ι) :
       Finite (ℤ_[p] ⧸ ℤ_[p] ∙ q i ^ e i) := by
     apply padicInt_quotient_finite p
     exact fun h => pow_ne_zero (e i) (hq i).ne_zero
       (Submodule.span_singleton_eq_bot.mp h)
-  letI (i : ι) : Finite (ℤ_[p] ⧸ ℤ_[p] ∙ q i ^ e i) :=
+  let (i : ι) : Finite (ℤ_[p] ⧸ ℤ_[p] ∙ q i ^ e i) :=
     hquot i
   let de := DirectSum.linearEquivFunOnFintype ℤ_[p] ι
     (fun i => ℤ_[p] ⧸ ℤ_[p] ∙ q i ^ e i)
@@ -1230,10 +1230,10 @@ private theorem padicModule_torsionProdQuotientContinuousAddEquiv
           (M ⧸ Submodule.torsion ℤ_[p] M)) ≃ₜ+ M) := by
   let T := Submodule.torsion ℤ_[p] M
   let Q := M ⧸ T
-  letI : Finite T := padicModule_torsion_finite p M
+  let : Finite T := padicModule_torsion_finite p M
   have hTfinite : (T : Set M).Finite := Set.toFinite _
-  letI : IsClosed (T : Set M) := hTfinite.isClosed
-  letI : CompactSpace Q := isCompact_univ_iff.mp (by
+  let : IsClosed (T : Set M) := hTfinite.isClosed
+  let : CompactSpace Q := isCompact_univ_iff.mp (by
     have hcomp :=
       (isCompact_univ : IsCompact (Set.univ : Set M)).image
         T.continuous_mkQ
@@ -1241,8 +1241,8 @@ private theorem padicModule_torsionProdQuotientContinuousAddEquiv
       Submodule.Quotient.mk_surjective T
     rw [Set.image_univ, Set.range_eq_univ.mpr hsurj] at hcomp
     exact hcomp)
-  letI : Module.Finite ℤ_[p] Q := inferInstance
-  letI : Module.Free ℤ_[p] Q :=
+  let : Module.Finite ℤ_[p] Q := inferInstance
+  let : Module.Free ℤ_[p] Q :=
     padicModule_free_of_finite_torsionFree p Q
   obtain ⟨s, hs⟩ := Module.projective_lifting_property
     (P := Q) (Submodule.mkQ T)
@@ -1286,7 +1286,7 @@ private theorem padicModule_continuousAddEquivPi_of_finite_torsionFree
     [Module.Finite ℤ_[p] M] [Module.IsTorsionFree ℤ_[p] M] :
     Nonempty
       ((Fin (Module.finrank ℤ_[p] M) → ℤ_[p]) ≃ₜ+ M) := by
-  letI : Module.Free ℤ_[p] M :=
+  let : Module.Free ℤ_[p] M :=
     padicModule_free_of_finite_torsionFree p M
   obtain ⟨n, b⟩ := Module.basisOfFiniteTypeTorsionFree'
     (R := ℤ_[p]) (M := M)
@@ -1322,10 +1322,10 @@ private theorem padicModule_torsionProdFreeContinuousAddEquiv
             (M ⧸ Submodule.torsion ℤ_[p] M)) → ℤ_[p])) ≃ₜ+ M) := by
   let T := Submodule.torsion ℤ_[p] M
   let Q := M ⧸ T
-  letI : Finite T := padicModule_torsion_finite p M
+  let : Finite T := padicModule_torsion_finite p M
   have hTfinite : (T : Set M).Finite := Set.toFinite _
-  letI : IsClosed (T : Set M) := hTfinite.isClosed
-  letI : Module.Finite ℤ_[p] Q := inferInstance
+  let : IsClosed (T : Set M) := hTfinite.isClosed
+  let : Module.Finite ℤ_[p] Q := inferInstance
   obtain ⟨freeEquiv⟩ :=
     padicModule_continuousAddEquivPi_of_finite_torsionFree p Q
   obtain ⟨splitEquiv⟩ :=
@@ -1377,8 +1377,8 @@ private theorem continuous_normalizedValuation
     (F : Type*) [Field F] [ValuativeRel F] [TopologicalSpace F]
     [IsNonarchimedeanLocalField F] :
     Continuous (normalizedValuation F) := by
-  letI := IsTopologicalAddGroup.rightUniformSpace F
-  letI := isUniformAddGroup_of_addCommGroup (G := F)
+  let := IsTopologicalAddGroup.rightUniformSpace F
+  let := isUniformAddGroup_of_addCommGroup (G := F)
   rw [continuous_iff_continuousAt]
   intro x
   rw [continuousAt_def]
@@ -1676,15 +1676,15 @@ private theorem ringOfIntegers_isPrecomplete :
 
 private theorem ringOfIntegers_isAdicComplete :
     IsAdicComplete (LocalMaximalIdeal F) (RingOfIntegers F) := by
-  letI : IsPrecomplete (LocalMaximalIdeal F) (RingOfIntegers F) :=
+  let : IsPrecomplete (LocalMaximalIdeal F) (RingOfIntegers F) :=
     ringOfIntegers_isPrecomplete F
   exact { }
 
 private theorem ringOfIntegers_henselianLocalRing :
     HenselianLocalRing (RingOfIntegers F) := by
-  letI : IsAdicComplete (LocalMaximalIdeal F) (RingOfIntegers F) :=
+  let : IsAdicComplete (LocalMaximalIdeal F) (RingOfIntegers F) :=
     ringOfIntegers_isAdicComplete F
-  letI : HenselianRing (RingOfIntegers F) (LocalMaximalIdeal F) :=
+  let : HenselianRing (RingOfIntegers F) (LocalMaximalIdeal F) :=
     inferInstance
   apply (HenselianLocalRing.TFAE (RingOfIntegers F)).out 2 1 |>.mp
   intro f hf a₀ hroot hderiv
@@ -1719,7 +1719,7 @@ private theorem residueCard_gt_one : 1 < residueCard F := by
 
 private theorem residueCard_sub_one_cast :
     ((residueCard F - 1 : ℕ) : LocalResidueField F) = -1 := by
-  letI := Fintype.ofFinite (LocalResidueField F)
+  let := Fintype.ofFinite (LocalResidueField F)
   rw [Nat.cast_sub (residueCard_gt_one F).le]
   rw [show ((residueCard F : ℕ) : LocalResidueField F) = 0 by
     simpa [residueCard, Nat.card_eq_fintype_card] using
@@ -1735,7 +1735,7 @@ private theorem exists_teichmullerGenerator :
   let R := RingOfIntegers F
   let k := LocalResidueField F
   let N := residueCard F - 1
-  letI : HenselianLocalRing R := ringOfIntegers_henselianLocalRing F
+  let : HenselianLocalRing R := ringOfIntegers_henselianLocalRing F
   obtain ⟨g, hgen⟩ :=
     (inferInstance : IsCyclic (Units k)).exists_generator
   have hgorder : orderOf g = N := by
@@ -1828,8 +1828,8 @@ private theorem completionPrincipalUnitGroup_isCompact
           Subgroup (Units (v.adicCompletion K))) :
           Set (Units (v.adicCompletion K))) := by
   let F := v.adicCompletion K
-  letI : ValuativeRel F := completionValuativeRel v
-  letI : IsNonarchimedeanLocalField F := completionIsLocalField v
+  let : ValuativeRel F := completionValuativeRel v
+  let : IsNonarchimedeanLocalField F := completionIsLocalField v
   let w := ValuativeRel.valuation F
   let A := w.valuationSubring
   let P := A.principalUnitGroup
@@ -1920,7 +1920,7 @@ private theorem localUnitTeichmullerData_exists :
   let k := IsLocalRing.ResidueField A
   let N := residueCard F - 1
   have hNpos : 0 < N := Nat.sub_pos_of_lt (residueCard_gt_one F)
-  letI : NeZero N := ⟨hNpos.ne'⟩
+  let : NeZero N := ⟨hNpos.ne'⟩
   obtain ⟨g, t, hgen, hgorder, htred, htpow⟩ :=
     exists_teichmullerGenerator F
   let zA : A.unitGroup := A.unitGroupMulEquiv.symm t
@@ -1953,7 +1953,7 @@ private theorem localUnitTeichmullerData_exists :
     rw [Nat.card_zpowers, hzorder]
   let ez : Multiplicative (ZMod N) ≃* T :=
     zmodMulEquivOfGenerator hzTgen hcardT
-  letI : Finite T := Finite.of_equiv
+  let : Finite T := Finite.of_equiv
     (Multiplicative (ZMod N)) ez.toEquiv
   have hTle : T ≤ A.unitGroup :=
     Subgroup.zpowers_le.mpr zA.property
@@ -1976,9 +1976,9 @@ private theorem localUnitTeichmullerData_exists :
     (Nat.bijective_iff_surjective_and_card tr).mpr
       ⟨htrsurj, hcardT.trans hcardk.symm⟩
   let trEquiv : T ≃* Units k := MulEquiv.ofBijective tr htrbij
-  letI : TopologicalSpace (Units k) := ⊥
-  letI : DiscreteTopology (Units k) := ⟨rfl⟩
-  letI : DiscreteTopology T := inferInstance
+  let : TopologicalSpace (Units k) := ⊥
+  let : DiscreteTopology (Units k) := ⟨rfl⟩
+  let : DiscreteTopology T := inferInstance
   let ctr : T ≃ₜ* Units k :=
     ContinuousMulEquiv.mk'
       (Homeomorph.mk trEquiv.toEquiv
@@ -2141,17 +2141,17 @@ private theorem principalUnitDecompositionData_exists
     Nonempty (PrincipalUnitDecompositionData F p rank) := by
   let P := (ValuativeRel.valuation F).valuationSubring.principalUnitGroup
   let M := Additive P
-  letI : Module ℤ_[p] M := d.module
-  letI : CompactSpace M := d.compactSpace
-  letI : T2Space M := T2Space.of_injective_continuous
+  let : Module ℤ_[p] M := d.module
+  let : CompactSpace M := d.compactSpace
+  let : T2Space M := T2Space.of_injective_continuous
     Additive.toMul.injective continuous_id
-  letI : ContinuousSMul ℤ_[p] M := d.continuousSMul
-  letI : Module.Finite ℤ_[p] M := d.moduleFinite
+  let : ContinuousSMul ℤ_[p] M := d.continuousSMul
+  let : Module.Finite ℤ_[p] M := d.moduleFinite
   let T := Submodule.torsion ℤ_[p] M
   let V := Fin rank → ℤ_[p]
-  letI : AddCommGroup T := inferInstance
-  letI : Group (Multiplicative T) := inferInstance
-  letI : Finite T := padicModule_torsion_finite p M
+  let : AddCommGroup T := inferInstance
+  let : Group (Multiplicative T) := inferInstance
+  let : Finite T := padicModule_torsion_finite p M
   obtain ⟨c⟩ := padicModule_torsionProdFreeContinuousAddEquiv p M
   rw [d.quotientFinrank] at c
   let cm : P ≃* Multiplicative T × Multiplicative V :=
@@ -2221,7 +2221,7 @@ private theorem principalUnitDecompositionData_exists
       ⟨fun _ _ h => hti
           (congrArg (fun z : ti.range => (z : Units F)) h),
         MonoidHom.rangeRestrict_surjective _⟩
-  letI : Finite (Multiplicative T) :=
+  let : Finite (Multiplicative T) :=
     Finite.of_equiv T Multiplicative.toAdd
   have htf : Continuous tf := by
     apply Continuous.subtype_mk
@@ -2330,16 +2330,16 @@ private theorem deepUnitFiltration_actionData_exists
     letI : ValuativeRel (v.adicCompletion K) := completionValuativeRel v
     Nonempty (DeepPrincipalUnitActionData (v.adicCompletion K) p) := by
   let F := v.adicCompletion K
-  letI : ValuativeRel F := completionValuativeRel v
-  letI : IsNonarchimedeanLocalField F := completionIsLocalField v
+  let : ValuativeRel F := completionValuativeRel v
+  let : IsNonarchimedeanLocalField F := completionIsLocalField v
   let w := ValuativeRel.valuation F
   let vF := (Valued.v : Valuation F ℤᵐ⁰)
-  letI : vF.Compatible := Valuation.Compatible.ofValuation vF
+  let : vF.Compatible := Valuation.Compatible.ofValuation vF
   let A := w.valuationSubring
   let P := A.principalUnitGroup
   let M := Additive P
   let B := v.adicCompletionIntegers K
-  letI : CompactSpace P := isCompact_iff_compactSpace.mp
+  let : CompactSpace P := isCompact_iff_compactSpace.mp
     (completionPrincipalUnitGroup_isCompact v)
   let r : P → F := fun u => (u : Units F) - 1
   have hr : Continuous r :=
@@ -2523,7 +2523,7 @@ private theorem deepUnitFiltration_actionData_exists
       apply Units.ext
       simpa using hpower_nat 1 (Additive.toMul u))
   let continuousSMul : let _ := module; ContinuousSMul ℤ_[p] M := by
-    letI : Module ℤ_[p] M := module
+    let : Module ℤ_[p] M := module
     exact ⟨by
       change Continuous fun x : ℤ_[p] × P => powerP x.1 x.2
       exact hpowerP_continuous⟩
@@ -2665,8 +2665,8 @@ private theorem completion_expSeries_radius_pos
   have hρlt : ρ < 1 := completion_residuePrime_norm_lt_one v p hp
   let hF : NontriviallyNormedField F :=
     Valued.toNontriviallyNormedField F ℤᵐ⁰
-  letI : Field F := hF.toNormedField.toField
-  letI : NontriviallyNormedField F := hF
+  let : Field F := hF.toNormedField.toField
+  let : NontriviallyNormedField F := hF
   dsimp only
   let r : NNReal := ⟨ρ ^ 2, sq_nonneg ρ⟩
   have hs : Summable fun n =>
@@ -2720,26 +2720,26 @@ private theorem deepUnitFiltration_exponentialLattice_exists
   let F := v.adicCompletion K
   let B := v.adicCompletionIntegers K
   let completionTopology : TopologicalSpace F := inferInstance
-  letI : ValuativeRel F := completionValuativeRel v
-  letI : IsNonarchimedeanLocalField F := completionIsLocalField v
+  let : ValuativeRel F := completionValuativeRel v
+  let : IsNonarchimedeanLocalField F := completionIsLocalField v
   let w := ValuativeRel.valuation F
   let vF := (Valued.v : Valuation F ℤᵐ⁰)
-  letI : vF.Compatible := Valuation.Compatible.ofValuation vF
+  let : vF.Compatible := Valuation.Compatible.ofValuation vF
   let A := w.valuationSubring
   let P := A.principalUnitGroup
   let M := Additive P
-  letI : Module ℤ_[p] M := module
-  letI : ContinuousSMul ℤ_[p] M := continuousSMul
-  letI : Algebra ℤ_[p] B := (padicIntegerPlaceMap v p hp).toAlgebra
+  let : Module ℤ_[p] M := module
+  let : ContinuousSMul ℤ_[p] M := continuousSMul
+  let : Algebra ℤ_[p] B := (padicIntegerPlaceMap v p hp).toAlgebra
   let hF : NontriviallyNormedField F :=
     Valued.toNontriviallyNormedField F ℤᵐ⁰
-  letI : NontriviallyNormedField F := hF
-  letI : CharZero F := ⟨by
+  let : NontriviallyNormedField F := hF
+  let : CharZero F := ⟨by
     intro m n hmn
     apply Nat.cast_injective (R := K)
     apply (algebraMap K F).injective
     simpa using hmn⟩
-  letI : CompleteSpace F := inferInstance
+  let : CompleteSpace F := inferInstance
   have htopology :
       hF.toNormedField.toUniformSpace.toTopologicalSpace =
         completionTopology := by
@@ -3019,26 +3019,26 @@ private theorem deepUnitFiltration_latticeData_exists
       (v.adicCompletion K) p rank module) := by
   let F := v.adicCompletion K
   let B := v.adicCompletionIntegers K
-  letI : ValuativeRel F := completionValuativeRel v
+  let : ValuativeRel F := completionValuativeRel v
   let P := (ValuativeRel.valuation F).valuationSubring.principalUnitGroup
   let M := Additive P
-  letI : Module ℤ_[p] M := module
-  letI : ContinuousSMul ℤ_[p] M := continuousSMul
-  letI : CompactSpace M := isCompact_iff_compactSpace.mp
+  let : Module ℤ_[p] M := module
+  let : ContinuousSMul ℤ_[p] M := continuousSMul
+  let : CompactSpace M := isCompact_iff_compactSpace.mp
     (completionPrincipalUnitGroup_isCompact v)
-  letI : Algebra ℤ_[p] B := (padicIntegerPlaceMap v p hp).toAlgebra
+  let : Algebra ℤ_[p] B := (padicIntegerPlaceMap v p hp).toAlgebra
   obtain ⟨hBfinite, hBrank⟩ :=
     padicIntegerCompletion_module_finite_finrank v p hp
-  letI : Module.Finite ℤ_[p] B := hBfinite
+  let : Module.Finite ℤ_[p] B := hBfinite
   obtain ⟨L, hLinj, hLopen⟩ :=
     deepUnitFiltration_exponentialLattice_exists
       v p hp module continuousSMul
   let N : Submodule ℤ_[p] M := L.range
-  letI : Module.Finite ℤ_[p] N := Module.Finite.range L
-  letI : Finite (M ⧸ N) :=
+  let : Module.Finite ℤ_[p] N := Module.Finite.range L
+  let : Finite (M ⧸ N) :=
     AddSubgroup.quotient_finite_of_isOpen N.toAddSubgroup hLopen
-  letI : Module.Finite ℤ_[p] (M ⧸ N) := Module.Finite.of_finite
-  letI : Module.Finite ℤ_[p] M :=
+  let : Module.Finite ℤ_[p] (M ⧸ N) := Module.Finite.of_finite
+  let : Module.Finite ℤ_[p] M :=
     Module.Finite.of_submodule_quotient N
   have hNrank : Module.finrank ℤ_[p] N = finitePlaceLocalDegree v := by
     rw [← hBrank]
@@ -3090,13 +3090,13 @@ private theorem deepUnitFiltration_pPowerTorsion_spec
               (ValuativeRel.valuation (v.adicCompletion K)).valuationSubring.principalUnitGroup)) ↔
         ∃ a : ℕ, u ^ ((p : ℕ) ^ a) = 1 := by
   let F := v.adicCompletion K
-  letI : ValuativeRel F := completionValuativeRel v
-  letI : IsNonarchimedeanLocalField F := completionIsLocalField v
+  let : ValuativeRel F := completionValuativeRel v
+  let : IsNonarchimedeanLocalField F := completionIsLocalField v
   let w := ValuativeRel.valuation F
   let A := w.valuationSubring
   let P := A.principalUnitGroup
   let M := Additive P
-  letI : Module ℤ_[p] M := module
+  let : Module ℤ_[p] M := module
   dsimp only
   intro u
   constructor
@@ -3203,16 +3203,16 @@ private theorem deepUnitFiltration_principalModuleData_exists
     Nonempty
       (DeepPrincipalUnitModuleData (v.adicCompletion K) p rank) := by
   let F := v.adicCompletion K
-  letI : ValuativeRel F := completionValuativeRel v
+  let : ValuativeRel F := completionValuativeRel v
   obtain ⟨action⟩ := deepUnitFiltration_actionData_exists v p hp
-  letI : Module ℤ_[p]
+  let : Module ℤ_[p]
       (Additive (ValuativeRel.valuation F).valuationSubring.principalUnitGroup) :=
     action.module
-  letI : ContinuousSMul ℤ_[p]
+  let : ContinuousSMul ℤ_[p]
       (Additive (ValuativeRel.valuation F).valuationSubring.principalUnitGroup) :=
     action.continuousSMul
   obtain ⟨compact⟩ := deepUnitFiltration_compactSpace_exists v
-  letI : CompactSpace
+  let : CompactSpace
       (Additive (ValuativeRel.valuation F).valuationSubring.principalUnitGroup) :=
     compact
   obtain ⟨lattice⟩ :=
@@ -3239,8 +3239,8 @@ private theorem localUnitDecomposition_completePIDClassification
     (hrank : rank = finitePlaceLocalDegree v) :
     Nonempty (LocalUnitDecompositionData v p rank) := by
   let F := v.adicCompletion K
-  letI : ValuativeRel F := completionValuativeRel v
-  letI : IsNonarchimedeanLocalField F := completionIsLocalField v
+  let : ValuativeRel F := completionValuativeRel v
+  let : IsNonarchimedeanLocalField F := completionIsLocalField v
   obtain ⟨valuation⟩ := localUnitValuationData_exists F
   obtain ⟨teichmuller⟩ := localUnitTeichmullerData_exists F
   obtain ⟨deepModule⟩ :=

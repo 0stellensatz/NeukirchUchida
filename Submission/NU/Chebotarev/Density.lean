@@ -150,7 +150,7 @@ theorem ideal_linear_bound :
     have hall : (Nat.card {I : Ideal (NumberField.RingOfIntegers K) //
         Ideal.absNorm I ≤ x} : ℝ) < B * x :=
       (div_lt_iff₀ hxpos).mp hratio
-    letI : Fintype {I : Ideal (NumberField.RingOfIntegers K) //
+    let : Fintype {I : Ideal (NumberField.RingOfIntegers K) //
         (Ideal.absNorm I : ℝ) ≤ x} := (idealNormSet_finite (K := K) x).fintype
     have hsub : Nat.card {a : Ideal (NumberField.RingOfIntegers K) //
         a ≠ 0 ∧ (Ideal.absNorm a : ℝ) ≤ x} ≤
@@ -172,7 +172,7 @@ theorem ideal_linear_bound :
       have hN : 0 ≤ N := Nat.cast_nonneg _
       nlinarith)
   · have hxt : x ≤ t := le_of_not_ge htx
-    letI : Fintype {I : Ideal (NumberField.RingOfIntegers K) //
+    let : Fintype {I : Ideal (NumberField.RingOfIntegers K) //
         (Ideal.absNorm I : ℝ) ≤ t} := (idealNormSet_finite (K := K) t).fintype
     have hsub : Nat.card {a : Ideal (NumberField.RingOfIntegers K) //
         a ≠ 0 ∧ (Ideal.absNorm a : ℝ) ≤ x} ≤
@@ -256,7 +256,7 @@ private theorem summable_ideal_rpow (s : ℝ) (hs : 1 < s) :
         Complex.ofReal_re]
       rw [div_eq_mul_inv]
       exact congrArg (a n * ·) (Real.rpow_neg (Nat.cast_nonneg n) s).symm
-  letI (n : ℕ) : Fintype
+  let (n : ℕ) : Fintype
       {I : Ideal (NumberField.RingOfIntegers K) // Ideal.absNorm I = n} :=
     (Ideal.finite_setOf_absNorm_eq n).fintype
   have hsigma : Summable (fun z : Σ n : ℕ,
@@ -292,7 +292,7 @@ theorem PrimeIdeal.norm_pow_inertiaDeg
     (hqp : q.asIdeal.LiesOver p.asIdeal) :
     PrimeIdeal.norm q = PrimeIdeal.norm p ^
       p.asIdeal.inertiaDeg' q.asIdeal := by
-  letI : q.asIdeal.LiesOver p.asIdeal := hqp
+  let : q.asIdeal.LiesOver p.asIdeal := hqp
   exact Ideal.absNorm_eq_pow_inertiaDeg_of_liesOver q.asIdeal p.asIdeal
     (inferInstance : p.asIdeal.IsPrime) p.ne_bot
 
@@ -312,7 +312,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
   let contract : PrimeIdeal E → PrimeIdeal K := fun q =>
     ⟨q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
       intro h
-      letI : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simpa [h]⟩
+      let : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simpa [h]⟩
       exact q.ne_bot (Ideal.eq_bot_of_liesOver_bot
         (NumberField.RingOfIntegers K) q.asIdeal)⟩
   obtain ⟨A, hA, hideal⟩ := ideal_linear_bound (K := K)
@@ -357,9 +357,9 @@ theorem PrimeIdeal.count_residueDegree_ge_two
     apply (Real.le_sqrt (Nat.cast_nonneg _) (by linarith : 0 ≤ x)).2
     rw [← Nat.cast_pow]
     exact (Nat.cast_le.mpr (hpows.trans_eq hn.symm)).trans hq.2
-  letI := FaithfulSMul.of_field_isFractionRing
+  let := FaithfulSMul.of_field_isFractionRing
     (NumberField.RingOfIntegers K) (NumberField.RingOfIntegers E) K E
-  letI : NoZeroSMulDivisors (NumberField.RingOfIntegers K)
+  let : NoZeroSMulDivisors (NumberField.RingOfIntegers K)
       (NumberField.RingOfIntegers E) := ⟨by
     intro c y h
     rw [Algebra.smul_def] at h
@@ -391,7 +391,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
       (S := NumberField.RingOfIntegers K) n).subset (by
         intro a ha
         exact_mod_cast ha.2.trans hn)
-  letI : Fintype {a : Ideal (NumberField.RingOfIntegers K) //
+  let : Fintype {a : Ideal (NumberField.RingOfIntegers K) //
       a ≠ 0 ∧ (Ideal.absNorm a : ℝ) ≤ Real.sqrt x} := hIfin.fintype
   have hPideal : hPfin.toFinset.card ≤ Nat.card
       {a : Ideal (NumberField.RingOfIntegers K) //
@@ -425,7 +425,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
 theorem finite_primeSet_hasPrimeDensity_zero
     {S : Set (PrimeIdeal K)} (hS : S.Finite) :
     HasPrimeDensity S 0 := by
-  letI := hS.fintype
+  let := hS.fintype
   have hbound (x : ℝ) : primeCounting S x ≤ Nat.card S := by
     unfold primeCounting
     apply Nat.card_le_card_of_injective
@@ -574,7 +574,7 @@ theorem sqrt_bound_hasDirichletDensity_zero (S : Set (PrimeIdeal K))
         Complex.ofReal_re]
       rw [div_eq_mul_inv]
       exact congrArg (a n * ·) (Real.rpow_neg (Nat.cast_nonneg n) _).symm
-  letI (n : ℕ) : Fintype {p : S // PrimeIdeal.norm p.1 = n} :=
+  let (n : ℕ) : Fintype {p : S // PrimeIdeal.norm p.1 = n} :=
     (hfiber n).fintype
   have hsum : Summable (fun z : Σ n : ℕ,
       {p : S // PrimeIdeal.norm p.1 = n} =>

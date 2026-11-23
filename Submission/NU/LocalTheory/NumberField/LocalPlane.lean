@@ -482,8 +482,8 @@ private theorem finrank_eq_of_natCard_eq_prime_pow
     [Module (ZMod p) V] [Finite V] {d : ℕ}
     (hcard : Nat.card V = p ^ d) :
     Module.finrank (ZMod p) V = d := by
-  letI := Fintype.ofFinite (ZMod p)
-  letI := Fintype.ofFinite V
+  let := Fintype.ofFinite (ZMod p)
+  let := Fintype.ofFinite V
   apply Nat.pow_right_injective ((Fact.out : Nat.Prime p).two_le)
   have hdim : Fintype.card V =
       p ^ Module.finrank (ZMod p) V := by
@@ -499,8 +499,8 @@ private theorem residueUnitModEll_finite
     (v : FinitePlace K) (n : ℕ) :
     Finite (ResidueUnitModEll v n) := by
   let k := ResidueFieldAt v
-  letI : Finite k := residueFieldAt_finite v
-  letI : Finite (Additive kˣ) := inferInstance
+  let : Finite k := residueFieldAt_finite v
+  let : Finite (Additive kˣ) := inferInstance
   exact Finite.of_surjective (ModN.mkQ n)
     (QuotientAddGroup.mk'_surjective _)
 
@@ -510,10 +510,10 @@ private theorem residueUnitModEll_finrank_eq_zero
     (hv : residueCharacteristic v = ℓ) :
     Module.finrank (ZMod ℓ) (ResidueUnitModEll v ℓ) = 0 := by
   let k := ResidueFieldAt v
-  letI : Finite k := residueFieldAt_finite v
-  letI := Fintype.ofFinite k
-  letI : Finite (Additive kˣ) := inferInstance
-  letI : Finite (ResidueUnitModEll v ℓ) :=
+  let : Finite k := residueFieldAt_finite v
+  let := Fintype.ofFinite k
+  let : Finite (Additive kˣ) := inferInstance
+  let : Finite (ResidueUnitModEll v ℓ) :=
     residueUnitModEll_finite v ℓ
   have hcardMod : Nat.card (ResidueUnitModEll v ℓ) =
       (Nat.card kˣ).gcd ℓ := natCard_modN_eq_gcd ℓ
@@ -544,10 +544,10 @@ private theorem residueUnitModEll_finrank_eq_one
     (v : FinitePlace K) (hv : residueCharacteristic v ≠ ℓ) :
     Module.finrank (ZMod ℓ) (ResidueUnitModEll v ℓ) = 1 := by
   let k := ResidueFieldAt v
-  letI : Finite k := residueFieldAt_finite v
-  letI := Fintype.ofFinite k
-  letI : Finite (Additive kˣ) := inferInstance
-  letI : Finite (ResidueUnitModEll v ℓ) :=
+  let : Finite k := residueFieldAt_finite v
+  let := Fintype.ofFinite k
+  let : Finite (Additive kˣ) := inferInstance
+  let : Finite (ResidueUnitModEll v ℓ) :=
     residueUnitModEll_finite v ℓ
   have hcardMod : Nat.card (ResidueUnitModEll v ℓ) =
       (Nat.card kˣ).gcd ℓ := natCard_modN_eq_gcd ℓ
@@ -622,7 +622,7 @@ private theorem localI_finrank_eq_one
     (Additive (Kˣ ⧸ (primeValuationSubring v).unitGroup)) ℓ
   let e : Q ≃ₗ[ZMod ℓ] ZMod ℓ :=
     unitQuotientModEllEquivZMod v ℓ
-  letI : Finite Q := Finite.of_equiv (ZMod ℓ) e.symm.toEquiv
+  let : Finite Q := Finite.of_equiv (ZMod ℓ) e.symm.toEquiv
   calc
     Module.finrank (ZMod ℓ) (localI ℓ (primeValuationSubring v)) =
         Module.finrank (ZMod ℓ) Q := by
@@ -637,14 +637,14 @@ private theorem localD_finrank_eq_one_add_residue
     Module.finrank (ZMod ℓ) (localD ℓ (primeValuationSubring v)) =
       1 + Module.finrank (ZMod ℓ) (ResidueUnitModEll v ℓ) := by
   let k := ResidueFieldAt v
-  letI : Finite k := residueFieldAt_finite v
-  letI : Finite (Additive kˣ) := inferInstance
-  letI : Finite (ResidueUnitModEll v ℓ) :=
+  let : Finite k := residueFieldAt_finite v
+  let : Finite (Additive kˣ) := inferInstance
+  let : Finite (ResidueUnitModEll v ℓ) :=
     residueUnitModEll_finite v ℓ
   let Q := PrincipalUnitModEll (primeValuationSubring v) ℓ
   let e : Q ≃ₗ[ZMod ℓ] (ZMod ℓ × ResidueUnitModEll v ℓ) :=
     (local_quotient_mod_ell v ℓ).some
-  letI : Finite Q :=
+  let : Finite Q :=
     Finite.of_equiv (ZMod ℓ × ResidueUnitModEll v ℓ) e.symm.toEquiv
   calc
     Module.finrank (ZMod ℓ) (localD ℓ (primeValuationSubring v)) =

@@ -97,9 +97,9 @@ theorem exists_ambientExtension
     ∃ alpha : RationalAbsoluteGaloisGroup,
       ∀ x : F₂.field, alpha x.1 = (e x).1 := by
   let f : F₂.field →ₐ[ℚ] Omega := F₁.field.val.comp e.toAlgHom
-  letI : IsAlgClosure ℚ Omega :=
+  let : IsAlgClosure ℚ Omega :=
     ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
-  letI : Algebra.IsAlgebraic F₂.field Omega :=
+  let : Algebra.IsAlgebraic F₂.field Omega :=
     Algebra.IsAlgebraic.tower_top (K := ℚ) F₂.field
   obtain ⟨f', hf'⟩ :=
     IsAlgClosed.surjective_restrictDomain_of_isAlgebraic
@@ -362,13 +362,13 @@ private theorem continuous_semilinearAutCongr
   have hs' : s ∈ nhds (1 : L' ≃ₐ[K'] L') := by simpa using hs
   obtain ⟨E, hEfin, hEs⟩ :=
     (krullTopology_mem_nhds_one_iff K' L' s).mp hs'
-  letI : FiniteDimensional K' E := hEfin
+  let : FiniteDimensional K' E := hEfin
   let b := Module.finBasis K' E
   let S : Set L := Set.range fun i => e.symm (b i).1
   have hS : S.Finite := Set.finite_range _
-  letI : Fintype S := hS.fintype
+  let : Fintype S := hS.fintype
   let D : IntermediateField K L := IntermediateField.adjoin K S
-  letI : FiniteDimensional K D :=
+  let : FiniteDimensional K D :=
     IntermediateField.finiteDimensional_adjoin fun x _ =>
       Algebra.IsIntegral.isIntegral x
   rw [krullTopology_mem_nhds_one_iff]

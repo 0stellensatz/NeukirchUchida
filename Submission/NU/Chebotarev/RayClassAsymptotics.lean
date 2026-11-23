@@ -1691,11 +1691,11 @@ private theorem finite_rayDatumFiber (m : RayModulus K) (B : (Ideal O)⁰)
     let L := mixedEmbedding.idealLattice K
       (FractionalIdeal.mk0 K (rayCongruenceIdeal m B))
     let v := mixedEmbedding K (rayDatumLift m B hB q.1)
-    letI : Finite {y : mixedSpace K // y ∈ S ∧ y - v ∈ L} :=
+    let : Finite {y : mixedSpace K // y ∈ S ∧ y - v ∈ L} :=
       Discrepancy.finite_affineLatticePointSubtype L v
         ((raySignRegion_isBounded m q.1.2).smul₀ _)
     exact Finite.of_equiv _ (rayDatumFiberEquiv m B hB q hs).symm
-  · haveI : IsEmpty {z : idealSet K B //
+  · have : IsEmpty {z : idealSet K B //
         integralRayDatum m (preimageOfMemIntegerSet (idealSetMap K B z)) = q.1 ∧
         mixedEmbedding.norm (z : mixedSpace K) ≤ (Ideal.absNorm B.1 : ℝ) * x} :=
       ⟨fun z => (not_lt_of_ge (z.2.2.trans (le_of_not_gt hs)))
@@ -1759,10 +1759,10 @@ private theorem rayCanonicalGeneratorCounting_eq_sum (m : RayModulus K)
         integralRayDatum m (preimageOfMemIntegerSet (idealSetMap K B z)) = q.1 ∧
         mixedEmbedding.norm (z : mixedSpace K) ≤ (Ideal.absNorm B.1 : ℝ) * x} := by
   classical
-  letI : Finite (O ⧸ m.finite) :=
+  let : Finite (O ⧸ m.finite) :=
     Ring.HasFiniteQuotients.finiteQuotient m.finite_ne
-  letI : Fintype (GoodRayDatum m) := Fintype.ofFinite _
-  letI (q : GoodRayDatum m) : Finite {z : idealSet K B //
+  let : Fintype (GoodRayDatum m) := Fintype.ofFinite _
+  let (q : GoodRayDatum m) : Finite {z : idealSet K B //
       integralRayDatum m (preimageOfMemIntegerSet (idealSetMap K B z)) = q.1 ∧
       mixedEmbedding.norm (z : mixedSpace K) ≤ (Ideal.absNorm B.1 : ℝ) * x} :=
     finite_rayDatumFiber m B hB q x
@@ -1790,9 +1790,9 @@ private theorem rayCanonicalGeneratorCounting_isBigO (m : RayModulus K)
       (fun x : ℝ => x ^ ((Module.finrank ℚ K - 1 : ℝ) /
         (Module.finrank ℚ K : ℝ))) := by
   classical
-  letI : Finite (O ⧸ m.finite) :=
+  let : Finite (O ⧸ m.finite) :=
     Ring.HasFiniteQuotients.finiteQuotient m.finite_ne
-  letI : Fintype (GoodRayDatum m) := Fintype.ofFinite _
+  let : Fintype (GoodRayDatum m) := Fintype.ofFinite _
   have hsum := Asymptotics.IsBigO.sum (s := Finset.univ) (g := fun x : ℝ =>
       x ^ ((Module.finrank ℚ K - 1 : ℝ) / (Module.finrank ℚ K : ℝ)))
     (A := fun q x =>

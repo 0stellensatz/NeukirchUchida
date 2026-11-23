@@ -54,7 +54,7 @@ def correspondingAbsoluteSubgroup
       (relativeAbsoluteSubgroup K₁))
 
 private theorem rationalOmega_isGalois : IsGalois ℚ Omega := by
-  letI : IsAlgClosure ℚ Omega :=
+  let : IsAlgClosure ℚ Omega :=
     ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
   exact ⟨⟩
 
@@ -101,7 +101,7 @@ noncomputable def correspondingField
   field := IntermediateField.fixedField
     (correspondingAbsoluteSubgroup theta K₁)
   finite := by
-    letI : IsGalois ℚ Omega := rationalOmega_isGalois
+    let : IsGalois ℚ Omega := rationalOmega_isGalois
     let H := correspondingAbsoluteSubgroup theta K₁
     have hfix : (IntermediateField.fixedField H).fixingSubgroup = H := by
       exact InfiniteGalois.fixingSubgroup_fixedField
@@ -139,7 +139,7 @@ theorem fixingSubgroup_correspondingField
     (K₁ : NumberFieldExtension F₁) :
     absoluteGaloisGroup (correspondingField theta K₁) =
       correspondingAbsoluteSubgroup theta K₁ := by
-  letI : IsGalois ℚ Omega := rationalOmega_isGalois
+  let : IsGalois ℚ Omega := rationalOmega_isGalois
   exact InfiniteGalois.fixingSubgroup_fixedField
     ⟨correspondingAbsoluteSubgroup theta K₁,
       correspondingAbsoluteSubgroup_isClosed theta K₁⟩
@@ -197,7 +197,7 @@ private theorem fixingSubgroup_inf_finite
     (K L : NumberFieldInOmega) :
     (K.field ⊓ L.field).fixingSubgroup =
       K.field.fixingSubgroup ⊔ L.field.fixingSubgroup := by
-  letI : IsGalois ℚ Omega := rationalOmega_isGalois
+  let : IsGalois ℚ Omega := rationalOmega_isGalois
   let H := K.field.fixingSubgroup ⊔ L.field.fixingSubgroup
   have hopen : IsOpen (H : Set RationalAbsoluteGaloisGroup) := by
     apply Subgroup.isOpen_mono le_sup_left
@@ -215,7 +215,7 @@ private theorem fixingSubgroup_inf_finite
 private theorem eq_of_fixingSubgroup_eq
     (K L : IntermediateField ℚ Omega)
     (h : K.fixingSubgroup = L.fixingSubgroup) : K = L := by
-  letI : IsGalois ℚ Omega := rationalOmega_isGalois
+  let : IsGalois ℚ Omega := rationalOmega_isGalois
   rw [← InfiniteGalois.fixedField_fixingSubgroup K,
     ← InfiniteGalois.fixedField_fixingSubgroup L, h]
 
@@ -427,7 +427,7 @@ private theorem valuationSubring_comap_ne_top_of_local
       A.coe_mem_nonunits_iff.mp hxinv
   let f : A →+* W :=
     (i.comp A.toSubring.subtype).codRestrict W.toSubring hi
-  letI : IsLocalHom f := hloc
+  let : IsLocalHom f := hloc
   have hfa_nonunit : ¬IsUnit (f a) := by
     intro h
     exact ha_nonunit (IsUnit.of_map f a h)
@@ -457,7 +457,7 @@ private theorem finitePrime_surjective (F : NumberFieldInOmega) :
   have hle : A ≤ W.comap i := by
     intro x hx
     exact hW ⟨x, hx⟩
-  letI : Ring.KrullDimLE 1 A := by
+  let : Ring.KrullDimLE 1 A := by
     change Ring.KrullDimLE 1
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime F.field v)
     infer_instance
@@ -480,15 +480,15 @@ private theorem finitePrime_surjective (F : NumberFieldInOmega) :
         trivial
       exact this
     let jW : ℚ →+* W := j.codRestrict W.toSubring hj
-    letI : Algebra ℚ W := jW.toAlgebra
-    letI : IsScalarTower ℚ W Omega := by
+    let : Algebra ℚ W := jW.toAlgebra
+    let : IsScalarTower ℚ W Omega := by
       apply IsScalarTower.of_algebraMap_eq
       intro r
       rfl
     have hxQ : IsIntegral ℚ x := by
-      letI : Algebra.IsAlgebraic ℚ Omega :=
+      let : Algebra.IsAlgebraic ℚ Omega :=
         AlgebraicClosure.isAlgebraic ℚ
-      letI : Algebra.IsIntegral ℚ Omega :=
+      let : Algebra.IsIntegral ℚ Omega :=
         Algebra.IsAlgebraic.isIntegral
       exact Algebra.IsIntegral.isIntegral x
     have hxW : IsIntegral W x := hxQ.tower_top
@@ -583,7 +583,7 @@ theorem restrictFinitePlace_finitePrime
     rw [primeValuationSubring_finitePrime] at hxw
     change F.field.val x ∈ P.valuationSubring at hxw
     exact hxw
-  letI : Ring.KrullDimLE 1 B := by
+  let : Ring.KrullDimLE 1 B := by
     change Ring.KrullDimLE 1
       (HeightOneSpectrum.valuationSubringAtPrime F.field v)
     infer_instance
@@ -763,8 +763,8 @@ private theorem primeTransportSet_isClosed
     (P Q : AbsolutePrime) :
     IsClosed (primeTransportSet F L P Q) := by
   let N := L.toExtension.field
-  letI : IsGalois ℚ L.toExtension.field.field := L.isGalois
-  letI : Normal ℚ L.toExtension.field.field := IsGalois.to_normal
+  let : IsGalois ℚ L.toExtension.field.field := L.isGalois
+  let : Normal ℚ L.toExtension.field.field := IsGalois.to_normal
   let r : absoluteGaloisGroup F → (N.field ≃ₐ[ℚ] N.field) :=
     fun g => AlgEquiv.restrictNormalHom N.field g.1
   let T : Set (N.field ≃ₐ[ℚ] N.field) :=
@@ -812,27 +812,27 @@ private theorem primeTransportSet_nonempty
     change p = (NU.LocalTheory.restrictFinitePlace F.field
       (finitePrime N Q)).asIdeal
     exact congrArg HeightOneSpectrum.asIdeal (hPQ.trans hrestrictQ.symm)⟩
-  letI : Pn.LiesOver p := hPover
-  letI : Qn.LiesOver p := hQover
-  letI : IsGalois F.field N.field :=
+  let : Pn.LiesOver p := hPover
+  let : Qn.LiesOver p := hQover
+  let : IsGalois F.field N.field :=
     IsGalois.tower_top_of_isGalois ℚ F.field N.field
-  letI : FiniteDimensional F.field N.field :=
+  let : FiniteDimensional F.field N.field :=
     Module.Finite.of_restrictScalars_finite ℚ F.field N.field
-  letI : Finite (N.field →ₐ[F.field] N.field) :=
+  let : Finite (N.field →ₐ[F.field] N.field) :=
     Finite.algHom F.field N.field N.field
-  letI : Finite (N.field ≃ₐ[F.field] N.field) := Finite.algEquiv
+  let : Finite (N.field ≃ₐ[F.field] N.field) := Finite.algEquiv
   obtain ⟨sigma, hsigma⟩ := Ideal.exists_smul_eq_of_isGaloisGroup
     p Pn Qn (N.field ≃ₐ[F.field] N.field)
   have hplace : NU.LocalTheory.conjugateFinitePlace F.field sigma
       (finitePrime N P) = finitePrime N Q := by
     apply HeightOneSpectrum.ext
     exact hsigma
-  letI : Algebra.IsAlgebraic ℚ Omega :=
+  let : Algebra.IsAlgebraic ℚ Omega :=
     AlgebraicClosure.isAlgebraic ℚ
-  letI : IsAlgClosure F.field Omega := by
+  let : IsAlgClosure F.field Omega := by
     refine ⟨AlgebraicClosure.isAlgClosed ℚ, ?_⟩
     exact Algebra.IsAlgebraic.tower_top (K := ℚ) F.field
-  letI : IsScalarTower F.field N.field Omega := by
+  let : IsScalarTower F.field N.field Omega := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
@@ -867,17 +867,17 @@ theorem exists_smul_of_finitePrime_eq
     (F : NumberFieldInOmega) (P Q : AbsolutePrime)
     (hPQ : finitePrime F P = finitePrime F Q) :
     ∃ g : absoluteGaloisGroup F, g • P = Q := by
-  letI : Nonempty (RationalGaloisExtension F) :=
+  let : Nonempty (RationalGaloisExtension F) :=
     ⟨rationalGaloisExtensionContaining F 0⟩
-  letI : IsGalois ℚ Omega := rationalOmega_isGalois
-  letI : CompactSpace RationalAbsoluteGaloisGroup := inferInstance
+  let : IsGalois ℚ Omega := rationalOmega_isGalois
+  let : CompactSpace RationalAbsoluteGaloisGroup := inferInstance
   have hopen : IsOpen (absoluteGaloisGroup F :
       Set RationalAbsoluteGaloisGroup) :=
     IntermediateField.fixingSubgroup_isOpen F.field
   have hclosed : IsClosed (absoluteGaloisGroup F :
       Set RationalAbsoluteGaloisGroup) :=
     (absoluteGaloisGroup F).isClosed_of_isOpen hopen
-  letI : CompactSpace (absoluteGaloisGroup F) :=
+  let : CompactSpace (absoluteGaloisGroup F) :=
     hclosed.isClosedEmbedding_subtypeVal.compactSpace
   let S := fun L : RationalGaloisExtension F =>
     primeTransportSet F L P Q
@@ -1108,20 +1108,20 @@ theorem degreeOne_iff_rationalDecompositionGroup_le
   let v := finitePrime F P
   let w := finitePrime N P
   let q := rationalPrime F v
-  letI : IsGalois ℚ N.field := L.isGalois
-  letI : Algebra F.field N.field :=
+  let : IsGalois ℚ N.field := L.isGalois
+  let : Algebra F.field N.field :=
     inferInstanceAs (Algebra F.field L.toExtension.field.field)
-  letI : IsScalarTower ℚ F.field N.field := by
+  let : IsScalarTower ℚ F.field N.field := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
-  letI : IsGalois F.field N.field :=
+  let : IsGalois F.field N.field :=
     IsGalois.tower_top_of_isGalois ℚ F.field N.field
-  letI : FiniteDimensional F.field N.field :=
+  let : FiniteDimensional F.field N.field :=
     Module.Finite.of_restrictScalars_finite ℚ F.field N.field
-  letI : Finite (N.field →ₐ[F.field] N.field) :=
+  let : Finite (N.field →ₐ[F.field] N.field) :=
     Finite.algHom F.field N.field N.field
-  letI : Finite (N.field ≃ₐ[F.field] N.field) := Finite.algEquiv
+  let : Finite (N.field ≃ₐ[F.field] N.field) := Finite.algEquiv
   have hwv : w.asIdeal.LiesOver v.asIdeal := ⟨by
     change v.asIdeal = (NU.LocalTheory.restrictFinitePlace F.field w).asIdeal
     exact congrArg HeightOneSpectrum.asIdeal
@@ -1129,10 +1129,10 @@ theorem degreeOne_iff_rationalDecompositionGroup_le
   have hvq : v.asIdeal.LiesOver q.asIdeal := ⟨by rfl⟩
   have hwq : w.asIdeal.LiesOver q.asIdeal :=
     Ideal.LiesOver.trans w.asIdeal v.asIdeal q.asIdeal
-  letI : w.asIdeal.LiesOver v.asIdeal := hwv
-  letI : v.asIdeal.LiesOver q.asIdeal := hvq
-  letI : w.asIdeal.LiesOver q.asIdeal := hwq
-  letI := Localization.AtPrime.algebraOfLiesOver v.asIdeal w.asIdeal
+  let : w.asIdeal.LiesOver v.asIdeal := hwv
+  let : v.asIdeal.LiesOver q.asIdeal := hvq
+  let : w.asIdeal.LiesOver q.asIdeal := hwq
+  let := Localization.AtPrime.algebraOfLiesOver v.asIdeal w.asIdeal
   let Dq := MulAction.stabilizer (N.field ≃ₐ[ℚ] N.field) w.asIdeal
   let Df := MulAction.stabilizer (N.field ≃ₐ[F.field] N.field) w.asIdeal
   have he : absoluteRamificationIndex F v =
@@ -1186,8 +1186,8 @@ theorem degreeOne_iff_rationalDecompositionGroup_le
   · intro hdeg
     have hcardeq : Nat.card Df = Nat.card Dq := by
       rw [hcard, hdeg, one_mul]
-    letI : Fintype Df := Fintype.ofFinite Df
-    letI : Fintype Dq := Fintype.ofFinite Dq
+    let : Fintype Df := Fintype.ofFinite Df
+    let : Fintype Dq := Fintype.ofFinite Dq
     have hinc_bij : Function.Bijective inc :=
       (Fintype.bijective_iff_injective_and_card inc).2
         ⟨hinc, by
@@ -1217,7 +1217,7 @@ theorem degreeOne_iff_rationalDecompositionGroup_le
   · intro hle
     have hinc_surj : Function.Surjective inc := by
       intro d
-      letI : IsGalois ℚ Omega := rationalOmega_isGalois
+      let : IsGalois ℚ Omega := rationalOmega_isGalois
       obtain ⟨gamma, hgamma⟩ :=
         AlgEquiv.restrictNormalHom_surjective Omega d.1
       have hfinite : finitePrime N (gamma • P) = finitePrime N P := by
@@ -1354,7 +1354,7 @@ theorem finiteQuotientMap_surjective
     (F N : NumberFieldInOmega) (hFN : F.field ≤ N.field)
     [IsGalois ℚ N.field] :
     Function.Surjective (finiteQuotientMap F N hFN) := by
-  letI : IsGalois ℚ Omega := rationalOmega_isGalois
+  let : IsGalois ℚ Omega := rationalOmega_isGalois
   intro sigma
   obtain ⟨g, hg⟩ :=
     AlgEquiv.restrictNormalHom_surjective Omega sigma.1

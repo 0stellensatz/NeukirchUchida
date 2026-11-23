@@ -65,7 +65,7 @@ private theorem exists_planeBasis_of_finrank_eq_two
     {ℓ : ℕ} [Fact ℓ.Prime] (P : GroupSubspace G ℓ)
     (hfin : Module.finrank (ZMod ℓ) P = 2) :
     ∃ p q, IsPlaneBasis P p q := by
-  letI : Module.Finite (ZMod ℓ) P :=
+  let : Module.Finite (ZMod ℓ) P :=
     Module.finite_of_finrank_pos (by rw [hfin]; omega)
   let b : Module.Basis (Fin 2) (ZMod ℓ) P :=
     Module.finBasisOfFinrankEq (ZMod ℓ) P hfin
@@ -131,7 +131,7 @@ private theorem satisfiesValuationConclusion_of_span_eq_localD
   let N : Submodule (ZMod ℓ) W := Submodule.comap W.subtype I
   have hWrank : Module.finrank (ZMod ℓ) W = 2 :=
     pairSpan_finrank_eq_two p q hind
-  letI : Module.Finite (ZMod ℓ) W :=
+  let : Module.Finite (ZMod ℓ) W :=
     Module.finite_of_finrank_pos (by rw [hWrank]; omega)
   have hIrank : Module.finrank (ZMod ℓ) I = 1 :=
     (local_dimensions ζ hζ v).1

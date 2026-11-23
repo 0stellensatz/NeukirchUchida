@@ -140,10 +140,10 @@ private theorem rep_shortExact_of_function
     (hexact : Function.Exact f g) (hf : Function.Injective f)
     (hg : Function.Surjective g) :
     (ShortComplex.mk f g hzero).ShortExact := by
-  letI : Module ℤ A := A.hV2
-  letI : Module ℤ B := B.hV2
-  letI : Module ℤ C := C.hV2
-  letI : Mono f := (Rep.mono_iff_injective f).2 hf
+  let : Module ℤ A := A.hV2
+  let : Module ℤ B := B.hV2
+  let : Module ℤ C := C.hV2
+  let : Mono f := (Rep.mono_iff_injective f).2 hf
   have f_is_kernel : IsLimit (KernelFork.ofι f hzero) := by
     let lift (s : KernelFork g) : s.pt ⟶ A := by
       letI : Module ℤ s.pt := s.pt.hV2
@@ -176,7 +176,7 @@ private theorem rep_shortExact_of_function
           _ = B.ρ σ (f (pre z)) := by rw [hpre]
           _ = f (A.ρ σ (pre z)) := (Rep.hom_comm_apply f σ (pre z)).symm⟩
     have lift_fac (s : KernelFork g) : lift s ≫ f = s.ι := by
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       apply Representation.IntertwiningMap.ext
       apply LinearMap.ext
@@ -202,7 +202,7 @@ private theorem shiftInduced_tateAcyclic
     {G : Type} [Group G] [Fintype G] (M : Rep ℤ G)
     (S : Subgroup G) [Fintype S] (n : ℤ) :
     Subsingleton (tateCohomology (Rep.res S.subtype (shiftInduced M)) n) := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   let e0 : Rep.res (⊥ : Subgroup G).subtype M ≅
       Rep.trivial ℤ (⊥ : Subgroup G) M := by
     apply Rep.mkIso
@@ -236,7 +236,7 @@ private lemma shiftCoind_norm_pointMass
     (b : Rep.res (⊥ : Subgroup G).subtype M) (t : G) :
     ((shiftCoinduced M).norm.asHom.hom (shiftCoindPointMass M b)).1 t = b := by
   classical
-  letI : Module ℤ (shiftCoinduced M) := (shiftCoinduced M).hV2
+  let : Module ℤ (shiftCoinduced M) := (shiftCoinduced M).hV2
   rw [Rep.norm_apply, Representation.norm]
   simp only [LinearMap.sum_apply, Submodule.coe_sum, Finset.sum_apply,
     Representation.coind_apply, LinearMap.restrict_apply, LinearMap.funLeft_apply]
@@ -280,7 +280,7 @@ private lemma shiftCoind_normKernel_mem_augmentation
     (x : TateLowDegree.normKernel (shiftCoinduced M)) :
     x.1 ∈ TateLowDegree.augmentation (shiftCoinduced M) := by
   classical
-  letI : Module ℤ (shiftCoinduced M) := (shiftCoinduced M).hV2
+  let : Module ℤ (shiftCoinduced M) := (shiftCoinduced M).hV2
   have hsum := congrArg (fun z : shiftCoinduced M => z.1 1) x.2
   change (((shiftCoinduced M).norm.asHom.hom x.1).1 1) = 0 at hsum
   rw [Rep.norm_apply, Representation.norm] at hsum
@@ -504,7 +504,7 @@ private theorem tateAcyclic_iff_of_middle
       ModuleCat.isZero_iff_subsingleton.mpr (hmid n)
     have hzmid' : IsZero (tateCohomology X.X₂ (n + 1)) :=
       ModuleCat.isZero_iff_subsingleton.mpr (hmid (n + 1))
-    letI : IsIso (TateCohomology.δ hX n) :=
+    let : IsIso (TateCohomology.δ hX n) :=
       (TateCohomology.map_tateComplexFunctor_shortExact hX).isIso_δ
         n (n + 1) rfl hzmid hzmid'
     have hzleft : IsZero (tateCohomology X.X₁ (n + 1)) :=
@@ -517,7 +517,7 @@ private theorem tateAcyclic_iff_of_middle
     have hzmid' : IsZero (tateCohomology X.X₂ n) :=
       ModuleCat.isZero_iff_subsingleton.mpr (hmid n)
     have hrel : (ComplexShape.up ℤ).Rel (n - 1) n := by simp
-    letI : IsIso ((TateCohomology.map_tateComplexFunctor_shortExact hX).δ
+    let : IsIso ((TateCohomology.map_tateComplexFunctor_shortExact hX).δ
         (n - 1) n hrel) :=
       (TateCohomology.map_tateComplexFunctor_shortExact hX).isIso_δ
         (n - 1) n hrel hzmid hzmid'
@@ -538,7 +538,7 @@ private theorem tate_subsingleton_target_of_delta
     ModuleCat.isZero_iff_subsingleton.mpr (hmid n)
   have hzmid' : IsZero (tateCohomology X.X₂ (n + 1)) :=
     ModuleCat.isZero_iff_subsingleton.mpr (hmid (n + 1))
-  letI : IsIso (TateCohomology.δ hX n) :=
+  let : IsIso (TateCohomology.δ hX n) :=
     (TateCohomology.map_tateComplexFunctor_shortExact hX).isIso_δ
       n (n + 1) rfl hzmid hzmid'
   have hzsource : IsZero (tateCohomology X.X₃ n) :=
@@ -556,7 +556,7 @@ private theorem tate_subsingleton_source_of_delta
     ModuleCat.isZero_iff_subsingleton.mpr (hmid n)
   have hzmid' : IsZero (tateCohomology X.X₂ (n + 1)) :=
     ModuleCat.isZero_iff_subsingleton.mpr (hmid (n + 1))
-  letI : IsIso (TateCohomology.δ hX n) :=
+  let : IsIso (TateCohomology.δ hX n) :=
     (TateCohomology.map_tateComplexFunctor_shortExact hX).isIso_δ
       n (n + 1) rfl hzmid hzmid'
   have hztarget : IsZero (tateCohomology X.X₁ (n + 1)) :=
@@ -672,9 +672,9 @@ private theorem quotientToInvariants_shortExact_of_H1_zero
     (hf : Function.Injective X.f.hom) (hg : Function.Surjective X.g.hom)
     (hH1 : Subsingleton (Inhomogeneous.H1 (Rep.res N.subtype X.X₁))) :
     (X.map (Rep.quotientToInvariantsFunctor ℤ N)).ShortExact := by
-  letI : Module ℤ X.X₁ := X.X₁.hV2
-  letI : Module ℤ X.X₂ := X.X₂.hV2
-  letI : Module ℤ X.X₃ := X.X₃.hV2
+  let : Module ℤ X.X₁ := X.X₁.hV2
+  let : Module ℤ X.X₂ := X.X₂.hV2
+  let : Module ℤ X.X₃ := X.X₃.hV2
   let F := Rep.quotientToInvariantsFunctor ℤ N
   have hsurj : Function.Surjective (F.map X.g).hom := by
     intro y
@@ -697,7 +697,7 @@ private theorem quotientToInvariants_shortExact_of_H1_zero
       change X.X₂.ρ n (X.X₂.ρ m b - b) -
           (X.X₂.ρ (n * m) b - b) + (X.X₂.ρ n b - b) = 0
       rw [map_sub]
-      letI : Module ℤ X.X₂ := X.X₂.hV2
+      let : Module ℤ X.X₂ := X.X₂.hV2
       rw [← Module.End.mul_apply, ← map_mul]
       abel
     have hzNorm : z0 1 = 0 := by
@@ -800,7 +800,7 @@ private theorem H1_index_smul_eq_zero_of_restriction_zero
     (hS : Subsingleton (Inhomogeneous.H1 (Rep.res S.subtype M)))
     (x : Inhomogeneous.H1 M) : S.index • x = 0 := by
   classical
-  letI : Fintype (Quotient (QuotientGroup.rightRel S)) := Fintype.ofFinite _
+  let : Fintype (Quotient (QuotientGroup.rightRel S)) := Fintype.ofFinite _
   let T := reciprocitySubgroupTransversal S
   have hr : Inhomogeneous.restrictionH1 S.subtype M x = 0 := hS.elim _ _
   rw [← Inhomogeneous.Transfer.corH1_restriction T M x, hr, map_zero]
@@ -810,7 +810,7 @@ private theorem H2_index_smul_eq_zero_of_restriction_zero
     (hS : Subsingleton (Inhomogeneous.H2 (Rep.res S.subtype M)))
     (x : Inhomogeneous.H2 M) : S.index • x = 0 := by
   classical
-  letI : Fintype (Quotient (QuotientGroup.rightRel S)) := Fintype.ofFinite _
+  let : Fintype (Quotient (QuotientGroup.rightRel S)) := Fintype.ofFinite _
   let T := reciprocitySubgroupTransversal S
   have hr : Inhomogeneous.restrictionH2 S.subtype M x = 0 := hS.elim _ _
   rw [← Inhomogeneous.Transfer.corH2_restriction T M x, hr, map_zero]
@@ -828,7 +828,7 @@ private theorem eq_zero_of_sylow_index_smul_eq_zero
   have hordcard : addOrderOf x ∣ Nat.card G :=
     addOrderOf_dvd_iff_nsmul_eq_zero.mpr hcard
   have hpcard : p ∣ Nat.card G := hpord.trans hordcard
-  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  let : Fact (Nat.Prime p) := ⟨hp⟩
   let P : Sylow p G := Classical.choice (Sylow.nonempty (p := p) (G := G))
   have hordindex : addOrderOf x ∣ P.index :=
     addOrderOf_dvd_iff_nsmul_eq_zero.mpr (hSylow p P)
@@ -985,8 +985,8 @@ private theorem cyclic_tateAcyclic
     (h1 : Subsingleton (groupCohomology.H1 M))
     (h2 : Subsingleton (groupCohomology.H2 M)) : TateAcyclic M := by
   classical
-  letI : CommGroup G := IsCyclic.commGroup
-  letI : Module ℤ M := M.hV2
+  let : CommGroup G := IsCyclic.commGroup
+  let : Module ℤ M := M.hV2
   let gen := (IsCyclic.exists_generator (α := G)).choose
   have hgen := (IsCyclic.exists_generator (α := G)).choose_spec
   have ht0 : Subsingleton (tateCohomology M 0) := by
@@ -1038,7 +1038,7 @@ private theorem cyclic_tateAcyclic
       | zero => exact ht0
       | succ k =>
           let d := k + 1
-          letI : NeZero d := ⟨by omega⟩
+          let : NeZero d := ⟨by omega⟩
           let et := (TateCohomology.isoGroupCohomology d).app M
           by_cases he : Even d
           · let ep := Rep.FiniteCyclicGroup.groupCohomologyIsoEven M gen hgen d he
@@ -1057,7 +1057,7 @@ private theorem cyclic_tateAcyclic
       | zero => exact htm
       | succ k =>
           let d := k + 1
-          letI : NeZero d := ⟨by omega⟩
+          let : NeZero d := ⟨by omega⟩
           let et := (TateCohomology.isoGroupHomology (-(d + 1 : ℤ)) d rfl).app M
           by_cases he : Even d
           · let ep := Rep.FiniteCyclicGroup.groupHomologyIsoEven M gen hgen d he
@@ -1079,7 +1079,7 @@ private theorem groupCohomology_subsingleton_res_of_injective
     {H : Type} [Group H] [Fintype H] (f : H →* G) (hf : Function.Injective f) :
     Subsingleton (groupCohomology (Rep.res f M) n) := by
   classical
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   let R := f.range
   let eG : H ≃* R := MulEquiv.ofBijective f.rangeRestrict
     ⟨fun x y hxy => hf (congrArg Subtype.val hxy), f.rangeRestrict_surjective⟩
@@ -1224,7 +1224,7 @@ private theorem finiteGroup_tateAcyclic_of_lowCohomology
       dsimp only [P]
       intro H _ _ hcardEq X h1X h2X
       by_cases hcyc : IsCyclic H
-      · letI : IsCyclic H := hcyc
+      · let : IsCyclic H := hcyc
         have hX1 := h1X (MonoidHom.id H) Function.injective_id
         have hX2 := h2X (MonoidHom.id H) Function.injective_id
         change Subsingleton (groupCohomology.H1 X) at hX1
@@ -1233,7 +1233,7 @@ private theorem finiteGroup_tateAcyclic_of_lowCohomology
       · have hcardH : 1 < Nat.card H := by
           rw [Nat.card_eq_fintype_card]
           by_contra hn
-          haveI : Subsingleton H :=
+          have : Subsingleton H :=
             Fintype.card_le_one_iff_subsingleton.mp (Nat.le_of_not_gt hn)
           exact hcyc isCyclic_of_subsingleton
         have hproper (S : Subgroup H) [Fintype S]
@@ -1247,9 +1247,9 @@ private theorem finiteGroup_tateAcyclic_of_lowCohomology
             exact h2X (S.subtype.comp f) (S.subtype_injective.comp hf)
         by_cases hpg : ∃ p : ℕ, Nat.Prime p ∧ IsPGroup p H
         · obtain ⟨p, hp, hpG⟩ := hpg
-          letI : Fact (Nat.Prime p) := ⟨hp⟩
-          letI : IsPGroup p H := hpG
-          letI : Group.IsNilpotent H := hpG.isNilpotent
+          let : Fact (Nat.Prime p) := ⟨hp⟩
+          let : IsPGroup p H := hpG
+          let : Group.IsNilpotent H := hpG.isNilpotent
           have hbotne : (⊥ : Subgroup H) ≠ ⊤ := by
             intro hb
             have hc := congrArg (fun S : Subgroup H => Nat.card S) hb
@@ -1260,10 +1260,10 @@ private theorem finiteGroup_tateAcyclic_of_lowCohomology
           · exact (hbotne hbot).elim
           · have hnall : ∀ K : Subgroup H, IsCoatom K → K.Normal :=
               ((Group.isNilpotent_of_finite_tfae (G := H)).out 1 3).mp (inferInstance : Group.IsNilpotent H)
-            letI : N.Normal := hnall N hNcoat
-            letI : Fintype N := Fintype.ofFinite N
-            letI : Fintype (H ⧸ N) := Fintype.ofFinite (H ⧸ N)
-            letI : IsCyclic (H ⧸ N) := quotient_isCyclic_of_coatom N hNcoat
+            let : N.Normal := hnall N hNcoat
+            let : Fintype N := Fintype.ofFinite N
+            let : Fintype (H ⧸ N) := Fintype.ofFinite (H ⧸ N)
+            let : IsCyclic (H ⧸ N) := quotient_isCyclic_of_coatom N hNcoat
             have hNdiv : Nat.card N ∣ Nat.card H :=
               ⟨N.index, N.card_mul_index.symm⟩
             have hNle : Nat.card N ≤ Nat.card H :=
@@ -1397,7 +1397,7 @@ def Cohomologous2 (M : Rep ℤ G) (a b : Inhomogeneous.C2 M) : Prop :=
 theorem rowSumClass_mul (M : Rep ℤ G) (a : Inhomogeneous.C2 M)
     (ha : IsNormalizedCocycle2 M a) (g h : G) :
     rowSumClass M a ha (g * h) = rowSumClass M a ha g + rowSumClass M a ha h := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   change (↑(rowSumInvariant M a ha (g * h)) : TateLowDegree.H0 M) =
     (↑(rowSumInvariant M a ha g) : TateLowDegree.H0 M) +
       (↑(rowSumInvariant M a ha h) : TateLowDegree.H0 M)
@@ -1447,7 +1447,7 @@ theorem rowSumClass_coboundary_independent (M : Rep ℤ G)
     (a b : Inhomogeneous.C2 M) (ha : IsNormalizedCocycle2 M a)
     (hb : IsNormalizedCocycle2 M b) (hab : Cohomologous2 M a b) :
     ∀ g, rowSumClass M a ha g = rowSumClass M b hb g := by
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   rcases hab with ⟨c, hc⟩
   intro g
   change (↑(rowSumInvariant M a ha g) : TateLowDegree.H0 M) =
@@ -1731,7 +1731,7 @@ private theorem restrictedClass_is_generator
     exact hd
   have hcard_dvd_of_nsmul_eq_zero (n : ℕ) (hn : n • αS = 0) :
       Nat.card S ∣ n := by
-    letI : Fintype (Quotient (QuotientGroup.rightRel S)) := Fintype.ofFinite _
+    let : Fintype (Quotient (QuotientGroup.rightRel S)) := Fintype.ofFinite _
     let T := reciprocitySubgroupTransversal S
     have hcor := Inhomogeneous.Transfer.corH2_restriction T M α
     have hncor : n • (S.index • α) = 0 := by
@@ -1755,7 +1755,7 @@ private theorem restrictedClass_is_generator
   have hcardConcrete :
       Nat.card (Inhomogeneous.H2 (Rep.res S.subtype M)) = Nat.card S :=
     (Nat.card_congr (comparisonH2 (Rep.res S.subtype M)).toEquiv).trans hcardMathlib
-  letI : Finite (Inhomogeneous.H2 (Rep.res S.subtype M)) :=
+  let : Finite (Inhomogeneous.H2 (Rep.res S.subtype M)) :=
     Nat.finite_of_card_ne_zero (by rw [hcardConcrete]; exact Nat.card_pos.ne')
   have htop : AddSubgroup.zmultiples αS = ⊤ := by
     apply (AddSubgroup.card_eq_iff_eq_top (AddSubgroup.zmultiples αS)).mp
@@ -1867,7 +1867,7 @@ private theorem restrictedTrivialInteger_H1_subsingleton
     Subsingleton
       (groupCohomology.H1 (Rep.res S.subtype (Rep.trivial ℤ G ℤ))) := by
   let Z := Rep.res S.subtype (Rep.trivial ℤ G ℤ)
-  letI : Z.IsTrivial := ⟨fun _ => rfl⟩
+  let : Z.IsTrivial := ⟨fun _ => rfl⟩
   let e := groupCohomology.H1IsoOfIsTrivial Z
   constructor
   intro x y
@@ -2011,7 +2011,7 @@ private theorem cocyclePushout_lowCohomology
   let X := (cocyclePushoutSequence M a ha).map (Rep.resFunctor S.subtype)
   let hX : X.ShortExact :=
     (Rep.shortExact_res S.subtype).2 (cocyclePushoutSequence_shortExact M a ha)
-  letI : IsIso (groupCohomology.δ hX 1 2 rfl) :=
+  let : IsIso (groupCohomology.δ hX 1 2 rfl) :=
     restrictedCocycleConnecting_isIso M hM α hα a ha hrep S
   let L1 := groupCohomology.mapShortComplex₂ X 1
   let L2 := groupCohomology.mapShortComplex₂ X 2
@@ -2091,7 +2091,7 @@ private theorem twoConnectingMap_isIso_of_middle_acyclic
       (tateCohomology D.augmentationSequence.X₂ ((-2) + 1)) :=
     ModuleCat.isZero_iff_subsingleton.mpr (hAugmentation ((-2) + 1))
   let dAug := TateCohomology.δ D.augmentationExact (-2)
-  letI : IsIso dAug :=
+  let : IsIso dAug :=
     (TateCohomology.map_tateComplexFunctor_shortExact D.augmentationExact).isIso_δ
       (-2) ((-2) + 1) rfl hzAug₁ hzAug₂
   have hzCocycle₁ : IsZero (tateCohomology D.cocycleSequence.X₂ (-1)) :=
@@ -2100,15 +2100,15 @@ private theorem twoConnectingMap_isIso_of_middle_acyclic
       (tateCohomology D.cocycleSequence.X₂ ((-1) + 1)) :=
     ModuleCat.isZero_iff_subsingleton.mpr (hCocycle ((-1) + 1))
   let dCocycle := TateCohomology.δ D.cocycleExact (-1)
-  letI : IsIso dCocycle :=
+  let : IsIso dCocycle :=
     (TateCohomology.map_tateComplexFunctor_shortExact D.cocycleExact).isIso_δ
       (-1) ((-1) + 1) rfl hzCocycle₁ hzCocycle₂
   let fSource := (tateCohomologyFunctor (-2)).map D.sourceIso.hom
   let fMiddle := (tateCohomologyFunctor (-1)).map D.augmentationIdealIso.hom
   let fTarget := (tateCohomologyFunctor 0).map D.targetIso.hom
-  letI : IsIso fSource := by infer_instance
-  letI : IsIso fMiddle := by infer_instance
-  letI : IsIso fTarget := by infer_instance
+  let : IsIso fSource := by infer_instance
+  let : IsIso fMiddle := by infer_instance
+  let : IsIso fTarget := by infer_instance
   let iSource := inv fSource
   let iAug := inv dAug
   let iMiddle := inv fMiddle
@@ -2170,7 +2170,7 @@ theorem abstractReciprocity_exists (M : Rep ℤ G) (hM : Hypotheses M)
     (hrep : cocycleClass2 M a ha = α) :
     ∃ e : Additive (Group.Abelianization G) ≃+ TateLowDegree.H0 M,
       ∀ g, e (Additive.ofMul (Group.Abelianization.of g)) = rowSumClass M a ha g := by
-  letI : IsIso (twoConnectingMap G (barDimensionShiftData G M a ha)) :=
+  let : IsIso (twoConnectingMap G (barDimensionShiftData G M a ha)) :=
     twoConnectingMap_isIso M hM α hα a ha hrep
   exact abstractReciprocity_of_twoConnecting_isIso M a ha
 

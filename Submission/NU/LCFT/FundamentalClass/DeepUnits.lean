@@ -290,18 +290,18 @@ literal regular lattices `A` and `B = π_K^(N+1)A`, and prove `B² ⊆ π_K B`.
 -/
 theorem deepUnitLattice_exists (π : Uniformizer K) :
     Nonempty (DeepUnitLatticeData K L π) := by
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  letI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI := IsTopologicalAddGroup.rightUniformSpace L
-  letI := isUniformAddGroup_of_addCommGroup (G := L)
-  letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  let := isUniformAddGroup_of_addCommGroup (G := K)
+  let := IsTopologicalAddGroup.rightUniformSpace L
+  let := isUniformAddGroup_of_addCommGroup (G := L)
+  let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
     { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI : NontriviallyNormedField K :=
+  let : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValuativeRel.ValueGroupWithZero K)
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) := by
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) := by
     constructor
     exact ValuativeRel.isEquiv _ _
   have algebraMap_OK (c : RingOfIntegers K) :
@@ -894,25 +894,25 @@ set_option maxHeartbeats 800000 in
 -- The explicit quotient-coordinate construction is large enough to exceed the default budget.
 private theorem deepUnitFiltrationData_exists (π : Uniformizer K) :
     Nonempty (DeepUnitFiltrationData K L π) := by
-    letI := IsTopologicalAddGroup.rightUniformSpace K
-    letI := isUniformAddGroup_of_addCommGroup (G := K)
-    letI := IsTopologicalAddGroup.rightUniformSpace L
-    letI := isUniformAddGroup_of_addCommGroup (G := L)
-    letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+    let := IsTopologicalAddGroup.rightUniformSpace K
+    let := isUniformAddGroup_of_addCommGroup (G := K)
+    let := IsTopologicalAddGroup.rightUniformSpace L
+    let := isUniformAddGroup_of_addCommGroup (G := L)
+    let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
       { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
           MonoidWithZeroHom.ValueGroup₀.embedding
         strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
           MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-    letI : NontriviallyNormedField K :=
+    let : NontriviallyNormedField K :=
       Valued.toNontriviallyNormedField K (ValuativeRel.ValueGroupWithZero K)
-    letI : (Valued.v (R := L) (Γ₀ := ValuativeRel.ValueGroupWithZero L)).RankOne :=
+    let : (Valued.v (R := L) (Γ₀ := ValuativeRel.ValueGroupWithZero L)).RankOne :=
       { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := L).comp
           MonoidWithZeroHom.ValueGroup₀.embedding
         strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
           MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-    letI : NontriviallyNormedField L :=
+    let : NontriviallyNormedField L :=
       Valued.toNontriviallyNormedField L (ValuativeRel.ValueGroupWithZero L)
-    letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) := by
+    let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) := by
       constructor
       exact ValuativeRel.isEquiv _ _
     have algebraMap_OK (c : RingOfIntegers K) :
@@ -1363,7 +1363,7 @@ private theorem deepUnitFiltrationData_exists (π : Uniformizer K) :
       rw [(one_add_unit 0 b).unit_spec]
       simpa using hb.symm
     have compactV0 : IsCompact (Set.univ : Set (V 0)) := by
-      letI : CompactSpace lat.B := isCompact_iff_compactSpace.mp lat.B_compact
+      let : CompactSpace lat.B := isCompact_iff_compactSpace.mp lat.B_compact
       have hrange : Set.range oneAddToV0 = Set.univ :=
         Set.range_eq_univ.mpr oneAddToV0_surj
       rw [← hrange]

@@ -133,7 +133,7 @@ private theorem mvPowerSeries_expand_card_fintype
     f.expand (Fintype.card k) Fintype.card_ne_zero = f ^ Fintype.card k := by
   obtain ⟨p, hp⟩ := CharP.exists k
   rcases FiniteField.card k p with ⟨⟨n, _⟩, ⟨hp, hn⟩⟩
-  letI : Fact p.Prime := ⟨hp⟩
+  let : Fact p.Prime := ⟨hp⟩
   dsimp at hn
   have h := MvPowerSeries.map_iterateFrobenius_expand p hp.ne_zero f n
   rw [iterateFrobenius_eq_pow, FiniteField.frobenius_pow hn] at h
@@ -144,11 +144,11 @@ private theorem mvPowerSeries_expand_card_fintype
 private theorem mvPowerSeries_expand_card
     {σ k : Type*} [Field k] [Finite k] (f : MvPowerSeries σ k) :
     f.expand (Nat.card k) (Nat.card_pos.ne') = f ^ Nat.card k := by
-  letI := Fintype.ofFinite k
+  let := Fintype.ofFinite k
   simpa only [Nat.card_eq_fintype_card] using mvPowerSeries_expand_card_fintype f
 
 private theorem one_lt_residueCard : 1 < residueCard K := by
-  letI := Fintype.ofFinite (LocalResidueField K)
+  let := Fintype.ofFinite (LocalResidueField K)
   change 1 < Nat.card (LocalResidueField K)
   rw [Nat.card_eq_fintype_card]
   exact Fintype.one_lt_card

@@ -145,7 +145,7 @@ def cyclotomicKernel (K : Type*) [Field K] (n : ℕ) :
 theorem cyclotomicKernel_isOpen (K : Type*) [Field K] (p : OddPrime) :
     IsOpen (cyclotomicKernel K (p : ℕ) :
       Set (Field.absoluteGaloisGroup K)) := by
-  haveI : Algebra.IsIntegral K (AlgebraicClosure K) :=
+  have : Algebra.IsIntegral K (AlgebraicClosure K) :=
     Algebra.IsAlgebraic.isIntegral
   let roots := Polynomial.nthRootsFinset (p : ℕ)
     (1 : AlgebraicClosure K)
@@ -701,19 +701,19 @@ theorem cyclotomicOverfield_isGalois_forComparison
     intro n hn _
     subst n
     exact HasEnoughRootsOfUnity.exists_primitiveRoot A (p : ℕ)
-  letI : IsCyclotomicExtension ({(p : ℕ)} : Set ℕ) K R :=
+  let : IsCyclotomicExtension ({(p : ℕ)} : Set ℕ) K R :=
     IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
       ({(p : ℕ)} : Set ℕ) K A hroot
-  letI : IsGalois K R :=
+  let : IsGalois K R :=
     IsCyclotomicExtension.isGalois ({(p : ℕ)} : Set ℕ) K R
   let E₀ : IntermediateField K A := L.field ⊔ R
-  letI : Normal K E₀ := by
+  let : Normal K E₀ := by
     dsimp [E₀]
     infer_instance
-  letI : Algebra.IsSeparable K E₀ := by
+  let : Algebra.IsSeparable K E₀ := by
     dsimp [E₀]
     infer_instance
-  letI : IsGalois K E₀ := ⟨⟩
+  let : IsGalois K E₀ := ⟨⟩
   let E : IntermediateField L.field A :=
     IntermediateField.adjoin L.field roots
   have hE : E.restrictScalars K = E₀ := by
@@ -736,7 +736,7 @@ theorem cyclotomicOverfield_isGalois_forComparison
         intro x hx
         change x ∈ E
         exact IntermediateField.subset_adjoin L.field roots hx
-  letI : IsGalois K E := by
+  let : IsGalois K E := by
     have h : IsGalois K (E.restrictScalars K) := by
       rw [hE]
       infer_instance
@@ -753,10 +753,10 @@ theorem cyclotomicOverfield_isGalois_forComparison
 private theorem residueCharacteristic_eq_absNorm_under
     {K : Type*} [Field K] [NumberField K] (v : FinitePlace K) :
     residueCharacteristic v = Ideal.absNorm (Ideal.under ℤ v.asIdeal) := by
-  letI : Algebra (𝓞 K) (primeValuationSubring v) :=
+  let : Algebra (𝓞 K) (primeValuationSubring v) :=
     show Algebra (𝓞 K)
       (HeightOneSpectrum.valuationSubringAtPrime K v) from inferInstance
-  letI : IsLocalization.AtPrime (primeValuationSubring v) v.asIdeal :=
+  let : IsLocalization.AtPrime (primeValuationSubring v) v.asIdeal :=
     show IsLocalization.AtPrime
       (HeightOneSpectrum.valuationSubringAtPrime K v) v.asIdeal from inferInstance
   let e := IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
@@ -1329,18 +1329,18 @@ private theorem comparisonLevelMulEquiv_continuous
     (krullTopology_mem_nhds_one_iff
       (CyclotomicField (p : ℕ) L.field)
       (AlgebraicClosure (CyclotomicField (p : ℕ) L.field)) V).mp hV1
-  letI : FiniteDimensional (CyclotomicField (p : ℕ) L.field) T := hTfin
-  letI : FiniteDimensional L.field
+  let : FiniteDimensional (CyclotomicField (p : ℕ) L.field) T := hTfin
+  let : FiniteDimensional L.field
       (CyclotomicField (p : ℕ) L.field) :=
     IsCyclotomicExtension.finiteDimensional
       ({(p : ℕ)} : Set ℕ) L.field
       (CyclotomicField (p : ℕ) L.field)
-  letI : FiniteDimensional K
+  let : FiniteDimensional K
       (CyclotomicField (p : ℕ) L.field) :=
     FiniteDimensional.trans K L.field (CyclotomicField (p : ℕ) L.field)
-  letI : IsScalarTower K (CyclotomicField (p : ℕ) L.field) T :=
+  let : IsScalarTower K (CyclotomicField (p : ℕ) L.field) T :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  letI : FiniteDimensional K T :=
+  let : FiniteDimensional K T :=
     FiniteDimensional.trans K (CyclotomicField (p : ℕ) L.field) T
   let j := comparisonClosureRingEquiv L p
   let f : T →ₐ[K] AlgebraicClosure K :=
@@ -1379,7 +1379,7 @@ private theorem comparisonLevelMulEquiv_continuous
               (AlgebraicClosure K) k }
   let J : IntermediateField K (AlgebraicClosure K) := f.fieldRange
   let eTJ : T ≃ₐ[K] J := AlgEquiv.ofInjectiveField f
-  letI : FiniteDimensional K J := eTJ.toLinearEquiv.finiteDimensional
+  let : FiniteDimensional K J := eTJ.toLinearEquiv.finiteDimensional
   let W : Set (orientedCyclotomicLevel o L p) :=
     (fun u => (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from u.1)) ⁻¹'
       (J.fixingSubgroup : Set
@@ -1840,7 +1840,7 @@ theorem packetImagesAtOddPrime_eq_decompositionCollectionAway
       decompositionCollectionAway K L.field p := by
   rw [packetImagesAtOddPrime_eq_cyclotomicComparison orientation L p]
   let M := CyclotomicField (p : ℕ) L.field
-  letI : IsGalois K M := cyclotomicOverfield_isGalois_forComparison L p
+  let : IsGalois K M := cyclotomicOverfield_isGalois_forComparison L p
   obtain ⟨ζ, hζ⟩ :=
     exists_cyclotomicPrimitiveRoot_forComparison L.field (p : ℕ)
   have hpackets := packet_theorem p.2 ζ hζ
@@ -1930,7 +1930,7 @@ theorem packetImagesAtOddPrime_eq_decompositionCollectionAway_of_le
     intro w hw
     exact packetStabilizer_eq_decompositionGroup K
       (CyclotomicField (p : ℕ) L.field) ζ hζ w hw
-  letI : IsGalois K (CyclotomicField (p : ℕ) L.field) :=
+  let : IsGalois K (CyclotomicField (p : ℕ) L.field) :=
     cyclotomicOverfield_isGalois_forComparison L p
   have htower :
       ∀ w : FinitePlace (CyclotomicField (p : ℕ) L.field),

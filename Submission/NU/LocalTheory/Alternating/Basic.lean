@@ -236,7 +236,7 @@ private theorem character_det_on_units_of_relativeCodim_le_one
       p (Additive.ofMul y) * q (Additive.ofMul x) := by
   let W : Submodule (ZMod ℓ) (MulCharacter F ℓ) := pairSpan p q
   let N : Submodule (ZMod ℓ) W := Submodule.comap W.subtype (localI ℓ A)
-  letI : Module.Finite (ZMod ℓ) W :=
+  let : Module.Finite (ZMod ℓ) W :=
     Module.Finite.span_of_finite (ZMod ℓ) (by simp)
   have hfin : Module.finrank (ZMod ℓ) (W ⧸ N) ≤ 1 := by
     simpa [relativeCodim, W, N] using hcodim

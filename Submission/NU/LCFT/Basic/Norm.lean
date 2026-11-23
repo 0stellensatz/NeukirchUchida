@@ -33,11 +33,11 @@ variable [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
 theorem continuous_normUnitsHom : Continuous (normUnitsHom K L) := by
   classical
   apply Units.continuous_map
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  letI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI := IsTopologicalAddGroup.rightUniformSpace L
-  letI := isUniformAddGroup_of_addCommGroup (G := L)
-  letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  let := isUniformAddGroup_of_addCommGroup (G := K)
+  let := IsTopologicalAddGroup.rightUniformSpace L
+  let := isUniformAddGroup_of_addCommGroup (G := L)
+  let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
     { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
@@ -223,21 +223,21 @@ private theorem ringOfIntegers_module_finite_norm
     [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L]
     [ValuativeExtension K L]
     [(valuation K).HasExtension (valuation L)] : Module.Finite 𝒪[K] 𝒪[L] := by
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  letI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI := IsTopologicalAddGroup.rightUniformSpace L
-  letI := isUniformAddGroup_of_addCommGroup (G := L)
-  letI : ContinuousSMul K L := ⟨by
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  let := isUniformAddGroup_of_addCommGroup (G := K)
+  let := IsTopologicalAddGroup.rightUniformSpace L
+  let := isUniformAddGroup_of_addCommGroup (G := L)
+  let : ContinuousSMul K L := ⟨by
     have h : Continuous (fun p : K × L => algebraMap K L p.1 * p.2) :=
       (((continuous_algebraMap_of_valuativeExtension_norm K L).comp continuous_fst).mul
         continuous_snd).congr (fun _ => rfl)
     simpa only [Algebra.smul_def] using h⟩
-  letI : (Valued.v (R := K) (Γ₀ := ValueGroupWithZero K)).RankOne :=
+  let : (Valued.v (R := K) (Γ₀ := ValueGroupWithZero K)).RankOne :=
     { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI : NontriviallyNormedField K :=
+  let : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
   let b := Module.Free.chooseBasis K L
   let coord (i) : L →ₗ[K] K :=
@@ -278,7 +278,7 @@ private theorem ringOfIntegers_module_finite_norm
     exact hmul.le
   let g (i) : L := c⁻¹ • b i
   let lattice : Submodule 𝒪[K] L := Submodule.span 𝒪[K] (Set.range g)
-  letI : Module.Finite 𝒪[K] lattice :=
+  let : Module.Finite 𝒪[K] lattice :=
     Module.Finite.span_of_finite 𝒪[K] (Set.finite_range g)
   let toL : 𝒪[L] →ₗ[𝒪[K]] L :=
     (IsScalarTower.toAlgHom 𝒪[K] 𝒪[L] L).toLinearMap
@@ -437,10 +437,10 @@ variable (K : Type u) (L : Type v)
 theorem normalizedValuation_norm (x : Units L) :
     normalizedValuation K (normUnitsHom K L x) =
       (residueDegree K L : ℤ) * normalizedValuation L x := by
-  letI : (valuation K).HasExtension (valuation L) := by
+  let : (valuation K).HasExtension (valuation L) := by
     constructor
     exact ValuativeRel.isEquiv _ _
-  letI : Module.Finite 𝒪[K] 𝒪[L] := ringOfIntegers_module_finite_norm K L
+  let : Module.Finite 𝒪[K] 𝒪[L] := ringOfIntegers_module_finite_norm K L
   let e := ramificationIndex K L
   let f := residueDegree K L
   obtain ⟨ϖK, hϖK, hϖKirr⟩ := integral_normalizedUniformizer_norm K
@@ -852,26 +852,26 @@ private theorem unramified_norm_lifts_integral_units :
       normUnitsHom K L (ringUnitsToFieldUnits L v) = ringUnitsToFieldUnits K u := by
   intro u
   classical
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) := by
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) := by
     constructor
     exact ValuativeRel.isEquiv _ _
-  letI : Module.Finite 𝒪[K] 𝒪[L] := ringOfIntegers_module_finite_norm K L
-  letI : Module.Free 𝒪[K] 𝒪[L] := Module.free_of_finite_type_torsion_free'
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  letI := isUniformAddGroup_of_addCommGroup (G := K)
+  let : Module.Finite 𝒪[K] 𝒪[L] := ringOfIntegers_module_finite_norm K L
+  let : Module.Free 𝒪[K] 𝒪[L] := Module.free_of_finite_type_torsion_free'
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  let := isUniformAddGroup_of_addCommGroup (G := K)
   let p : Ideal 𝒪[K] := IsLocalRing.maximalIdeal 𝒪[K]
   let q : Ideal 𝒪[L] := Ideal.map (algebraMap 𝒪[K] 𝒪[L]) p
   let P : Ideal 𝒪[L] := IsLocalRing.maximalIdeal 𝒪[L]
   have hqP : q = P := unramified_map_maximalIdeal_eq K L
-  letI : p.IsMaximal := IsLocalRing.maximalIdeal.isMaximal 𝒪[K]
-  letI : q.IsMaximal := hqP ▸ IsLocalRing.maximalIdeal.isMaximal 𝒪[L]
-  letI : Field (𝒪[K] ⧸ p) := Ideal.Quotient.field p
-  letI : Field (𝒪[L] ⧸ q) := Ideal.Quotient.field q
-  letI : Finite (𝒪[L] ⧸ P) := by
+  let : p.IsMaximal := IsLocalRing.maximalIdeal.isMaximal 𝒪[K]
+  let : q.IsMaximal := hqP ▸ IsLocalRing.maximalIdeal.isMaximal 𝒪[L]
+  let : Field (𝒪[K] ⧸ p) := Ideal.Quotient.field p
+  let : Field (𝒪[L] ⧸ q) := Ideal.Quotient.field q
+  let : Finite (𝒪[L] ⧸ P) := by
     dsimp [P]
     change Finite (LocalResidueField L)
     infer_instance
-  letI : Finite (𝒪[L] ⧸ q) := hqP ▸ (inferInstance : Finite (𝒪[L] ⧸ P))
+  let : Finite (𝒪[L] ⧸ q) := hqP ▸ (inferInstance : Finite (𝒪[L] ⧸ P))
   let ubar : Units (𝒪[K] ⧸ p) := Units.map (Ideal.Quotient.mk p).toMonoidHom u
   obtain ⟨zbar, hzbar⟩ :=
     FiniteField.unitsMap_norm_surjective (𝒪[K] ⧸ p) (𝒪[L] ⧸ q) ubar

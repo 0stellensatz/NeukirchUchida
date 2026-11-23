@@ -23,14 +23,14 @@ variable {G : Type} [Group G] (N : Subgroup G) [N.Normal] (M : Rep ℤ G)
 
 private theorem d1_d0 (a : C0 M) : d1 M (d0 M a) = 0 := by
   ext g h
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   simp only [d1, d0, AddMonoidHom.coe_mk, ZeroHom.coe_mk, Pi.zero_apply]
   rw [map_sub, ← Module.End.mul_apply, ← map_mul]
   abel
 
 private theorem d2_d1 (b : C1 M) : d2 M (d1 M b) = 0 := by
   ext g h t
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   simp only [d2, d1, AddMonoidHom.coe_mk, ZeroHom.coe_mk, Pi.zero_apply,
     map_add, map_sub]
   rw [← Module.End.mul_apply, ← map_mul]
@@ -910,7 +910,7 @@ private theorem conjugateC1_cocycle (g : G) (a : cocycles1 (Rep.res N.subtype M)
   have ha := congrFun (congrFun a.2.1 n') h'
   change M.ρ n (M.ρ g (a.1 h')) -
     M.ρ g (a.1 (conjugateSubgroup N g (n * h))) + M.ρ g (a.1 n') = 0
-  letI : Module ℤ M := M.hV2
+  let : Module ℤ M := M.hV2
   have hng : (n : G) * g = g * (n' : G) := by
     dsimp [n', conjugateSubgroup]
     simp [mul_assoc]
@@ -954,7 +954,7 @@ def conjugationH1 (g : G) :
       have hn := congrFun hm (conjugateSubgroup N g n)
       change M.ρ n (M.ρ g m) - M.ρ g m =
         M.ρ g (a.1 (conjugateSubgroup N g n))
-      letI : Module ℤ M := M.hV2
+      let : Module ℤ M := M.hV2
       have hng : (n : G) * g = g * (conjugateSubgroup N g n : G) := by
         simp [conjugateSubgroup, mul_assoc]
       change M.ρ (conjugateSubgroup N g n) m - m =
@@ -1145,7 +1145,7 @@ private theorem fixedH1_le_quotientInvariantH1 : fixedH1 N M ≤ quotientInvaria
         M.ρ n (M.ρ (kernelPart N g) (corr (QuotientGroup.mk' N g)) +
           a.1 (kernelPart N g)) + a.1 n
       rw [quotient_mk_left_N N n g, kernelPart_left N n g, hak, map_add]
-      letI : Module ℤ M := M.hV2
+      let : Module ℤ M := M.hV2
       change M.ρ ((n : G) * (kernelPart N g : G))
           (corr (QuotientGroup.mk' N g)) +
           (M.ρ n (a.1 k) + a.1 n) =
@@ -1203,7 +1203,7 @@ private theorem fixedH1_le_quotientInvariantH1 : fixedH1 N M ≤ quotientInvaria
           (M.ρ (kernelPart N g) (corr (QuotientGroup.mk' N g)) +
             a.1 (kernelPart N g))
       rw [quotient_mk_right_N N g n, hkright, hak]
-      letI : Module ℤ M := M.hV2
+      let : Module ℤ M := M.hV2
       change M.ρ ((k : G) * (ns : G)) (corr q) +
           (M.ρ k (a.1 ns) + a.1 k) =
         M.ρ g (a.1 n) + (M.ρ k (corr q) + a.1 k)
@@ -1449,7 +1449,7 @@ theorem inflation_restrictionH2_exact_of_H1_zero
             (corr (QuotientGroup.mk' N ((n : G) * g))) =
           M.ρ n (M.ρ (kernelPart N g) (corr (QuotientGroup.mk' N g)))
         rw [kernelPart_left N n g, quotient_mk_left_N N n g]
-        letI : Module ℤ M := M.hV2
+        let : Module ℤ M := M.hV2
         rw [← Module.End.mul_apply, ← map_mul]
         rfl
       have he_section (q : G ⧸ N) : e (quotientSection N q) = corr q := by

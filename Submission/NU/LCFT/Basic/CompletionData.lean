@@ -83,29 +83,29 @@ theorem localFieldExtensionData_exists
     [Algebra.IsSeparable K L]
     [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] :
     Nonempty (LocalFieldExtensionData K L) := by
-  letI : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
-  letI : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
-  letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+  let : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
+  let : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
+  let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
     { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI : NontriviallyNormedField K :=
+  let : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValuativeRel.ValueGroupWithZero K)
-  letI : NontriviallyNormedField L := spectralNorm.nontriviallyNormedField K L
-  letI : IsUltrametricDist L :=
+  let : NontriviallyNormedField L := spectralNorm.nontriviallyNormedField K L
+  let : IsUltrametricDist L :=
     IsUltrametricDist.isUltrametricDist_of_isNonarchimedean_norm
       (isNonarchimedean_spectralNorm (K := K) (L := L))
-  letI : NormedAlgebra K L := spectralNorm.normedAlgebra K L
+  let : NormedAlgebra K L := spectralNorm.normedAlgebra K L
   let vL : ValuativeRel L :=
     ValuativeRel.ofValuation (NormedField.valuation (K := L))
   let tL : TopologicalSpace L := inferInstance
-  letI : ValuativeRel L := vL
-  letI : (NormedField.valuation (K := L)).Compatible :=
+  let : ValuativeRel L := vL
+  let : (NormedField.valuation (K := L)).Compatible :=
     Valuation.Compatible.ofValuation (NormedField.valuation (K := L))
-  letI : TopologicalSpace L := tL
-  letI : Valued L NNReal := NormedField.toValued
-  haveI : (Valued.v : Valuation L NNReal).Compatible := by
+  let : TopologicalSpace L := tL
+  let : Valued L NNReal := NormedField.toValued
+  have : (Valued.v : Valuation L NNReal).Compatible := by
     rw [show (Valued.v : Valuation L NNReal) = NormedField.valuation from rfl]
     infer_instance
   have htop : IsValuativeTopology L := by
@@ -114,19 +114,19 @@ theorem localFieldExtensionData_exists
     rw [Valued.is_topological_valuation s]
     simpa using
       (Valued.v : Valuation L NNReal).exists_setOf_restrict_le_iff 0 s
-  letI : IsValuativeTopology L := htop
+  let : IsValuativeTopology L := htop
   have hloc : LocallyCompactSpace L :=
     LocallyCompactSpace.of_finiteDimensional_of_complete K L
-  letI : LocallyCompactSpace L := hloc
+  let : LocallyCompactSpace L := hloc
   have hnontriv : ValuativeRel.IsNontrivial L := by
     rw [ValuativeRel.isNontrivial_iff_isNontrivial (NormedField.valuation (K := L))]
     infer_instance
-  letI : ValuativeRel.IsNontrivial L := hnontriv
+  let : ValuativeRel.IsNontrivial L := hnontriv
   let hL : IsNonarchimedeanLocalField L :=
     { toIsValuativeTopology := htop
       toLocallyCompactSpace := hloc
       toIsNontrivial := hnontriv }
-  letI : IsNonarchimedeanLocalField L := hL
+  let : IsNonarchimedeanLocalField L := hL
   let hKL : ValuativeExtension K L := by
     constructor
     intro a b
@@ -138,7 +138,7 @@ theorem localFieldExtensionData_exists
     rw [spectralNorm_extends, spectralNorm_extends,
       Valuation.Compatible.vle_iff_le (v := ValuativeRel.valuation K)]
     exact Valued.toNormedField.norm_le_iff
-  letI : ValuativeExtension K L := hKL
+  let : ValuativeExtension K L := hKL
   exact ⟨⟨vL, tL, hL, hKL, inferInstance⟩⟩
 
 /-- The selected compatible local-field structure on a finite separable extension. -/
@@ -232,13 +232,13 @@ private theorem localFieldExtension_valuativeRel_unique
     letI : ValuativeRel L := v₂
     exact ValuativeRel.valuation L
   have hmem₁ (x : L) : v1 x ≤ 1 ↔ IsIntegral (RingOfIntegers K) x := by
-    letI : ValuativeRel L := v₁
-    letI : TopologicalSpace L := t₁
-    letI : IsNonarchimedeanLocalField L := hlocal₁
-    letI : ValuativeExtension K L := hext₁
-    letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+    let : ValuativeRel L := v₁
+    let : TopologicalSpace L := t₁
+    let : IsNonarchimedeanLocalField L := hlocal₁
+    let : ValuativeExtension K L := hext₁
+    let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
       ⟨ValuativeRel.isEquiv _ _⟩
-    letI : Module.Finite (RingOfIntegers K) (RingOfIntegers L) :=
+    let : Module.Finite (RingOfIntegers K) (RingOfIntegers L) :=
       ringOfIntegers_module_finite K L
     change x ∈ (ValuativeRel.valuation L).integer ↔ _
     constructor
@@ -251,13 +251,13 @@ private theorem localFieldExtension_valuativeRel_unique
       exact (Valuation.integer.integers (ValuativeRel.valuation L)).mem_of_integral
         hx.tower_top
   have hmem₂ (x : L) : v2 x ≤ 1 ↔ IsIntegral (RingOfIntegers K) x := by
-    letI : ValuativeRel L := v₂
-    letI : TopologicalSpace L := t₂
-    letI : IsNonarchimedeanLocalField L := hlocal₂
-    letI : ValuativeExtension K L := hext₂
-    letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
+    let : ValuativeRel L := v₂
+    let : TopologicalSpace L := t₂
+    let : IsNonarchimedeanLocalField L := hlocal₂
+    let : ValuativeExtension K L := hext₂
+    let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation L) :=
       ⟨ValuativeRel.isEquiv _ _⟩
-    letI : Module.Finite (RingOfIntegers K) (RingOfIntegers L) :=
+    let : Module.Finite (RingOfIntegers K) (RingOfIntegers L) :=
       ringOfIntegers_module_finite K L
     change x ∈ (ValuativeRel.valuation L).integer ↔ _
     constructor
@@ -277,10 +277,10 @@ private theorem localFieldExtension_valuativeRel_unique
   funext x y
   apply propext
   have h₁ : @ValuativeRel.vle L _ v₁ x y ↔ v1 x ≤ v1 y := by
-    letI : ValuativeRel L := v₁
+    let : ValuativeRel L := v₁
     exact Valuation.Compatible.vle_iff_le _ _
   have h₂ : @ValuativeRel.vle L _ v₂ x y ↔ v2 x ≤ v2 y := by
-    letI : ValuativeRel L := v₂
+    let : ValuativeRel L := v₂
     exact Valuation.Compatible.vle_iff_le _ _
   exact h₁.trans ((heq x y).trans h₂.symm)
 
@@ -290,17 +290,17 @@ private theorem localFieldExtension_topology_unique
     (hlocal₁ : @IsNonarchimedeanLocalField L _ v₁ t₁)
     (hlocal₂ : @IsNonarchimedeanLocalField L _ v₂ t₂)
     (hv : v₁ = v₂) : t₁ = t₂ := by
-  letI : ValuativeRel L := v₁
+  let : ValuativeRel L := v₁
   have hlocal₂' : @IsNonarchimedeanLocalField L _ v₁ t₂ := by
     rw [hv]
     exact hlocal₂
   have h₁ : t₁ = (ValuativeRel.valuation L).subgroups_basis.topology := by
-    letI : TopologicalSpace L := t₁
-    letI : IsNonarchimedeanLocalField L := hlocal₁
+    let : TopologicalSpace L := t₁
+    let : IsNonarchimedeanLocalField L := hlocal₁
     exact Valuation.toTopologicalSpace_eq (ValuativeRel.valuation L)
   have h₂ : t₂ = (ValuativeRel.valuation L).subgroups_basis.topology := by
-    letI : TopologicalSpace L := t₂
-    letI : IsNonarchimedeanLocalField L := hlocal₂'
+    let : TopologicalSpace L := t₂
+    let : IsNonarchimedeanLocalField L := hlocal₂'
     exact Valuation.toTopologicalSpace_eq (ValuativeRel.valuation L)
   exact h₁.trans h₂.symm
 
@@ -316,17 +316,17 @@ theorem selectedLocalFieldTowerData
     SelectedLocalFieldTowerData K L E := by
   let DL := localFieldExtensionData K L
   let DE := localFieldExtensionData K E
-  letI : ValuativeRel L := DL.valuativeRel
-  letI : TopologicalSpace L := DL.topology
-  letI : IsNonarchimedeanLocalField L := DL.localField
-  letI : ValuativeExtension K L := DL.valuativeExtension
-  letI : ContinuousSMul K L := DL.continuousSMul
+  let : ValuativeRel L := DL.valuativeRel
+  let : TopologicalSpace L := DL.topology
+  let : IsNonarchimedeanLocalField L := DL.localField
+  let : ValuativeExtension K L := DL.valuativeExtension
+  let : ContinuousSMul K L := DL.continuousSMul
   let DLE := localFieldExtensionData L E
   let hKE : @ValuativeExtension K E _ _ _ DLE.valuativeRel _ := by
-    letI : ValuativeRel E := DLE.valuativeRel
-    letI : TopologicalSpace E := DLE.topology
-    letI : IsNonarchimedeanLocalField E := DLE.localField
-    letI : ValuativeExtension L E := DLE.valuativeExtension
+    let : ValuativeRel E := DLE.valuativeRel
+    let : TopologicalSpace E := DLE.topology
+    let : IsNonarchimedeanLocalField E := DLE.localField
+    let : ValuativeExtension L E := DLE.valuativeExtension
     constructor
     intro x y
     rw [IsScalarTower.algebraMap_apply K L E x,
@@ -672,10 +672,10 @@ private theorem mulRepReciprocityHypotheses
   · intro S _
     let E := IntermediateField.fixedField S
     let D := reciprocityFixedFieldLocalData S
-    letI : ValuativeRel E := D.valuativeRel
-    letI : IsNonarchimedeanLocalField E := D.localField
-    letI : ValuativeExtension K E := D.lowerExtension
-    letI : ValuativeExtension E L := D.upperExtension
+    let : ValuativeRel E := D.valuativeRel
+    let : IsNonarchimedeanLocalField E := D.localField
+    let : ValuativeExtension K E := D.lowerExtension
+    let : ValuativeExtension E L := D.upperExtension
     have hlocal : Subsingleton (Inhomogeneous.H1 (MulRep E L)) :=
       localFundamentalClass_H1 E L
     have hres : Subsingleton (Inhomogeneous.H1
@@ -685,10 +685,10 @@ private theorem mulRepReciprocityHypotheses
   · intro S _
     let E := IntermediateField.fixedField S
     let D := reciprocityFixedFieldLocalData S
-    letI : ValuativeRel E := D.valuativeRel
-    letI : IsNonarchimedeanLocalField E := D.localField
-    letI : ValuativeExtension K E := D.lowerExtension
-    letI : ValuativeExtension E L := D.upperExtension
+    let : ValuativeRel E := D.valuativeRel
+    let : IsNonarchimedeanLocalField E := D.localField
+    let : ValuativeExtension K E := D.lowerExtension
+    let : ValuativeExtension E L := D.upperExtension
     let e := reciprocityRestrictedH2Equiv S
     let c := comparisonH2 (Rep.res S.subtype (MulRep K L))
     let αres := e.symm (fundamentalClassValue E L)
@@ -1111,14 +1111,14 @@ open Set Filter
 private theorem localField_small
     (K : Type u) [Field K] [ValuativeRel K] [TopologicalSpace K]
     [IsNonarchimedeanLocalField K] : Small.{0} K := by
-  letI : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
-  letI : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
-  letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+  let : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
+  let : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
+  let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
     { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI : NontriviallyNormedField K :=
+  let : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValuativeRel.ValueGroupWithZero K)
   let π := (defaultUniformizer K).val
   let C : ℕ → Set K := fun n =>
@@ -1155,8 +1155,8 @@ private theorem localField_small
         change (((π ^ n)⁻¹ : Units K) : K) * (a : K) = x
         rw [ha]
         simp [xu]⟩⟩
-  letI : SigmaCompactSpace K := isSigmaCompact_univ_iff.mp ⟨C, hCcompact, hCcover⟩
-  letI : SecondCountableTopology K := EMetric.secondCountable_of_sigmaCompact K
+  let : SigmaCompactSpace K := isSigmaCompact_univ_iff.mp ⟨C, hCcompact, hCcover⟩
+  let : SecondCountableTopology K := EMetric.secondCountable_of_sigmaCompact K
   obtain ⟨S, -, hS⟩ := exists_seq_separating K isOpen_empty univ
   let f : K → Set ℕ := fun x => {n | x ∈ S n}
   apply small_of_injective (f := f)
@@ -1186,32 +1186,32 @@ private theorem shrink_local
     letI : ValuativeRel A := transportVR e
     letI : TopologicalSpace A := e.toEquiv.topologicalSpace
     IsNonarchimedeanLocalField A := by
-  letI : Small.{0} K := localField_small K
+  let : Small.{0} K := localField_small K
   let A := Shrink.{0} K
-  letI : Field A := inferInstance
+  let : Field A := inferInstance
   let e : A ≃+* K := Shrink.ringEquiv K
-  letI : ValuativeRel A := transportVR e
-  letI : TopologicalSpace A := e.toEquiv.topologicalSpace
+  let : ValuativeRel A := transportVR e
+  let : TopologicalSpace A := e.toEquiv.topologicalSpace
   let h : A ≃ₜ K := e.toEquiv.homeomorph
   have he : Continuous e := continuous_induced_dom
-  haveI : ContinuousAdd A := ⟨by
+  have : ContinuousAdd A := ⟨by
     apply (continuous_induced_rng (f := e)).2
     rw [show (e ∘ fun p : A × A => p.1 + p.2) =
         fun p => e p.1 + e p.2 by
       funext p
       exact e.map_add _ _]
     exact (he.comp continuous_fst).add (he.comp continuous_snd)⟩
-  haveI : ContinuousNeg A := ⟨by
+  have : ContinuousNeg A := ⟨by
     apply (continuous_induced_rng (f := e)).2
     rw [show (e ∘ fun a : A => -a) = fun a => -e a by
       funext a
       exact e.map_neg a]
     exact he.neg⟩
-  haveI : IsTopologicalAddGroup A := ⟨⟩
+  have : IsTopologicalAddGroup A := ⟨⟩
   have hlocal : LocallyCompactSpace A := h.isClosedEmbedding.locallyCompactSpace
   let w : Valuation A (ValuativeRel.ValueGroupWithZero K) :=
     (ValuativeRel.valuation K).comap e.toRingHom
-  haveI hw : w.Compatible := by
+  have hw : w.Compatible := by
     constructor
     intro x y
     change e x ≤ᵥ e y ↔ ValuativeRel.valuation K (e x) ≤ ValuativeRel.valuation K (e y)
@@ -1801,7 +1801,7 @@ private theorem valuativeExtension_of_normalizedValuation_ringEquiv
       normalizedValuation B (Units.map e.toRingHom x) = normalizedValuation A x) :
     letI : Algebra A B := e.toRingHom.toAlgebra
     ValuativeExtension A B := by
-  letI : Algebra A B := e.toRingHom.toAlgebra
+  let : Algebra A B := e.toRingHom.toAlgebra
   constructor
   intro a b
   by_cases ha : a = 0
@@ -1930,14 +1930,14 @@ private theorem normalizedFundamentalClassRawNormTateEquiv_bridge
         (normalizedFundamentalClassRawNormTateEquiv B.model.K₀ B.model.L₀) := by
   let b := B.baseEquiv
   let e := B.extensionEquiv
-  letI aKK₁ : Algebra K₀ B.model.K₀ := b.toRingHom.toAlgebra
-  letI aLL₁ : Algebra L₀ B.model.L₀ := e.toRingHom.toAlgebra
+  let aKK₁ : Algebra K₀ B.model.K₀ := b.toRingHom.toAlgebra
+  let aLL₁ : Algebra L₀ B.model.L₀ := e.toRingHom.toAlgebra
   let aKL₁Hom : K₀ →+* B.model.L₀ :=
     (algebraMap B.model.K₀ B.model.L₀).comp b.toRingHom
-  letI aKL₁ : Algebra K₀ B.model.L₀ := aKL₁Hom.toAlgebra
-  letI stKK₁L₁ : IsScalarTower K₀ B.model.K₀ B.model.L₀ :=
+  let aKL₁ : Algebra K₀ B.model.L₀ := aKL₁Hom.toAlgebra
+  let stKK₁L₁ : IsScalarTower K₀ B.model.K₀ B.model.L₀ :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI stKL₀L₁ : IsScalarTower K₀ L₀ B.model.L₀ :=
+  let stKL₀L₁ : IsScalarTower K₀ L₀ B.model.L₀ :=
     IsScalarTower.of_algebraMap_eq fun x => by
       rw [RingHom.algebraMap_toAlgebra, RingHom.algebraMap_toAlgebra]
       exact (B.algebra_compatibility x).symm
@@ -1945,23 +1945,23 @@ private theorem normalizedFundamentalClassRawNormTateEquiv_bridge
     { b with commutes' := fun _ => rfl }
   let eA : L₀ ≃ₐ[L₀] B.model.L₀ :=
     { e with commutes' := fun _ => rfl }
-  letI fdKK₁ : FiniteDimensional K₀ B.model.K₀ :=
+  let fdKK₁ : FiniteDimensional K₀ B.model.K₀ :=
     bA.toLinearEquiv.finiteDimensional
-  letI fdLL₁ : FiniteDimensional L₀ B.model.L₀ :=
+  let fdLL₁ : FiniteDimensional L₀ B.model.L₀ :=
     eA.toLinearEquiv.finiteDimensional
-  letI fdKL₁ : FiniteDimensional K₀ B.model.L₀ :=
+  let fdKL₁ : FiniteDimensional K₀ B.model.L₀ :=
     FiniteDimensional.trans K₀ L₀ B.model.L₀
-  letI galKL₁ : IsGalois K₀ B.model.L₀ := by
+  let galKL₁ : IsGalois K₀ B.model.L₀ := by
     apply IsGalois.of_equiv_equiv (F := K₀) (E := L₀)
       (M := K₀) (N := B.model.L₀) (f := RingEquiv.refl K₀) (g := e)
     ext x
     rw [RingHom.algebraMap_toAlgebra]
     exact (B.algebra_compatibility x).symm
-  letI veKK₁ : ValuativeExtension K₀ B.model.K₀ :=
+  let veKK₁ : ValuativeExtension K₀ B.model.K₀ :=
     valuativeExtension_of_normalizedValuation_ringEquiv b B.base_valuation
-  letI veLL₁ : ValuativeExtension L₀ B.model.L₀ :=
+  let veLL₁ : ValuativeExtension L₀ B.model.L₀ :=
     valuativeExtension_of_normalizedValuation_ringEquiv e B.extension_valuation
-  letI veKL₁ : ValuativeExtension K₀ B.model.L₀ := by
+  let veKL₁ : ValuativeExtension K₀ B.model.L₀ := by
     constructor
     intro x y
     change (algebraMap B.model.K₀ B.model.L₀ (b x) ≤ᵥ
@@ -1972,15 +1972,15 @@ private theorem normalizedFundamentalClassRawNormTateEquiv_bridge
     ringEquiv_continuous_of_valuativeExtension b (fun _ => rfl)
   have hecont : Continuous e :=
     ringEquiv_continuous_of_valuativeExtension e (fun _ => rfl)
-  letI csKK₁ : ContinuousSMul K₀ B.model.K₀ :=
+  let csKK₁ : ContinuousSMul K₀ B.model.K₀ :=
     continuousSMul_of_algebraMap K₀ B.model.K₀ (by
       change Continuous (b : K₀ → B.model.K₀)
       exact hbcont)
-  letI csLL₁ : ContinuousSMul L₀ B.model.L₀ :=
+  let csLL₁ : ContinuousSMul L₀ B.model.L₀ :=
     continuousSMul_of_algebraMap L₀ B.model.L₀ (by
       change Continuous (e : L₀ → B.model.L₀)
       exact hecont)
-  letI csKL₁ : ContinuousSMul K₀ B.model.L₀ :=
+  let csKL₁ : ContinuousSMul K₀ B.model.L₀ :=
     continuousSMul_of_algebraMap K₀ B.model.L₀ (by
       change Continuous ((algebraMap B.model.K₀ B.model.L₀) ∘ b)
       exact (continuous_algebraMap B.model.K₀ B.model.L₀).comp hbcont)
@@ -2236,7 +2236,7 @@ private noncomputable def finiteReciprocity_selfUnramifiedCyclicExtensionData
   · intro x
     exact ⟨x, rfl⟩
   · intro x y hy
-    letI : Fintype (LocalResidueField F) := Fintype.ofFinite _
+    let : Fintype (LocalResidueField F) := Fintype.ofFinite _
     have hxy : y = x := by
       apply Subtype.ext
       simpa [frob] using hy
@@ -2285,9 +2285,9 @@ private theorem finiteReciprocity_fundamentalClass_eq_unramifiedClass
     (D : UnramifiedCyclicExtensionData K L) (π : Uniformizer K)
     (C : UnramifiedClassData K L D π) :
     fundamentalClassValue K L = C.class := by
-  letI veLL : ValuativeExtension L L := ⟨Iff.rfl⟩
-  letI csLL : ContinuousSMul L L := inferInstance
-  letI stKLL : IsScalarTower K L L :=
+  let veLL : ValuativeExtension L L := ⟨Iff.rfl⟩
+  let csLL : ContinuousSMul L L := inferInstance
+  let stKLL : IsScalarTower K L L :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
   let upper := finiteReciprocity_selfUnramifiedCyclicExtensionData L
   let q : (L ≃ₐ[K] L) →* (L ≃ₐ[K] L) := MonoidHom.id _
@@ -2374,7 +2374,7 @@ private theorem finiteReciprocity_sum_carryExponent_one_of_one_lt (n : ℕ) [NeZ
     (∑ r : ZMod n, (carryExponent n r 1 : ℤ)) = 1 := by
   obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.pos n).ne'
   have hn2 : 1 < m + 1 := by omega
-  letI : Fact (1 < m + 1) := ⟨hn2⟩
+  let : Fact (1 < m + 1) := ⟨hn2⟩
   have hval (i : Fin (m + 1)) : (ZMod.finEquiv (m + 1) i).val = i.val := by rfl
   rw [← Equiv.sum_comp (ZMod.finEquiv (m + 1)).toEquiv
     (fun r : ZMod (m + 1) => (carryExponent (m + 1) r 1 : ℤ))]
@@ -2420,7 +2420,7 @@ private theorem finiteReciprocity_cohomologicalCompensated_unramified
   have hrows := AbstractReciprocity.rowSumClass_coboundary_independent
     (MulRep K L) C₀.cocycle C.cocycle C₀.cocycle_mem C.cocycle_mem hcoh D.frobenius
   let n := Module.finrank K L
-  letI : NeZero n := ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
+  let : NeZero n := ⟨(Module.finrank_pos (R := K) (M := L)).ne'⟩
   have hq : AbstractReciprocity.rowSumClass (MulRep K L)
       C.cocycle C.cocycle_mem D.frobenius =
       FiniteReciprocity.tateClassOfBaseUnit K L π.val := by
@@ -2428,23 +2428,23 @@ private theorem finiteReciprocity_cohomologicalCompensated_unramified
     · have hcard : Nat.card (L ≃ₐ[K] L) = 1 := by
         rw [IsGalois.card_aut_eq_finrank K L]
         exact hn
-      letI : Subsingleton (L ≃ₐ[K] L) := (Nat.card_eq_one_iff_unique.mp hcard).1
-      letI : Subsingleton (Group.Abelianization (L ≃ₐ[K] L)) := by
+      let : Subsingleton (L ≃ₐ[K] L) := (Nat.card_eq_one_iff_unique.mp hcard).1
+      let : Subsingleton (Group.Abelianization (L ≃ₐ[K] L)) := by
         constructor
         intro x y
         obtain ⟨a, rfl⟩ := QuotientGroup.mk_surjective x
         obtain ⟨b, rfl⟩ := QuotientGroup.mk_surjective y
         congr 1
         exact Subsingleton.elim a b
-      letI : Subsingleton (Units K ⧸ normSubgroup K L) :=
+      let : Subsingleton (Units K ⧸ normSubgroup K L) :=
         ⟨fun x y => (FiniteReciprocity.artin K L).injective (Subsingleton.elim _ _)⟩
-      letI : Subsingleton (TateLowDegree.H0 (MulRep K L)) :=
+      let : Subsingleton (TateLowDegree.H0 (MulRep K L)) :=
         ⟨fun x y => C₀.tateQuotient.injective (Subsingleton.elim _ _)⟩
       apply Subsingleton.elim
     · have hnlt : 1 < n := by
         have hnpos := NeZero.pos n
         omega
-      letI : Fact (1 < n) := ⟨hnlt⟩
+      let : Fact (1 < n) := ⟨hnlt⟩
       have hF : D.frobeniusEquiv (Multiplicative.ofAdd (1 : ZMod n)) =
           D.frobenius := by
         rw [D.frobeniusEquiv_apply]
@@ -2824,11 +2824,11 @@ theorem finiteArtin_universeBridge (L : FiniteGaloisIntermediateField K Ksep) :
             (AddEquiv.neg (Additive
               (Units B.model.K₀ ⧸ normSubgroup B.model.K₀ B.model.L₀)))) := by
   let D := localFieldExtensionData K L
-  letI : ValuativeRel L := D.valuativeRel
-  letI : TopologicalSpace L := D.topology
-  letI : IsNonarchimedeanLocalField L := D.localField
-  letI : ValuativeExtension K L := D.valuativeExtension
-  letI : ContinuousSMul K L := D.continuousSMul
+  let : ValuativeRel L := D.valuativeRel
+  let : TopologicalSpace L := D.topology
+  let : IsNonarchimedeanLocalField L := D.localField
+  let : ValuativeExtension K L := D.valuativeExtension
+  let : ContinuousSMul K L := D.continuousSMul
   let C := FiniteReciprocity.construction K L
   let B := C.universeBridge
   have hArt := finiteArtin_defining_equation K Ksep L
@@ -2866,11 +2866,11 @@ theorem finiteArtin_uniformizer_unramified
     finiteArtin K Ksep L (QuotientGroup.mk π.val) =
       Group.Abelianization.of (arithmeticFrobenius hL) := by
   let D := localFieldExtensionData K L
-  letI : ValuativeRel L := D.valuativeRel
-  letI : TopologicalSpace L := D.topology
-  letI : IsNonarchimedeanLocalField L := D.localField
-  letI : ValuativeExtension K L := D.valuativeExtension
-  letI : ContinuousSMul K L := D.continuousSMul
+  let : ValuativeRel L := D.valuativeRel
+  let : TopologicalSpace L := D.topology
+  let : IsNonarchimedeanLocalField L := D.localField
+  let : ValuativeExtension K L := D.valuativeExtension
+  let : ContinuousSMul K L := D.continuousSMul
   have hunr : IsUnramifiedLocalExtension K L := by
     let h := hL.unramified
     rw [hL.localFieldData_eq_selected] at h
@@ -3012,15 +3012,15 @@ private theorem finiteReciprocity_restrictionToClosure_surjective
   dsimp only
   let Ω := AlgebraicClosure F
   let j : L →ₐ[F] Ω := IsAlgClosed.lift
-  letI aLΩ : Algebra L Ω := j.toRingHom.toAlgebra
-  letI stFLΩ : IsScalarTower F L Ω :=
+  let aLΩ : Algebra L Ω := j.toRingHom.toAlgebra
+  let stFLΩ : IsScalarTower F L Ω :=
     IsScalarTower.of_algebraMap_eq fun x => (j.commutes x).symm
   let r : (L ≃ₐ[F] L) → (E →ₐ[F] Ω) := fun g =>
     j.comp (g.toAlgHom.comp (IsScalarTower.toAlgHom F E L))
   intro φ
   let aEΩ : Algebra E Ω := φ.toRingHom.toAlgebra
-  letI : Algebra E Ω := aEΩ
-  letI : IsScalarTower F E Ω :=
+  let : Algebra E Ω := aEΩ
+  let : IsScalarTower F E Ω :=
     IsScalarTower.of_algebraMap_eq fun x => (φ.commutes x).symm
   let ψ : L →ₐ[E] Ω := IsAlgClosed.lift
   let ψF : L →ₐ[F] Ω := ψ.restrictScalars F
@@ -3156,7 +3156,7 @@ private theorem finiteReciprocity_normUnitsHom_eq_embeddingProduct
     simp only [Units.coe_prod, Units.coe_map]
     rfl
   rw [hleft, hright, map_prod]
-  letI : Algebra.IsSeparable F E :=
+  let : Algebra.IsSeparable F E :=
     Algebra.isSeparable_tower_bot_of_isSeparable F E L
   calc
     (IsAlgClosed.lift : L →ₐ[F] AlgebraicClosure F)
@@ -3795,18 +3795,18 @@ private theorem finiteArtin_norm_core :
   let K₀ := DKM.model.K₀
   let E₀ := DEM.model.K₀
   let M₀ := DKM.model.L₀
-  letI fieldK₀ : Field K₀ := DKM.model.fieldK₀
-  letI fieldE₀ : Field E₀ := DEM.model.fieldK₀
-  letI fieldM₀ : Field M₀ := DKM.model.fieldL₀
-  letI vrK₀ : ValuativeRel K₀ := DKM.model.valuativeRelK₀
-  letI topK₀ : TopologicalSpace K₀ := DKM.model.topologyK₀
-  letI localK₀ : IsNonarchimedeanLocalField K₀ := DKM.model.localFieldK₀
-  letI vrE₀ : ValuativeRel E₀ := DEM.model.valuativeRelK₀
-  letI topE₀ : TopologicalSpace E₀ := DEM.model.topologyK₀
-  letI localE₀ : IsNonarchimedeanLocalField E₀ := DEM.model.localFieldK₀
-  letI vrM₀ : ValuativeRel M₀ := DKM.model.valuativeRelL₀
-  letI topM₀ : TopologicalSpace M₀ := DKM.model.topologyL₀
-  letI localM₀ : IsNonarchimedeanLocalField M₀ := DKM.model.localFieldL₀
+  let fieldK₀ : Field K₀ := DKM.model.fieldK₀
+  let fieldE₀ : Field E₀ := DEM.model.fieldK₀
+  let fieldM₀ : Field M₀ := DKM.model.fieldL₀
+  let vrK₀ : ValuativeRel K₀ := DKM.model.valuativeRelK₀
+  let topK₀ : TopologicalSpace K₀ := DKM.model.topologyK₀
+  let localK₀ : IsNonarchimedeanLocalField K₀ := DKM.model.localFieldK₀
+  let vrE₀ : ValuativeRel E₀ := DEM.model.valuativeRelK₀
+  let topE₀ : TopologicalSpace E₀ := DEM.model.topologyK₀
+  let localE₀ : IsNonarchimedeanLocalField E₀ := DEM.model.localFieldK₀
+  let vrM₀ : ValuativeRel M₀ := DKM.model.valuativeRelL₀
+  let topM₀ : TopologicalSpace M₀ := DKM.model.topologyL₀
+  let localM₀ : IsNonarchimedeanLocalField M₀ := DKM.model.localFieldL₀
   let bK : K ≃+* K₀ := DKM.baseEquiv
   let bE : E ≃+* E₀ := DEM.baseEquiv
   let bM : M ≃+* M₀ := DKM.extensionEquiv
@@ -3814,9 +3814,9 @@ private theorem finiteArtin_norm_core :
   let eE : E₀ ≃+* E := bE.symm
   let algHomK₀E₀ : K₀ →+* E₀ := bE.toRingHom.comp
     ((algebraMap K E).comp eK.toRingHom)
-  letI algK₀E₀ : Algebra K₀ E₀ := algHomK₀E₀.toAlgebra
-  letI algE₀M₀ : Algebra E₀ M₀ := DEM.model.algebra
-  letI algK₀M₀ : Algebra K₀ M₀ := DKM.model.algebra
+  let algK₀E₀ : Algebra K₀ E₀ := algHomK₀E₀.toAlgebra
+  let algE₀M₀ : Algebra E₀ M₀ := DEM.model.algebra
+  let algK₀M₀ : Algebra K₀ M₀ := DKM.model.algebra
   let semKE : E →ₛₗ[bK.toRingHom] E₀ :=
     { toFun := bE
       map_add' := bE.map_add
@@ -3825,14 +3825,14 @@ private theorem finiteArtin_norm_core :
         simp only [Algebra.smul_def]
         rw [map_mul, RingHom.algebraMap_toAlgebra]
         simp [algHomK₀E₀, eK] }
-  letI rsbK : RingHomSurjective bK.toRingHom := ⟨bK.surjective⟩
-  letI fdK₀E₀ : FiniteDimensional K₀ E₀ :=
+  let rsbK : RingHomSurjective bK.toRingHom := ⟨bK.surjective⟩
+  let fdK₀E₀ : FiniteDimensional K₀ E₀ :=
     Module.Finite.of_surjective semKE bE.surjective
-  letI fdE₀M₀ : FiniteDimensional E₀ M₀ := DEM.model.finiteDimensional
-  letI fdK₀M₀ : FiniteDimensional K₀ M₀ := DKM.model.finiteDimensional
-  letI galK₀M₀ : IsGalois K₀ M₀ := DKM.model.isGalois
-  letI galE₀M₀ : IsGalois E₀ M₀ := DEM.model.isGalois
-  letI veK₀E₀ : ValuativeExtension K₀ E₀ := by
+  let fdE₀M₀ : FiniteDimensional E₀ M₀ := DEM.model.finiteDimensional
+  let fdK₀M₀ : FiniteDimensional K₀ M₀ := DKM.model.finiteDimensional
+  let galK₀M₀ : IsGalois K₀ M₀ := DKM.model.isGalois
+  let galE₀M₀ : IsGalois E₀ M₀ := DEM.model.isGalois
+  let veK₀E₀ : ValuativeExtension K₀ E₀ := by
     constructor
     intro a b
     change eE (algebraMap K₀ E₀ a) ≤ᵥ eE (algebraMap K₀ E₀ b) ↔
@@ -3841,11 +3841,11 @@ private theorem finiteArtin_norm_core :
     simpa [algHomK₀E₀, eK, eE] using
       (ValuativeExtension.vle_iff_vle (A := K) (B := E)
         (a := eK a) (b := eK b))
-  letI veE₀M₀ : ValuativeExtension E₀ M₀ := DEM.model.valuativeExtension
-  letI veK₀M₀ : ValuativeExtension K₀ M₀ := DKM.model.valuativeExtension
+  let veE₀M₀ : ValuativeExtension E₀ M₀ := DEM.model.valuativeExtension
+  let veK₀M₀ : ValuativeExtension K₀ M₀ := DKM.model.valuativeExtension
   have heK : Continuous eK := continuous_induced_dom
   have heE : Continuous eE := continuous_induced_dom
-  letI csK₀E₀ : ContinuousSMul K₀ E₀ := ⟨by
+  let csK₀E₀ : ContinuousSMul K₀ E₀ := ⟨by
     apply (continuous_induced_rng (f := eE)).2
     rw [show (eE ∘ fun p : K₀ × E₀ => p.1 • p.2) =
         fun p => eK p.1 • eE p.2 by
@@ -3854,8 +3854,8 @@ private theorem finiteArtin_norm_core :
       rw [map_mul, RingHom.algebraMap_toAlgebra]
       simp [algHomK₀E₀, eK, eE]]
     exact (heK.comp continuous_fst).smul (heE.comp continuous_snd)⟩
-  letI csE₀M₀ : ContinuousSMul E₀ M₀ := DEM.model.continuousSMul
-  letI csK₀M₀ : ContinuousSMul K₀ M₀ := DKM.model.continuousSMul
+  let csE₀M₀ : ContinuousSMul E₀ M₀ := DEM.model.continuousSMul
+  let csK₀M₀ : ContinuousSMul K₀ M₀ := DKM.model.continuousSMul
   have hKE : ∀ x : K,
       bE (algebraMap K E x) = algebraMap K₀ E₀ (bK x) := by
     intro x
@@ -3867,7 +3867,7 @@ private theorem finiteArtin_norm_core :
   have hKM : ∀ x : K,
       bM (algebraMap K M x) = algebraMap K₀ M₀ (bK x) :=
     DKM.algebra_compatibility
-  letI stK₀E₀M₀ : IsScalarTower K₀ E₀ M₀ :=
+  let stK₀E₀M₀ : IsScalarTower K₀ E₀ M₀ :=
     IsScalarTower.of_algebraMap_eq fun x => by
       obtain ⟨y, rfl⟩ := bK.surjective x
       rw [← hKM y, ← hKE y, ← hEM (algebraMap K E y)]
@@ -4092,14 +4092,14 @@ theorem normSubgroup_isClosed : IsClosed (normSubgroup K L : Set (Units K)) := b
     rw [hN₀set]
     exact (normalizedValuation_zero_set_isCompact L).image
       (continuous_normUnitsHom K L)
-  letI : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
-  letI : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
-  letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+  let : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
+  let : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
+  let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
     { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI : NontriviallyNormedField K :=
+  let : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValuativeRel.ValueGroupWithZero K)
   have hN₀closed : IsClosed (N₀ : Set (Units K)) := hN₀compact.isClosed
   rw [← closure_eq_iff_isClosed]
@@ -4149,10 +4149,10 @@ theorem normSubgroup_isClosed : IsClosed (normSubgroup K L : Set (Units K)) := b
 
 /-- **R04**, Lemma `lem:norm-open`: finite index plus closedness makes the norm subgroup open. -/
 theorem normSubgroup_isOpen : IsOpen (normSubgroup K L : Set (Units K)) := by
-  letI : Finite (Units K ⧸ normSubgroup K L) :=
+  let : Finite (Units K ⧸ normSubgroup K L) :=
     Finite.of_equiv (Group.Abelianization (L ≃ₐ[K] L))
       (FiniteReciprocity.artin K L).symm.toEquiv
-  letI : (normSubgroup K L).FiniteIndex := Subgroup.finiteIndex_of_finite_quotient
+  let : (normSubgroup K L).FiniteIndex := Subgroup.finiteIndex_of_finite_quotient
   exact (normSubgroup K L).isOpen_of_isClosed_of_finiteIndex
     (normSubgroup_isClosed K L)
 
@@ -4200,9 +4200,9 @@ private theorem normGroup_evaluation_C
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (r : RingOfIntegers K) :
     L.evaluation (PowerSeries.C r) = algebraMap (RingOfIntegers K) L.field r := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
-  letI : ValuativeRel L.field := L.localFieldData.valuativeRel
-  letI : TopologicalSpace L.field := L.localFieldData.topology
+  let : FiniteDimensional K L.field := L.finiteDimensional
+  let : ValuativeRel L.field := L.localFieldData.valuativeRel
+  let : TopologicalSpace L.field := L.localFieldData.topology
   rw [L.evaluation_apply, tsum_eq_single 0]
   · simp [PowerSeries.coeff_C]
   · intro n hn
@@ -4212,9 +4212,9 @@ private theorem normGroup_evaluation_X
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
     L.evaluation PowerSeries.X = L.generator := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
-  letI : ValuativeRel L.field := L.localFieldData.valuativeRel
-  letI : TopologicalSpace L.field := L.localFieldData.topology
+  let : FiniteDimensional K L.field := L.finiteDimensional
+  let : ValuativeRel L.field := L.localFieldData.valuativeRel
+  let : TopologicalSpace L.field := L.localFieldData.topology
   rw [L.evaluation_apply, tsum_eq_single 1]
   · simp [PowerSeries.coeff_X]
   · intro n hn
@@ -4242,7 +4242,7 @@ private theorem normGroup_evaluation_polynomial
     hcomp, normGroup_evaluation_X K Ksep π m hm L]
 
 private theorem normGroup_one_lt_residueCard : 1 < residueCard K := by
-  letI := Fintype.ofFinite (LocalResidueField K)
+  let := Fintype.ofFinite (LocalResidueField K)
   change 1 < Nat.card (LocalResidueField K)
   rw [Nat.card_eq_fintype_card]
   exact Fintype.one_lt_card
@@ -4337,7 +4337,7 @@ private theorem normGroup_level_minpoly
     minpoly K L.generator =
       (primitiveDivisionPolynomial K π m).map
         (algebraMap (RingOfIntegers K) K) := by
-  letI : FiniteDimensional K L.field := L.finiteDimensional
+  let : FiniteDimensional K L.field := L.finiteDimensional
   let P := primitiveDivisionPolynomial K π m
   let PK := P.map (algebraMap (RingOfIntegers K) K)
   have hPmonic : P.Monic := (normGroup_primitive_monic_natDegree K π m).1
@@ -4391,9 +4391,9 @@ private theorem normGroup_negGenerator_norm
     normUnitsHom K level.field (-level.generatorUnit) = π.val := by
   dsimp only
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
   let pb := normGroup_levelPowerBasis K Ksep π m hm level
   have hpbgen : pb.gen = level.generator :=
     normGroup_levelPowerBasis_gen K Ksep π m hm level
@@ -4430,13 +4430,13 @@ private theorem normGroup_integralUnit_evaluation
         ringUnitsToFieldUnits level.field u = Units.map level.evaluation.toMonoidHom g := by
   dsimp only
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
-  letI : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
-  letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
-  letI : ContinuousSMul K level.field := level.localFieldData.continuousSMul
-  letI : (ValuativeRel.valuation K).HasExtension
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
+  let : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
+  let : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
+  let : ContinuousSMul K level.field := level.localFieldData.continuousSMul
+  let : (ValuativeRel.valuation K).HasExtension
       (ValuativeRel.valuation level.field) := by
     constructor
     exact ValuativeRel.isEquiv _ _
@@ -4692,12 +4692,12 @@ theorem lubinTate_norm_inclusion
       (primitiveDivisionPolynomial K π m).constantCoeff = uniformizerInteger K π := by
   dsimp only
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
-  letI : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
-  letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
-  letI : ContinuousSMul K level.field := level.localFieldData.continuousSMul
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
+  let : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
+  let : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
+  let : ContinuousSMul K level.field := level.localFieldData.continuousSMul
   have hnegNorm : normUnitsHom K level.field
       (lubinTateNegGeneratorUnit K Ksep π m hm) = π.val := by
     change normUnitsHom K level.field (-level.generatorUnit) = π.val
@@ -4772,7 +4772,7 @@ theorem lubinTate_normSubgroup
       rectangularSubgroup K π 1 m := by
   let L := lubinTateFiniteAbelianExtension K Ksep π m hm
   let G := L.field ≃ₐ[K] L.field
-  letI : CommGroup G :=
+  let : CommGroup G :=
     { (inferInstance : Group G) with
       mul_comm := L.commutative }
   have hinclusion : normSubgroup K L.field ≤ rectangularSubgroup K π 1 m := by
@@ -4788,7 +4788,7 @@ theorem lubinTate_normSubgroup
   have hrectIndex : (rectangularSubgroup K π 1 m).index = Nat.card G := by
     rw [normGroup_rectangular_index K Ksep π m hm]
     exact Nat.card_congr (lubinTateGaloisEquiv K Ksep π m hm).toEquiv
-  letI : (normSubgroup K L.field).FiniteIndex :=
+  let : (normSubgroup K L.field).FiniteIndex :=
     Subgroup.finiteIndex_iff.mpr (by
       rw [hnormIndex]
       exact Nat.card_pos.ne')
@@ -4819,7 +4819,7 @@ variable (K : Type u) (Ksep : Type v)
   [TopologicalSpace Ksep]
 
 private theorem e01_one_lt_residueCard : 1 < residueCard K := by
-  letI := Fintype.ofFinite (LocalResidueField K)
+  let := Fintype.ofFinite (LocalResidueField K)
   change 1 < Nat.card (LocalResidueField K)
   rw [Nat.card_eq_fintype_card]
   exact Fintype.one_lt_card
@@ -5350,50 +5350,50 @@ theorem rectangularClassField_exists (π : Uniformizer K)
     Nonempty (RectangularCompositumData K Ksep π a b ha hb) := by
   let E := (lubinTateLevel K Ksep π b hb).field
   let U := (unramifiedTower K Ksep).field (a - 1)
-  letI : FiniteDimensional K E := (lubinTateLevel K Ksep π b hb).finiteDimensional
-  letI : FiniteDimensional K U := (unramifiedTower K Ksep).finiteDimensional (a - 1)
-  letI : ValuativeRel E := (lubinTateLevel K Ksep π b hb).localFieldData.valuativeRel
-  letI : TopologicalSpace E := (lubinTateLevel K Ksep π b hb).localFieldData.topology
-  letI : IsNonarchimedeanLocalField E :=
+  let : FiniteDimensional K E := (lubinTateLevel K Ksep π b hb).finiteDimensional
+  let : FiniteDimensional K U := (unramifiedTower K Ksep).finiteDimensional (a - 1)
+  let : ValuativeRel E := (lubinTateLevel K Ksep π b hb).localFieldData.valuativeRel
+  let : TopologicalSpace E := (lubinTateLevel K Ksep π b hb).localFieldData.topology
+  let : IsNonarchimedeanLocalField E :=
     (lubinTateLevel K Ksep π b hb).localFieldData.localField
-  letI : ValuativeExtension K E :=
+  let : ValuativeExtension K E :=
     (lubinTateLevel K Ksep π b hb).localFieldData.valuativeExtension
-  letI : ContinuousSMul K E :=
+  let : ContinuousSMul K E :=
     (lubinTateLevel K Ksep π b hb).localFieldData.continuousSMul
-  letI : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U
+  let : ValuativeRel U := unramifiedIntermediateFieldValuativeRel K Ksep U
     ((unramifiedTower K Ksep).unramified (a - 1))
-  letI : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U
+  let : TopologicalSpace U := unramifiedIntermediateFieldTopology K Ksep U
     ((unramifiedTower K Ksep).unramified (a - 1))
-  letI : IsNonarchimedeanLocalField U := unramifiedIntermediateFieldLocalField K Ksep U
+  let : IsNonarchimedeanLocalField U := unramifiedIntermediateFieldLocalField K Ksep U
     ((unramifiedTower K Ksep).unramified (a - 1))
-  letI : ValuativeExtension K U := unramifiedIntermediateFieldValuativeExtension K Ksep U
+  let : ValuativeExtension K U := unramifiedIntermediateFieldValuativeExtension K Ksep U
     ((unramifiedTower K Ksep).unramified (a - 1))
-  letI : ContinuousSMul K U := unramifiedIntermediateFieldContinuousSMul K Ksep U
+  let : ContinuousSMul K U := unramifiedIntermediateFieldContinuousSMul K Ksep U
     ((unramifiedTower K Ksep).unramified (a - 1))
-  letI : IsUnramifiedLocalExtension K U := unramifiedIntermediateFieldIsUnramified K Ksep U
+  let : IsUnramifiedLocalExtension K U := unramifiedIntermediateFieldIsUnramified K Ksep U
     ((unramifiedTower K Ksep).unramified (a - 1))
   have hEg : IsGalois K E := (lubinTateGaloisData K Ksep π).isGalois b hb
   have hUg : IsGalois K U := (unramifiedTower K Ksep).isGalois (a - 1)
   let D := ((unramifiedTower K Ksep).compositum_localField E hEg (a - 1)).some
   let C : IntermediateField K Ksep := E ⊔ U
-  letI : Algebra E C := intermediateFieldInclusionAlgebra K Ksep le_sup_left
-  letI : Algebra U C := intermediateFieldInclusionAlgebra K Ksep le_sup_right
-  letI : FiniteDimensional E C := D.finiteDimensional_left
-  letI : FiniteDimensional U C := D.finiteDimensional_right
-  letI : IsScalarTower K E C := D.scalarTower_left
-  letI : IsScalarTower K U C := D.scalarTower_right
-  letI : FiniteDimensional K C := FiniteDimensional.trans K E C
-  letI : ValuativeRel C := D.compositumValuativeRel
-  letI : TopologicalSpace C := D.compositumTopology
-  letI : IsNonarchimedeanLocalField C := D.compositumLocalField
-  letI : IsGalois K C := D.isGalois_base
-  letI : IsGalois E C := D.isGalois_left
-  letI : ValuativeExtension K C := D.valuativeExtension_base
-  letI : ValuativeExtension E C := D.valuativeExtension_left
-  letI : ContinuousSMul K C := D.continuousSMul_base
-  letI : ContinuousSMul E C := D.continuousSMul_left
-  letI : IsUnramifiedLocalExtension E C := D.unramified_left
-  letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) := by
+  let : Algebra E C := intermediateFieldInclusionAlgebra K Ksep le_sup_left
+  let : Algebra U C := intermediateFieldInclusionAlgebra K Ksep le_sup_right
+  let : FiniteDimensional E C := D.finiteDimensional_left
+  let : FiniteDimensional U C := D.finiteDimensional_right
+  let : IsScalarTower K E C := D.scalarTower_left
+  let : IsScalarTower K U C := D.scalarTower_right
+  let : FiniteDimensional K C := FiniteDimensional.trans K E C
+  let : ValuativeRel C := D.compositumValuativeRel
+  let : TopologicalSpace C := D.compositumTopology
+  let : IsNonarchimedeanLocalField C := D.compositumLocalField
+  let : IsGalois K C := D.isGalois_base
+  let : IsGalois E C := D.isGalois_left
+  let : ValuativeExtension K C := D.valuativeExtension_base
+  let : ValuativeExtension E C := D.valuativeExtension_left
+  let : ContinuousSMul K C := D.continuousSMul_base
+  let : ContinuousSMul E C := D.continuousSMul_left
+  let : IsUnramifiedLocalExtension E C := D.unramified_left
+  let : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation U) := by
     constructor
     exact ValuativeRel.isEquiv _ _
   let intMap : RingOfIntegers K →+* RingOfIntegers U :=
@@ -5406,8 +5406,8 @@ theorem rectangularClassField_exists (π : Uniformizer K)
       map_mul' := fun x y => by apply Subtype.ext; simp
       map_zero' := by apply Subtype.ext; simp
       map_add' := fun x y => by apply Subtype.ext; simp }
-  letI : Algebra (RingOfIntegers K) (RingOfIntegers U) := intMap.toAlgebra
-  letI : IsScalarTower (RingOfIntegers K) (RingOfIntegers U) U :=
+  let : Algebra (RingOfIntegers K) (RingOfIntegers U) := intMap.toAlgebra
+  let : IsScalarTower (RingOfIntegers K) (RingOfIntegers U) U :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
   let pK := uniformizerInteger K π
   let pU : RingOfIntegers U := algebraMap (RingOfIntegers K) (RingOfIntegers U) pK
@@ -5573,13 +5573,13 @@ theorem rectangularClassField_exists (π : Uniformizer K)
   have hinter : U ⊓ E = ⊥ := hlinear.inf_eq_bot
   let GE := E ≃ₐ[K] E
   let GU := U ≃ₐ[K] U
-  letI : CommGroup GE :=
+  let : CommGroup GE :=
     { (inferInstance : Group GE) with
       mul_comm := (lubinTateGaloisData K Ksep π).commutative b hb }
-  letI : IsCyclic GU := isCyclic_iff_exists_zpowers_eq_top.mpr
+  let : IsCyclic GU := isCyclic_iff_exists_zpowers_eq_top.mpr
     ⟨(unramifiedTower K Ksep).frobenius (a - 1),
       (unramifiedTower K Ksep).frobenius_generates (a - 1)⟩
-  letI : CommGroup GU := IsCyclic.commGroup
+  let : CommGroup GU := IsCyclic.commGroup
   let rE : (C ≃ₐ[K] C) →* GE := AlgEquiv.restrictNormalHom E
   let rU : (C ≃ₐ[K] C) →* GU := AlgEquiv.restrictNormalHom U
   let r : (C ≃ₐ[K] C) →* GE × GU := rE.prod rU
@@ -5652,7 +5652,7 @@ theorem rectangularClassField_exists (π : Uniformizer K)
     rw [map_mul, map_mul]
     exact mul_comm _ _
   let GC := C ≃ₐ[K] C
-  letI : CommGroup GC :=
+  let : CommGroup GC :=
     { (inferInstance : Group GC) with mul_comm := hcomm }
   have hnormE : normSubgroup K C ≤ normSubgroup K E := by
     rintro x ⟨y, rfl⟩
@@ -5701,7 +5701,7 @@ theorem rectangularClassField_exists (π : Uniformizer K)
       _ = Module.finrank K C := IsGalois.card_aut_eq_finrank K C
       _ = a * (residueCard K - 1) * residueCard K ^ (b - 1) := hfinC
   have hnorm : normSubgroup K C = rectangularSubgroup K π a b := by
-    letI : (normSubgroup K C).FiniteIndex :=
+    let : (normSubgroup K C).FiniteIndex :=
       Subgroup.finiteIndex_iff.mpr (by
         rw [hnormIndex]
         exact mul_pos (mul_pos ha (Nat.sub_pos_of_lt (e01_one_lt_residueCard K)))

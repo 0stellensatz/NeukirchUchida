@@ -359,7 +359,7 @@ theorem root_proximity {K L : Type*} [Field K] [Field L]
       simpa [n] using hnone j
     rw [← coe_order_of_ne w hj0, WithTop.coe_lt_coe] at hj
     exact hj
-  letI : Nonempty (Fin n) := (Fin.pos_iff_nonempty.mp (Nat.pos_of_ne_zero hn'))
+  let : Nonempty (Fin n) := (Fin.pos_iff_nonempty.mp (Nat.pos_of_ne_zero hn'))
   have hsumReal : (∑ j : Fin n, order w (b - a j)) <
       ∑ _j : Fin n, T := by
     apply Finset.sum_lt_sum_of_nonempty Finset.univ_nonempty
@@ -904,7 +904,7 @@ lemma exists_factor_ge {K : Type*} [Field K] (v : RealValuation K)
     ∃ i : Fin n, ((T : ℝ) : RealValue) ≤ v (z i) := by
   by_contra hnone
   push Not at hnone
-  letI : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp (Nat.pos_of_ne_zero hn)
+  let : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp (Nat.pos_of_ne_zero hn)
   have hreal : ∀ i : Fin n, order v (z i) < T := by
     intro i
     have hitop : v (z i) ≠ (⊤ : RealValue) :=
@@ -1259,9 +1259,9 @@ theorem main {F Ω : Type u} [Field F] [Field Ω] [CharZero F]
     (hne : realValuationSubring v₁ ≠ realValuationSubring v₂)
     (hhens₁ : IsHenselian v₁) (hhens₂ : IsHenselian v₂) :
     IsAlgClosed F := by
-  letI : IsAlgClosure F Ω := IsAlgClosure.mk inferInstance inferInstance
-  letI : Normal F Ω := IsAlgClosure.normal F Ω
-  letI : IsGalois F Ω := IsGalois.mk
+  let : IsAlgClosure F Ω := IsAlgClosure.mk inferInstance inferInstance
+  let : Normal F Ω := IsAlgClosure.normal F Ω
+  let : IsGalois F Ω := IsGalois.mk
   obtain ⟨w₁, hw₁, _⟩ := hhens₁ Ω inferInstance
   obtain ⟨w₂, hw₂, _⟩ := hhens₂ Ω inferInstance
   apply IsAlgClosed.of_exists_root F
@@ -1381,7 +1381,7 @@ theorem main {F Ω : Type u} [Field F] [Field Ω] [CharZero F]
   have hincl := krasner_separated v₁ hhens₁ w₁ hw₁ hkclose
   have haiInt : IsIntegral F (a i) := Algebra.IsIntegral.isIntegral (a i)
   have hbInt : IsIntegral F b := Algebra.IsIntegral.isIntegral b
-  letI : FiniteDimensional F (IntermediateField.adjoin F {b}) :=
+  let : FiniteDimensional F (IntermediateField.adjoin F {b}) :=
     IntermediateField.adjoin.finiteDimensional hbInt
   have hincl' :
       (IntermediateField.adjoin F {a i}).toSubalgebra.toSubmodule ≤
@@ -1507,7 +1507,7 @@ theorem fkSchmidt_two_henselian_valuations
     (hne : realValuationSubring v₁ ≠ realValuationSubring v₂)
     (hhens₁ : IsHenselian v₁) (hhens₂ : IsHenselian v₂) :
     IsSepClosed F := by
-  letI : IsAlgClosed F := main (Ω := Ω) v₁ v₂
+  let : IsAlgClosed F := main (Ω := Ω) v₁ v₂
     (realValuation_rank_one v₁ h₁) (realValuation_rank_one v₂ h₂)
     hne hhens₁ hhens₂
   infer_instance
@@ -1528,7 +1528,7 @@ theorem consumed_of_algEquiv {Ω : Type u} [Field Ω] [Algebra ℚ Ω]
   have hZclosed : IsAlgClosed Z := main (Ω := Ω) v₁ v₂
     (rank_one_bridge Z v₁ h₁) (rank_one_bridge Z v₂ h₂)
     hne hhens₁ hhens₂
-  letI : IsAlgClosed Z := hZclosed
+  let : IsAlgClosed Z := hZclosed
   have hsurj : Function.Surjective (algebraMap Z Ω) :=
     IsSepClosed.algebraMap_surjective Z Ω
   obtain ⟨σ, hσ⟩ := hG

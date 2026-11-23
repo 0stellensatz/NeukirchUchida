@@ -109,7 +109,7 @@ theorem centralizer_absoluteGaloisGroup_eq_one
           A.coe_mem_nonunits_iff.mp hxinv
       let fW : A →+* W :=
         (i.comp A.toSubring.subtype).codRestrict W.toSubring hW
-      letI : IsLocalHom fW := hlocal
+      let : IsLocalHom fW := hlocal
       have hfa_nonunit : ¬IsUnit (fW a) := by
         intro h
         exact ha_nonunit (IsUnit.of_map fW a h)
@@ -130,7 +130,7 @@ theorem centralizer_absoluteGaloisGroup_eq_one
     have hle : A ≤ W.comap i := by
       intro x hx
       exact hW ⟨x, hx⟩
-    letI : Ring.KrullDimLE 1 A := by
+    let : Ring.KrullDimLE 1 A := by
       change Ring.KrullDimLE 1
         (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K.field v)
       infer_instance
@@ -153,15 +153,15 @@ theorem centralizer_absoluteGaloisGroup_eq_one
           trivial
         exact this
       let jW : ℚ →+* W := j.codRestrict W.toSubring hj
-      letI : Algebra ℚ W := jW.toAlgebra
-      letI : IsScalarTower ℚ W Omega := by
+      let : Algebra ℚ W := jW.toAlgebra
+      let : IsScalarTower ℚ W Omega := by
         apply IsScalarTower.of_algebraMap_eq
         intro r
         rfl
       have hxQ : IsIntegral ℚ x := by
-        letI : Algebra.IsAlgebraic ℚ Omega :=
+        let : Algebra.IsAlgebraic ℚ Omega :=
           AlgebraicClosure.isAlgebraic ℚ
-        letI : Algebra.IsIntegral ℚ Omega :=
+        let : Algebra.IsIntegral ℚ Omega :=
           Algebra.IsAlgebraic.isIntegral
         exact Algebra.IsIntegral.isIntegral x
       have hxW : IsIntegral W x := hxQ.tower_top
@@ -330,9 +330,9 @@ theorem centralizer_absoluteGaloisGroup_eq_one
     IntermediateField.adjoin ℚ ({x} : Set Omega)
   let Nfield : IntermediateField ℚ Omega :=
     IntermediateField.normalClosure ℚ A Omega
-  letI : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
-  letI : Algebra.IsIntegral ℚ Omega := Algebra.IsAlgebraic.isIntegral
-  letI : FiniteDimensional ℚ A :=
+  let : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
+  let : Algebra.IsIntegral ℚ Omega := Algebra.IsAlgebraic.isIntegral
+  let : FiniteDimensional ℚ A :=
     IntermediateField.adjoin.finiteDimensional
       (Algebra.IsIntegral.isIntegral x)
   let N : NumberFieldInOmega :=
@@ -342,12 +342,12 @@ theorem centralizer_absoluteGaloisGroup_eq_one
     IntermediateField.subset_adjoin ℚ ({x} : Set Omega) (Set.mem_singleton x)
   have hxN : x ∈ N.field := IntermediateField.le_normalClosure A hxA
   have hOmega : IsGalois ℚ Omega := by
-    letI : IsAlgClosure ℚ Omega :=
+    let : IsAlgClosure ℚ Omega :=
       ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
     exact ⟨⟩
-  letI : IsGalois ℚ Omega := hOmega
+  let : IsGalois ℚ Omega := hOmega
   have hNgal : IsGalois ℚ N.field := IsGalois.normalClosure ℚ A Omega
-  letI : IsGalois ℚ N.field := hNgal
+  let : IsGalois ℚ N.field := hNgal
   have hcN := restriction_eq_one N
   let y : N.field := ⟨x, hxN⟩
   have hy := ambientRestriction_apply N c y
@@ -384,10 +384,10 @@ theorem commonNormalLevel_nonempty (F₁ F₂ : NumberFieldInOmega) :
   have h₁ : F₁.field ≤ N.field := le_sup_left.trans hKN
   have h₂ : F₂.field ≤ N.field := le_sup_right.trans hKN
   have hOmega : IsGalois ℚ Omega := by
-    letI : IsAlgClosure ℚ Omega :=
+    let : IsAlgClosure ℚ Omega :=
       ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
     exact ⟨⟩
-  letI : IsGalois ℚ Omega := hOmega
+  let : IsGalois ℚ Omega := hOmega
   have hN : IsGalois ℚ N.field := IsGalois.normalClosure ℚ K Omega
   exact ⟨⟨N, h₁, h₂, hN⟩⟩
 
@@ -415,10 +415,10 @@ theorem commonNormalLevel_directed
   have hNL : N.field.field ≤ L.field := le_sup_left.trans hKL
   have hML : M.field.field ≤ L.field := le_sup_right.trans hKL
   have hOmega : IsGalois ℚ Omega := by
-    letI : IsAlgClosure ℚ Omega :=
+    let : IsAlgClosure ℚ Omega :=
       ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
     exact ⟨⟩
-  letI : IsGalois ℚ Omega := hOmega
+  let : IsGalois ℚ Omega := hOmega
   have hL : IsGalois ℚ L.field := IsGalois.normalClosure ℚ K Omega
   let level : CommonNormalLevel F₁ F₂ :=
     { field := L
@@ -541,8 +541,8 @@ theorem finiteLevelSolutionSet_anti
     (ambientRestriction N.field alpha)
   let i : N.field.field →ₐ[ℚ] M.field.field :=
     IntermediateField.inclusion hNM
-  letI : Algebra N.field.field M.field.field := i.toRingHom.toAlgebra
-  letI : IsScalarTower ℚ N.field.field M.field.field := by
+  let : Algebra N.field.field M.field.field := i.toRingHom.toAlgebra
+  let : IsScalarTower ℚ N.field.field M.field.field := by
     apply IsScalarTower.of_algebraMap_eq
     intro x
     rfl
@@ -704,8 +704,8 @@ theorem exists_mem_all_finiteLevelSolutionSets
       ∀ N : CommonNormalLevel F₁ F₂,
         alpha ∈ finiteLevelSolutionSet theta N := by
   classical
-  letI : IsGalois ℚ Omega := by
-    letI : IsAlgClosure ℚ Omega :=
+  let : IsGalois ℚ Omega := by
+    let : IsAlgClosure ℚ Omega :=
       ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
     exact ⟨⟩
   have hclosed (N : CommonNormalLevel F₁ F₂) :
@@ -802,8 +802,8 @@ theorem exists_global_inducingAutomorphism
     ∃ alpha : RationalAbsoluteGaloisGroup,
       ∃ hfield : conjugateField alpha F₂.field = F₁.field,
         ambientConjugationIso F₁ F₂ alpha hfield = theta := by
-  letI : IsGalois ℚ Omega := by
-    letI : IsAlgClosure ℚ Omega :=
+  let : IsGalois ℚ Omega := by
+    let : IsAlgClosure ℚ Omega :=
       ⟨AlgebraicClosure.isAlgClosed ℚ, AlgebraicClosure.isAlgebraic ℚ⟩
     exact ⟨⟩
   obtain ⟨alpha, hall⟩ := exists_mem_all_finiteLevelSolutionSets theta
@@ -851,9 +851,9 @@ theorem exists_global_inducingAutomorphism
   apply AlgEquiv.ext
   intro x
   let A := IntermediateField.adjoin ℚ ({x} : Set Omega)
-  letI : FiniteDimensional ℚ A := by
-    letI : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
-    letI : Algebra.IsIntegral ℚ Omega := Algebra.IsAlgebraic.isIntegral
+  let : FiniteDimensional ℚ A := by
+    let : Algebra.IsAlgebraic ℚ Omega := AlgebraicClosure.isAlgebraic ℚ
+    let : Algebra.IsIntegral ℚ Omega := Algebra.IsAlgebraic.isIntegral
     exact IntermediateField.adjoin.finiteDimensional
       (Algebra.IsIntegral.isIntegral x)
   let K : IntermediateField ℚ Omega := (F₁.field ⊔ F₂.field) ⊔ A

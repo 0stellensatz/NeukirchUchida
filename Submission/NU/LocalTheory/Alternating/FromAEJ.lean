@@ -472,7 +472,7 @@ theorem relativeCodim_localI_le_aejPairAnnihilator
       exact hvu
     rw [heq] at hv
     exact hv
-  letI : Module.Finite (ZMod ℓ) W :=
+  let : Module.Finite (ZMod ℓ) W :=
     Module.Finite.span_of_finite (ZMod ℓ) (by simp)
   have hdim : Module.finrank (ZMod ℓ) N ≤ Module.finrank (ZMod ℓ) M :=
     Submodule.finrank_mono hNM

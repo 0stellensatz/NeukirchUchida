@@ -1330,9 +1330,9 @@ theorem principal_iff (m : RayModulus K) (I : RayIdealGroup m) :
 /-- Blueprint Lemma 5.1, proposed declaration `RayClassGroup.finite`: every
 ray class group is finite. -/
 theorem finite (m : RayModulus K) : Finite (RayClassGroup m) := by
-  letI : Finite (NumberField.RingOfIntegers K ⧸ m.finite) :=
+  let : Finite (NumberField.RingOfIntegers K ⧸ m.finite) :=
     Ring.HasFiniteQuotients.finiteQuotient m.finite_ne
-  letI : Fintype (LocalData m) := Fintype.ofFinite (LocalData m)
+  let : Fintype (LocalData m) := Fintype.ofFinite (LocalData m)
   obtain ⟨_unitSignature, localToRay, forget, _hunit, hrange, _hforget⟩ :=
     exactSequence m
   let ft : Fintype (RayClassGroup m) :=

@@ -28,8 +28,8 @@ private theorem testRestrictSep_bijective
     {M : Type*} [Field M] : Function.Bijective (testRestrictSep (M := M)) := by
   let A := AlgebraicClosure M
   let S := separableClosure M A
-  letI : Normal M A := inferInstance
-  letI : IsGalois M S := separableClosure.isGalois M A
+  let : Normal M A := inferInstance
+  let : IsGalois M S := separableClosure.isGalois M A
   constructor
   · intro σ τ h
     apply AlgEquiv.ext
@@ -60,16 +60,16 @@ private theorem testRestrictSep_continuous
     {M : Type*} [Field M] : Continuous (testRestrictSep (M := M)) := by
   let A := AlgebraicClosure M
   let S := separableClosure M A
-  letI : Normal M A := inferInstance
-  letI : IsGalois M S := separableClosure.isGalois M A
+  let : Normal M A := inferInstance
+  let : IsGalois M S := separableClosure.isGalois M A
   exact InfiniteGalois.restrictNormalHom_continuous S
 
 private theorem testRestrictSepEquiv_symm_continuous
     {M : Type*} [Field M] : Continuous (testRestrictSepEquiv (M := M)).symm := by
   let A := AlgebraicClosure M
   let S := separableClosure M A
-  letI : Normal M A := inferInstance
-  letI : IsGalois M S := separableClosure.isGalois M A
+  let : Normal M A := inferInstance
+  let : IsGalois M S := separableClosure.isGalois M A
   apply continuous_of_continuousAt_one (testRestrictSepEquiv (M := M)).symm.toMonoidHom
   rw [continuousAt_def]
   intro U hU
@@ -89,10 +89,10 @@ private theorem testRestrictSepEquiv_symm_continuous
       commutes' := fun _ => rfl }
   let L : IntermediateField M S := iES.fieldRange
   let eEL : Esep ≃ₐ[M] L := AlgEquiv.ofInjectiveField iES
-  letI : FiniteDimensional M E := hEfin
-  letI : FiniteDimensional M Esep := FiniteDimensional.of_injective
+  let : FiniteDimensional M E := hEfin
+  let : FiniteDimensional M Esep := FiniteDimensional.of_injective
     Esep.val.toLinearMap Esep.val.injective
-  letI : FiniteDimensional M L := eEL.toLinearEquiv.finiteDimensional
+  let : FiniteDimensional M L := eEL.toLinearEquiv.finiteDimensional
   have hfix : ∀ ρ : S ≃ₐ[M] S, ρ ∈ L.fixingSubgroup →
       (testRestrictSepEquiv (M := M)).symm ρ ∈ E.fixingSubgroup := by
     intro ρ hρ
@@ -138,8 +138,8 @@ theorem absoluteGaloisGroup_compactSpace
     {M : Type*} [Field M] : CompactSpace (Field.absoluteGaloisGroup M) := by
   let A := AlgebraicClosure M
   let S := separableClosure M A
-  letI : Normal M A := inferInstance
-  letI : IsGalois M S := separableClosure.isGalois M A
+  let : Normal M A := inferInstance
+  let : IsGalois M S := separableClosure.isGalois M A
   exact (testAbsoluteContinuousEquiv (M := M)).symm.compactSpace
 
 /-- The Krull topology on the absolute Galois group is totally disconnected. -/
@@ -194,9 +194,9 @@ private theorem testEvaluationLinear_injective
   let A := TopologicalAbelianization G
   let q : G →* A := QuotientGroup.mk' C
   let nrange : AddSubgroup (Additive A) := (nsmulAddMonoidHom n).range
-  letI : IsClosed (C : Set G) := Subgroup.isClosed_topologicalClosure _
-  letI : T2Space A := inferInstance
-  letI : T2Space (Additive A) := inferInstanceAs (T2Space A)
+  let : IsClosed (C : Set G) := Subgroup.isClosed_topologicalClosure _
+  let : T2Space A := inferInstance
+  let : T2Space (Additive A) := inferInstanceAs (T2Space A)
   have hnrangeClosed : IsClosed (nrange : Set (Additive A)) := by
     have hc : IsCompact (Set.range (fun a : Additive A => n • a)) := by
       rw [← Set.image_univ]
@@ -340,7 +340,7 @@ private theorem testEvaluationLinear_surjective
       ∃ g : G, ∀ χ ∈ u, continuousCharacterValue χ g = L χ := by
     let W : Submodule (ZMod n) (ContinuousCharacter G n) :=
       Submodule.span (ZMod n) (u : Set (ContinuousCharacter G n))
-    letI : Module.Finite (ZMod n) W :=
+    let : Module.Finite (ZMod n) W :=
       Module.Finite.span_of_finite (ZMod n) u.finite_toSet
     let evW : Additive G →+ Module.Dual (ZMod n) W :=
       { toFun := fun g =>

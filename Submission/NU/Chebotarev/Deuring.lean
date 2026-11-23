@@ -47,7 +47,7 @@ private theorem frobenius_eq_of_isArith (P : PrimeIdeal L)
     (s : Gal(L/K))
     (hs : IsArithFrobAt (NumberField.RingOfIntegers K) s P.asIdeal) :
     s = arithFrobeniusAt (K := K) (L := L) P := by
-  letI : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) P.asIdeal := hunr
+  let : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) P.asIdeal := hunr
   have hfield : s.toRingEquiv.toRingHom =
       (arithFrobeniusAt (K := K) (L := L) P).toRingEquiv.toRingHom := by
     apply IsFractionRing.ringHom_ext (A := NumberField.RingOfIntegers L)
@@ -82,7 +82,7 @@ private theorem frobenius_smul (P : PrimeIdeal L)
       (Ideal.under_ne_bot (NumberField.RingOfIntegers K) Q.ne_bot)]
     dsimp [Q]
     rw [Ideal.ramificationIdx'_smul]
-    letI : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) P.asIdeal := hunr
+    let : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) P.asIdeal := hunr
     rw [← Ideal.ramificationIdx_eq_ramificationIdx'
       (P.asIdeal.under (NumberField.RingOfIntegers K)) P.asIdeal
       (Ideal.under_ne_bot (NumberField.RingOfIntegers K) P.ne_bot)]
@@ -101,7 +101,7 @@ private theorem fixedField_contraction_degreeOne
       ⟨P.asIdeal.under (NumberField.RingOfIntegers (deuringFixedField g)),
         inferInstance, by
           intro h
-          letI : P.asIdeal.LiesOver
+          let : P.asIdeal.LiesOver
               (⊥ : Ideal (NumberField.RingOfIntegers (deuringFixedField g))) :=
             ⟨by simpa [h]⟩
           exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot
@@ -114,15 +114,15 @@ private theorem fixedField_contraction_degreeOne
   let q : PrimeIdeal E :=
     ⟨P.asIdeal.under (NumberField.RingOfIntegers E), inferInstance, by
       intro h
-      letI : P.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers E)) :=
+      let : P.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers E)) :=
         ⟨by simpa [h]⟩
       exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot
         (NumberField.RingOfIntegers E) P.asIdeal)⟩
   have hPq : P.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
-  letI : P.asIdeal.LiesOver q.asIdeal := hPq
+  let : P.asIdeal.LiesOver q.asIdeal := hPq
   have hunrE : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers E) P.asIdeal := by
-    letI : Algebra.IsUnramifiedAt
+    let : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) P.asIdeal := hunr
     exact Algebra.IsUnramifiedAt.of_restrictScalars
       (NumberField.RingOfIntegers K) P.asIdeal
@@ -170,16 +170,16 @@ private theorem fixedField_contraction_degreeOne
   have hqe : (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' q.asIdeal = 1 := by
     have hunrq : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) q.asIdeal := by
-      letI : Algebra.IsUnramifiedAt
+      let : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers K) P.asIdeal := hunr
       exact Algebra.IsUnramifiedAt.of_liesOver
         (NumberField.RingOfIntegers K) q.asIdeal P.asIdeal
-    letI : Algebra.IsUnramifiedAt
+    let : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) q.asIdeal := hunrq
     exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt q.ne_bot
   refine ⟨hqe, hqf, ?_⟩
   intro Q hQq
-  letI : Q.asIdeal.LiesOver q.asIdeal := hQq
+  let : Q.asIdeal.LiesOver q.asIdeal := hQq
   obtain ⟨s, hs⟩ := Ideal.exists_smul_eq_of_isGaloisGroup
     q.asIdeal P.asIdeal Q.asIdeal Gal(L/E)
   apply IsDedekindDomain.HeightOneSpectrum.asIdeal_injective
@@ -207,7 +207,7 @@ private theorem isArithFrobAt_restrictScalars_of_inertiaDeg_one
     let p : PrimeIdeal K :=
       ⟨q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
         intro hp
-        letI : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) :=
+        let : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) :=
           ⟨by simpa [hp]⟩
         exact q.ne_bot (Ideal.eq_bot_of_liesOver_bot
           (NumberField.RingOfIntegers K) q.asIdeal)⟩
@@ -247,7 +247,7 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
   let P0 : PrimeIdeal L := ⟨s • P'.asIdeal, inferInstance, hsmulne⟩
   have hP0p : P0.asIdeal.LiesOver p.asIdeal := by
     dsimp [P0]
-    letI : P'.asIdeal.LiesOver p.asIdeal := hP'p
+    let : P'.asIdeal.LiesOver p.asIdeal := hP'p
     infer_instance
   have hunrP' := hunrp P' hP'p
   have hunrP0 := hunrp P0 hP0p
@@ -259,8 +259,8 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
       arithFrobeniusAt (K := K) (L := L) P = g}
   let toOrbit : source → MulAction.orbit C P0.asIdeal := fun P =>
     ⟨P.val.asIdeal, by
-      letI : P0.asIdeal.LiesOver p.asIdeal := hP0p
-      letI : P.val.asIdeal.LiesOver p.asIdeal := P.prop.1
+      let : P0.asIdeal.LiesOver p.asIdeal := hP0p
+      let : P.val.asIdeal.LiesOver p.asIdeal := P.prop.1
       let hex := Ideal.exists_smul_eq_of_isGaloisGroup
         p.asIdeal P0.asIdeal P.val.asIdeal G
       let t := Classical.choose hex
@@ -304,7 +304,7 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
     let Pt : PrimeIdeal L := ⟨(t : G) • P0.asIdeal, inferInstance, hne⟩
     have hPtp : Pt.asIdeal.LiesOver p.asIdeal := by
       dsimp [Pt]
-      letI : P0.asIdeal.LiesOver p.asIdeal := hP0p
+      let : P0.asIdeal.LiesOver p.asIdeal := hP0p
       infer_instance
     have hfrobPt : arithFrobeniusAt (K := K) (L := L) Pt = g := by
       rw [frobenius_smul P0 hunrP0 (t : G), hfrobP0]
@@ -326,7 +326,7 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
     ⟨P.asIdeal.under
         (NumberField.RingOfIntegers (deuringFixedField g)), inferInstance, by
       intro h
-      letI : P.asIdeal.LiesOver
+      let : P.asIdeal.LiesOver
           (⊥ : Ideal (NumberField.RingOfIntegers (deuringFixedField g))) :=
         ⟨by simpa [h]⟩
       exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot
@@ -344,7 +344,7 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
     have hPq : P.val.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
     have hunrE : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers (deuringFixedField g)) P.val.asIdeal := by
-      letI : Algebra.IsUnramifiedAt
+      let : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers K) P.val.asIdeal := hunrP
       exact Algebra.IsUnramifiedAt.of_restrictScalars
         (NumberField.RingOfIntegers K) P.val.asIdeal
@@ -399,16 +399,16 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
       exact q.prop.1.2.1
     have hunrP : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) P.asIdeal := by
-      letI : q.val.asIdeal.LiesOver p.asIdeal := ⟨q.prop.2.symm⟩
-      letI : P.asIdeal.LiesOver q.val.asIdeal := hPq
-      letI : Algebra.IsUnramifiedAt
+      let : q.val.asIdeal.LiesOver p.asIdeal := ⟨q.prop.2.symm⟩
+      let : P.asIdeal.LiesOver q.val.asIdeal := hPq
+      let : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers K) q.val.asIdeal := hunrqK
-      letI : Algebra.IsUnramifiedAt
+      let : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers (deuringFixedField g)) P.asIdeal := hunrE
       exact Algebra.IsUnramifiedAt.comp q.val.asIdeal P.asIdeal
     have hPp : P.asIdeal.LiesOver p.asIdeal := by
-      letI : P.asIdeal.LiesOver q.val.asIdeal := hPq
-      letI : q.val.asIdeal.LiesOver p.asIdeal := ⟨q.prop.2.symm⟩
+      let : P.asIdeal.LiesOver q.val.asIdeal := hPq
+      let : q.val.asIdeal.LiesOver p.asIdeal := ⟨q.prop.2.symm⟩
       exact Ideal.LiesOver.trans P.asIdeal q.val.asIdeal p.asIdeal
     have hfrobP : arithFrobeniusAt (K := K) (L := L) P = g := by
       have harithK := isArithFrobAt_restrictScalars_of_inertiaDeg_one P q.val hPq q.prop.1.2.2
@@ -516,7 +516,7 @@ private def primeUnder
     (q : PrimeIdeal E) : PrimeIdeal K :=
   ⟨q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
     intro h
-    letI : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) :=
+    let : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) :=
       ⟨by simpa [h]⟩
     exact q.ne_bot (Ideal.eq_bot_of_liesOver_bot
       (NumberField.RingOfIntegers K) q.asIdeal)⟩
@@ -565,21 +565,21 @@ theorem deuring_exceptional_primeCounting (g : Gal(L/K)) :
     rcases hqA.2 with ⟨P, hPq, _⟩
     have hunrPE := hqA.1 P hPq
     have hPp : P.asIdeal.LiesOver (primeUnder (K := K) q).asIdeal := by
-      letI : P.asIdeal.LiesOver q.asIdeal := hPq
+      let : P.asIdeal.LiesOver q.asIdeal := hPq
       change P.asIdeal.LiesOver
         (q.asIdeal.under (NumberField.RingOfIntegers K))
       exact Ideal.LiesOver.trans P.asIdeal q.asIdeal
         (q.asIdeal.under (NumberField.RingOfIntegers K))
     have hePE : (P.asIdeal.under (NumberField.RingOfIntegers E)).ramificationIdx'
         P.asIdeal = 1 := by
-      letI : Algebra.IsUnramifiedAt
+      let : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers E) P.asIdeal := hunrPE
       exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt P.ne_bot
     rw [← hPq.over] at hePE
     have hePK : (P.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' P.asIdeal =
         (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' q.asIdeal := by
-      letI : P.asIdeal.LiesOver q.asIdeal := hPq
-      letI : q.asIdeal.LiesOver
+      let : P.asIdeal.LiesOver q.asIdeal := hPq
+      let : q.asIdeal.LiesOver
           (q.asIdeal.under (NumberField.RingOfIntegers K)) := ⟨rfl⟩
       rw [← Ideal.under_under (B := NumberField.RingOfIntegers E) P.asIdeal,
         ← hPq.over, Ideal.ramificationIdx_algebra_tower'
@@ -588,7 +588,7 @@ theorem deuring_exceptional_primeCounting (g : Gal(L/K)) :
     change ¬ IsUnramifiedPrime (K := K) (L := L) (primeUnder (K := K) q)
     intro hunrp
     have hunrPK := hunrp P hPp
-    letI : Algebra.IsUnramifiedAt
+    let : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) P.asIdeal := hunrPK
     have := Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt
       (R := NumberField.RingOfIntegers K) (p := P.asIdeal) P.ne_bot
@@ -606,7 +606,7 @@ theorem deuring_exceptional_primeCounting (g : Gal(L/K)) :
           q.asIdeal).ne', hf⟩
     · exact Or.inl (Or.inr ⟨hqA, he⟩)
   have hCle (x : ℝ) : primeCounting C x ≤ Nat.card C := by
-    letI : Fintype C := hC.fintype
+    let : Fintype C := hC.fintype
     unfold primeCounting
     apply Nat.card_le_card_of_injective
       (fun q : {q : PrimeIdeal E // q ∈ C ∧ (PrimeIdeal.norm q : ℝ) ≤ x} =>
@@ -635,7 +635,7 @@ theorem deuring_exceptional_primeCounting (g : Gal(L/K)) :
         (primeCounting C x : ℝ) + (primeCounting D x : ℝ) := by
     have hBA : primeCounting B x ≤ primeCounting A x := by
       unfold primeCounting
-      letI : Finite {q : PrimeIdeal E // q ∈ A ∧ (PrimeIdeal.norm q : ℝ) ≤ x} :=
+      let : Finite {q : PrimeIdeal E // q ∈ A ∧ (PrimeIdeal.norm q : ℝ) ≤ x} :=
         boundedPrimeSet_finite A x
       apply Nat.card_le_card_of_injective
         (fun q : {q : PrimeIdeal E // q ∈ B ∧ (PrimeIdeal.norm q : ℝ) ≤ x} =>
@@ -679,14 +679,14 @@ private theorem degreeOne_contraction_mem
     exact hq.2.1
   have hunrPK : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers K) P.asIdeal := by
-    letI : P.asIdeal.LiesOver q.asIdeal := hPq
-    letI : Algebra.IsUnramifiedAt
+    let : P.asIdeal.LiesOver q.asIdeal := hPq
+    let : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) q.asIdeal := hunrqK
-    letI : Algebra.IsUnramifiedAt
+    let : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers (deuringFixedField g)) P.asIdeal := hunrPE
     exact Algebra.IsUnramifiedAt.comp q.asIdeal P.asIdeal
   have hPp : P.asIdeal.LiesOver p.asIdeal := by
-    letI : P.asIdeal.LiesOver q.asIdeal := hPq
+    let : P.asIdeal.LiesOver q.asIdeal := hPq
     change P.asIdeal.LiesOver
       (q.asIdeal.under (NumberField.RingOfIntegers K))
     exact Ideal.LiesOver.trans P.asIdeal q.asIdeal
@@ -703,12 +703,12 @@ private theorem degreeOne_contraction_mem
   have hunrp : IsUnramifiedPrime (K := K) (L := L) p := by
     intro Q hQp
     have heP : (P.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' P.asIdeal = 1 := by
-      letI : Algebra.IsUnramifiedAt
+      let : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers K) P.asIdeal := hunrPK
       exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt P.ne_bot
     have heQ : (Q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' Q.asIdeal = 1 := by
-      letI : P.asIdeal.LiesOver p.asIdeal := hPp
-      letI : Q.asIdeal.LiesOver p.asIdeal := hQp
+      let : P.asIdeal.LiesOver p.asIdeal := hPp
+      let : Q.asIdeal.LiesOver p.asIdeal := hQp
       rw [← hQp.over, Ideal.ramificationIdx_eq_ramificationIdx' p.asIdeal Q.asIdeal p.ne_bot,
         Ideal.ramificationIdx_eq_of_isGaloisGroup
           p.asIdeal Q.asIdeal P.asIdeal (Gal(L/K)),
@@ -747,9 +747,9 @@ theorem deuring_primeCounting (g : Gal(L/K)) :
       primeCounting B x = deuringFactor g * primeCounting T x := by
     let X := {q : PrimeIdeal E // q ∈ B ∧ (PrimeIdeal.norm q : ℝ) ≤ x}
     let Y := {p : PrimeIdeal K // p ∈ T ∧ (PrimeIdeal.norm p : ℝ) ≤ x}
-    letI : Finite X := boundedPrimeSet_finite B x
-    letI : Finite Y := boundedPrimeSet_finite T x
-    letI : Fintype Y := Fintype.ofFinite Y
+    let : Finite X := boundedPrimeSet_finite B x
+    let : Finite Y := boundedPrimeSet_finite T x
+    let : Fintype Y := Fintype.ofFinite Y
     let f : X → Y := fun q =>
       ⟨primeUnder (K := K) q.val,
         (degreeOne_contraction_mem g q.val q.prop.1).1,
@@ -954,8 +954,8 @@ private theorem degreeOne_dirichletPrimeSum (g : Gal(L/K)) (s : ℝ) :
     exact_mod_cast (degreeOne_contraction_mem g q.val q.prop).2
   have hinternal (p : Y) :
       ∑' q : {q : X // f q = p}, a p = (deuringFactor g : ℝ) * a p := by
-    letI : Finite {q : X // f q = p} := hfiberFinite p
-    letI : Fintype {q : X // f q = p} := Fintype.ofFinite _
+    let : Finite {q : X // f q = p} := hfiberFinite p
+    let : Fintype {q : X // f q = p} := Fintype.ofFinite _
     rw [tsum_fintype, Finset.sum_const, Finset.card_univ,
       ← Nat.card_eq_fintype_card, hfiber]
     simp [nsmul_eq_mul]
@@ -969,8 +969,8 @@ private theorem degreeOne_dirichletPrimeSum (g : Gal(L/K)) (s : ℝ) :
         rw [summable_sigma_of_nonneg hnonneg]
         constructor
         · intro p
-          letI : Finite {q : X // f q = p} := hfiberFinite p
-          letI : Fintype {q : X // f q = p} := Fintype.ofFinite _
+          let : Finite {q : X // f q = p} := hfiberFinite p
+          let : Fintype {q : X // f q = p} := Fintype.ofFinite _
           exact (hasSum_fintype _).summable
         · simpa only [hinternal] using ha.mul_left (deuringFactor g : ℝ)
       rw [hz.tsum_sigma]
@@ -1040,7 +1040,7 @@ theorem deuring_dirichletDensity (g : Gal(L/K)) (δ : ℝ) :
       rw [hcount]
       have hle : primeCounting B x ≤ primeCounting A x := by
         unfold primeCounting
-        letI : Finite {q : PrimeIdeal (deuringFixedField g) //
+        let : Finite {q : PrimeIdeal (deuringFixedField g) //
             q ∈ A ∧ (PrimeIdeal.norm q : ℝ) ≤ x} := boundedPrimeSet_finite A x
         apply Nat.card_le_card_of_injective
           (fun q : {q : PrimeIdeal (deuringFixedField g) //

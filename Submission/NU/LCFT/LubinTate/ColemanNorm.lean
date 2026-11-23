@@ -561,9 +561,9 @@ theorem colemanNorm_exists (π : Uniformizer K) :
   let f := lubinTateSeries K π
   let I := LocalMaximalIdeal K
   let q := residueCard K
-  letI : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
-  letI : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
-  letI : IsAdicComplete I R := by
+  let : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
+  let : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
+  let : IsAdicComplete I R := by
     dsimp [I, R]
     infer_instance
   have hf0 : PowerSeries.constantCoeff f = 0 :=
@@ -892,7 +892,7 @@ private theorem colemanNorm_mvPowerSeries_expand_card_fintype
     f.expand (Fintype.card k) Fintype.card_ne_zero = f ^ Fintype.card k := by
   obtain ⟨p, hp⟩ := CharP.exists k
   rcases FiniteField.card k p with ⟨⟨n, _⟩, ⟨hp, hn⟩⟩
-  letI : Fact p.Prime := ⟨hp⟩
+  let : Fact p.Prime := ⟨hp⟩
   dsimp at hn
   have h := MvPowerSeries.map_iterateFrobenius_expand p hp.ne_zero f n
   rw [iterateFrobenius_eq_pow, FiniteField.frobenius_pow hn] at h
@@ -903,7 +903,7 @@ private theorem colemanNorm_mvPowerSeries_expand_card_fintype
 private theorem colemanNorm_mvPowerSeries_expand_card
     {σ k : Type*} [Field k] [Finite k] (f : MvPowerSeries σ k) :
     f.expand (Nat.card k) (Nat.card_pos.ne') = f ^ Nat.card k := by
-  letI := Fintype.ofFinite k
+  let := Fintype.ofFinite k
   simpa only [Nat.card_eq_fintype_card] using colemanNorm_mvPowerSeries_expand_card_fintype f
 
 private theorem colemanNorm_frobenius_factor (π : Uniformizer K)
@@ -1107,7 +1107,7 @@ private theorem colemanNorm_trace_map_zero (π : Uniformizer K) (D : ColemanNorm
     _ = 0 := by
       rw [Fin.sum_const, nsmul_eq_mul]
       have hcast : (q : LocalResidueField K) = 0 := by
-        letI := Fintype.ofFinite (LocalResidueField K)
+        let := Fintype.ofFinite (LocalResidueField K)
         change (Nat.card (LocalResidueField K) : LocalResidueField K) = 0
         rw [Nat.card_eq_fintype_card]
         exact FiniteField.cast_card_eq_zero (K := LocalResidueField K)
@@ -1335,9 +1335,9 @@ private theorem test_summable
     (g : PowerSeries (RingOfIntegers K)) :
     Summable (fun n : ℕ => algebraMap (RingOfIntegers K) L
       (PowerSeries.coeff n g) * β ^ n) := by
-  letI : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
-  letI : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
-  letI : NonarchimedeanRing L := by
+  let : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
+  let : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
+  let : NonarchimedeanRing L := by
     rw [Valuation.toTopologicalSpace_eq (ValuativeRel.valuation L)]
     exact ValuativeRel.nonarchimedeanRing L
   apply NonarchimedeanAddGroup.summable_of_tendsto_cofinite_zero
@@ -1409,8 +1409,8 @@ private theorem test_adic_inclusion_continuous
     letI : WithIdeal (RingOfIntegers F) := ⟨LocalMaximalIdeal F⟩
     letI : TopologicalSpace (RingOfIntegers F) := (LocalMaximalIdeal F).adicTopology
     Continuous (algebraMap (RingOfIntegers F) F) := by
-  letI : WithIdeal (RingOfIntegers F) := ⟨LocalMaximalIdeal F⟩
-  letI : TopologicalSpace (RingOfIntegers F) := (LocalMaximalIdeal F).adicTopology
+  let : WithIdeal (RingOfIntegers F) := ⟨LocalMaximalIdeal F⟩
+  let : TopologicalSpace (RingOfIntegers F) := (LocalMaximalIdeal F).adicTopology
   let incl : RingOfIntegers F →+* F := algebraMap (RingOfIntegers F) F
   apply continuous_of_continuousAt_zero incl
   rw [ContinuousAt, map_zero]
@@ -1503,24 +1503,24 @@ private theorem testAdicEval_apply
     (g : PowerSeries (RingOfIntegers K)) :
     algebraMap (RingOfIntegers L) L (testAdicEval K c β hβ g) =
       powerSeriesValue K (algebraMap (RingOfIntegers K) L) (β : L) g := by
-  letI : TopologicalSpace (RingOfIntegers K) := ⊥
-  letI : UniformSpace (RingOfIntegers K) := ⊥
-  letI : DiscreteUniformity (RingOfIntegers K) := ⟨rfl⟩
-  letI : DiscreteTopology (RingOfIntegers K) := ⟨rfl⟩
-  letI : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
-  letI : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
-  letI : WithIdeal (RingOfIntegers L) := ⟨LocalMaximalIdeal L⟩
-  letI : TopologicalSpace (RingOfIntegers L) := (LocalMaximalIdeal L).adicTopology
-  letI : UniformSpace (RingOfIntegers L) := IsTopologicalAddGroup.rightUniformSpace _
-  letI : IsUniformAddGroup (RingOfIntegers L) := isUniformAddGroup_of_addCommGroup
-  letI : IsLinearTopology (RingOfIntegers L) (RingOfIntegers L) :=
+  let : TopologicalSpace (RingOfIntegers K) := ⊥
+  let : UniformSpace (RingOfIntegers K) := ⊥
+  let : DiscreteUniformity (RingOfIntegers K) := ⟨rfl⟩
+  let : DiscreteTopology (RingOfIntegers K) := ⟨rfl⟩
+  let : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
+  let : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
+  let : WithIdeal (RingOfIntegers L) := ⟨LocalMaximalIdeal L⟩
+  let : TopologicalSpace (RingOfIntegers L) := (LocalMaximalIdeal L).adicTopology
+  let : UniformSpace (RingOfIntegers L) := IsTopologicalAddGroup.rightUniformSpace _
+  let : IsUniformAddGroup (RingOfIntegers L) := isUniformAddGroup_of_addCommGroup
+  let : IsLinearTopology (RingOfIntegers L) (RingOfIntegers L) :=
     (LocalMaximalIdeal L).isLinearTopology
   have hadic : IsAdic (LocalMaximalIdeal L) := rfl
   have hcomplete := hadic.isAdicComplete_iff.mp
     (inferInstance : IsAdicComplete (LocalMaximalIdeal L) (RingOfIntegers L))
-  letI : CompleteSpace (RingOfIntegers L) := hcomplete.1
-  letI : T2Space (RingOfIntegers L) := hcomplete.2
-  letI : Algebra (RingOfIntegers K) (RingOfIntegers L) := c.toAlgebra
+  let : CompleteSpace (RingOfIntegers L) := hcomplete.1
+  let : T2Space (RingOfIntegers L) := hcomplete.2
+  let : Algebra (RingOfIntegers K) (RingOfIntegers L) := c.toAlgebra
   have hs := PowerSeries.hasSum_eval₂
     (continuous_of_discreteTopology : Continuous c)
     (WithIdeal.isTopologicallyNilpotent_of_mem hβ) g
@@ -1548,24 +1548,24 @@ private theorem testAdicEval_coe
     (p : Polynomial (RingOfIntegers K)) :
     testAdicEval K c β hβ (p : PowerSeries (RingOfIntegers K)) =
       p.eval₂ c β := by
-  letI : TopologicalSpace (RingOfIntegers K) := ⊥
-  letI : UniformSpace (RingOfIntegers K) := ⊥
-  letI : DiscreteUniformity (RingOfIntegers K) := ⟨rfl⟩
-  letI : DiscreteTopology (RingOfIntegers K) := ⟨rfl⟩
-  letI : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
-  letI : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
-  letI : WithIdeal (RingOfIntegers L) := ⟨LocalMaximalIdeal L⟩
-  letI : TopologicalSpace (RingOfIntegers L) := (LocalMaximalIdeal L).adicTopology
-  letI : UniformSpace (RingOfIntegers L) := IsTopologicalAddGroup.rightUniformSpace _
-  letI : IsUniformAddGroup (RingOfIntegers L) := isUniformAddGroup_of_addCommGroup
-  letI : IsLinearTopology (RingOfIntegers L) (RingOfIntegers L) :=
+  let : TopologicalSpace (RingOfIntegers K) := ⊥
+  let : UniformSpace (RingOfIntegers K) := ⊥
+  let : DiscreteUniformity (RingOfIntegers K) := ⟨rfl⟩
+  let : DiscreteTopology (RingOfIntegers K) := ⟨rfl⟩
+  let : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
+  let : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
+  let : WithIdeal (RingOfIntegers L) := ⟨LocalMaximalIdeal L⟩
+  let : TopologicalSpace (RingOfIntegers L) := (LocalMaximalIdeal L).adicTopology
+  let : UniformSpace (RingOfIntegers L) := IsTopologicalAddGroup.rightUniformSpace _
+  let : IsUniformAddGroup (RingOfIntegers L) := isUniformAddGroup_of_addCommGroup
+  let : IsLinearTopology (RingOfIntegers L) (RingOfIntegers L) :=
     (LocalMaximalIdeal L).isLinearTopology
   have hadic : IsAdic (LocalMaximalIdeal L) := rfl
   have hcomplete := hadic.isAdicComplete_iff.mp
     (inferInstance : IsAdicComplete (LocalMaximalIdeal L) (RingOfIntegers L))
-  letI : CompleteSpace (RingOfIntegers L) := hcomplete.1
-  letI : T2Space (RingOfIntegers L) := hcomplete.2
-  letI : Algebra (RingOfIntegers K) (RingOfIntegers L) := c.toAlgebra
+  let : CompleteSpace (RingOfIntegers L) := hcomplete.1
+  let : T2Space (RingOfIntegers L) := hcomplete.2
+  let : Algebra (RingOfIntegers K) (RingOfIntegers L) := c.toAlgebra
   rw [testAdicEval, PowerSeries.coe_eval₂Hom, PowerSeries.eval₂_coe]
 
 private theorem testAdicEval_X
@@ -1591,24 +1591,24 @@ private theorem testAdicEval_subst
     (hfa : testAdicEval K c β hβ f = a) :
     testAdicEval K c β hβ (PowerSeries.subst f h) =
       testAdicEval K c a ha h := by
-  letI : TopologicalSpace (RingOfIntegers K) := ⊥
-  letI : UniformSpace (RingOfIntegers K) := ⊥
-  letI : DiscreteUniformity (RingOfIntegers K) := ⟨rfl⟩
-  letI : DiscreteTopology (RingOfIntegers K) := ⟨rfl⟩
-  letI : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
-  letI : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
-  letI : WithIdeal (RingOfIntegers L) := ⟨LocalMaximalIdeal L⟩
-  letI : TopologicalSpace (RingOfIntegers L) := (LocalMaximalIdeal L).adicTopology
-  letI : UniformSpace (RingOfIntegers L) := IsTopologicalAddGroup.rightUniformSpace _
-  letI : IsUniformAddGroup (RingOfIntegers L) := isUniformAddGroup_of_addCommGroup
-  letI : IsLinearTopology (RingOfIntegers L) (RingOfIntegers L) :=
+  let : TopologicalSpace (RingOfIntegers K) := ⊥
+  let : UniformSpace (RingOfIntegers K) := ⊥
+  let : DiscreteUniformity (RingOfIntegers K) := ⟨rfl⟩
+  let : DiscreteTopology (RingOfIntegers K) := ⟨rfl⟩
+  let : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
+  let : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
+  let : WithIdeal (RingOfIntegers L) := ⟨LocalMaximalIdeal L⟩
+  let : TopologicalSpace (RingOfIntegers L) := (LocalMaximalIdeal L).adicTopology
+  let : UniformSpace (RingOfIntegers L) := IsTopologicalAddGroup.rightUniformSpace _
+  let : IsUniformAddGroup (RingOfIntegers L) := isUniformAddGroup_of_addCommGroup
+  let : IsLinearTopology (RingOfIntegers L) (RingOfIntegers L) :=
     (LocalMaximalIdeal L).isLinearTopology
   have hadic : IsAdic (LocalMaximalIdeal L) := rfl
   have hcomplete := hadic.isAdicComplete_iff.mp
     (inferInstance : IsAdicComplete (LocalMaximalIdeal L) (RingOfIntegers L))
-  letI : CompleteSpace (RingOfIntegers L) := hcomplete.1
-  letI : T2Space (RingOfIntegers L) := hcomplete.2
-  letI : Algebra (RingOfIntegers K) (RingOfIntegers L) := c.toAlgebra
+  let : CompleteSpace (RingOfIntegers L) := hcomplete.1
+  let : T2Space (RingOfIntegers L) := hcomplete.2
+  let : Algebra (RingOfIntegers K) (RingOfIntegers L) := c.toAlgebra
   have hf : PowerSeries.HasSubst f :=
     PowerSeries.HasSubst.of_constantCoeff_zero' hf0
   have hβe : PowerSeries.HasEval β := WithIdeal.isTopologicallyNilpotent_of_mem hβ
@@ -1638,7 +1638,7 @@ private theorem test_iterate_monic_natDegree
     rw [← (uniformizer_integer_exists K π).choose_spec]
     exact congrArg (fun x : RingOfIntegers K => (x : K)) h
   have hq : 1 < residueCard K := by
-    letI := Fintype.ofFinite (LocalResidueField K)
+    let := Fintype.ofFinite (LocalResidueField K)
     change 1 < Nat.card (LocalResidueField K)
     rw [Nat.card_eq_fintype_card]
     exact Fintype.one_lt_card
@@ -1752,16 +1752,16 @@ private theorem testTorsionRootInteger_mem_maximalIdeal
     letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
     testTorsionRootInteger K Ksep π m hm β hβ ∈ LocalMaximalIdeal level.field := by
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
-  letI : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
-  letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
+  let : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
+  let : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
   let c := level.integerAlgebraMap
-  letI : Algebra (RingOfIntegers K) (RingOfIntegers level.field) := c.toAlgebra
-  letI : IsScalarTower (RingOfIntegers K) (RingOfIntegers level.field) level.field :=
+  let : Algebra (RingOfIntegers K) (RingOfIntegers level.field) := c.toAlgebra
+  let : IsScalarTower (RingOfIntegers K) (RingOfIntegers level.field) level.field :=
     IsScalarTower.of_algebraMap_eq fun x => (level.integerAlgebraMap_apply x).symm
-  letI : (ValuativeRel.valuation K).HasExtension
+  let : (ValuativeRel.valuation K).HasExtension
       (ValuativeRel.valuation level.field) := by
     constructor
     exact ValuativeRel.isEquiv _ _
@@ -1870,7 +1870,7 @@ private theorem test_primitive_monic_natDegree
     rw [← (uniformizer_integer_exists K π).choose_spec]
     exact congrArg (fun x : RingOfIntegers K => (x : K)) h
   have hq : 1 < residueCard K := by
-    letI := Fintype.ofFinite (LocalResidueField K)
+    let := Fintype.ofFinite (LocalResidueField K)
     change 1 < Nat.card (LocalResidueField K)
     rw [Nat.card_eq_fintype_card]
     exact Fintype.one_lt_card
@@ -1930,7 +1930,7 @@ private theorem test_primitive_irreducible_K
       (algebraMap (RingOfIntegers K) K)) := by
   have hmonic := (test_primitive_monic_natDegree K π m hm).1
   have hq : 1 < residueCard K := by
-    letI := Fintype.ofFinite (LocalResidueField K)
+    let := Fintype.ofFinite (LocalResidueField K)
     change 1 < Nat.card (LocalResidueField K)
     rw [Nat.card_eq_fintype_card]
     exact Fintype.one_lt_card
@@ -1958,9 +1958,9 @@ private theorem test_primitive_splits_separable_in_level
       (algebraMap (RingOfIntegers K) level.field)).Separable) := by
   let level := lubinTateLevel K Ksep π m hm
   let lower := lubinTateLevel K Ksep π j hj
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : FiniteDimensional K lower.field := lower.finiteDimensional
-  letI : IsGalois K level.field := (lubinTateGaloisData K Ksep π).isGalois m hm
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : FiniteDimensional K lower.field := lower.finiteDimensional
+  let : IsGalois K level.field := (lubinTateGaloisData K Ksep π).isGalois m hm
   have hle : lower.field ≤ level.field := by
     simpa only [level, lower, proof_irrel_heq] using
       test_tower_field_le K Ksep π hj hjm
@@ -2034,8 +2034,8 @@ private theorem test_iterate_primitive_isCoprime_in_level
         (algebraMap (RingOfIntegers K) level.field)) := by
   let level := lubinTateLevel K Ksep π m hm
   let lower := lubinTateLevel K Ksep π j hj
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : FiniteDimensional K lower.field := lower.finiteDimensional
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : FiniteDimensional K lower.field := lower.finiteDimensional
   let QK := (primitiveDivisionPolynomial K π j).map
     (algebraMap (RingOfIntegers K) K)
   let FK := (lubinTateIterate K π (j - 1)).map
@@ -2082,8 +2082,8 @@ private theorem test_iterate_splits_separable_in_level
      ((lubinTateIterate K π n).map
       (algebraMap (RingOfIntegers K) level.field)).Separable) := by
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : IsGalois K level.field := (lubinTateGaloisData K Ksep π).isGalois m hm
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : IsGalois K level.field := (lubinTateGaloisData K Ksep π).isGalois m hm
   induction n with
   | zero => simp [lubinTateIterate, Polynomial.separable_X]
   | succ n ih =>
@@ -2155,7 +2155,7 @@ private theorem test_fiber_splits_separable
       (algebraMap (RingOfIntegers K) level.field) - Polynomial.C a
     P.Splits ∧ P.Separable := by
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
+  let : FiniteDimensional K level.field := level.finiteDimensional
   let φ := algebraMap (RingOfIntegers K) level.field
   let P := (lubinTatePolynomial K π).map φ - Polynomial.C a
   have hall := test_iterate_splits_separable_in_level
@@ -2274,12 +2274,12 @@ private theorem test_fiber_operator_product
         (algebraMap (RingOfIntegers K) level.field) β g)).prod := by
   classical
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
-  letI : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
-  letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
-  letI : ContinuousSMul K level.field := level.localFieldData.continuousSMul
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
+  let : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
+  let : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
+  let : ContinuousSMul K level.field := level.localFieldData.continuousSMul
   let c := level.integerAlgebraMap
   let φ := algebraMap (RingOfIntegers K) level.field
   let F := (lubinTatePolynomial K π).map φ
@@ -2486,7 +2486,7 @@ private theorem test_fiber_roots_succ
         (fun b => ((lubinTateIterate K π r).map φ - Polynomial.C b).roots) := by
   classical
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
+  let : FiniteDimensional K level.field := level.finiteDimensional
   let φ := algebraMap (RingOfIntegers K) level.field
   let F := (lubinTatePolynomial K π).map φ
   let Fr := (lubinTateIterate K π r).map φ
@@ -2573,11 +2573,11 @@ private theorem test_operator_iterate_fiber_product
         (fun z => powerSeriesValue K φ z g)).prod) := by
   classical
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
-  letI : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
-  letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
+  let : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
+  let : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
   let φ := algebraMap (RingOfIntegers K) level.field
   dsimp only
   induction r generalizing n a with
@@ -2674,9 +2674,9 @@ private theorem test_iteration_torsion_product
         (PowerSeries.constantCoeff (colemanNormIterate K π m g)) =
       lubinTateTorsionProduct K Ksep π m hm g := by
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
   let φ := algebraMap (RingOfIntegers K) level.field
   have hzero : ((lubinTateIterate K π 0).map φ).IsRoot (0 : level.field) := by
     simp [lubinTateIterate]
@@ -2695,9 +2695,9 @@ private theorem test_algEquiv_continuous
     {L : Type v} [Field L] [Algebra K L] [FiniteDimensional K L]
     [TopologicalSpace L] [IsTopologicalAddGroup L] [T2Space L] [ContinuousSMul K L]
     (σ : L ≃ₐ[K] L) : Continuous σ := by
-  letI : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
-  letI : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
-  letI : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
+  let : UniformSpace K := IsTopologicalAddGroup.rightUniformSpace K
+  let : IsUniformAddGroup K := isUniformAddGroup_of_addCommGroup
+  let : (Valued.v (R := K) (Γ₀ := ValuativeRel.ValueGroupWithZero K)).RankOne :=
     { hom' := ValuativeRel.IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := ValuativeRel.IsRankLeOne.nonempty.some.strictMono.comp
@@ -2716,8 +2716,8 @@ private theorem test_powerSeriesValue_algEquiv
     (g : PowerSeries (RingOfIntegers K)) :
     σ (powerSeriesValue K (algebraMap (RingOfIntegers K) L) x g) =
       powerSeriesValue K (algebraMap (RingOfIntegers K) L) (σ x) g := by
-  letI : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
-  letI : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
+  let : UniformSpace L := IsTopologicalAddGroup.rightUniformSpace L
+  let : IsUniformAddGroup L := isUniformAddGroup_of_addCommGroup
   have hs := (test_summable K x hx g).hasSum
   have hsmap := hs.map σ.toRingEquiv.toRingHom (test_algEquiv_continuous K σ)
   unfold powerSeriesValue
@@ -2749,9 +2749,9 @@ private theorem test_galoisEquiv_primitiveRoots
       ∀ σ, ((e σ : Q.roots.toFinset) : level.field) = σ level.generator := by
   classical
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : IsGalois K level.field := (lubinTateGaloisData K Ksep π).isGalois m hm
-  letI : DecidableEq level.field := Classical.decEq level.field
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : IsGalois K level.field := (lubinTateGaloisData K Ksep π).isGalois m hm
+  let : DecidableEq level.field := Classical.decEq level.field
   let Q := (primitiveDivisionPolynomial K π m).map
     (algebraMap (RingOfIntegers K) level.field)
   have hQdata := test_primitive_splits_separable_in_level K Ksep π m hm m hm le_rfl
@@ -2870,14 +2870,14 @@ private theorem test_primitive_norm_product
         (g : PowerSeries (RingOfIntegers K)) := by
   classical
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
-  letI : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
-  letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
-  letI : ContinuousSMul K level.field := level.localFieldData.continuousSMul
-  letI : IsGalois K level.field := (lubinTateGaloisData K Ksep π).isGalois m hm
-  letI : DecidableEq level.field := Classical.decEq level.field
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
+  let : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
+  let : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
+  let : ContinuousSMul K level.field := level.localFieldData.continuousSMul
+  let : IsGalois K level.field := (lubinTateGaloisData K Ksep π).isGalois m hm
+  let : DecidableEq level.field := Classical.decEq level.field
   let Q := (primitiveDivisionPolynomial K π m).map
     (algebraMap (RingOfIntegers K) level.field)
   obtain ⟨e, he⟩ := test_galoisEquiv_primitiveRoots K Ksep π m hm
@@ -2972,11 +2972,11 @@ private theorem test_torsion_roots_hasEval
         (algebraMap (RingOfIntegers K) level.field)).IsRoot β →
           PowerSeries.HasEval β) := by
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
-  letI : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
-  letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
+  let : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
+  let : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
   let φ := algebraMap (RingOfIntegers K) level.field
   have hall (β : level.field)
       (hβ : ((lubinTateIterate K π m).map φ).IsRoot β) :
@@ -2984,8 +2984,8 @@ private theorem test_torsion_roots_hasEval
     let βO := testTorsionRootInteger K Ksep π m hm β hβ
     have hβmax : βO ∈ LocalMaximalIdeal level.field :=
       testTorsionRootInteger_mem_maximalIdeal K Ksep π m hm β hβ
-    letI : WithIdeal (RingOfIntegers level.field) := ⟨LocalMaximalIdeal level.field⟩
-    letI : TopologicalSpace (RingOfIntegers level.field) :=
+    let : WithIdeal (RingOfIntegers level.field) := ⟨LocalMaximalIdeal level.field⟩
+    let : TopologicalSpace (RingOfIntegers level.field) :=
       (LocalMaximalIdeal level.field).adicTopology
     have hO : PowerSeries.HasEval βO :=
       WithIdeal.isTopologicallyNilpotent_of_mem hβmax
@@ -3032,12 +3032,12 @@ private theorem test_constant_iteration_primitive
         (((lubinTatePrimitiveProduct K Ksep π m hm g : Units K) : K)) := by
   classical
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
-  letI : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
-  letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
-  letI : ContinuousSMul K level.field := level.localFieldData.continuousSMul
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
+  let : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
+  let : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
+  let : ContinuousSMul K level.field := level.localFieldData.continuousSMul
   let φ := algebraMap (RingOfIntegers K) level.field
   let gm := (g : PowerSeries (RingOfIntegers K))
   have hfull := test_iteration_torsion_product K Ksep π m hm hinc gm
@@ -3289,12 +3289,12 @@ theorem colemanNorm_iteration_product
       normUnitsHom K level.field (Units.map level.evaluation.toMonoidHom g) ∧
     lubinTatePrimitiveProduct K Ksep π m hm g ∈ principalUnitSubgroup K m := by
   let level := lubinTateLevel K Ksep π m hm
-  letI : FiniteDimensional K level.field := level.finiteDimensional
-  letI : ValuativeRel level.field := level.localFieldData.valuativeRel
-  letI : TopologicalSpace level.field := level.localFieldData.topology
-  letI : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
-  letI : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
-  letI : ContinuousSMul K level.field := level.localFieldData.continuousSMul
+  let : FiniteDimensional K level.field := level.finiteDimensional
+  let : ValuativeRel level.field := level.localFieldData.valuativeRel
+  let : TopologicalSpace level.field := level.localFieldData.topology
+  let : IsNonarchimedeanLocalField level.field := level.localFieldData.localField
+  let : ValuativeExtension K level.field := level.localFieldData.valuativeExtension
+  let : ContinuousSMul K level.field := level.localFieldData.continuousSMul
   let ϖ := defaultUniformizer level.field
   let p := uniformizerInteger level.field ϖ
   have hpvalField : (p : level.field) = (ϖ.val : level.field) :=

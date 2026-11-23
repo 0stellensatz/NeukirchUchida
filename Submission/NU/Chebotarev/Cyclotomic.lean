@@ -54,7 +54,7 @@ theorem exists_cyclotomicModulus (n : ℕ) (hn : 1 ≤ n) :
       (FaithfulSMul.algebraMap_injective ℤ
         (NumberField.RingOfIntegers K))).2
     exact_mod_cast (Nat.ne_of_gt hn)
-  letI := Fintype.ofFinite (K →+* ℝ)
+  let := Fintype.ofFinite (K →+* ℝ)
   let m : RayModulus K :=
     { finite := Ideal.span
         {algebraMap ℤ (NumberField.RingOfIntegers K) (n : ℤ)} * J
@@ -69,7 +69,7 @@ theorem exists_cyclotomicModulus (n : ℕ) (hn : 1 ≤ n) :
     let p : PrimeIdeal K :=
       ⟨Q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
         intro hp
-        letI : Q.asIdeal.LiesOver
+        let : Q.asIdeal.LiesOver
             (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simpa [hp]⟩
         exact Q.ne_bot
           (Ideal.eq_bot_of_liesOver_bot
@@ -504,7 +504,7 @@ private noncomputable def cyclotomicPrimeAbove
   refine ⟨q.1, q.2.1, ?_⟩
   intro hq
   have hover := q.2.2
-  letI : q.1.LiesOver p.asIdeal := hover
+  let : q.1.LiesOver p.asIdeal := hover
   apply p.ne_bot
   rw [hover.over]
   simpa [hq]
@@ -632,7 +632,7 @@ private theorem cyclotomic_aut_freeFrobenius
           (cyclotomicPrimeFrobAway (F := F) m p)) ^
         FractionalIdeal.count K p
           (X : FractionalIdeal (NumberField.RingOfIntegers K)⁰ K) := by
-  letI : IsAbelianGalois K F :=
+  let : IsAbelianGalois K F :=
     IsCyclotomicExtension.isAbelianGalois {n} K F
   let hζ := IsCyclotomicExtension.zeta_spec n K F
   calc
@@ -658,8 +658,8 @@ private theorem cyclotomicFreeFrobenius_kills
     RayPrincipalSubgroup m ≤
       ((cyclotomicFreeFrobenius (F := F) n m).comp (RayIdealGroup m).subtype).ker := by
   classical
-  letI : NeZero n := ⟨Nat.ne_of_gt hn⟩
-  letI : IsAbelianGalois K F :=
+  let : NeZero n := ⟨Nat.ne_of_gt hn⟩
+  let : IsAbelianGalois K F :=
     IsCyclotomicExtension.isAbelianGalois {n} K F
   let hζ := IsCyclotomicExtension.zeta_spec n K F
   let prime : PrimeIdeal K → Gal(F/K) := cyclotomicPrimeFrobAway (F := F) m
@@ -797,7 +797,7 @@ private theorem cyclotomicRestrictPrimeFrob
         Nat.card (NumberField.RingOfIntegers K ⧸
           P.asIdeal.under (NumberField.RingOfIntegers K)) ∈ P.asIdeal at hs
     simpa only [map_sub, map_pow, hact] using hs
-  letI : Algebra.IsUnramifiedAt
+  let : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers K) q.asIdeal := hunrq
   have heq := hr.eq_of_isUnramifiedAt
     (IsArithFrobAt.arithFrobAt (NumberField.RingOfIntegers K)
@@ -857,9 +857,9 @@ theorem cyclotomicIdealMap_on_prime
     cyclotomicIdealMap (M := M) (F := F) n m hn hmod hram c =
       arithFrobeniusAt (K := K) (L := M) Q := by
   classical
-  letI : IsAbelianGalois K F :=
+  let : IsAbelianGalois K F :=
     IsCyclotomicExtension.isAbelianGalois {n} K F
-  letI : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
+  let : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
   rcases hc with ⟨I, hI, rfl⟩
   have hfac : cyclotomicIdealFactors I.1 = Finsupp.single p 1 := by
     ext q
@@ -922,7 +922,7 @@ private theorem cyclotomicWeberAlongOneContinuation {K G : Type*} [Field K] [Num
       (∀ s : ℂ, 1 < s.re → W s = weberLSeriesAlong m ν 1 s) ∧
       Tendsto (fun s : ℂ => (s - 1) * W s) (𝓝[≠] (1 : ℂ)) (𝓝 ρ) := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   obtain ⟨ρ, hρ, hcont⟩ := rayClassPartialZeta_continuation m
   let F : RayClassGroup m → ℂ → ℂ := fun c => Classical.choose (hcont c)
   have hFeq (c : RayClassGroup m) (s : ℂ) (hs : 1 < s.re) :
@@ -1006,7 +1006,7 @@ private theorem cyclotomicTrivialPrimeCharacterValue {K : Type*} [Field K] [Numb
     (m : RayModulus K) (p : PrimeIdeal K) (hp : ¬p.asIdeal ∣ m.finite) :
     rayClassCharacterValue m 1 p.asIdeal = 1 := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   let I := cyclotomicPrimeRayIdeal m p hp
   let c := RayClassGroup.mk m I
   have hc : RayClassGroup.IsClassOfIdeal m p.asIdeal c :=
@@ -1078,7 +1078,7 @@ private theorem cyclotomicWeberOneContinuation {K : Type*} [Field K] [NumberFiel
       (∀ s : ℂ, 1 < s.re → W s = weberLSeries m 1 s) ∧
       Tendsto (fun s : ℂ => (s - 1) * W s) (𝓝[≠] (1 : ℂ)) (𝓝 ρ) := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   obtain ⟨ρ, hρ, hcont⟩ := rayClassPartialZeta_continuation m
   let F : RayClassGroup m → ℂ → ℂ := fun c => Classical.choose (hcont c)
   have hFeq (c : RayClassGroup m) (s : ℂ) (hs : 1 < s.re) :
@@ -1216,8 +1216,8 @@ private theorem cyclotomic_prod_zpowers_characters_one_sub
       (1 - (ψ ⟨a, Subgroup.mem_zpowers a⟩ : ℂ) * z)) =
       1 - z ^ orderOf a := by
   classical
-  letI : NeZero (orderOf a) := ⟨(orderOf_pos a).ne'⟩
-  letI := Fintype.ofFinite (rootsOfUnity (orderOf a) ℂ)
+  let : NeZero (orderOf a) := ⟨(orderOf_pos a).ne'⟩
+  let := Fintype.ofFinite (rootsOfUnity (orderOf a) ℂ)
   let e := cyclotomicCharEvalEquivRoots a
   calc
     (∏ ψ : UnitCharacter (Subgroup.zpowers a),
@@ -1287,7 +1287,7 @@ private noncomputable def cyclotomicContractPrime
     [Algebra K M] (Q : PrimeIdeal M) : PrimeIdeal K :=
   ⟨Q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
     intro h
-    letI : Q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simpa [h]⟩
+    let : Q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simpa [h]⟩
     exact Q.ne_bot (Ideal.eq_bot_of_liesOver_bot
       (NumberField.RingOfIntegers K) Q.asIdeal)⟩
 
@@ -1325,7 +1325,7 @@ private theorem cyclotomicPrimeCharacterValue {K : Type*} [Field K] [NumberField
     rayClassCharacterValue m ψ p.asIdeal =
       ψ (RayClassGroup.mk m (cyclotomicPrimeRayIdeal m p hp)) := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   let I := cyclotomicPrimeRayIdeal m p hp
   let c := RayClassGroup.mk m I
   have hc : RayClassGroup.IsClassOfIdeal m p.asIdeal c :=
@@ -1360,14 +1360,14 @@ private theorem cyclotomicLocalEulerFactor
               (cyclotomicPullbackCharacter m νA χ) p.asIdeal *
             Complex.cpow (PrimeIdeal.norm p : ℂ) (-s))⁻¹) ^ A.index) := by
   classical
-  letI : IsAbelianGalois K F :=
+  let : IsAbelianGalois K F :=
     IsCyclotomicExtension.isAbelianGalois {n} K F
-  letI : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
+  let : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
   let ν := cyclotomicIdealMap (M := M) (F := F) n m hn hmod hram
   let A := MonoidHom.range ν
   let νA : RayClassGroup m →* A := corestrictToRange ν
-  letI := Fintype.ofFinite (UnitCharacter A)
-  letI := Fintype.ofEquiv
+  let := Fintype.ofFinite (UnitCharacter A)
+  let := Fintype.ofEquiv
     (p.asIdeal.primesOver (NumberField.RingOfIntegers M))
     (cyclotomicPrimeFiberEquiv (M := M) p).symm
   dsimp only
@@ -1403,15 +1403,15 @@ private theorem cyclotomicLocalEulerFactor
       rw [← arithFrobAt_order_eq_inertiaDeg Q₀ hQ₀unr, ← ha]
       exact (orderOf_injective A.subtype A.subtype_injective a).symm
     let B := Subgroup.zpowers a
-    letI := Fintype.ofFinite (UnitCharacter B)
+    let := Fintype.ofFinite (UnitCharacter B)
     have hnormQ (Q : {Q : PrimeIdeal M // cyclotomicContractPrime (K := K) Q = p}) :
         PrimeIdeal.norm Q.1 = PrimeIdeal.norm p ^ orderOf a := by
       have hQp : Q.1.asIdeal.LiesOver p.asIdeal := by
         constructor
         simpa using (congrArg (fun q : PrimeIdeal K => q.asIdeal) Q.2).symm
       rw [PrimeIdeal.norm_pow_inertiaDeg Q.1 p hQp, haorder]
-      letI : Q.1.asIdeal.LiesOver p.asIdeal := hQp
-      letI : Q₀.asIdeal.LiesOver p.asIdeal := hQ₀p
+      let : Q.1.asIdeal.LiesOver p.asIdeal := hQp
+      let : Q₀.asIdeal.LiesOver p.asIdeal := hQ₀p
       rw [Ideal.inertiaDeg_eq_inertiaDeg' p.asIdeal Q.1.asIdeal,
         Ideal.inertiaDeg_eq_inertiaDeg'
           (Q₀.asIdeal.under (NumberField.RingOfIntegers K)) Q₀.asIdeal,
@@ -1438,7 +1438,7 @@ private theorem cyclotomicLocalEulerFactor
           ← Ideal.ramificationIdx_eq_ramificationIdx'
             (Q₀.asIdeal.under (NumberField.RingOfIntegers K)) Q₀.asIdeal
             (Ideal.under_ne_bot (NumberField.RingOfIntegers K) Q₀.ne_bot)]
-        letI : Algebra.IsUnramifiedAt
+        let : Algebra.IsUnramifiedAt
             (NumberField.RingOfIntegers K) Q₀.asIdeal := hQ₀unr
         exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt Q₀.ne_bot
       have hinertia : p.asIdeal.inertiaDegIn
@@ -1559,7 +1559,7 @@ private theorem cyclotomicFactorSummableIdealRpow (s : ℝ) (hs : 1 < s) :
         Complex.ofReal_re]
       rw [div_eq_mul_inv]
       exact congrArg (a n * ·) (Real.rpow_neg (Nat.cast_nonneg n) s).symm
-  letI (n : ℕ) : Fintype
+  let (n : ℕ) : Fintype
       {I : Ideal (NumberField.RingOfIntegers K) // Ideal.absNorm I = n} :=
     (Ideal.finite_setOf_absNorm_eq n).fintype
   have hsigma : Summable (fun z : Σ n : ℕ,
@@ -1677,13 +1677,13 @@ theorem cyclotomic_zeta_eq_prod_weberL
       (∏' χ : UnitCharacter A,
         weberLSeriesAlong m (corestrictToRange ν) χ s) ^ A.index := by
   classical
-  letI : IsAbelianGalois K F :=
+  let : IsAbelianGalois K F :=
     IsCyclotomicExtension.isAbelianGalois {n} K F
-  letI : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
+  let : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
   let ν := cyclotomicIdealMap (M := M) (F := F) n m hn hmod hram
   let A := MonoidHom.range ν
   let νA : RayClassGroup m →* A := corestrictToRange ν
-  letI := Fintype.ofFinite (UnitCharacter A)
+  let := Fintype.ofFinite (UnitCharacter A)
   dsimp only
   let up : PrimeIdeal M → ℂ := fun Q =>
     if Q.asIdeal.under (NumberField.RingOfIntegers K) ∣ m.finite then 1 else
@@ -1739,7 +1739,7 @@ theorem cyclotomic_zeta_eq_prod_weberL
   let contract : PrimeIdeal M → PrimeIdeal K := cyclotomicContractPrime (K := K)
   let E := Equiv.sigmaFiberEquiv contract
   have hSigma : Multipliable (up ∘ E) := (E.multipliable_iff).mpr hUp
-  letI (p : PrimeIdeal K) : Fintype {Q : PrimeIdeal M // contract Q = p} :=
+  let (p : PrimeIdeal K) : Fintype {Q : PrimeIdeal M // contract Q = p} :=
     Fintype.ofEquiv (p.asIdeal.primesOver (NumberField.RingOfIntegers M))
       (cyclotomicPrimeFiberEquiv (M := M) p).symm
   have hFiber (p : PrimeIdeal K) :
@@ -1793,7 +1793,7 @@ private theorem cyclotomicWeberOneMeromorphicContinuation
       MeromorphicAt W 1 ∧
       Tendsto (fun s : ℂ => (s - 1) * W s) (𝓝[≠] (1 : ℂ)) (𝓝 ρ) := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   obtain ⟨ρ, hρ, hcont⟩ := rayClassPartialZeta_continuation m
   let F : RayClassGroup m → ℂ → ℂ := fun c => Classical.choose (hcont c)
   have hFeq (c : RayClassGroup m) (s : ℂ) (hs : 1 < s.re) :
@@ -1898,13 +1898,13 @@ theorem cyclotomic_poleOrder
       (-1 : ℤ) = (A.index : ℤ) *
         (-1 + ∑' χ : {χ : UnitCharacter A // χ ≠ 1}, (r χ : ℤ)) := by
   classical
-  letI : IsAbelianGalois K F :=
+  let : IsAbelianGalois K F :=
     IsCyclotomicExtension.isAbelianGalois {n} K F
-  letI : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
+  let : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
   let ν := cyclotomicIdealMap (M := M) (F := F) n m hn hmod hram
   let A := MonoidHom.range ν
   let νA : RayClassGroup m →* A := corestrictToRange ν
-  letI := Fintype.ofFinite (UnitCharacter A)
+  let := Fintype.ofFinite (UnitCharacter A)
   have hνA : Function.Surjective νA := by
     exact MonoidHom.rangeRestrict_surjective ν
   have hstrip : 1 - 1 / (Module.finrank ℚ K : ℝ) < (1 : ℂ).re := by
@@ -2110,9 +2110,9 @@ theorem cyclotomic_weberL_ne_zero_at_one
           (cyclotomicIdealMap (M := M) (F := F) n m hn hmod hram) χ s) ∧
       AnalyticAt ℂ W 1 ∧ W 1 ≠ 0 := by
   classical
-  letI : IsAbelianGalois K F :=
+  let : IsAbelianGalois K F :=
     IsCyclotomicExtension.isAbelianGalois {n} K F
-  letI : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
+  let : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
   let ν := cyclotomicIdealMap (M := M) (F := F) n m hn hmod hram
   let A := MonoidHom.range ν
   let νA : RayClassGroup m →* A := corestrictToRange ν
@@ -2150,7 +2150,7 @@ theorem cyclotomic_weberL_ne_zero_at_one
     intro c
     rfl
   · intro hWzero
-    letI := Fintype.ofFinite (UnitCharacter A)
+    let := Fintype.ofFinite (UnitCharacter A)
     obtain ⟨T, RT, hRT, hTeq, hTres⟩ := cyclotomicWeberAlongOneContinuation m νA
     obtain ⟨Z, RZ, hRZ, hZeq, hZres⟩ :=
       cyclotomicIncompleteZetaContinuation (M := M) m
@@ -2279,7 +2279,7 @@ private theorem cyclotomicDensity_characterValue
     rayClassCharacterValue m (cyclotomicPullbackCharacter m ν χ) p.asIdeal =
       (χ (ν (cyclotomicDensityPrimeClass m p hp)) : ℂ) := by
   classical
-  letI := Fintype.ofFinite (RayClassGroup m)
+  let := Fintype.ofFinite (RayClassGroup m)
   let c := cyclotomicDensityPrimeClass m p hp
   have hc : RayClassGroup.IsClassOfIdeal m p.asIdeal c :=
     cyclotomicDensityPrimeClass_isClass m p hp
@@ -2789,7 +2789,7 @@ private theorem cyclotomicDensity_log_tendsto_of_exp
   let s₀ : ℝ := (1 + b) / 2
   have hs₀ : s₀ ∈ S := by
     constructor <;> dsimp [s₀] <;> linarith
-  letI : PreconnectedSpace S :=
+  let : PreconnectedSpace S :=
     isPreconnected_iff_preconnectedSpace.mp isPreconnected_Ioo
   have hdeq (s : ℝ) (hs : s ∈ S) : d s = d s₀ :=
     hdloc.apply_eq_of_preconnectedSpace ⟨s, hs⟩ ⟨s₀, hs₀⟩
@@ -3095,7 +3095,7 @@ private theorem cyclotomicDensity_goodPrimeSet
       (1 / (Nat.card (Gal(M/K)) : ℝ)) := by
   classical
   let ν := cyclotomicIdealMap (M := M) (F := F) n m hn hmod hram
-  letI := Fintype.ofFinite (UnitCharacter (Gal(M/K)))
+  let := Fintype.ofFinite (UnitCharacter (Gal(M/K)))
   let coeff : UnitCharacter (Gal(M/K)) → ℂ := fun χ => (χ g : ℂ)⁻¹
   let D : UnitCharacter (Gal(M/K)) → ℝ → ℂ := fun χ =>
     cyclotomicDensityLog m ν χ
@@ -3232,9 +3232,9 @@ theorem cyclotomic_chebotarev_dirichletDensity_of_modulus
       (frobeniusElementPrimeSet (K := K) (L := M) g)
       (1 / (Nat.card (Gal(M/K)) : ℝ)) := by
   classical
-  letI : IsAbelianGalois K F :=
+  let : IsAbelianGalois K F :=
     IsCyclotomicExtension.isAbelianGalois {n} K F
-  letI : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
+  let : IsAbelianGalois K M := IsAbelianGalois.tower_bot K M F
   let ν := cyclotomicIdealMap (M := M) (F := F) n m hn hmod hram
   let S := cyclotomicDensityGoodPrimeSet m ν g
   let T := frobeniusElementPrimeSet (K := K) (L := M) g
@@ -3309,7 +3309,7 @@ theorem cyclotomic_chebotarev_dirichletDensity
 trivial cyclotomic extension. -/
 theorem allPrimes_dirichletDensity_one :
     HasDirichletDensity (Set.univ : Set (PrimeIdeal K)) 1 := by
-  letI : IsCyclotomicExtension {1} K K :=
+  let : IsCyclotomicExtension {1} K K :=
     IsCyclotomicExtension.singleton_one_of_algebraMap_bijective
       (A := K) (B := K)
       (fun x => ⟨x, (Algebra.algebraMap_self_apply x).symm⟩)

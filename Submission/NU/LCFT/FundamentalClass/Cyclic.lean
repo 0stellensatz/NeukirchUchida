@@ -528,8 +528,8 @@ private theorem cyclicPeriodicHom_naturality_one
         (cyclicOddIsoOne B g).hom =
       (cyclicOddIsoOne A g).hom ≫
         ShortComplex.homologyMap (cyclicPeriodicSCMap g f) := by
-  letI : Module ℤ A := A.hV2
-  letI : Module ℤ B := B.hV2
+  let : Module ℤ A := A.hV2
+  let : Module ℤ B := B.hV2
   change ShortComplex.homologyMap _ ≫ ShortComplex.homologyMap _ =
     ShortComplex.homologyMap _ ≫ ShortComplex.homologyMap _
   rw [← ShortComplex.homologyMap_comp, ← ShortComplex.homologyMap_comp]
@@ -542,8 +542,8 @@ private theorem cyclicPeriodicHom_naturality_three
         (cyclicOddIsoThree B g).hom =
       (cyclicOddIsoThree A g).hom ≫
         ShortComplex.homologyMap (cyclicPeriodicSCMap g f) := by
-  letI : Module ℤ A := A.hV2
-  letI : Module ℤ B := B.hV2
+  let : Module ℤ A := A.hV2
+  let : Module ℤ B := B.hV2
   change ShortComplex.homologyMap _ ≫ ShortComplex.homologyMap _ =
     ShortComplex.homologyMap _ ≫ ShortComplex.homologyMap _
   rw [← ShortComplex.homologyMap_comp, ← ShortComplex.homologyMap_comp]
@@ -594,15 +594,15 @@ private theorem finite_middle_of_range_eq_ker
     {A B C : Type*} [AddGroup A] [AddGroup B] [AddGroup C]
     [Finite A] [Finite C] (p : A →+ B) (q : B →+ C)
     (h : p.range = q.ker) : Finite B := by
-  letI : Finite p.range := Finite.of_surjective
+  let : Finite p.range := Finite.of_surjective
     (fun x : A => (⟨p x, x, rfl⟩ : p.range)) (fun y => by
       obtain ⟨x, hx⟩ := y.2
       exact ⟨x, Subtype.ext hx⟩)
-  letI : Finite q.ker := Finite.of_injective (fun x : q.ker =>
+  let : Finite q.ker := Finite.of_injective (fun x : q.ker =>
     (⟨x, by rw [h]; exact x.2⟩ : p.range)) (fun x y hxy => by
       apply Subtype.ext
       exact congrArg (fun z : p.range => (z : B)) hxy)
-  letI : Finite q.range := Finite.of_injective (fun x : q.range => (x : C))
+  let : Finite q.range := Finite.of_injective (fun x : q.range => (x : C))
     Subtype.val_injective
   exact (q.finite_iff_finite_ker_range).2 ⟨inferInstance, inferInstance⟩
 
@@ -737,19 +737,19 @@ private theorem herbrandQuotient_finite
     (M : Rep.{u} ℤ G) [Finite M]
     [Finite (TateLowDegree.H0 M)] [Finite (TateLowDegree.HMinusOne M)] :
     herbrandQuotient M = 1 := by
-  letI : CommGroup G := IsCyclic.commGroup
-  letI : Module ℤ M := M.hV2
+  let : CommGroup G := IsCyclic.commGroup
+  let : Module ℤ M := M.hV2
   let gen := (IsCyclic.exists_generator (α := G)).choose
   have hgen := (IsCyclic.exists_generator (α := G)).choose_spec
   let O := Rep.FiniteCyclicGroup.subCompNormHom M gen
   let E := Rep.FiniteCyclicGroup.normHomCompSub M gen
-  letI : Module ℤ (LinearMap.ker O.g.hom) := (LinearMap.ker O.g.hom).module
-  letI : Module ℤ (LinearMap.ker E.g.hom) := (LinearMap.ker E.g.hom).module
+  let : Module ℤ (LinearMap.ker O.g.hom) := (LinearMap.ker O.g.hom).module
+  let : Module ℤ (LinearMap.ker E.g.hom) := (LinearMap.ker E.g.hom).module
   let eo := periodicOddEquivHMinusOne M gen hgen
   let ee := periodicEvenEquivH0 M gen hgen
-  letI : Finite O.homology :=
+  let : Finite O.homology :=
     Finite.of_equiv (TateLowDegree.HMinusOne M) eo.symm.toEquiv
-  letI : Finite E.homology := Finite.of_equiv (TateLowDegree.H0 M) ee.symm.toEquiv
+  let : Finite E.homology := Finite.of_equiv (TateLowDegree.H0 M) ee.symm.toEquiv
   let d := O.f.hom.toAddMonoidHom
   let n := O.g.hom.toAddMonoidHom
   have hd : Nat.card M = Nat.card d.ker * Nat.card d.range :=
@@ -798,10 +798,10 @@ private theorem rep_shortExact_of_function
     (hexact : Function.Exact f g) (hf : Function.Injective f)
     (hg : Function.Surjective g) :
     (ShortComplex.mk f g hzero).ShortExact := by
-  letI : Module ℤ A := A.hV2
-  letI : Module ℤ B := B.hV2
-  letI : Module ℤ C := C.hV2
-  letI : Mono f := (Rep.mono_iff_injective f).2 hf
+  let : Module ℤ A := A.hV2
+  let : Module ℤ B := B.hV2
+  let : Module ℤ C := C.hV2
+  let : Mono f := (Rep.mono_iff_injective f).2 hf
   have f_is_kernel : IsLimit (KernelFork.ofι f hzero) := by
     let lift (s : KernelFork g) : s.pt ⟶ A := by
       letI : Module ℤ s.pt := s.pt.hV2
@@ -834,7 +834,7 @@ private theorem rep_shortExact_of_function
           _ = B.ρ σ (f (pre z)) := by rw [hpre]
           _ = f (A.ρ σ (pre z)) := (Rep.hom_comm_apply f σ (pre z)).symm⟩
     have lift_fac (s : KernelFork g) : lift s ≫ f = s.ι := by
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       refine Representation.IntertwiningMap.ext ?_
       apply LinearMap.ext
@@ -864,10 +864,10 @@ private theorem herbrandQuotient_mul
     (hexact : Function.Exact f g) (hf : Function.Injective f)
     (hg : Function.Surjective g) :
     herbrandQuotient B = herbrandQuotient A * herbrandQuotient C := by
-  letI : CommGroup G := IsCyclic.commGroup
-  letI : Module ℤ A := A.hV2
-  letI : Module ℤ B := B.hV2
-  letI : Module ℤ C := C.hV2
+  let : CommGroup G := IsCyclic.commGroup
+  let : Module ℤ A := A.hV2
+  let : Module ℤ B := B.hV2
+  let : Module ℤ C := C.hV2
   let gen := (IsCyclic.exists_generator (α := G)).choose
   have hgen := (IsCyclic.exists_generator (α := G)).choose_spec
   have hzero : f ≫ g = 0 := by
@@ -878,7 +878,7 @@ private theorem herbrandQuotient_mul
     have hx : g (f x) = 0 := (hexact (f x)).2 ⟨x, rfl⟩
     exact hx
   let S : ShortComplex (Rep.{u} ℤ G) := ShortComplex.mk f g hzero
-  letI : Mono f := (Rep.mono_iff_injective f).2 hf
+  let : Mono f := (Rep.mono_iff_injective f).2 hf
   have f_is_kernel :
       IsLimit (KernelFork.ofι f hzero) := by
     let lift (s : KernelFork g) : s.pt ⟶ A := by
@@ -912,7 +912,7 @@ private theorem herbrandQuotient_mul
           _ = B.ρ σ (f (pre z)) := by rw [hpre]
           _ = f (A.ρ σ (pre z)) := (Rep.hom_comm_apply f σ (pre z)).symm⟩
     have lift_fac (s : KernelFork g) : lift s ≫ f = s.ι := by
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       refine Representation.IntertwiningMap.ext ?_
       apply LinearMap.ext
@@ -960,21 +960,21 @@ private theorem herbrandQuotient_mul
   let e3 (M : Rep.{u} ℤ G) : (P M).homology 3 ≃+ TateLowDegree.HMinusOne M :=
     (cyclicOddIsoThree M gen).toLinearEquiv.toAddEquiv |>.trans
       (periodicOddEquivHMinusOne M gen hgen)
-  letI : Finite ((P A).homology 1) :=
+  let : Finite ((P A).homology 1) :=
     Finite.of_equiv (TateLowDegree.HMinusOne A) (e1 A).symm.toEquiv
-  letI : Finite ((P B).homology 1) :=
+  let : Finite ((P B).homology 1) :=
     Finite.of_equiv (TateLowDegree.HMinusOne B) (e1 B).symm.toEquiv
-  letI : Finite ((P C).homology 1) :=
+  let : Finite ((P C).homology 1) :=
     Finite.of_equiv (TateLowDegree.HMinusOne C) (e1 C).symm.toEquiv
-  letI : Finite ((P A).homology 2) :=
+  let : Finite ((P A).homology 2) :=
     Finite.of_equiv (TateLowDegree.H0 A) (e2 A).symm.toEquiv
-  letI : Finite ((P B).homology 2) :=
+  let : Finite ((P B).homology 2) :=
     Finite.of_equiv (TateLowDegree.H0 B) (e2 B).symm.toEquiv
-  letI : Finite ((P C).homology 2) :=
+  let : Finite ((P C).homology 2) :=
     Finite.of_equiv (TateLowDegree.H0 C) (e2 C).symm.toEquiv
-  letI : Finite ((P A).homology 3) :=
+  let : Finite ((P A).homology 3) :=
     Finite.of_equiv (TateLowDegree.HMinusOne A) (e3 A).symm.toEquiv
-  letI : Finite ((P B).homology 3) :=
+  let : Finite ((P B).homology 3) :=
     Finite.of_equiv (TateLowDegree.HMinusOne B) (e3 B).symm.toEquiv
   let p1 := (HomologicalComplex.homologyMap PS.f 1).hom.toAddMonoidHom
   let q1 := (HomologicalComplex.homologyMap PS.g 1).hom.toAddMonoidHom
@@ -1094,7 +1094,7 @@ theorem herbrandQuotient_rules
     have h0card : Nat.card (TateLowDegree.H0 T) = Nat.card G := by
       rw [Nat.card_congr trivialH0EquivZMod.toEquiv, Nat.card_zmod]
     have hmcard : Nat.card (TateLowDegree.HMinusOne T) = 1 := by
-      letI : Subsingleton (TateLowDegree.HMinusOne T) :=
+      let : Subsingleton (TateLowDegree.HMinusOne T) :=
         trivialHMinusOne_subsingleton
       exact Nat.card_unique
     refine ⟨h0card ▸ Nat.card_pos, hmcard ▸ Nat.zero_lt_one, ?_⟩
@@ -1103,7 +1103,7 @@ theorem herbrandQuotient_rules
   · intro A _ _ _ _
     let I := InducedFromTrivial G A
     let T : Subgroup G := ⊤
-    letI : Fintype T := Fintype.ofFinite T
+    let : Fintype T := Fintype.ofFinite T
     let N := Rep.res T.subtype I
     have ht0 : Subsingleton (tateCohomology N 0) :=
       inducedFromTrivial_tateAcyclic G A T 0
@@ -1116,9 +1116,9 @@ theorem herbrandQuotient_rules
       exact ⟨fun x y => e.injective (htm.elim _ _)⟩
     let e0 := topResH0Equiv I
     let em := topResHMinusOneEquiv I
-    letI : Subsingleton (TateLowDegree.H0 I) :=
+    let : Subsingleton (TateLowDegree.H0 I) :=
       ⟨fun x y => e0.injective (hn0.elim _ _)⟩
-    letI : Subsingleton (TateLowDegree.HMinusOne I) :=
+    let : Subsingleton (TateLowDegree.HMinusOne I) :=
       ⟨fun x y => em.injective (hnm.elim _ _)⟩
     exact herbrandQuotient_eq_one_of_subsingleton I
   · intro A B C _ _ _ _ _ _ f g hexact hf hg
@@ -1247,14 +1247,14 @@ private noncomputable def valuationInclusionIsKernel_cyclic :
     IsLimit (KernelFork.ofι (localUnitInclusion K L) (valuationSequence_cyclic K L).zero) :=
   Fork.IsLimit.mk _ (valuationKernelLift_cyclic K L)
     (fun s => by
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       apply Representation.IntertwiningMap.ext
       apply LinearMap.ext
       intro z
       rfl)
     (fun s m hm => by
-      letI : Module ℤ s.pt := s.pt.hV2
+      let : Module ℤ s.pt := s.pt.hV2
       apply Rep.hom_ext
       apply Representation.IntertwiningMap.ext
       apply LinearMap.ext
@@ -1291,7 +1291,7 @@ private theorem deepUnitQuotient_finite (π : Uniformizer K) (D : DeepUnitFiltra
   obtain ⟨r, hr⟩ := D.V_cofinal_principal_right 0
   let red : U →* Units (RingOfIntegers L ⧸ LocalMaximalIdeal L ^ (r + 1)) :=
     (integralUnitReduction L (r + 1)).comp e.symm.toMonoidHom
-  haveI : Finite (RingOfIntegers L ⧸ LocalMaximalIdeal L ^ (r + 1)) :=
+  have : Finite (RingOfIntegers L ⧸ LocalMaximalIdeal L ^ (r + 1)) :=
     (IsLocalRing.finite_quotient_iff).2 ⟨r + 1, le_rfl⟩
   let P : Subgroup U := (principalUnitSubgroup L (r + 1)).comap U.subtype
   have hP : P = red.ker := by
@@ -1309,15 +1309,15 @@ private theorem deepUnitQuotient_finite (π : Uniformizer K) (D : DeepUnitFiltra
       refine ⟨e.symm x, hx, ?_⟩
       change ringUnitsToFieldUnits L (e.symm x) = (x : Units L)
       exact congrArg Subtype.val (e.apply_symm_apply x)
-  haveI : Finite red.range := Finite.of_injective (fun x : red.range => (x :
+  have : Finite red.range := Finite.of_injective (fun x : red.range => (x :
     Units (RingOfIntegers L ⧸ LocalMaximalIdeal L ^ (r + 1)))) Subtype.val_injective
-  haveI : Finite (U ⧸ red.ker) :=
+  have : Finite (U ⧸ red.ker) :=
     Finite.of_equiv red.range (QuotientGroup.quotientKerEquivRange red).symm.toEquiv
-  letI : P.FiniteIndex := by rw [hP]; exact Subgroup.finiteIndex_of_finite_quotient
+  let : P.FiniteIndex := by rw [hP]; exact Subgroup.finiteIndex_of_finite_quotient
   have hPV : P ≤ V := by
     intro x hx
     exact hr hx
-  letI : V.FiniteIndex := Subgroup.finiteIndex_of_le hPV
+  let : V.FiniteIndex := Subgroup.finiteIndex_of_le hPV
   exact Subgroup.finite_quotient_of_finiteIndex
 
 
@@ -1386,7 +1386,7 @@ theorem cyclic_local_units_herbrand :
   have hproj : Function.Surjective proj := W.mkQ_surjective
   have hS : S.ShortExact :=
     rep_shortExact_of_function inc proj hzero hexact hinc hproj
-  letI : Finite (U ⧸ VU) := deepUnitQuotient_finite K L π D
+  let : Finite (U ⧸ VU) := deepUnitQuotient_finite K L π D
   have base_mem (x : localUnitRep K L) :
       x ∈ W ↔ base x ∈ VU.toAddSubgroup := Iff.rfl
   let qb : (localUnitRep K L ⧸ W.toAddSubgroup) →+
@@ -1408,9 +1408,9 @@ theorem cyclic_local_units_herbrand :
   let eqQ : (localUnitRep K L ⧸ W.toAddSubgroup) ≃+
       (Additive U ⧸ VU.toAddSubgroup) :=
     AddEquiv.ofBijective qb ⟨hqleft.injective, hqright.surjective⟩
-  letI : Finite Q := Finite.of_equiv (Additive (U ⧸ VU)) eqQ.symm.toEquiv
+  let : Finite Q := Finite.of_equiv (Additive (U ⧸ VU)) eqQ.symm.toEquiv
   let T : Subgroup (L ≃ₐ[K] L) := ⊤
-  letI : Fintype T := Fintype.ofFinite T
+  let : Fintype T := Fintype.ofFinite T
   let deepTop := Rep.res T.subtype deep
   have hdt0 : Subsingleton (tateCohomology deepTop 0) := hD T 0
   have hdtm : Subsingleton (tateCohomology deepTop (-1)) := hD T (-1)
@@ -1421,22 +1421,22 @@ theorem cyclic_local_units_herbrand :
     exact ⟨fun x y => e.injective (hdtm.elim _ _)⟩
   let ed0 := topResH0Equiv deep
   let edm := topResHMinusOneEquiv deep
-  letI : Subsingleton (TateLowDegree.H0 deep) :=
+  let : Subsingleton (TateLowDegree.H0 deep) :=
     ⟨fun x y => ed0.injective (hdtop0.elim _ _)⟩
-  letI : Subsingleton (TateLowDegree.HMinusOne deep) :=
+  let : Subsingleton (TateLowDegree.HMinusOne deep) :=
     ⟨fun x y => edm.injective (hdtopm.elim _ _)⟩
-  letI : Finite (TateLowDegree.H0 deep) := Finite.of_subsingleton
-  letI : Finite (TateLowDegree.HMinusOne deep) := Finite.of_subsingleton
-  letI : Finite (TateLowDegree.H0 Q) := inferInstance
-  letI : Finite (TateLowDegree.HMinusOne Q) := inferInstance
+  let : Finite (TateLowDegree.H0 deep) := Finite.of_subsingleton
+  let : Finite (TateLowDegree.HMinusOne deep) := Finite.of_subsingleton
+  let : Finite (TateLowDegree.H0 Q) := inferInstance
+  let : Finite (TateLowDegree.HMinusOne Q) := inferInstance
   let TS := S.map (tateComplexFunctor ℤ (L ≃ₐ[K] L))
   have hTS : TS.ShortExact := TateCohomology.map_tateComplexFunctor_shortExact hS
   let tD0 := TS.X₁.homology 0
   let tU0 := TS.X₂.homology 0
   let tQ0 := TS.X₃.homology 0
-  letI : Finite tD0 := Finite.of_equiv (TateLowDegree.H0 deep)
+  let : Finite tD0 := Finite.of_equiv (TateLowDegree.H0 deep)
     (TateLowDegree.comparisonH0Tate deep).toEquiv
-  letI : Finite tQ0 := Finite.of_equiv (TateLowDegree.H0 Q)
+  let : Finite tQ0 := Finite.of_equiv (TateLowDegree.H0 Q)
     (TateLowDegree.comparisonH0Tate Q).toEquiv
   let p0 : tD0 →+ tU0 :=
     (HomologicalComplex.homologyMap TS.f 0).hom.toAddMonoidHom
@@ -1449,8 +1449,8 @@ theorem cyclic_local_units_herbrand :
       (HomologicalComplex.homologyMap TS.g 0).hom x = 0
     rw [← LinearMap.mem_range, ← LinearMap.mem_ker,
       (hTS.homology_exact₂ 0).moduleCat_range_eq_ker]
-  letI : Finite tU0 := finite_middle_of_range_eq_ker p0 q0 hpq0
-  letI : Finite (TateLowDegree.H0 (localUnitRep K L)) :=
+  let : Finite tU0 := finite_middle_of_range_eq_ker p0 q0 hpq0
+  let : Finite (TateLowDegree.H0 (localUnitRep K L)) :=
     Finite.of_equiv tU0
       (TateLowDegree.comparisonH0Tate (localUnitRep K L)).symm.toEquiv
   let tDm := TS.X₁.homology (-1)
@@ -1458,8 +1458,8 @@ theorem cyclic_local_units_herbrand :
   let tQm := TS.X₃.homology (-1)
   let emD := (TateLowDegree.HMinusOne_equiv_tate deep).some
   let emQ := (TateLowDegree.HMinusOne_equiv_tate Q).some
-  letI : Finite tDm := Finite.of_equiv (TateLowDegree.HMinusOne deep) emD.toEquiv
-  letI : Finite tQm := Finite.of_equiv (TateLowDegree.HMinusOne Q) emQ.toEquiv
+  let : Finite tDm := Finite.of_equiv (TateLowDegree.HMinusOne deep) emD.toEquiv
+  let : Finite tQm := Finite.of_equiv (TateLowDegree.HMinusOne Q) emQ.toEquiv
   let pm : tDm →+ tUm :=
     (HomologicalComplex.homologyMap TS.f (-1)).hom.toAddMonoidHom
   let qm : tUm →+ tQm :=
@@ -1471,9 +1471,9 @@ theorem cyclic_local_units_herbrand :
       (HomologicalComplex.homologyMap TS.g (-1)).hom x = 0
     rw [← LinearMap.mem_range, ← LinearMap.mem_ker,
       (hTS.homology_exact₂ (-1)).moduleCat_range_eq_ker]
-  letI : Finite tUm := finite_middle_of_range_eq_ker pm qm hpqm
+  let : Finite tUm := finite_middle_of_range_eq_ker pm qm hpqm
   let emU := (TateLowDegree.HMinusOne_equiv_tate (localUnitRep K L)).some
-  letI : Finite (TateLowDegree.HMinusOne (localUnitRep K L)) :=
+  let : Finite (TateLowDegree.HMinusOne (localUnitRep K L)) :=
     Finite.of_equiv tUm emU.symm.toEquiv
   let h : HerbrandFinite (localUnitRep K L) := ⟨inferInstance, inferInstance⟩
   refine ⟨h, ?_⟩
@@ -1491,31 +1491,31 @@ theorem cyclic_local_herbrand :
     ∃ h : HerbrandFinite (MulRep K L),
       @herbrandQuotient _ _ _ (MulRep K L) h.h0 h.h1 = Module.finrank K L := by
   obtain ⟨hU, hUq⟩ := cyclic_local_units_herbrand K L
-  letI : Finite (TateLowDegree.H0 (localUnitRep K L)) := hU.h0
-  letI : Finite (TateLowDegree.HMinusOne (localUnitRep K L)) := hU.h1
+  let : Finite (TateLowDegree.H0 (localUnitRep K L)) := hU.h0
+  let : Finite (TateLowDegree.HMinusOne (localUnitRep K L)) := hU.h1
   let T := Rep.trivial ℤ (L ≃ₐ[K] L) ℤ
-  letI : Subsingleton (TateLowDegree.HMinusOne T) :=
+  let : Subsingleton (TateLowDegree.HMinusOne T) :=
     trivialHMinusOne_subsingleton
-  letI : Finite (TateLowDegree.HMinusOne T) := Finite.of_subsingleton
-  letI : NeZero (Nat.card (L ≃ₐ[K] L)) := ⟨Nat.card_pos.ne'⟩
-  letI : Finite (TateLowDegree.H0 T) :=
+  let : Finite (TateLowDegree.HMinusOne T) := Finite.of_subsingleton
+  let : NeZero (Nat.card (L ≃ₐ[K] L)) := ⟨Nat.card_pos.ne'⟩
+  let : Finite (TateLowDegree.H0 T) :=
     Finite.of_equiv (ZMod (Nat.card (L ≃ₐ[K] L)))
       trivialH0EquivZMod.symm.toEquiv
   have hH1 : Subsingleton (Inhomogeneous.H1 (MulRep K L)) :=
     hilbert90_mulRep_inhomogeneous K L
-  letI : Subsingleton (TateLowDegree.HMinusOne (MulRep K L)) :=
+  let : Subsingleton (TateLowDegree.HMinusOne (MulRep K L)) :=
     ⟨fun x y => (cyclicH1EquivHMinusOne (MulRep K L)).symm.injective
       (hH1.elim _ _)⟩
-  letI : Finite (TateLowDegree.HMinusOne (MulRep K L)) := Finite.of_subsingleton
+  let : Finite (TateLowDegree.HMinusOne (MulRep K L)) := Finite.of_subsingleton
   let S := valuationSequence_cyclic K L
   have hS : S.ShortExact := valuationSequence_cyclic_shortExact K L
   let TS := S.map (tateComplexFunctor ℤ (L ≃ₐ[K] L))
   let tU := TS.X₁.homology 0
   let tM := TS.X₂.homology 0
   let tT := TS.X₃.homology 0
-  letI : Finite tU := Finite.of_equiv (TateLowDegree.H0 (localUnitRep K L))
+  let : Finite tU := Finite.of_equiv (TateLowDegree.H0 (localUnitRep K L))
     (TateLowDegree.comparisonH0Tate (localUnitRep K L)).toEquiv
-  letI : Finite tT := Finite.of_equiv (TateLowDegree.H0 T)
+  let : Finite tT := Finite.of_equiv (TateLowDegree.H0 T)
     (TateLowDegree.comparisonH0Tate T).toEquiv
   let p : tU →+ tM :=
     (HomologicalComplex.homologyMap TS.f 0).hom.toAddMonoidHom
@@ -1529,19 +1529,19 @@ theorem cyclic_local_herbrand :
       (HomologicalComplex.homologyMap TS.g 0).hom x = 0
     rw [← LinearMap.mem_range, ← LinearMap.mem_ker,
       hex.moduleCat_range_eq_ker]
-  letI : Finite p.range := Finite.of_surjective
+  let : Finite p.range := Finite.of_surjective
     (fun x : tU => (⟨p x, x, rfl⟩ : p.range)) (fun y => by
       obtain ⟨x, hx⟩ := y.2
       exact ⟨x, Subtype.ext hx⟩)
-  letI : Finite q.ker := Finite.of_injective (fun x : q.ker =>
+  let : Finite q.ker := Finite.of_injective (fun x : q.ker =>
     (⟨x, by rw [hrk]; exact x.2⟩ : p.range)) (fun x y h => by
       apply @Subtype.ext tM (fun z => q z = 0) x y
       have hv := congrArg (fun z : p.range => (z : tM)) h
       exact hv)
-  letI : Finite q.range := Finite.of_injective (fun x : q.range => (x : tT))
+  let : Finite q.range := Finite.of_injective (fun x : q.range => (x : tT))
     Subtype.val_injective
-  letI : Finite tM := (q.finite_iff_finite_ker_range).2 ⟨inferInstance, inferInstance⟩
-  letI : Finite (TateLowDegree.H0 (MulRep K L)) :=
+  let : Finite tM := (q.finite_iff_finite_ker_range).2 ⟨inferInstance, inferInstance⟩
+  let : Finite (TateLowDegree.H0 (MulRep K L)) :=
     Finite.of_equiv tM (TateLowDegree.comparisonH0Tate (MulRep K L)).symm.toEquiv
   let h : HerbrandFinite (MulRep K L) := ⟨inferInstance, inferInstance⟩
   refine ⟨h, ?_⟩
@@ -1573,7 +1573,7 @@ from the cardinality formula so later arguments can install the `Finite` instanc
 theorem cyclic_local_H2_finite :
     Finite (Inhomogeneous.H2 (MulRep K L)) := by
   obtain ⟨h, _⟩ := cyclic_local_herbrand K L
-  letI : Finite (TateLowDegree.H0 (MulRep K L)) := h.h0
+  let : Finite (TateLowDegree.H0 (MulRep K L)) := h.h0
   exact Finite.of_equiv (TateLowDegree.H0 (MulRep K L))
     (cyclicH2EquivH0 (MulRep K L)).symm
 
@@ -1584,14 +1584,14 @@ theorem cyclic_local_H2_finite :
 theorem cyclic_local_H2_card :
     Nat.card (Inhomogeneous.H2 (MulRep K L)) = Module.finrank K L := by
   obtain ⟨h, hq⟩ := cyclic_local_herbrand K L
-  letI : Finite (TateLowDegree.H0 (MulRep K L)) := h.h0
-  letI : Finite (TateLowDegree.HMinusOne (MulRep K L)) := h.h1
+  let : Finite (TateLowDegree.H0 (MulRep K L)) := h.h0
+  let : Finite (TateLowDegree.HMinusOne (MulRep K L)) := h.h1
   have hH1 : Subsingleton (Inhomogeneous.H1 (MulRep K L)) :=
     hilbert90_mulRep_inhomogeneous K L
   have hminus : Subsingleton (TateLowDegree.HMinusOne (MulRep K L)) :=
     ⟨fun x y => (cyclicH1EquivHMinusOne (MulRep K L)).symm.injective
       (hH1.elim _ _)⟩
-  letI := hminus
+  let := hminus
   have hmcard : Nat.card (TateLowDegree.HMinusOne (MulRep K L)) = 1 :=
     Nat.card_unique
   rw [herbrandQuotient, hmcard] at hq
