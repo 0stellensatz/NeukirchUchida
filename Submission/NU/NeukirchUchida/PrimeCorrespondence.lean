@@ -440,11 +440,8 @@ private theorem valuationSubring_comap_ne_top_of_local
   apply isUnit_iff_exists_inv.mpr
   refine ⟨⟨i (a.1⁻¹), hinvW⟩, ?_⟩
   apply Subtype.ext
-  dsimp [f, a]
-  rw [← map_mul]
-  rw [show A.toSubring.subtype
-    (⟨x⁻¹, A.nonunits_subset hxinv⟩ : A) = x⁻¹ from rfl,
-    inv_inv, inv_mul_cancel₀ hx0, map_one]
+  change i x⁻¹ * i (x⁻¹)⁻¹ = 1
+  rw [← map_mul, inv_inv, inv_mul_cancel₀ hx0, map_one]
 
 private theorem finitePrime_surjective (F : NumberFieldInOmega) :
     Function.Surjective (finitePrime F) := by
