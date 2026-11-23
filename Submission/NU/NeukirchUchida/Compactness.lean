@@ -430,7 +430,7 @@ theorem commonNormalLevel_directed
 /-- The copy of `F` inside a finite level `N`, obtained by literal preimage
 along `N ↪ Omega`. -/
 def fieldAtLevel
-    (F N : NumberFieldInOmega) (hFN : F.field ≤ N.field) :
+    (F N : NumberFieldInOmega) (_hFN : F.field ≤ N.field) :
     IntermediateField ℚ N.field :=
   IntermediateField.comap N.field.val F.field
 

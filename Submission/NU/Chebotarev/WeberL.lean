@@ -218,7 +218,7 @@ private theorem weberPrivatePartialZeta_eq_LSeries (m : RayModulus K)
       rw [tsum_fintype, LSeries.norm_term_eq]
       by_cases hn : n = 0
       · subst n
-        simp only [if_pos rfl, weberPrivateCoeff, B]
+        simp only [weberPrivateCoeff, B]
         have hempty : IsEmpty {a : A // Ideal.absNorm a.1 = 0} :=
           ⟨fun a => (a.1.2.1 (Ideal.absNorm_eq_zero_iff.mp a.2))⟩
         simp
@@ -426,7 +426,7 @@ private theorem weberPrivateErrorStep_bigO_zero (m : RayModulus K)
       (fun t : ℝ => Real.rpow t (-b)) := by
   apply Asymptotics.IsBigO.of_bound 0
   filter_upwards [Ioo_mem_nhdsGT (show (0 : ℝ) < 1 by norm_num)] with t ht
-  simp only [zero_mul, norm_nonneg, le_zero_iff]
+  simp only [zero_mul]
   simp only [weberPrivateErrorStep]
   have : ⌊t⌋₊ = 0 := Nat.floor_eq_zero.mpr ht.2
   simp [this]

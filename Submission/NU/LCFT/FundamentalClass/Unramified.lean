@@ -74,6 +74,7 @@ noncomputable def normalizedValuationAddHom : Additive (Units L) →+ ℤ where
   map_zero' := by simp [normalizedValuation]
   map_add' x y := normalizedValuation_mul L x.toMul y.toMul
 
+omit [IsGalois K L] [ContinuousSMul K L] in
 /--
 **F06**, Lemma `lem:unramified-class`: normalized valuation is invariant under every
 `K`-automorphism of `L`.
@@ -159,7 +160,7 @@ def integerCarryCocycle (D : UnramifiedCyclicExtensionData K L) :
     let s := (D.frobeniusEquiv.symm τ).toAdd
     (carryExponent n r s : ℤ)
 
-private theorem add_mod_eq_carry (n a b : ℕ) (hn : 0 < n) (ha : a < n) (hb : b < n) :
+private theorem add_mod_eq_carry (n a b : ℕ) (_hn : 0 < n) (ha : a < n) (hb : b < n) :
     (a + b) % n = if a + b < n then a + b else a + b - n := by
   split_ifs with h
   · exact Nat.mod_eq_of_lt h
@@ -180,6 +181,7 @@ private theorem carryExponent_cocycleIdentity_aux
     add_mod_eq_carry n s.val t.val hn hs ht]
   split_ifs <;> omega
 
+omit [IsGalois K L] [ContinuousSMul K L] in
 /-- The explicit integer carry function is a normalized two-cocycle. -/
 theorem integerCarryCocycle_mem (D : UnramifiedCyclicExtensionData K L) :
     AbstractReciprocity.IsNormalizedCocycle2
@@ -363,6 +365,7 @@ private noncomputable def integerRowSumOnCocycles
   map_zero' := by simp
   map_add' a b := by simp [Finset.sum_add_distrib]
 
+omit [ContinuousSMul K L] in
 private theorem integerRowSum_killsCoboundaries
     (D : UnramifiedCyclicExtensionData K L) :
     Inhomogeneous.coboundaries2 (TrivialIntegerRep K L) ≤
@@ -432,6 +435,7 @@ private theorem sum_carryExponent_one (n : ℕ) [NeZero n] :
     rw [hsum]
     norm_num
 
+omit [ContinuousSMul K L] in
 private theorem integerRowInvariant_carry
     (D : UnramifiedCyclicExtensionData K L) :
     integerRowInvariant K L D (integerCarryClass K L D) = 1 := by
@@ -467,6 +471,7 @@ private theorem integerRowInvariant_carry
   rw [hsum]
   exact sum_carryExponent_one (Module.finrank K L)
 
+omit [ContinuousSMul K L] in
 private theorem trivialIntegerH2_card (D : UnramifiedCyclicExtensionData K L) :
     Nat.card (TrivialIntegerH2 K L) = Module.finrank K L := by
   let : IsCyclic (L ≃ₐ[K] L) :=
@@ -480,6 +485,7 @@ private theorem trivialIntegerH2_card (D : UnramifiedCyclicExtensionData K L) :
     _ = Nat.card (L ≃ₐ[K] L) := Nat.card_zmod _
     _ = Module.finrank K L := IsGalois.card_aut_eq_finrank K L
 
+omit [ContinuousSMul K L] in
 /--
 **F06**, Lemma `lem:unramified-class`: the explicit positive-orientation identification
 `H²(G,ℤ) ≅ ℤ/[L:K]`, characterized in the concrete comparison layer by sending the standard
@@ -529,6 +535,7 @@ noncomputable def integerH2Comparison (D : UnramifiedCyclicExtensionData K L) :
     TrivialIntegerH2 K L ≃+ ZMod (Module.finrank K L) :=
   (integerH2Comparison_existsUnique K L D).choose
 
+omit [ContinuousSMul K L] in
 /-- The defining positive-orientation equation for `integerH2Comparison`. -/
 theorem integerH2Comparison_carry (D : UnramifiedCyclicExtensionData K L) :
     integerH2Comparison K L D (integerCarryClass K L D) = 1 :=
@@ -599,6 +606,7 @@ theorem carryExponent_cocycleIdentity (n : ℕ) [NeZero n] (r s t : ZMod n) :
       carryExponent n s t + carryExponent n r (s + t) := by
   exact carryExponent_cocycleIdentity_aux n r s t
 
+omit [IsGalois K L] [ContinuousSMul K L] in
 private theorem carryCocycle_mem
     (D : UnramifiedCyclicExtensionData K L) (π : Uniformizer K) :
     AbstractReciprocity.IsNormalizedCocycle2 (CarryRep K L)
@@ -625,7 +633,7 @@ private theorem carryCocycle_mem
     have hc' : (carryExponent n s t : ℤ) - carryExponent n (r + s) t +
         carryExponent n r (s + t) - carryExponent n r s = 0 := by omega
     simp only [Inhomogeneous.d2, carryCocycle, AddMonoidHom.coe_mk,
-      ZeroHom.coe_mk, Pi.zero_apply, map_mul, hmul]
+      ZeroHom.coe_mk, Pi.zero_apply, map_mul]
     change (show Additive (Units L) from ((MulRep K L).ρ σ)
           (if carryExponent n s t = 0 then (0 : Additive (Units L)) else u)) -
         (if carryExponent n (r + s) t = 0 then 0 else u) +
@@ -658,18 +666,19 @@ private theorem carryCocycle_mem
     calc
       _ = ((carryExponent n s t : ℤ) - carryExponent n (r + s) t +
           carryExponent n r (s + t) - carryExponent n r s) • u := by
-        simp only [sub_zsmul, add_zsmul, sub_eq_add_neg, neg_zsmul]
+        simp only [add_zsmul, sub_eq_add_neg, neg_zsmul]
       _ = 0 := by rw [hc']; simp
   · constructor
     · intro σ
       have hs := (D.frobeniusEquiv.symm σ).toAdd.val_lt
       have hto : (1 : Multiplicative (ZMod n)).toAdd = 0 := rfl
-      simp [carryCocycle, hto, carryExponent, hs]
+      simp [carryCocycle, carryExponent, hs]
     · intro σ
       have hs := (D.frobeniusEquiv.symm σ).toAdd.val_lt
       have hto : (1 : Multiplicative (ZMod n)).toAdd = 0 := rfl
-      simp [carryCocycle, hto, carryExponent, hs]
+      simp [carryCocycle, carryExponent, hs]
 
+omit [IsGalois K L] [ContinuousSMul K L] in
 private theorem valuation_carry_cochain
     (D : UnramifiedCyclicExtensionData K L) (π : Uniformizer K) :
     (fun σ τ => (valuationCoefficient K L).hom (carryCocycle K L D π σ τ)) =
@@ -698,6 +707,7 @@ private theorem valuation_carry_cochain
     rw [if_neg h, hone, hval]
     rfl
 
+omit [IsGalois K L] [ContinuousSMul K L] in
 private theorem valuationInducedH2_carryClass
     (D : UnramifiedCyclicExtensionData K L) (π : Uniformizer K) :
     valuationInducedH2 K L
@@ -790,6 +800,7 @@ theorem carryCocycle_isGenerator
     obtain ⟨m, rfl⟩ := hgen β
     rw [map_zsmul, he, map_zsmul, hinvα]
 
+omit [ContinuousSMul K L] in
 /--
 **F06**, Lemma `lem:unramified-class`: changing the uniformizer changes the carry cocycle by a
 coboundary, so the resulting classes agree.  The equality is between the pinned quotient classes,
@@ -2102,6 +2113,8 @@ theorem unramifiedCarryTowerData_exists
     quotientHom_frobenius := hfrob.1
     subgroupHom_frobenius := hfrob.2 }, rfl, rfl, rfl⟩
 
+omit [ContinuousSMul L M] in
+omit [ContinuousSMul K L] [ContinuousSMul K M] in
 private theorem carryCocycle_inflation_cochain
     (T : UnramifiedCarryTowerData K L M) (π : Uniformizer K)
     (CL : UnramifiedClassData K L T.lower π)
@@ -2272,6 +2285,8 @@ private theorem carryCocycle_inflation_cochain
   simpa only [add_zsmul, sub_zsmul, mul_zsmul, neg_zsmul,
     sub_eq_add_neg] using hz
 
+omit [ContinuousSMul L M] in
+omit [ContinuousSMul K L] [ContinuousSMul K M] in
 /--
 **F07**, equation (4.3): inflation in an unramified tower multiplies the fundamental class by
 `[M:L]`.  The first conjunct is the pre-cohomology carry calculation; the second uses the actual
@@ -2298,6 +2313,8 @@ theorem carryClass_inflation
       (d • CM.cocycle) hmem b hb
   exact hclass
 
+omit [ContinuousSMul K L] in
+omit [ContinuousSMul K M] [ContinuousSMul L M] in
 private theorem carryCocycle_restriction_cochain
     (T : UnramifiedCarryTowerData K L M) (πK : Uniformizer K) (πL : Uniformizer L)
     (hπ : Units.map (algebraMap K L) πK.val = πL.val)
@@ -2366,6 +2383,8 @@ private theorem carryCocycle_restriction_cochain
     apply Additive.toMul.injective
     exact hunit
 
+omit [ContinuousSMul K L] in
+omit [ContinuousSMul K M] [ContinuousSMul L M] in
 /--
 **F07**, equation (4.2): subgroup restriction in an unramified tower sends the total carry class
 to the upper carry class.  Compatible uniformizers are stated explicitly, and both the cochain
@@ -2466,6 +2485,7 @@ structure CarryBaseChangeData where
   /-- Common-envelope Frobenius restricts to target Frobenius. -/
   target_frobenius : targetGroupHom common.frobenius = target.frobenius
 
+omit [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul U W] [ContinuousSMul R W] in
 /--
 **F07**, Proposition `prop:fundamental-restriction`: the geometric degree and intersection
 conditions defining an appropriate common unramified envelope extend to all pinned group and
@@ -2547,6 +2567,7 @@ theorem carryBaseChangeData_exists
   exact AlgEquiv.restrictNormal_commutes
     ((AlgEquiv.restrictScalarsHom K) σ) U x
 
+omit [IsGalois E W] [ContinuousSMul E W] in
 private theorem baseChange_valuation_classes_eq_of_coboundary
     (a b : Inhomogeneous.C2 (MulRep E W))
     (ha : AbstractReciprocity.IsNormalizedCocycle2 (MulRep E W) a)
@@ -2577,6 +2598,7 @@ private theorem baseChange_valuation_classes_eq_of_coboundary
   rw [hp]
   abel
 
+omit [IsScalarTower K E W] [IsScalarTower K U W] [IsScalarTower E R W] [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois K U] [IsGalois E R] [IsGalois E W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K U] [ContinuousSMul K W] [ContinuousSMul E R] [ContinuousSMul E W] [ContinuousSMul U W] [ContinuousSMul R W] in
 private theorem baseChange_degrees (B : CarryBaseChangeData K E U R W) :
     Module.finrank E W = Module.finrank E R * ramificationIndex K E := by
   let f := residueDegree K E
@@ -2597,6 +2619,9 @@ private theorem baseChange_degrees (B : CarryBaseChangeData K E U R W) :
       _ = _ := by rw [Nat.mul_assoc]
   exact Nat.mul_right_cancel hf hmul
 
+omit [IsScalarTower E R W] [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois E R] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul E R] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [IsGalois E W] [ContinuousSMul E W] in
+omit [ContinuousSMul K U] in
 private theorem baseChange_source_valuation_cochain
     (B : CarryBaseChangeData K E U R W) (πK : Uniformizer K)
     (CU : UnramifiedClassData K U B.source πK) :
@@ -2704,6 +2729,8 @@ private theorem baseChange_source_valuation_cochain
       _ = (ramificationIndex K E : ℤ) * (carryExponent m a b : ℤ) := by
         rw [hone, Int.natCast_one, mul_one]
 
+omit [IsScalarTower K E W] [IsScalarTower K U W] [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois K U] [IsGalois E W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K U] [ContinuousSMul K W] [ContinuousSMul E W] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [ContinuousSMul E R] in
 private theorem baseChange_target_valuation_cochain
     (B : CarryBaseChangeData K E U R W) (πE : Uniformizer E)
     (CR : UnramifiedClassData E R B.target πE) :
@@ -2864,6 +2891,8 @@ private theorem baseChange_target_valuation_cochain
 
 set_option maxHeartbeats 800000 in
 -- The two nested transported cocycle proofs need extra elaboration budget.
+omit [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [ContinuousSMul K U] [ContinuousSMul E R] in
 private theorem baseChange_class_eq
     (B : CarryBaseChangeData K E U R W) (πK : Uniformizer K) (πE : Uniformizer E)
     (CU : UnramifiedClassData K U B.source πK)
@@ -2901,6 +2930,8 @@ private theorem baseChange_class_eq
   exact hsclass.trans
     ((CW.valuation_h2_bijective.1 hval).trans htclass.symm)
 
+omit [IsScalarTower K E W] [IsScalarTower K U W] [IsScalarTower E R W] [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois E W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul E W] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [ContinuousSMul K U] [ContinuousSMul E R] in
 private theorem baseChange_coboundary
     (B : CarryBaseChangeData K E U R W) (πK : Uniformizer K) (πE : Uniformizer E)
     (CU : UnramifiedClassData K U B.source πK)
@@ -2934,6 +2965,8 @@ private theorem baseChange_coboundary
     hsclass.symm.trans (hclass.trans htclass)
   exact exists_d1_of_cocycleClass_eq (MulRep E W) sC tC hs ht hcoc
 
+omit [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [ContinuousSMul K U] [ContinuousSMul E R] in
 /--
 **F07**, Proposition `prop:fundamental-restriction` (base-change carry lemma): restriction of the
 `K_{rs}/K` carry class to the common envelope equals inflation of the degree-`r` carry class over

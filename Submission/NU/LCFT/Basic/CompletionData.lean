@@ -764,6 +764,7 @@ private noncomputable def explicitMulRepInvariantsEquiv :
     exact hy
   exact (AddEquiv.ofBijective f ⟨hf_inj, hf_surj⟩).symm
 
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem explicitMulRepInvariantsEquiv_baseUnit (x : Units K) :
     explicitMulRepInvariantsEquiv K L (baseUnitInvariant K L x) = Additive.ofMul x := by
   let e := explicitMulRepInvariantsEquiv K L
@@ -778,6 +779,7 @@ private def tateNormQuotientHom :
   (QuotientGroup.mk' (normSubgroup K L)).toAdditive.comp
     (explicitMulRepInvariantsEquiv K L).toAddMonoidHom
 
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem mem_tateNormRange_iff (x : Inhomogeneous.invariants0 (MulRep K L)) :
     x ∈ TateLowDegree.normRangeInInvariants (MulRep K L) ↔
       Additive.toMul (explicitMulRepInvariantsEquiv K L x) ∈ normSubgroup K L := by
@@ -812,11 +814,13 @@ private theorem mem_tateNormRange_iff (x : Inhomogeneous.invariants0 (MulRep K L
     exact hbaseval.trans (congrArg
       (fun z : Inhomogeneous.invariants0 (MulRep K L) => Additive.toMul z.1) hxbase)
 
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem tateNormQuotientHom_surjective :
     Function.Surjective (tateNormQuotientHom K L) :=
   (QuotientGroup.mk'_surjective (normSubgroup K L)).comp
     (explicitMulRepInvariantsEquiv K L).surjective
 
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem tateNormQuotientHom_ker :
     (tateNormQuotientHom K L).ker =
       TateLowDegree.normRangeInInvariants (MulRep K L) := by
@@ -829,6 +833,7 @@ private theorem tateNormQuotientHom_ker :
   rw [QuotientGroup.eq_one_iff]
   exact (mem_tateNormRange_iff K L x).symm
 
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem tateNormRange_le_ker :
     TateLowDegree.normRangeInInvariants (MulRep K L) ≤
       (tateNormQuotientHom K L).ker := by
@@ -843,6 +848,7 @@ private def tateQuotientAddHom :
     (TateLowDegree.normRangeInInvariants (MulRep K L)) inferInstance
     (tateNormQuotientHom K L) (tateNormRange_le_ker K L)
 
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem tateQuotientAddHom_bijective :
     Function.Bijective (tateQuotientAddHom K L) := by
   constructor
@@ -867,6 +873,7 @@ private noncomputable def localTateQuotientEquiv :
     TateLowDegree.H0 (MulRep K L) ≃+ Additive (Units K ⧸ normSubgroup K L) :=
   AddEquiv.ofBijective (tateQuotientAddHom K L) (tateQuotientAddHom_bijective K L)
 
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem localTateQuotientEquiv_apply (x : Units K) :
     localTateQuotientEquiv K L (tateClassOfBaseUnit K L x) =
       Additive.ofMul (QuotientGroup.mk x : Units K ⧸ normSubgroup K L) := by
@@ -1173,7 +1180,7 @@ private theorem localField_small
   vle_mul_cancel {x y z} h hxy := by
     exact ValuativeRel.vle_mul_cancel (x := e x) (y := e y) (z := e z)
       (by simpa using h) (by simpa using hxy)
-  not_vle_one_zero := by simpa using (ValuativeRel.not_vle_one_zero (R := B))
+  not_vle_one_zero := by simp
   vle_mul_comm := by simp [ValuativeRel.vle_mul_comm]
 
 private theorem shrink_local
@@ -1613,8 +1620,7 @@ private noncomputable def universeModel
     change eL (algebraMap K₀ L₀ a) ≤ᵥ eL (algebraMap K₀ L₀ b) ↔
       eK a ≤ᵥ eK b
     rw [RingHom.algebraMap_toAlgebra algHom]
-    simpa [algHom] using
-      (ValuativeExtension.vle_iff_vle (A := K) (B := L) (a := eK a) (b := eK b))
+    simp [algHom]
   have heK : Continuous eK := continuous_induced_dom
   have heL : Continuous eL := continuous_induced_dom
   let continuousSMulK₀L₀ : ContinuousSMul K₀ L₀ := ⟨by
@@ -2963,6 +2969,7 @@ variable (K : Type u) (E : Type v) (M : Type w)
   [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M]
   [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M]
 
+omit [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
 /-- The field norm sends `N(M/E)` into `N(M/K)`, by the literal tower formula. -/
 theorem normSubgroup_le_comap_norm :
     normSubgroup E M ≤ (normSubgroup K M).comap (normUnitsHom K E) := by
@@ -2975,6 +2982,7 @@ noncomputable def normOnQuotient :
   QuotientGroup.map (normSubgroup E M) (normSubgroup K M)
     (normUnitsHom K E) (normSubgroup_le_comap_norm K E M)
 
+omit [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
 /-- Pointwise defining equation for the quotient norm. -/
 @[simp] theorem normOnQuotient_mk (x : Units E) :
     normOnQuotient K E M (QuotientGroup.mk x) =
@@ -2985,6 +2993,7 @@ noncomputable def normOnQuotient :
 def galoisInclusion : (M ≃ₐ[E] M) →* (M ≃ₐ[K] M) :=
   AlgEquiv.restrictScalarsHom K
 
+omit [FiniteDimensional K E] [FiniteDimensional E M] [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
 /-- Pointwise defining equation for subgroup inclusion. -/
 @[simp] theorem galoisInclusion_apply (σ : M ≃ₐ[E] M) (x : M) :
     galoisInclusion K E M σ x = σ x := rfl
@@ -2993,6 +3002,7 @@ def galoisInclusion : (M ≃ₐ[E] M) →* (M ≃ₐ[K] M) :=
 def inclusionAb : Group.Abelianization (M ≃ₐ[E] M) →* Group.Abelianization (M ≃ₐ[K] M) :=
   Group.Abelianization.map (galoisInclusion K E M)
 
+omit [FiniteDimensional K E] [FiniteDimensional E M] [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
 /-- Pointwise defining equation for inclusion on abelianizations. -/
 @[simp] theorem inclusionAb_of (σ : M ≃ₐ[E] M) :
     inclusionAb K E M (Group.Abelianization.of σ) =
@@ -3838,9 +3848,7 @@ private theorem finiteArtin_norm_core :
     change eE (algebraMap K₀ E₀ a) ≤ᵥ eE (algebraMap K₀ E₀ b) ↔
       eK a ≤ᵥ eK b
     rw [RingHom.algebraMap_toAlgebra]
-    simpa [algHomK₀E₀, eK, eE] using
-      (ValuativeExtension.vle_iff_vle (A := K) (B := E)
-        (a := eK a) (b := eK b))
+    simp [algHomK₀E₀, eK, eE]
   let veE₀M₀ : ValuativeExtension E₀ M₀ := DEM.model.valuativeExtension
   let veK₀M₀ : ValuativeExtension K₀ M₀ := DKM.model.valuativeExtension
   have heK : Continuous eK := continuous_induced_dom
@@ -4043,6 +4051,7 @@ private theorem normalizedValuation_zero_set_isCompact
   exact (Valuation.mem_integer_iff _ _).mpr
     ((ValuativeRel.valuation F).restrict_eq_one_iff.mp hx).le
 
+omit [IsGalois K L] in
 /-- **R04**, Lemma `lem:norm-open`: the norm subgroup is closed for the actual local-field
 topologies. -/
 theorem normSubgroup_isClosed : IsClosed (normSubgroup K L : Set (Units K)) := by
@@ -4196,8 +4205,9 @@ noncomputable def lubinTateNegGeneratorUnit
     Units (lubinTateLevel K Ksep π m hm).field :=
   -(lubinTateLevel K Ksep π m hm).generatorUnit
 
+omit [IsSepClosure K Ksep] [TopologicalSpace Ksep] in
 private theorem normGroup_evaluation_C
-    (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
+    (π : Uniformizer K) (m : ℕ) (_hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (r : RingOfIntegers K) :
     L.evaluation (PowerSeries.C r) = algebraMap (RingOfIntegers K) L.field r := by
   let : FiniteDimensional K L.field := L.finiteDimensional
@@ -4208,8 +4218,9 @@ private theorem normGroup_evaluation_C
   · intro n hn
     simp [PowerSeries.coeff_C, hn]
 
+omit [IsSepClosure K Ksep] [TopologicalSpace Ksep] in
 private theorem normGroup_evaluation_X
-    (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
+    (π : Uniformizer K) (m : ℕ) (_hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
     L.evaluation PowerSeries.X = L.generator := by
   let : FiniteDimensional K L.field := L.finiteDimensional
@@ -4220,6 +4231,7 @@ private theorem normGroup_evaluation_X
   · intro n hn
     simp [PowerSeries.coeff_X, hn]
 
+omit [IsSepClosure K Ksep] [TopologicalSpace Ksep] in
 private theorem normGroup_evaluation_polynomial
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (p : Polynomial (RingOfIntegers K)) :
@@ -4331,6 +4343,7 @@ private theorem normGroup_primitive_constantCoeff
   rw [primitiveDivisionPolynomial, RingHom.map_add, RingHom.map_pow, hit, zero_pow hne, add_zero]
   simp
 
+omit [TopologicalSpace Ksep] in
 private theorem normGroup_level_minpoly
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -4365,7 +4378,7 @@ private theorem normGroup_level_minpoly
   exact (minpoly.eq_of_irreducible_of_monic hPKirr hroot hPKmonic).symm
 
 private noncomputable def normGroup_levelPowerBasis
-    (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
+    (π : Uniformizer K) (m : ℕ) (_hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) : PowerBasis K L.field := by
   letI : FiniteDimensional K L.field := L.finiteDimensional
   have hint : IsIntegral K L.generator := IsIntegral.of_finite K L.generator
@@ -4376,12 +4389,14 @@ private noncomputable def normGroup_levelPowerBasis
   exact PowerBasis.ofAdjoinEqTop hint
     ((IntermediateField.adjoin_simple_eq_top_iff_of_isAlgebraic hint.isAlgebraic).mp hfield)
 
+omit [IsSepClosure K Ksep] [TopologicalSpace Ksep] in
 private theorem normGroup_levelPowerBasis_gen
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
     (normGroup_levelPowerBasis K Ksep π m hm L).gen = L.generator := by
   simp [normGroup_levelPowerBasis]
 
+omit [TopologicalSpace Ksep] in
 private theorem normGroup_negGenerator_norm
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m) :
     let level := lubinTateLevel K Ksep π m hm
@@ -4416,6 +4431,7 @@ private theorem normGroup_negGenerator_norm
   rw [hdim, ← mul_assoc, ← pow_add,
     (Even.add_self (Module.finrank K level.field)).neg_one_pow, one_mul]
 
+omit [TopologicalSpace Ksep] in
 private theorem normGroup_integralUnit_evaluation
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m) :
     let level := lubinTateLevel K Ksep π m hm
@@ -4665,6 +4681,7 @@ private theorem normGroup_rectangular_index
   exact Nat.card_congr
     (QuotientGroup.quotientKerEquivOfSurjective reduction reduction_surjective).toEquiv
 
+omit [TopologicalSpace Ksep] in
 /--
 **L06**, Theorem `thm:lt-norm-group`: integral units are actual evaluations at `α_m`, their
 norms are the pinned primitive Coleman products in `U_K^m`, and the specific uniformizer
@@ -4758,10 +4775,11 @@ theorem lubinTate_norm_inclusion
     rw [hy, map_mul, map_zpow, hϖnorm]
     apply Subgroup.mul_mem_sup
     · apply Subgroup.zpow_mem
-      simpa using Subgroup.mem_zpowers π.val
+      simp
     · exact (hunit u).choose_spec.2.2
   exact ⟨hinclusion, hunit, hnegNorm, normGroup_primitive_constantCoeff K π m⟩
 
+omit [TopologicalSpace Ksep] in
 /--
 **L07**, Theorem `thm:lt-norm-group`: the already-proved finite norm-index theorem turns the
 L06 inclusions into `N(K_m^LT/K)=π^ℤ U_K^m`.
@@ -5340,6 +5358,7 @@ structure RectangularCompositumData (π : Uniformizer K)
 set_option maxHeartbeats 800000 in
 -- The Eisenstein base-change and scalar-tower synthesis in E01 need a larger elaboration budget.
 set_option synthInstance.maxHeartbeats 100000 in
+omit [TopologicalSpace Ksep] in
 /--
 **E01**, Proposition `prop:cofinal-norms`: construct the literal compositum
 `K_a^ur K_b^LT`, prove linear disjointness and abelianity, compute its degree, and compute its
@@ -5780,6 +5799,7 @@ noncomputable def rectangularClassField (π : Uniformizer K)
         (rectangularCompositum K Ksep π a b ha hb)
       commutative := D.commutative }
 
+omit [TopologicalSpace Ksep] in
 /-- The field underlying `rectangularClassField` is literally `K_a^ur K_b^LT`. -/
 theorem rectangularClassField_field (π : Uniformizer K)
     (a b : ℕ) (ha : 1 ≤ a) (hb : 1 ≤ b) :
@@ -5788,6 +5808,7 @@ theorem rectangularClassField_field (π : Uniformizer K)
         (lubinTateLevel K Ksep π b hb).field := by
   rfl
 
+omit [TopologicalSpace Ksep] in
 /-- **E01**: the norm of the explicitly packaged compositum. -/
 theorem norm_rectangularClassField (π : Uniformizer K)
     (a b : ℕ) (ha : 1 ≤ a) (hb : 1 ≤ b) :
@@ -5795,6 +5816,7 @@ theorem norm_rectangularClassField (π : Uniformizer K)
       rectangularSubgroup K π a b := by
   exact (rectangularCompositumData K Ksep π a b ha hb).normSubgroup_eq
 
+omit [TopologicalSpace Ksep] in
 /-- **E01**: the degree of the explicitly packaged compositum. -/
 theorem finrank_rectangularClassField (π : Uniformizer K)
     (a b : ℕ) (ha : 1 ≤ a) (hb : 1 ≤ b) :

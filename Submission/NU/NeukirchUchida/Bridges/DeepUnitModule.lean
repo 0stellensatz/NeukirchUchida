@@ -1525,14 +1525,12 @@ private theorem normalizedValuationHom_ker_eq_unitGroup
           apply Subtype.ext
           change (a : F) * (b : F) = 1
           rw [ha, hb]
-          simpa [Units.val_inv_eq_inv_val] using
-            mul_inv_cancel₀ x.ne_zero
+          simp [Units.val_inv_eq_inv_val]
         inv_val := by
           apply Subtype.ext
           change (b : F) * (a : F) = 1
           rw [ha, hb]
-          simpa [Units.val_inv_eq_inv_val] using
-            inv_mul_cancel₀ x.ne_zero }
+          simp [Units.val_inv_eq_inv_val] }
     let zA : A.unitGroup := A.unitGroupMulEquiv.symm au
     have hz : (zA : Units F) = x := by
       apply Units.ext
@@ -1708,6 +1706,7 @@ private theorem ringOfIntegers_henselianLocalRing :
   rw [← sub_eq_zero, ← map_sub, IsLocalRing.residue_eq_zero_iff]
   exact hb
 
+omit [IsUniformAddGroup F] in
 private theorem residueCard_gt_one : 1 < residueCard F := by
   have hpos : 0 < residueCard F := Nat.card_pos
   have hne : residueCard F ≠ 1 := by
@@ -1717,13 +1716,13 @@ private theorem residueCard_gt_one : 1 < residueCard F := by
     exact one_ne_zero (hs.elim 1 0)
   omega
 
+omit [IsUniformAddGroup F] in
 private theorem residueCard_sub_one_cast :
     ((residueCard F - 1 : ℕ) : LocalResidueField F) = -1 := by
   let := Fintype.ofFinite (LocalResidueField F)
   rw [Nat.cast_sub (residueCard_gt_one F).le]
   rw [show ((residueCard F : ℕ) : LocalResidueField F) = 0 by
-    simpa [residueCard, Nat.card_eq_fintype_card] using
-      Nat.cast_card_eq_zero (LocalResidueField F)]
+    simp [residueCard, Nat.card_eq_fintype_card]]
   simp
 
 private theorem exists_teichmullerGenerator :
@@ -1782,6 +1781,7 @@ private theorem exists_teichmullerGenerator :
   · apply Units.ext
     exact htpow
 
+omit [UniformSpace F] [IsUniformAddGroup F] [IsNonarchimedeanLocalField F] in
 private theorem principalUnitGroup_le_unitGroup :
     (ValuativeRel.valuation F).valuationSubring.principalUnitGroup ≤
       (ValuativeRel.valuation F).valuationSubring.unitGroup := by
@@ -1799,6 +1799,7 @@ private theorem principalUnitGroup_le_unitGroup :
     exact v.map_add_eq_of_lt_right (by simpa using hraw)
   exact (Valuation.isEquiv_valuation_valuationSubring v).eq_one_iff_eq_one.mp huv
 
+omit [IsUniformAddGroup F] in
 private theorem principalUnitGroup_isOpen :
     IsOpen (((ValuativeRel.valuation F).valuationSubring.principalUnitGroup :
       Subgroup (Units F)) : Set (Units F)) := by
@@ -2405,7 +2406,7 @@ private theorem deepUnitFiltration_actionData_exists
         rfl
       simp_rw [hcoeffNat]
       rw [show ((u : Units F) : F) = r u + 1 by simp [r]]
-      simpa [add_pow, mul_comm, mul_left_comm, mul_assoc]
+      simp [add_pow, mul_comm]
     · intro n hn
       have hmn : m < n := by
         have : m + 1 ≤ n := by simpa only [Finset.mem_range, not_lt] using hn

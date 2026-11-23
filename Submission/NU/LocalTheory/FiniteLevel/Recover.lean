@@ -985,8 +985,6 @@ private noncomputable def comparisonAutELToAbsolute
                 (AlgebraicClosure (CyclotomicField (p : ℕ) L.field)) c
           apply j.injective
           rw [j.apply_symm_apply]
-          change τ (j (algebraMap (CyclotomicField (p : ℕ) L.field)
-            (AlgebraicClosure (CyclotomicField (p : ℕ) L.field)) c)) = _
           have hj : j (algebraMap (CyclotomicField (p : ℕ) L.field)
               (AlgebraicClosure (CyclotomicField (p : ℕ) L.field)) c) =
             algebraMap (comparisonEL L p) (AlgebraicClosure K)

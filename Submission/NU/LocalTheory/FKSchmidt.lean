@@ -229,7 +229,7 @@ lemma M_f_le_of_coefficients {K : Type*} [Field K]
   · exact hC
 
 lemma perturbed_M_f_le {K : Type*} [Field K]
-    (v : RealValuation K) (f g : K[X]) (hf : f.Monic) (hg : g.Monic)
+    (v : RealValuation K) (f g : K[X]) (_hf : f.Monic) (_hg : g.Monic)
     (hdegree : g.natDegree = f.natDegree) (hn : f.natDegree ≠ 0)
     (T : ℝ)
     (hclose : ((proximityDelta v f f.natDegree T : ℝ) : RealValue) ≤
@@ -517,7 +517,7 @@ theorem krasner {F Ω : Type u} [Field F] [Field Ω] [Algebra F Ω]
     [Algebra.IsAlgebraic F Ω] [IsGalois F Ω]
     (v : RealValuation F) (hv : IsHenselian v) (w : RealValuation Ω)
     (hext : Extends (algebraMap F Ω) v w) (a b : Ω) (s : Finset Ω)
-    (hs : ∀ x ∈ s, x ≠ a)
+    (_hs : ∀ x ∈ s, x ≠ a)
     (hconj : ∀ σ : Ω ≃ₐ[F] Ω, σ a ≠ a → σ a ∈ s)
     (hclose : krasnerRadius w a s <
       ((order w (b - a) : ℝ) : WithBot ℝ)) :
@@ -814,7 +814,7 @@ lemma coeff_finset_sum {F ι : Type*} [Semiring F]
   classical
   induction s using Finset.induction_on with
   | empty => simp
-  | @insert i s hi ih => simp [hi, ih, Polynomial.coeff_add]
+  | @insert i s hi ih => simp [hi]
 
 /-- Coefficientwise polynomial approximation.  The single invocation uses
 `max T₁ T₂`, so the two requested thresholds are both met. -/
@@ -823,8 +823,8 @@ theorem polynomial_approximation {F : Type*} [Field F]
     (h₁ : IsRankOneValuationSubring (realValuationSubring v₁))
     (h₂ : IsRankOneValuationSubring (realValuationSubring v₂))
     (hne : realValuationSubring v₁ ≠ realValuationSubring v₂)
-    (f₁ f₂ : F[X]) (hf₁ : f₁.Monic) (hf₂ : f₂.Monic)
-    (hdegree : f₂.natDegree = f₁.natDegree) (hn : f₁.natDegree ≠ 0)
+    (f₁ f₂ : F[X]) (_hf₁ : f₁.Monic) (_hf₂ : f₂.Monic)
+    (_hdegree : f₂.natDegree = f₁.natDegree) (hn : f₁.natDegree ≠ 0)
     (T₁ T₂ : ℝ) :
     ∃ g : F[X], g.Monic ∧ g.natDegree = f₁.natDegree ∧
       ((T₁ : ℝ) : RealValue) ≤
@@ -1066,7 +1066,7 @@ theorem split_stability {F Ω : Type u} [Field F] [Field Ω] [Algebra F Ω]
     [Algebra.IsAlgebraic F Ω] [IsGalois F Ω]
     (v : RealValuation F) (hv : IsHenselian v) (w : RealValuation Ω)
     (hext : Extends (algebraMap F Ω) v w) {n : ℕ} (hn : 2 ≤ n)
-    (c : Fin n → F) (hc : Function.Injective c)
+    (c : Fin n → F) (_hc : Function.Injective c)
     (g : F[X]) (hg : g.Monic) (hgdeg : g.natDegree = n)
     (r : Fin n → Ω)
     (hrfactor : g.map (algebraMap F Ω) = ∏ j : Fin n, (X - C (r j)))

@@ -57,12 +57,15 @@ def relativeC1 : AddSubgroup (C1 M) where
     · intro g n
       simpa using congrArg Neg.neg (hb₂ g n)
 
+omit [N.Normal] in
 private theorem relative_d1_left (b : relativeC1 N M) (n : N) (g : G) :
     d1 M b n g = 0 := b.2.1 n g
 
+omit [N.Normal] in
 private theorem relative_d1_right (b : relativeC1 N M) (g : G) (n : N) :
     d1 M b g n = 0 := b.2.2 g n
 
+omit [N.Normal] in
 private theorem relative_apply_one (b : relativeC1 N M) : b.1 1 = 0 := by
   have h := relative_d1_left N M b (1 : N) 1
   simpa [d1] using h
@@ -95,6 +98,7 @@ def quotientInvariantH1 : AddSubgroup (H1 (Rep.res N.subtype M)) :=
 private abbrev Q := G ⧸ N
 private abbrev MQ := M.quotientToInvariants N
 
+omit [N.Normal] in
 private theorem d1_right_mul (b : relativeC1 N M) (g h : G) (n : N) :
     d1 M b g (h * n) = d1 M b g h := by
   have hd := congrFun (congrFun (congrFun (d2_d1 M b.1) g) h) (n : G)
@@ -227,11 +231,12 @@ def zeroRelativeC1 : AddSubgroup (relativeC1 N M) where
   zero_mem' := by simp
   add_mem' := by
     intro a b ha hb n
-    simpa [ha n, hb n]
+    simp [ha n, hb n]
   neg_mem' := by
     intro b hb n
-    simpa [hb n]
+    simp [hb n]
 
+omit [N.Normal] in
 private theorem zeroRelative_right (b : zeroRelativeC1 N M) (g : G) (n : N) :
     b.1.1 (g * n) = b.1.1 g := by
   have h := relative_d1_right N M b.1 g n
@@ -369,6 +374,7 @@ def relativeCocycles2 : AddSubgroup (cocycles2 M) where
     exact ⟨fun n g => by simpa using congrArg Neg.neg (hc₁ n g),
       fun g n => by simpa using congrArg Neg.neg (hc₂ g n)⟩
 
+omit [N.Normal] in
 private theorem relativeC2_right_mul (c : relativeCocycles2 N M) (g h : G) (n : N) :
     c.1.1 g (h * n) = c.1.1 g h := by
   have hd := congrFun (congrFun (congrFun c.1.2.1 g) h) (n : G)
@@ -543,6 +549,7 @@ private def cocycleRelative (b : cocycles1 M) : relativeC1 N M := ⟨b.1, ⟨by
   intro g n
   exact congrFun (congrFun b.2.1 g) n⟩⟩
 
+omit [N.Normal] in
 private theorem restrictionH1_mem_quotientInvariant (x : H1 M) :
     restrictionH1 N.subtype M x ∈ quotientInvariantH1 N M := by
   induction x using QuotientAddGroup.induction_on with
@@ -555,6 +562,7 @@ def invariantRestrictionH1 : H1 M →+ quotientInvariantH1 N M :=
   (restrictionH1 N.subtype M).codRestrict (quotientInvariantH1 N M)
     (restrictionH1_mem_quotientInvariant N M)
 
+omit [N.Normal] in
 @[simp]
 theorem invariantRestrictionH1_coe (x : H1 M) :
     (invariantRestrictionH1 N M x : H1 (Rep.res N.subtype M)) =

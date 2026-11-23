@@ -121,6 +121,7 @@ private theorem rayAdmissible_one (m : RayModulus K) : RayAdmissible m 1 := by
   · intro σ hσ
     simp
 
+omit [NumberField K] in
 private theorem rayAdmissible_mul (m : RayModulus K) {a b : Kˣ}
     (ha : RayAdmissible m a) (hb : RayAdmissible m b) :
     RayAdmissible m (a * b) := by
@@ -141,6 +142,7 @@ private theorem rayAdmissible_mul (m : RayModulus K) {a b : Kˣ}
   · intro σ hσ
     simpa only [Units.val_mul, map_mul] using mul_pos (hpos σ hσ) (hpos' σ hσ)
 
+omit [NumberField K] in
 private theorem rayAdmissible_inv (m : RayModulus K) {a : Kˣ}
     (ha : RayAdmissible m a) : RayAdmissible m a⁻¹ := by
   rcases ha with ⟨⟨β, γ, hγ, hfrac, hβ, hγc, hcong⟩, hpos⟩
@@ -229,7 +231,7 @@ private theorem rayToClass_kills_principal (m : RayModulus K) :
   change ClassGroup.mk K I.1 = 1
   rw [ClassGroup.mk_eq_one_iff]
   refine ⟨⟨(a : K), ?_⟩⟩
-  simpa only [FractionalIdeal.val_eq_coe, hI, FractionalIdeal.coe_spanSingleton]
+  simp only [hI, FractionalIdeal.coe_spanSingleton]
 
 private noncomputable def forgetToClass (m : RayModulus K) :
     RayClassGroup m →* ClassGroup (NumberField.RingOfIntegers K) :=
@@ -343,8 +345,7 @@ private theorem rayToClass_surjective (m : RayModulus K) :
     have hX : ClassGroup.mk K X = 1 := by
       rw [ClassGroup.mk_eq_one_iff]
       refine ⟨⟨(x : K), ?_⟩⟩
-      simp [X, FractionalIdeal.coe_spanSingleton,
-        FractionalIdeal.coeIdeal_span_singleton]
+      simp [X, FractionalIdeal.coeIdeal_span_singleton]
     rw [hX, one_mul]
 
 private theorem principal_iff_aux (m : RayModulus K) (I : RayIdealGroup m) :
@@ -493,7 +494,7 @@ private theorem exists_coprime_fraction (M : Ideal O) (hM : M ≠ 0)
       intro ht
       apply htout
       rw [ht]
-      simpa using (p : FractionalIdeal O⁰ K).zero_mem
+      simp
     have hγ0 : γ ≠ 0 := by
       intro hγ
       subst γ
@@ -522,7 +523,7 @@ private theorem exists_coprime_fraction (M : Ideal O) (hM : M ≠ 0)
     exact hγp (hle hmem)
   have hnot : ¬(D : Set O) ⊆ ⋃ p ∈ (ps : Set (Ideal O)), (p : Set O) := by
     rw [Ideal.subset_union_prime (⊥ : Ideal O) (⊥ : Ideal O)]
-    · push_neg
+    · push Not
       exact hD
     · intro p hp _ _
       exact (Ideal.mem_normalizedFactors_iff hM).mp
@@ -577,6 +578,7 @@ private theorem exists_coprime_fraction (M : Ideal O) (hM : M ≠ 0)
     exact hγout (Set.mem_biUnion hp hγp)
   exact ⟨β, γ, hγ0, hfrac, hcop β hβout, hγcop⟩
 
+omit [NumberField K] in
 private theorem quotient_isUnit_iff_coprime (M : Ideal O) (x : O) :
     IsUnit (Ideal.Quotient.mk M x) ↔ IsCoprime (Ideal.span {x}) M := by
   constructor
@@ -604,11 +606,13 @@ private noncomputable def quotientUnitOfCoprime (M : Ideal O) (x : O)
     (hx : IsCoprime (Ideal.span {x}) M) : (O ⧸ M)ˣ :=
   (quotient_isUnit_iff_coprime M x).2 hx |>.unit
 
+omit [NumberField K] in
 @[simp] private theorem quotientUnitOfCoprime_val (M : Ideal O) (x : O)
     (hx : IsCoprime (Ideal.span {x}) M) :
     (quotientUnitOfCoprime M x hx : O ⧸ M) = Ideal.Quotient.mk M x := by
   rfl
 
+omit [NumberField K] in
 private theorem quotient_ratio_eq {M : Ideal O}
     {β γ β' γ' : O}
     (hγ : γ ≠ 0) (hγ' : γ' ≠ 0)
@@ -656,11 +660,11 @@ private noncomputable def realSignHom (σ : K →+* ℝ) :
     have ha0 : σ (a : K) ≠ 0 := (map_ne_zero σ).2 a.ne_zero
     have hb0 : σ (b : K) ≠ 0 := (map_ne_zero σ).2 b.ne_zero
     by_cases ha : 0 < σ (a : K) <;> by_cases hb : 0 < σ (b : K)
-    · simp [ha, hb, mul_pos]
+    · simp [ha, hb]
     · have hb' : σ (b : K) < 0 := lt_of_le_of_ne (le_of_not_gt hb) hb0
-      simp [ha, hb, hb', mul_neg_of_pos_of_neg]
+      simp [ha, hb]
     · have ha' : σ (a : K) < 0 := lt_of_le_of_ne (le_of_not_gt ha) ha0
-      simp [ha, hb, ha', mul_neg_of_neg_of_pos]
+      simp [ha, hb]
     · have ha' : σ (a : K) < 0 := lt_of_le_of_ne (le_of_not_gt ha) ha0
       have hb' : σ (b : K) < 0 := lt_of_le_of_ne (le_of_not_gt hb) hb0
       simp only [Units.val_mul, map_mul, if_pos (mul_pos_of_neg_of_neg ha' hb'),
@@ -668,6 +672,7 @@ private noncomputable def realSignHom (σ : K →+* ℝ) :
       rw [← ofAdd_add]
       congr 1
 
+omit [NumberField K] in
 private theorem realSignHom_eq_one_iff (σ : K →+* ℝ) (a : Kˣ) :
     realSignHom σ a = 1 ↔ 0 < σ (a : K) := by
   change (if 0 < σ (a : K) then 1 else Multiplicative.ofAdd 1) = 1 ↔ _
@@ -683,6 +688,7 @@ private theorem realSignHom_eq_one_iff (σ : K →+* ℝ) (a : Kˣ) :
 private noncomputable def realPlace (σ : K →+* ℝ) : NumberField.InfinitePlace K :=
   NumberField.InfinitePlace.mk (Complex.ofRealHom.comp σ)
 
+omit [NumberField K] in
 private theorem realPlace_injective : Function.Injective (realPlace (K := K)) := by
   intro σ τ h
   simp only [realPlace, NumberField.InfinitePlace.mk_eq_iff] at h
@@ -694,6 +700,7 @@ private theorem realPlace_injective : Function.Injective (realPlace (K := K)) :=
     have hx := congr_fun (congr_arg DFunLike.coe h) x
     simpa using congr_arg Complex.re hx
 
+omit [NumberField K] in
 @[simp] private theorem realPlace_apply (σ : K →+* ℝ) (x : K) :
     realPlace σ x = |σ x| := by
   simp [realPlace, NumberField.InfinitePlace.apply, Real.norm_eq_abs]
@@ -907,6 +914,7 @@ private noncomputable def rayFractionRep (m : RayModulus K) (a : rayElementGroup
     RayFractionRep m a :=
   Classical.choice (rayFractionRep_nonempty m a)
 
+omit [NumberField K] in
 private theorem quotientUnitOfCoprime_one (M : Ideal O) :
     quotientUnitOfCoprime M 1 (by
       rw [Ideal.isCoprime_iff_sup_eq]
@@ -914,6 +922,7 @@ private theorem quotientUnitOfCoprime_one (M : Ideal O) :
   apply Units.ext
   simp
 
+omit [NumberField K] in
 private theorem quotientUnitOfCoprime_mul (M : Ideal O) (x y : O)
     (hx : IsCoprime (Ideal.span {x}) M) (hy : IsCoprime (Ideal.span {y}) M) :
     quotientUnitOfCoprime M (x * y) (by
@@ -1035,7 +1044,7 @@ private theorem raySignature_eq_one_iff (m : RayModulus K) (a : rayElementGroup 
         (hpos σ σ.2)
 
 private theorem exists_nonzero_coprime_lift (M : Ideal O) (u : (O ⧸ M)ˣ) :
-    ∃ x : O, ∃ hx0 : x ≠ 0, ∃ hxc : IsCoprime (Ideal.span {x}) M,
+    ∃ x : O, ∃ _hx0 : x ≠ 0, ∃ hxc : IsCoprime (Ideal.span {x}) M,
       quotientUnitOfCoprime M x hxc = u := by
   obtain ⟨x, hx⟩ := Ideal.Quotient.mk_surjective (u : O ⧸ M)
   have hxc : IsCoprime (Ideal.span {x}) M :=
@@ -1110,7 +1119,7 @@ private theorem rayApproximation (m : RayModulus K) :
     change realSignHom (σ : K →+* ℝ) tU = e σ
     rw [← htU, map_mul, hqsign']
     simp only [correction]
-    simp [mul_assoc, mul_left_comm, mul_comm]
+    simp [mul_left_comm]
   obtain ⟨N, hy0, hysign⟩ :=
     exists_add_with_signs m.infinite hx0 ht0 e htsign
   let y : O := x + N * t
@@ -1211,7 +1220,6 @@ theorem exactSequence (m : RayModulus K) :
       have hdadm : RayAdmissible m (d : Kˣ) := (hone d).1 hd1
       refine ⟨(d : Kˣ), hdadm, ?_⟩
       rw [principalRayIdeal_val]
-      change _ = FractionalIdeal.spanSingleton _ (((d : Kˣ) : K))
       change _ = FractionalIdeal.spanSingleton _
         ((((a : Kˣ) * ((unitsToRayElements m u : rayElementGroup m) : Kˣ)⁻¹) : Kˣ) : K)
       rw [Units.val_mul, Units.val_inv_eq_inv_val,

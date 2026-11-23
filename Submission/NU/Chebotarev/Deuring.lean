@@ -94,7 +94,7 @@ private theorem frobenius_smul (P : PrimeIdeal L)
 
 private theorem fixedField_contraction_degreeOne
     (g : Gal(L/K)) (p : PrimeIdeal K) (P : PrimeIdeal L)
-    (hPp : P.asIdeal.LiesOver p.asIdeal)
+    (_hPp : P.asIdeal.LiesOver p.asIdeal)
     (hunr : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) P.asIdeal)
     (hfrob : arithFrobeniusAt (K := K) (L := L) P = g) :
     let q : PrimeIdeal (deuringFixedField g) :=
@@ -103,7 +103,7 @@ private theorem fixedField_contraction_degreeOne
           intro h
           let : P.asIdeal.LiesOver
               (⊥ : Ideal (NumberField.RingOfIntegers (deuringFixedField g))) :=
-            ⟨by simpa [h]⟩
+            ⟨by simp [h]⟩
           exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot
             (NumberField.RingOfIntegers (deuringFixedField g)) P.asIdeal)⟩
     (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' q.asIdeal = 1 ∧
@@ -115,7 +115,7 @@ private theorem fixedField_contraction_degreeOne
     ⟨P.asIdeal.under (NumberField.RingOfIntegers E), inferInstance, by
       intro h
       let : P.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers E)) :=
-        ⟨by simpa [h]⟩
+        ⟨by simp [h]⟩
       exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot
         (NumberField.RingOfIntegers E) P.asIdeal)⟩
   have hPq : P.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
@@ -185,6 +185,7 @@ private theorem fixedField_contraction_degreeOne
   apply IsDedekindDomain.HeightOneSpectrum.asIdeal_injective
   rw [← hs, hfix]
 
+omit [FiniteDimensional K L] in
 private theorem isArithFrobAt_restrictScalars_of_inertiaDeg_one
     {E : Type*} [Field E] [NumberField E]
     [Algebra K E] [Algebra E L] [IsScalarTower K E L]
@@ -208,7 +209,7 @@ private theorem isArithFrobAt_restrictScalars_of_inertiaDeg_one
       ⟨q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
         intro hp
         let : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) :=
-          ⟨by simpa [hp]⟩
+          ⟨by simp [hp]⟩
         exact q.ne_bot (Ideal.eq_bot_of_liesOver_bot
           (NumberField.RingOfIntegers K) q.asIdeal)⟩
     have hnorm := PrimeIdeal.norm_pow_inertiaDeg q p (by
@@ -328,7 +329,7 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
       intro h
       let : P.asIdeal.LiesOver
           (⊥ : Ideal (NumberField.RingOfIntegers (deuringFixedField g))) :=
-        ⟨by simpa [h]⟩
+        ⟨by simp [h]⟩
       exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot
         (NumberField.RingOfIntegers (deuringFixedField g)) P.asIdeal)⟩
   have hcontract_mem (P : source) :
@@ -381,8 +382,6 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
     symm
     apply hunique Q.val
     refine ⟨?_⟩
-    change q.asIdeal = Q.val.asIdeal.under
-      (NumberField.RingOfIntegers (deuringFixedField g))
     rw [← show contract Q.val = q from by
       calc
         contract Q.val = (toTarget Q).val := (htoTarget_val Q).symm
@@ -461,6 +460,7 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
   rw [htarget, hsource, horbit]
   rfl
 
+omit [NumberField K] [NumberField L] [FiniteDimensional K L] [IsGalois K L] in
 /-- Blueprint Proposition 4.1 (`deuringFactor_isInteger`): orbit--stabilizer
 shows `|⟨g⟩|` divides `|C_G(g)|`. -/
 theorem deuringFactor_isInteger (g : Gal(L/K)) :
@@ -517,7 +517,7 @@ private def primeUnder
   ⟨q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
     intro h
     let : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) :=
-      ⟨by simpa [h]⟩
+      ⟨by simp [h]⟩
     exact q.ne_bot (Ideal.eq_bot_of_liesOver_bot
       (NumberField.RingOfIntegers K) q.asIdeal)⟩
 

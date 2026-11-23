@@ -31,16 +31,19 @@ variable {S : Subgroup G} (T : ExplicitTransversal S ι)
 /-- The transversal coordinates of a group element. -/
 def coord (x : G) : ι × S := T.decomposition.symm x
 
+omit [Fintype ι] in
 @[simp]
 theorem decomposition_coord (x : G) :
     T.decomposition (T.coord x) = x :=
   T.decomposition.apply_symm_apply x
 
+omit [Fintype ι] in
 @[simp]
 theorem coord_decomposition (p : ι × S) :
     T.coord (T.decomposition p) = p :=
   T.decomposition.symm_apply_apply p
 
+omit [Fintype ι] in
 @[simp]
 theorem coord_smul_rep (i : ι) (s : S) :
     T.coord ((s : G) * T.rep i) = (i, s) := by
@@ -53,6 +56,7 @@ def next (i : ι) (g : G) : ι := (T.coord (T.rep i * g)).1
 /-- The Schreier factor determined by `rep i * g = factor i g * rep (next i g)`. -/
 def factor (i : ι) (g : G) : S := (T.coord (T.rep i * g)).2
 
+omit [Fintype ι] in
 /-- The defining Schreier factorization. -/
 theorem factorization (i : ι) (g : G) :
     T.rep i * g = (T.factor i g : G) * T.rep (T.next i g) := by
@@ -60,6 +64,7 @@ theorem factorization (i : ι) (g : G) :
   rw [T.decomposition_apply] at h
   exact h.symm
 
+omit [Fintype ι] in
 @[simp]
 theorem next_one (i : ι) : T.next i 1 = i := by
   change (T.coord (T.rep i * 1)).1 = i
@@ -67,6 +72,7 @@ theorem next_one (i : ι) : T.next i 1 = i := by
   have h := T.coord_smul_rep i (1 : S)
   simpa using congrArg Prod.fst h
 
+omit [Fintype ι] in
 @[simp]
 theorem factor_one (i : ι) : T.factor i 1 = 1 := by
   change (T.coord (T.rep i * 1)).2 = 1
@@ -74,12 +80,14 @@ theorem factor_one (i : ι) : T.factor i 1 = 1 := by
   have h := T.coord_smul_rep i (1 : S)
   simpa using congrArg Prod.snd h
 
+omit [Fintype ι] in
 /-- The Schreier factor as the familiar twisted product of representatives. -/
 theorem factor_coe (i : ι) (g : G) :
     (T.factor i g : G) = T.rep i * g * (T.rep (T.next i g))⁻¹ := by
   rw [T.factorization]
   simp [mul_assoc]
 
+omit [Fintype ι] in
 /-- Successive Schreier indices compose in the same order as multiplication in `G`. -/
 theorem next_mul (i : ι) (g h : G) :
     T.next i (g * h) = T.next (T.next i g) h := by
@@ -92,6 +100,7 @@ theorem next_mul (i : ι) (g h : G) :
   change (T.coord (T.rep i * (g * h))).1 = T.next (T.next i g) h
   rw [hgh, T.coord_smul_rep]
 
+omit [Fintype ι] in
 /-- Successive Schreier factors satisfy the cocycle identity. -/
 theorem factor_mul (i : ι) (g h : G) :
     T.factor i (g * h) = T.factor i g * T.factor (T.next i g) h := by
@@ -116,6 +125,7 @@ def nextEquiv (g : G) : ι ≃ ι where
     change T.next (T.next i g⁻¹) g = i
     rw [← T.next_mul, inv_mul_cancel, T.next_one]
 
+omit [Fintype ι] in
 @[simp]
 theorem nextEquiv_apply (g : G) (i : ι) : T.nextEquiv g i = T.next i g := rfl
 
@@ -148,7 +158,7 @@ noncomputable def indexEquivRightCosets :
       rw [T.decomposition_apply] at hx
       rw [← hx]
       change ((p.2 : S) : G) * T.rep p.1 * (T.rep p.1)⁻¹ ∈ S
-      simpa [mul_assoc] using p.2.2
+      simp [mul_assoc]
 
 /-- The number of labels is the subgroup index. -/
 theorem card_index (T : ExplicitTransversal S ι) : Fintype.card ι = S.index := by
@@ -160,12 +170,13 @@ theorem card_index (T : ExplicitTransversal S ι) : Fintype.card ι = S.index :=
     _ = Nat.card (G ⧸ S) :=
       Nat.card_congr (QuotientGroup.quotientRightRelEquivQuotientLeftRel S)
 
+omit [Fintype ι] in
 /-- The identity used to reindex the leading action in the transfer differential. -/
 theorem action_factorization (i : ι) (g : G) :
     g * (T.rep (T.next i g))⁻¹ = (T.rep i)⁻¹ * (T.factor i g : G) := by
   calc
     g * (T.rep (T.next i g))⁻¹ =
-        (T.rep i)⁻¹ * (T.rep i * g) * (T.rep (T.next i g))⁻¹ := by simp [mul_assoc]
+        (T.rep i)⁻¹ * (T.rep i * g) * (T.rep (T.next i g))⁻¹ := by simp
     _ = (T.rep i)⁻¹ * ((T.factor i g : G) * T.rep (T.next i g)) *
         (T.rep (T.next i g))⁻¹ := by rw [T.factorization]
     _ = (T.rep i)⁻¹ * (T.factor i g : G) := by simp [mul_assoc]
@@ -180,6 +191,7 @@ private theorem rho_inv_rho (M : Rep ℤ G) (g : G) (x : M) :
   rw [← Module.End.mul_apply, ← map_mul]
   simp
 
+omit [Fintype ι] in
 private theorem rho_action_factorization (M : Rep ℤ G) (i : ι) (g : G) (x : M) :
     M.ρ g (M.ρ (T.rep (T.next i g))⁻¹ x) =
       M.ρ (T.rep i)⁻¹ (M.ρ (T.factor i g : G) x) := by
@@ -322,13 +334,11 @@ def corCocycles2 (T : ExplicitTransversal S ι) (M : Rep ℤ G) :
     have hc : d2 (Rep.res S.subtype M) c = 0 := c.2.1
     rw [hc, map_zero], ⟨by
       intro g
-      change corC2 T M c 1 g = 0
       simp only [corC2, AddMonoidHom.coe_mk, ZeroHom.coe_mk, T.factor_one,
         T.next_one]
       have hc : ∀ h, c.1 1 h = 0 := c.2.2.1
       simp [hc], by
       intro g
-      change corC2 T M c g 1 = 0
       simp only [corC2, AddMonoidHom.coe_mk, ZeroHom.coe_mk, T.factor_one]
       have hc : ∀ h, c.1 h 1 = 0 := c.2.2.2
       simp [hc]⟩⟩⟩
@@ -405,6 +415,7 @@ theorem corH0_restriction (M : Rep ℤ G) (a : H0 M) :
 def restrictionCorPrimitive1 (M : Rep ℤ G) (b : C1 M) : C0 M :=
   -∑ i : ι, M.ρ (T.rep i)⁻¹ (b (T.rep i))
 
+omit [Fintype ι] in
 private theorem corC1_restrict_summand (M : Rep ℤ G) (b : C1 M)
     (hb : d1 M b = 0) (i : ι) (g : G) :
     M.ρ (T.rep i)⁻¹ (b (T.factor i g : G)) =
@@ -549,6 +560,7 @@ private def restrictionCorPrismTerm (M : Rep ℤ G) (c : C2 M) (i : ι) (g : G) 
 def restrictionCorPrimitive2 (M : Rep ℤ G) (c : C2 M) : C1 M :=
   fun g => ∑ i : ι, restrictionCorPrismTerm T M c i g
 
+omit [Fintype ι] in
 private theorem homogeneous2_transfer_summand (M : Rep ℤ G) (c : C2 M)
     (i : ι) (g h : G) :
     homogeneous2 M c (T.rep i)⁻¹
@@ -563,8 +575,9 @@ private theorem homogeneous2_transfer_summand (M : Rep ℤ G) (c : C2 M)
 
 private theorem homogeneous2_standard (M : Rep ℤ G) (c : C2 M) (g h : G) :
     homogeneous2 M c 1 g (g * h) = c g h := by
-  simp [homogeneous2, mul_assoc]
+  simp [homogeneous2]
 
+omit [Fintype ι] in
 private theorem rho_restrictionCorPrismTerm (M : Rep ℤ G) (c : C2 M)
     (i : ι) (g h : G) :
     M.ρ g (restrictionCorPrismTerm T M c (T.next i g) h) =
@@ -577,6 +590,7 @@ private theorem rho_restrictionCorPrismTerm (M : Rep ℤ G) (c : C2 M)
     homogeneous2_equivariant, homogeneous2_equivariant]
   congr 2 <;> simp [mul_assoc]
 
+omit [Fintype ι] in
 private theorem restrictionCorPrismTerm_d (M : Rep ℤ G) (c : C2 M)
     (hc : d2 M c = 0) (i : ι) (g h : G) :
     M.ρ g (restrictionCorPrismTerm T M c (T.next i g) h) -
@@ -671,6 +685,7 @@ def primitive1 (C : TransversalChange T U) (M : Rep ℤ G)
     (b : C1 (Rep.res S.subtype M)) : C0 M :=
   ∑ i : ι, M.ρ (T.rep i)⁻¹ (b (C.gauge i)⁻¹)
 
+omit [Fintype ι] in
 private theorem corC1_change_summand (M : Rep ℤ G)
     (b : cocycles1 (Rep.res S.subtype M)) (i : ι) (g : G) :
     M.ρ (U.rep i)⁻¹ (b.1 (U.factor i g)) -
@@ -788,6 +803,7 @@ def primitive2 (C : TransversalChange T U) (M : Rep ℤ G)
     (c : C2 (Rep.res S.subtype M)) : C1 M :=
   fun g => ∑ i : ι, M.ρ (T.rep i)⁻¹ (innerPrism2 C M c i g)
 
+omit [Fintype ι] in
 private theorem homogeneous2_change_new (M : Rep ℤ G)
     (c : C2 (Rep.res S.subtype M)) (i : ι) (g h : G) :
     M.ρ (U.rep i)⁻¹
@@ -801,7 +817,7 @@ private theorem homogeneous2_change_new (M : Rep ℤ G)
   let : Module ℤ M := M.hV2
   rw [C.rep_eq, mul_inv_rev, map_mul, Module.End.mul_apply]
   congr 1
-  simp only [homogeneous2, Rep.res_obj_ρ, MonoidHom.coe_comp,
+  simp only [homogeneous2, MonoidHom.coe_comp,
     Subgroup.coe_subtype, Function.comp_apply]
   congr 2
   · apply Subtype.ext
@@ -810,6 +826,7 @@ private theorem homogeneous2_change_new (M : Rep ℤ G)
     apply Subtype.ext
     simp [mul_assoc]
 
+omit [Fintype ι] in
 private theorem homogeneous2_change_old (M : Rep ℤ G)
     (c : C2 (Rep.res S.subtype M)) (i : ι) (g h : G) :
     M.ρ (T.rep i)⁻¹ (c (T.factor i g) (T.factor (T.next i g) h)) =
@@ -819,6 +836,7 @@ private theorem homogeneous2_change_old (M : Rep ℤ G)
   congr 1
   simp [homogeneous2]
 
+omit [Fintype ι] in
 private theorem rho_innerPrism2 (M : Rep ℤ G)
     (c : C2 (Rep.res S.subtype M)) (i : ι) (g h : G) :
     M.ρ g (M.ρ (T.rep (T.next i g))⁻¹
@@ -848,6 +866,7 @@ private theorem rho_innerPrism2 (M : Rep ℤ G)
   rw [homogeneous2_equivariant, homogeneous2_equivariant]
   congr 2 <;> simp [mul_assoc]
 
+omit [Fintype ι] in
 private theorem corC2_change_local (M : Rep ℤ G)
     (c : cocycles2 (Rep.res S.subtype M)) (i : ι) (g h : G) :
     M.ρ g (M.ρ (T.rep (T.next i g))⁻¹
@@ -1181,6 +1200,7 @@ theorem corestrictionH0Tate_restrictionH0Tate
     congr 1
     exact Inhomogeneous.Transfer.corH0_restriction T M a
 
+omit [Fintype G] [Fintype ↥S] in
 private theorem subgroupAugmentation_le (M : Rep ℤ G) :
     TateLowDegree.augmentation (Rep.res S.subtype M) ≤ TateLowDegree.augmentation M := by
   intro x hx
@@ -1225,6 +1245,7 @@ def restrictNormKernel (T : ExplicitTransversal S ι) (M : Rep ℤ G) :
   map_zero' := by apply Subtype.ext; exact map_zero (cosetSum T M)
   map_add' x y := by apply Subtype.ext; exact map_add (cosetSum T M) x.1 y.1
 
+omit [Fintype G] [Fintype ↥S] in
 private theorem cosetSum_generator_mem_augmentation
     (T : ExplicitTransversal S ι) (M : Rep ℤ G) (g : G) (a : M) :
     cosetSum T M (M.ρ g a - a) ∈
@@ -1264,6 +1285,7 @@ private theorem cosetSum_generator_mem_augmentation
   apply AddSubgroup.subset_closure
   exact ⟨T.factor i g, M.ρ (T.rep (T.next i g)) a, rfl⟩
 
+omit [Fintype G] [Fintype ↥S] in
 private theorem cosetSum_augmentation
     (T : ExplicitTransversal S ι) (M : Rep ℤ G) {x : M}
     (hx : x ∈ TateLowDegree.augmentation M) :
@@ -1288,6 +1310,7 @@ def restrictionHMinusOne (T : ExplicitTransversal S ι) (M : Rep ℤ G) :
       intro x hx
       exact cosetSum_augmentation T M hx)
 
+omit [Fintype G] [Fintype ↥S] in
 private theorem cosetSum_sub_index_mem_augmentation
     (T : ExplicitTransversal S ι) (M : Rep ℤ G) (x : M) :
     cosetSum T M x - Fintype.card ι • x ∈ TateLowDegree.augmentation M := by
@@ -1322,7 +1345,7 @@ theorem corestrictionHMinusOne_restrictionHMinusOne
     change -(cosetSum T M a.1) + Fintype.card ι • a.1 ∈
       TateLowDegree.augmentation M
     have h := cosetSum_sub_index_mem_augmentation T M a.1
-    convert (TateLowDegree.augmentation M).neg_mem h using 1 <;> abel
+    convert (TateLowDegree.augmentation M).neg_mem h using 1; abel
 
 end TateTransfer
 

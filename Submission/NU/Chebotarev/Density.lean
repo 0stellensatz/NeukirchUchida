@@ -104,7 +104,7 @@ private theorem tendsto_dirichletNormalizer_atTop :
       convert h.mono_left nhdsWithin_le_nhds using 1 <;> ext <;> simp
     · filter_upwards [self_mem_nhdsWithin] with s hs
       exact (by exact sub_pos.mpr hs : 0 < s - 1)
-  convert tendsto_inv_nhdsGT_zero.comp hsub using 1 <;> simp [Function.comp_def]
+  convert tendsto_inv_nhdsGT_zero.comp hsub using 1; simp [Function.comp_def]
 
 private theorem idealNormSet_finite (x : ℝ) :
     {I : Ideal (NumberField.RingOfIntegers K) |
@@ -312,7 +312,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
   let contract : PrimeIdeal E → PrimeIdeal K := fun q =>
     ⟨q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
       intro h
-      let : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simpa [h]⟩
+      let : q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simp [h]⟩
       exact q.ne_bot (Ideal.eq_bot_of_liesOver_bot
         (NumberField.RingOfIntegers K) q.asIdeal)⟩
   obtain ⟨A, hA, hideal⟩ := ideal_linear_bound (K := K)
@@ -537,8 +537,8 @@ theorem sqrt_bound_hasDirichletDensity_zero (S : Set (PrimeIdeal K))
             refine ⟨Nat.one_le_iff_ne_zero.mpr
               (Ideal.absNorm_eq_zero_iff.not.mpr p.1.ne_bot), ?_⟩
             exact_mod_cast p.2.2⟩
-          left_inv := fun p => by ext <;> rfl
-          right_inv := fun p => by ext <;> rfl }
+          left_inv := fun p => by ext; rfl
+          right_inv := fun p => by ext; rfl }
     simpa only [a, Nat.cast_sum] using congrArg (fun m : ℕ => (m : ℝ)) hcoeffN
   have hO : (fun n => ∑ k ∈ Finset.Icc 1 n, a k) =O[atTop]
       (fun n : ℕ => (n : ℝ) ^ (1 / 2 : ℝ)) := by
@@ -802,7 +802,7 @@ theorem HasPrimeDensity.congr_of_symmetricDifference_zero
       (primeCounting T x : ℝ) / (x / Real.log x) -
         (primeCounting S x : ℝ) / (x / Real.log x)) atTop (𝓝 0) := by
     apply (tendsto_zero_iff_abs_tendsto_zero _).mpr
-    convert hz using 1 <;> simp [Function.comp_def]
+    convert hz using 1; simp [Function.comp_def]
   simpa only [sub_add_cancel, zero_add] using hzero.add hS
 
 /-- Blueprint §2/§9 negligible-set replacement for Dirichlet density. -/
@@ -896,7 +896,7 @@ theorem HasDirichletDensity.congr_of_symmetricDifference_zero
       dirichletPrimeSum T s / dirichletNormalizer s -
         dirichletPrimeSum S s / dirichletNormalizer s) (𝓝[>] (1 : ℝ)) (𝓝 0) := by
     apply (tendsto_zero_iff_abs_tendsto_zero _).mpr
-    convert hz using 1 <;> simp [Function.comp_def]
+    convert hz using 1; simp [Function.comp_def]
   simpa only [sub_add_cancel, zero_add] using hzero.add hS
 
 private theorem primeCounting_iUnion_eq_sum

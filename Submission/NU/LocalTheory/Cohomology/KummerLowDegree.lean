@@ -1377,7 +1377,7 @@ private theorem cyclic_norm_criterion_of_norm
     intro h
     apply Units.ne_zero z
     apply e.injective
-    simpa [zL] using h
+    simp [zL] at h
   have hnormzL : Algebra.norm M zL = (b : M) := by
     rw [show zL = e (z : E) by rfl, Algebra.norm_eq_of_algEquiv e, hz]
   have hnormprod : (∏ t : L ≃ₐ[M] L, t zL) = algebraMap M L (b : M) := by
@@ -2781,7 +2781,7 @@ theorem steinberg_cupZero {M : Type*} [Field M] {ℓ : ℕ}
     have haone : (a : M) = 1 := (algebraMap M E).injective hamap
     apply Units.ne_zero b
     have hab' : (1 : M) + (b : M) = 1 + 0 := by
-      simpa [haone] using hab
+      simp [haone] at hab
     exact add_left_cancel hab'
   refine ⟨Units.mk0 zval hzval, ?_⟩
   change Algebra.norm M zval = (b : M)

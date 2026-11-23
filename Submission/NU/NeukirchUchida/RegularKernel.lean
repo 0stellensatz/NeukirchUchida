@@ -301,7 +301,7 @@ theorem kummerProjector_idempotent
       MonoidAlgebra.single d (a d) =
         a d • MonoidAlgebra.single d (1 : R) := by
     ext x
-    simp [MonoidAlgebra.coeff, Finsupp.single_apply, smul_eq_mul]
+    simp [Finsupp.single_apply, smul_eq_mul]
   have htranslate (d : Delta) :
       MonoidAlgebra.single d (1 : R) * P = (chi d : R) • P := by
     dsimp [P, R]
@@ -311,11 +311,6 @@ theorem kummerProjector_idempotent
     change (kummerProjector p hcard chi).coeff (d⁻¹ * x) =
       (chi d : R) * (kummerProjector p hcard chi).coeff x
     rw [kummerProjector_apply, kummerProjector_apply]
-    change (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
-        (↑(chi (d⁻¹ * x)) : ZMod (p : ℕ))⁻¹ =
-      (chi d : ZMod (p : ℕ)) *
-        ((Nat.card Delta : ZMod (p : ℕ))⁻¹ *
-          (↑(chi x) : ZMod (p : ℕ))⁻¹)
     rw [map_mul, map_inv]
     push_cast
     field_simp
@@ -365,11 +360,6 @@ theorem kummerProjector_leftTranslate
     (chi gamma : ZMod (p : ℕ)) *
       (kummerProjector p hcard chi).coeff delta
   rw [kummerProjector_apply, kummerProjector_apply]
-  change (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
-      (↑(chi (gamma⁻¹ * delta)) : ZMod (p : ℕ))⁻¹ =
-    (chi gamma : ZMod (p : ℕ)) *
-      ((Nat.card Delta : ZMod (p : ℕ))⁻¹ *
-        (↑(chi delta) : ZMod (p : ℕ))⁻¹)
   rw [map_mul, map_inv]
   push_cast
   field_simp
@@ -652,14 +642,14 @@ def radicalExtension
 /-- Relative ramification index of `w/v` in an ambient extension. -/
 noncomputable def relativeRamificationIndex
     {N : NumberFieldInOmega} (L : NumberFieldExtension N)
-    (v : NU.LocalTheory.FinitePlace N.field)
+    (_v : NU.LocalTheory.FinitePlace N.field)
     (w : NU.LocalTheory.FinitePlace L.field.field) : ℕ :=
   w.asIdeal.ramificationIdx (NumberField.RingOfIntegers N.field)
 
 /-- Relative residue degree of `w/v`. -/
 noncomputable def relativeResidueDegree
     {N : NumberFieldInOmega} (L : NumberFieldExtension N)
-    (v : NU.LocalTheory.FinitePlace N.field)
+    (_v : NU.LocalTheory.FinitePlace N.field)
     (w : NU.LocalTheory.FinitePlace L.field.field) : ℕ :=
   w.asIdeal.inertiaDeg (NumberField.RingOfIntegers N.field)
 
@@ -1339,7 +1329,7 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
           intro hz
           apply u.ne_zero
           apply E.field.val.injective
-          simpa using hz
+          simp at hz
         have hz0 : z ≠ 0 :=
           mul_ne_zero hu0 (pow_ne_zero r halpha0)
         let xi : Omega := tau alpha / z
@@ -2167,7 +2157,7 @@ private theorem asymmetricWeakApproximation
     apply htP2'
     have hneg : t - x ∈ P.asIdeal ^ 2 := by
       simpa only [neg_sub] using (P.asIdeal ^ 2).neg_mem hxP
-    convert (P.asIdeal ^ 2).add_mem hneg hx2 using 1 <;> ring
+    convert (P.asIdeal ^ 2).add_mem hneg hx2 using 1; ring
   refine ⟨x, hxmem, hxnot, ?_⟩
   intro Q hQq hQP
   have hQover : Q.asIdeal.LiesOver q.asIdeal := ⟨by
@@ -2424,9 +2414,7 @@ private theorem projectedKummerRepresentative_class
         ∏ delta : D,
           (QuotientGroup.mk (u delta ^ n delta) :
             KummerClass E (p : ℕ)) := by
-      simpa using
-        (map_prod (QuotientGroup.mk' (pthPowerSubgroup E (p : ℕ)))
-          (fun delta : D => u delta ^ n delta) Finset.univ)
+      simp
     _ = ∏ delta : D,
         (kummerAction N p delta (QuotientGroup.mk b)) ^ n delta := by
       apply Finset.prod_congr rfl
@@ -2542,7 +2530,7 @@ private theorem AsymmetricApproximationData.conjugate_unit_valuation
   have hnotmem : sigma • A.integer ∉ D.P.asIdeal := by
     intro hmem
     have hone : (1 : NumberField.RingOfIntegers E.field) ∈ D.P.asIdeal := by
-      convert D.P.asIdeal.sub_mem hmem hmodP using 1 <;> ring
+      convert D.P.asIdeal.sub_mem hmem hmodP using 1; ring
     exact D.P.isPrime.ne_top
       ((Ideal.eq_top_iff_one D.P.asIdeal).2 hone)
   have hint : D.P.intValuation (sigma • A.integer) = 1 :=
@@ -4240,8 +4228,8 @@ private theorem residueCharacteristic_eq_norm_of_split
     (E : NumberFieldInOmega) (q : NU.Chebotarev.PrimeIdeal ℚ)
     (P : NU.LocalTheory.FinitePlace E.field)
     (hPq : rationalPrime E P = q)
-    (he : absoluteRamificationIndex E P = 1)
-    (hf : absoluteResidueDegree E P = 1) :
+    (_he : absoluteRamificationIndex E P = 1)
+    (_hf : absoluteResidueDegree E P = 1) :
     NU.LocalTheory.residueCharacteristic P =
       NU.Chebotarev.PrimeIdeal.norm q := by
   have hrestrict :
@@ -5227,7 +5215,7 @@ private theorem regularConjugateCompositumData_exists
       exact hneq hgh.symm
     have hseedSplit := hLsplit k hk
     have hlabel : g * k = h := by
-      simp [k, mul_assoc]
+      simp [k]
     have hbase : regularKernelMapFinitePlace g.toRingEquiv (v k) = v h :=
       (hmapV g k).trans (congrArg v hlabel)
     constructor
@@ -6373,8 +6361,7 @@ private theorem regularFactorAddEquiv_coeff
     (regularFactorAddEquiv hAsymmetric D a).coeff g =
       (regularConjugateFactorCoordinates hAsymmetric D).coordinate g a := by
   simp only [regularFactorAddEquiv, AddEquiv.trans_apply,
-    AddEquiv.ofBijective_apply, finsuppMonoidAlgebraAddEquiv_coeff,
-    regularFactorEvaluation_apply]
+    finsuppMonoidAlgebraAddEquiv_coeff]
   rfl
 
 /-- The Finsupp coefficient calculation turns coordinate permutation into

@@ -88,11 +88,6 @@ private theorem maschkeCyclotomicProjector_translate
   ext delta
   rw [MonoidAlgebra.coeff_single_mul_apply, one_mul, hcoeff,
     MonoidAlgebra.coeff_smul, Finsupp.smul_apply, smul_eq_mul, hcoeff]
-  change (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
-      (↑(chi (gamma⁻¹ * delta)) : ZMod (p : ℕ))⁻¹ =
-    (chi gamma : ZMod (p : ℕ)) *
-      ((Nat.card Delta : ZMod (p : ℕ))⁻¹ *
-        (↑(chi delta) : ZMod (p : ℕ))⁻¹)
   rw [map_mul, map_inv]
   push_cast
   field_simp
@@ -1434,13 +1429,13 @@ private theorem localUnitDecomposition_pPowerTorsion_isClosed
       apply e.injective
       rw [map_pow, map_one]
       apply Prod.ext
-      · simpa [hval]
+      · simp [hval]
       · apply Prod.ext
-        · simpa [hteich]
+        · simp [hteich]
         · apply Prod.ext
           · apply Subtype.ext
             exact ha
-          · simpa [hfree]
+          · simp [hfree]
   have hset : (units.pPowerTorsion : Set (Units F)) =
       {u | (e u).1 = 1 ∧ (e u).2.1 = 1 ∧
         (e u).2.2.2 = 1} := by
@@ -2138,7 +2133,7 @@ private theorem absoluteCharacter_moduleFinite
         (NU.LocalTheory.KummerQuotient F (p : ℕ)) + 1 ≤
       Module.finrank R
         (NU.LocalTheory.KummerQuotient F (p : ℕ)) := by
-      simpa [R] using hle
+      simp [R] at hle
     omega
   let : Finite I := hIfinite
   exact Module.Finite.of_basis b

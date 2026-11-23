@@ -70,7 +70,7 @@ theorem exists_cyclotomicModulus (n : ℕ) (hn : 1 ≤ n) :
       ⟨Q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
         intro hp
         let : Q.asIdeal.LiesOver
-            (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simpa [hp]⟩
+            (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simp [hp]⟩
         exact Q.ne_bot
           (Ideal.eq_bot_of_liesOver_bot
             (NumberField.RingOfIntegers K) Q.asIdeal)⟩
@@ -394,7 +394,7 @@ private theorem algebraNorm_pos_of_pos_at_real {K : Type*} [Field K] [NumberFiel
             ((InfinitePlace.embedding_of_isReal w.2) x : ℂ)) *
           ∏ w : {w : InfinitePlace K // InfinitePlace.IsComplex w},
             (Complex.normSq (w.1.embedding x) : ℂ)).re := hre
-      _ = _ := by rw [hrprod, hcprod]; simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, mul_zero, zero_mul, sub_zero]
+      _ = _ := by rw [hrprod, hcprod]; simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, mul_zero, sub_zero]
   apply (Rat.cast_pos (K := ℝ)).mp
   rw [hre']
   exact mul_pos hreal hcomp
@@ -507,7 +507,7 @@ private noncomputable def cyclotomicPrimeAbove
   let : q.1.LiesOver p.asIdeal := hover
   apply p.ne_bot
   rw [hover.over]
-  simpa [hq]
+  simp [hq]
 private theorem cyclotomicPrimeAbove_liesOver
     {K F : Type*} [Field K] [NumberField K]
     [Field F] [NumberField F] [Algebra K F]
@@ -530,7 +530,7 @@ private theorem cyclotomicPrimeUnit_eq_norm
     [Field F] [NumberField F] [Algebra K F]
     [FiniteDimensional K F] [IsGalois K F]
     (n : ℕ) [NeZero n] (m : RayModulus K) [IsCyclotomicExtension {n} K F]
-    (hn : 1 ≤ n) (hmod : IsCyclotomicModulus n m)
+    (_hn : 1 ≤ n) (hmod : IsCyclotomicModulus n m)
     (p : PrimeIdeal K) (hp : ¬p.asIdeal ∣ m.finite) :
     ((IsCyclotomicExtension.zeta_spec n K F).autToPow K (cyclotomicPrimeFrob (F := F) p) : ZMod n) =
       (PrimeIdeal.norm p : ZMod n) := by
@@ -823,7 +823,7 @@ noncomputable def cyclotomicIdealMap
     (n : ℕ) (m : RayModulus K)
     [IsCyclotomicExtension {n} K F]
     (hn : 1 ≤ n) (hmod : IsCyclotomicModulus n m)
-    (hram : RamificationSupported (M := M) m) :
+    (_hram : RamificationSupported (M := M) m) :
     RayClassGroup m →* Gal(M/K) := by
   letI : IsAbelianGalois K F :=
     IsCyclotomicExtension.isAbelianGalois {n} K F
@@ -1287,7 +1287,7 @@ private noncomputable def cyclotomicContractPrime
     [Algebra K M] (Q : PrimeIdeal M) : PrimeIdeal K :=
   ⟨Q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
     intro h
-    let : Q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simpa [h]⟩
+    let : Q.asIdeal.LiesOver (⊥ : Ideal (NumberField.RingOfIntegers K)) := ⟨by simp [h]⟩
     exact Q.ne_bot (Ideal.eq_bot_of_liesOver_bot
       (NumberField.RingOfIntegers K) Q.asIdeal)⟩
 
@@ -1308,7 +1308,7 @@ private noncomputable def cyclotomicPrimeFiberEquiv
     intro h
     apply p.ne_bot
     rw [Q.2.2.over]
-    simpa [h]⟩, by
+    simp [h]⟩, by
       apply IsDedekindDomain.HeightOneSpectrum.ext
       exact Q.2.2.over.symm⟩
   left_inv Q := by
@@ -2235,7 +2235,7 @@ theorem cyclotomic_weberL_ne_zero_at_one
       intro η hη
       have hηone : η ≠ 1 := by
         simpa using (Finset.mem_erase.mp hη).1
-      simp [V, hηone]
+      simp [hηone]
     have heq : (fun x : ℝ => ((x : ℂ) - 1) * Z x) =ᶠ[𝓝[>] (1 : ℝ)]
         (fun x : ℝ => ∏ η : UnitCharacter A, V η (x : ℂ)) := by
       filter_upwards [self_mem_nhdsWithin] with x hx
@@ -2485,7 +2485,7 @@ private theorem cyclotomicDensity_weberLogEulerSeries_eq
         dsimp [q]
         rw [← Real.rpow_mul_natCast (Nat.cast_nonneg _) (-s) (r + 1)]
         convert Real.rpow_neg (Nat.cast_nonneg (PrimeIdeal.norm p))
-          (((r + 1 : ℕ) : ℝ) * s) using 1 <;> push_cast <;> ring
+          (((r + 1 : ℕ) : ℝ) * s) using 1; push_cast; ring_nf
       have hcomplex :
           Complex.cpow (PrimeIdeal.norm p : ℂ)
               (((r + 1 : ℕ) : ℂ) * (s : ℂ)) =
@@ -2522,7 +2522,7 @@ private theorem cyclotomicDensity_weberLogEulerSeries_eq
           x ^ (r + 1) / (r + 1 : ℂ) := by
       rw [hpow]
       field_simp
-      congr 2 <;> simp only [Nat.cast_add, Nat.cast_one] <;> ring
+      congr 2; simp only [Nat.cast_add, Nat.cast_one]; ring
     simp_rw [hterm]
     rw [hshift.tsum_eq, hlog]
 
@@ -2626,7 +2626,7 @@ private theorem cyclotomicDensity_normalizer_atTop :
       convert h.mono_left nhdsWithin_le_nhds using 1 <;> ext <;> simp
     · filter_upwards [self_mem_nhdsWithin] with s hs
       exact sub_pos.mpr (by exact hs : 1 < s)
-  convert tendsto_inv_nhdsGT_zero.comp hsub using 1 <;> simp [Function.comp_def]
+  convert tendsto_inv_nhdsGT_zero.comp hsub using 1; simp [Function.comp_def]
 
 private theorem cyclotomicDensityLog_continuousOn
     {G : Type*} [CommGroup G] [Finite G] (m : RayModulus K)
@@ -3067,7 +3067,7 @@ private theorem cyclotomicDensity_orthogonality_series
       simp
 
 private theorem cyclotomicDensity_bounded_re_div_normalizer
-    (E : ℝ → ℂ) (C : ℝ) (hC : 0 ≤ C)
+    (E : ℝ → ℂ) (C : ℝ) (_hC : 0 ≤ C)
     (hE : ∀ᶠ s : ℝ in 𝓝[>] (1 : ℝ), ‖E s‖ ≤ C) :
     Tendsto (fun s : ℝ => (E s).re / dirichletNormalizer s)
       (𝓝[>] (1 : ℝ)) (𝓝 0) := by

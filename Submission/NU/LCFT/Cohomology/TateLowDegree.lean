@@ -249,7 +249,7 @@ theorem HMinusOne_equiv_tate (M : Rep ℤ G) :
         exact ⟨-cx, by rw [map_neg, hcx]⟩
     · rintro ⟨c, rfl⟩
       induction c using Finsupp.induction with
-      | zero => simpa using (augmentation M).zero_mem
+      | zero => simp
       | single_add g a c hg hc ih =>
           rw [map_add]
           apply (augmentation M).add_mem
@@ -323,6 +323,7 @@ section Hilbert90
 variable (K L : Type) [Field K] [Field L] [Algebra K L]
   [FiniteDimensional K L] [IsGalois K L]
 
+omit [IsGalois K L] in
 /--
 **C03**, Lemma `lem:hilbert90`: Hilbert 90 specialized to the binding representation
 `Additive (Units L)` in the concrete normalized model.
@@ -334,6 +335,7 @@ theorem hilbert90_mulRep_inhomogeneous :
   apply (comparisonH1 (MulRep K L)).injective
   exact Subsingleton.elim _ _
 
+omit [IsGalois K L] in
 /-- **C03**, Lemma `lem:hilbert90`: the same vanishing in Mathlib group cohomology. -/
 theorem hilbert90_mulRep_mathlib :
     Subsingleton (groupCohomology.H1 (MulRep K L)) := by
@@ -378,7 +380,7 @@ private lemma r_mul_s (g : G) : r S (q S g) * (s S g : G) = g := by
 private lemma q_mul (g : G) (h : S) : q S (g * h) = q S g := by
   apply Quotient.sound
   apply QuotientGroup.leftRel_apply.mpr
-  simpa using h⁻¹.2
+  simp
 
 private lemma q_r (z : Q S) : q S (r S z) = z := Quotient.out_eq z
 
@@ -625,7 +627,7 @@ private lemma norm_pointMass [Fintype S] (b : B (A := A) S) (t : S) :
   classical
   rw [Rep.norm_apply, Representation.norm]
   simp only [LinearMap.sum_apply, Submodule.coe_sum, Finset.sum_apply,
-    Representation.coind_apply, LinearMap.restrict_apply, LinearMap.restrict_coe_apply, LinearMap.funLeft_apply]
+    Representation.coind_apply]
   change (∑ g : S, if t * g = 1 then b else 0) = b
   rw [Finset.sum_eq_single t⁻¹]
   · simp
@@ -654,7 +656,6 @@ private theorem coindBot_H0_subsingleton [Fintype S] :
   induction x - y using QuotientAddGroup.induction_on with
   | H z =>
     apply (QuotientAddGroup.eq_zero_iff z).2
-    change z ∈ TateLowDegree.normRangeInInvariants (C (A := A) S)
     exact ⟨pointMass (A := A) S (z.1.1 1), invariant_eq_norm_pointMass (A := A) S z⟩
 
 private lemma normKernel_mem_augmentation [Fintype S]
@@ -673,8 +674,7 @@ private lemma normKernel_mem_augmentation [Fintype S]
     apply Subtype.ext
     apply funext
     intro y
-    simp only [Submodule.coe_sum, Finset.sum_apply, map_sub,
-      Representation.coind_apply, LinearMap.restrict_apply, LinearMap.restrict_coe_apply, LinearMap.funLeft_apply]
+    simp only [Submodule.coe_sum, Finset.sum_apply, Representation.coind_apply]
     change (∑ t : S, ((if y * t⁻¹ = 1 then x.1.1 t else 0) -
       if y = 1 then x.1.1 t else 0)) = x.1.1 y
     rw [Finset.sum_sub_distrib, Finset.sum_eq_single y]
@@ -775,8 +775,7 @@ def barAugmentation (G : Type) [Group G] : barRegular G ⟶ Rep.trivial ℤ G �
 
 @[simp] lemma barAugmentation_single (g : G) (n : ℤ) :
     (barAugmentation G).hom (MonoidAlgebra.single g n : ℤ[G]) = n := by
-  simpa [barAugmentation] using
-    (Rep.leftRegularHom_hom_single (A := Rep.trivial ℤ G ℤ) g 1 n)
+  simp [barAugmentation]
 
 def barAugmentationSubmodule (G : Type) [Group G] : Submodule ℤ (barRegular G) :=
   LinearMap.ker (barAugmentation G).hom.toLinearMap
@@ -1330,9 +1329,7 @@ private lemma comparisonH0Tate_mk_eq_homologyπ (N : Rep ℤ G)
     TateLowDegree.comparisonH0Tate N
       (QuotientAddGroup.mk' (TateLowDegree.normRangeInInvariants N) x) =
       (tateComplex N).homologyπ 0 (tateZeroCycle G N x) := by
-  simp only [TateLowDegree.comparisonH0Tate, AddEquiv.trans_apply,
-    AddEquiv.coe_toAddMonoidHom, QuotientAddGroup.map_mk',
-    AddEquiv.ofBijective_apply, tateZeroCycle, tateZeroEquiv]
+  simp only [TateLowDegree.comparisonH0Tate, tateZeroCycle, tateZeroEquiv]
   let eSc := (tateComplex N).isoSc' ((-1 : ℤ)) 0 1 (by simp) (by simp)
   let et : tateCohomology N 0 ≅
       ((tateComplex N).sc' ((-1 : ℤ)) 0 1).moduleCatLeftHomologyData.H :=
@@ -1377,6 +1374,7 @@ private def firstBarLift (g : G) : G →₀ barRegular G :=
   Finsupp.single g (MonoidAlgebra.single 1 1) +
     Finsupp.single g⁻¹ (barAugmentationCocycle g⁻¹).1
 
+omit [Fintype G] in
 private lemma firstBarLift_projection (g : G) :
     Finsupp.mapRange.linearMap (barAugmentation G).hom.toLinearMap (firstBarLift G g) =
       Finsupp.single g 1 := by
@@ -1389,6 +1387,7 @@ private lemma firstBarLift_projection (g : G) :
     (barAugmentationCocycle g⁻¹).2
   rw [hzero, Finsupp.single_zero, add_zero]
 
+omit [Fintype G] in
 private lemma firstBarLift_boundary (g : G) :
     groupHomology.d₁₀ (barRegular G) (firstBarLift G g) =
       (barAugmentationInclusion G).hom (-barAugmentationCocycle g) := by
@@ -1399,7 +1398,7 @@ private lemma firstBarLift_boundary (g : G) :
   rw [barAugmentationCocycle_action] at hact
   have hact' : (barRegular G).ρ g (barAugmentationCocycle g⁻¹).1 =
       (-barAugmentationCocycle g).1 := by
-    simpa [barAugmentationCocycle] using hact
+    simp [barAugmentationCocycle]
   change (barRegular G).ρ g⁻¹ (MonoidAlgebra.single 1 1) -
       MonoidAlgebra.single 1 1 +
       ((barRegular G).ρ g (barAugmentationCocycle g⁻¹).1 -
@@ -1579,6 +1578,7 @@ private def negativeRowInvariant (M : Rep ℤ G) (a : Inhomogeneous.C2 M)
     Inhomogeneous.invariants0 M :=
   -⟨∑ x : G, a x g, hrow g⟩
 
+omit [Fintype G] in
 @[simp] private lemma cocyclePushout_ρ_apply (M : Rep ℤ G) (a : Inhomogeneous.C2 M)
     (ha : a ∈ Inhomogeneous.cocycles2 M) (g : G)
     (p : M × barAugmentationIdeal G) :
@@ -1586,11 +1586,13 @@ private def negativeRowInvariant (M : Rep ℤ G) (a : Inhomogeneous.C2 M)
       (M.ρ g p.1 + cocycleTwist M a g p.2,
         (barAugmentationIdeal G).ρ g p.2) := rfl
 
+omit [Fintype G] in
 @[simp] private lemma cocyclePushoutProjection_apply_pair (M : Rep ℤ G)
     (a : Inhomogeneous.C2 M) (ha : a ∈ Inhomogeneous.cocycles2 M)
     (p : M × barAugmentationIdeal G) :
     (cocyclePushoutProjection M a ha).hom p = p.2 := rfl
 
+omit [Fintype G] in
 @[simp] private lemma cocyclePushoutInclusion_apply_pair (M : Rep ℤ G)
     (a : Inhomogeneous.C2 M) (ha : a ∈ Inhomogeneous.cocycles2 M) (m : M) :
     (cocyclePushoutInclusion M a ha).hom m = (m, 0) := rfl

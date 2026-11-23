@@ -379,7 +379,7 @@ private noncomputable def openNormalSubgroupEquiv
   toFun x := ⟨e x, (OpenNormalSubgroup.mem_map e U x).2 x.property⟩
   invFun y := ⟨e.symm y, by
     rw [← OpenNormalSubgroup.mem_map e U]
-    simpa using y.property⟩
+    simp⟩
   left_inv x := by ext; exact e.symm_apply_apply x
   right_inv y := by ext; exact e.apply_symm_apply y
   map_mul' x y := by ext; exact e.map_mul x y
@@ -2806,8 +2806,7 @@ private noncomputable def henselianBridge_normalizedRealValuation
       simp [f]
     by_cases hxy : x + y = 0
     · simp [f, hx, hy, hxy]
-    simp only [f, dif_neg hx, dif_neg hy, dif_neg hxy,
-      WithTop.coe_min, WithTop.coe_le_coe]
+    simp only [f, dif_neg hx, dif_neg hy, dif_neg hxy]
     rcases A.valuation.map_add' x y with h | h
     · apply (min_le_left _ _).trans
       have hm : e (Additive.ofMul (Units.mk0 (A.valuation (x + y))
@@ -3477,7 +3476,7 @@ private theorem finitePlace_nonempty
   have hq0 : q.1 ≠ ⊥ := by
     intro h
     have hp0 : p ≠ ⊥ := by
-      simpa [p] using (show (2 : ℤ) ≠ 0 by norm_num)
+      simp [p]
     apply hp0
     rw [q.2.2.over]
     change Ideal.comap (algebraMap ℤ (𝓞 K)) q.1 = ⊥
@@ -3768,7 +3767,7 @@ noncomputable def conjugateAbsoluteFinitePlace
     have htopfix : σ⁻¹ •
         (⊤ : ValuationSubring (AlgebraicClosure K)) = ⊤ := by
       ext x
-      simp [ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem]
+      simp
     simpa only [inv_smul_smul, htopfix] using h
   · apply ValuationSubring.ext
     intro x

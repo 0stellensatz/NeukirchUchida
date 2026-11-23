@@ -1379,7 +1379,7 @@ def PreservesNormalLevel
     {F₁ F₂ : NumberFieldInOmega}
     (theta : absoluteGaloisGroup F₁ ≃ₜ* absoluteGaloisGroup F₂)
     (N : NumberFieldInOmega)
-    (h₁ : F₁.field ≤ N.field) (h₂ : F₂.field ≤ N.field) : Prop :=
+    (_h₁ : F₁.field ≤ N.field) (_h₂ : F₂.field ≤ N.field) : Prop :=
   Subgroup.map theta.toMulEquiv.toMonoidHom
       ((absoluteGaloisGroup N).subgroupOf (absoluteGaloisGroup F₁)) =
     (absoluteGaloisGroup N).subgroupOf (absoluteGaloisGroup F₂)

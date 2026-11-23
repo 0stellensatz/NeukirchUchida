@@ -386,7 +386,7 @@ private theorem coeff_subst_lubinTateVariable_of_isHomogeneous
   have hlin : ∀ i, (g i).homogeneousComponent 1 =
       uniformizerInteger K π • X i := lubinTateVariable_linearComponent K π
   rw [coeff_subst (hasSubst_of_constantCoeff_zero (by
-    simp [g, lubinTateVariable,
+    simp [lubinTateVariable,
       (Nat.zero_lt_one.trans (one_lt_residueCard K)).ne']))]
   rw [finsum_eq_single _ d]
   · have hprod := coeff_finsuppProd_of_linear_part
@@ -561,11 +561,13 @@ private def lubinTateLinearSeries {σ : Type*} [Fintype σ]
     (c : σ → RingOfIntegers K) : MvPowerSeries σ (RingOfIntegers K) :=
   ∑ i, C (c i) * X i
 
+omit [TopologicalSpace K] [IsNonarchimedeanLocalField K] in
 private theorem lubinTateLinearSeries_constantCoeff {σ : Type*} [Fintype σ]
     (c : σ → RingOfIntegers K) :
     (lubinTateLinearSeries K c).constantCoeff = 0 := by
   simp [lubinTateLinearSeries]
 
+omit [TopologicalSpace K] [IsNonarchimedeanLocalField K] in
 private theorem lubinTateLinearSeries_isHomogeneous {σ : Type*}
     [Fintype σ] [DecidableEq σ] (c : σ → RingOfIntegers K) :
     (lubinTateLinearSeries K c).IsHomogeneous 1 := by
@@ -582,6 +584,7 @@ private theorem lubinTateLinearSeries_isHomogeneous {σ : Type*}
     simp [Finsupp.weight_single]
   · simp
 
+omit [TopologicalSpace K] [IsNonarchimedeanLocalField K] in
 private theorem lubinTateLinearSeries_coeff_single {σ : Type*}
     [Fintype σ] [DecidableEq σ] (c : σ → RingOfIntegers K) (i : σ) :
     coeff (Finsupp.single i 1) (lubinTateLinearSeries K c) = c i := by
@@ -970,6 +973,7 @@ private theorem coeff_finsuppProd_eq_zero_of_degree_lt
         _ ≤ _ := le_order_pow _
     _ ≤ _ := le_order_prod _ _
 
+omit [TopologicalSpace K] [IsNonarchimedeanLocalField K] in
 private theorem coeff_subst_eq_of_linear
     {σ τ : Type*} [Finite σ] (H J : MvPowerSeries σ (RingOfIntegers K))
     (a b : σ → MvPowerSeries τ (RingOfIntegers K))
@@ -1109,7 +1113,7 @@ private theorem lubinTateEndomorphismSeries_one (π : Uniformizer K) :
     lubinTateEndomorphismSeries K π 1 = PowerSeries.X := by
   apply lubinTateFunctional_unique_of_coeff_single K π
   · exact lubinTateEndomorphismSeries_constantCoeff K π 1
-  · simp [PowerSeries.constantCoeff, PowerSeries.X]
+  · simp [PowerSeries.X]
   · exact lubinTateEndomorphismSeries_discrepancy K π 1
   · exact lubinTateVariable_discrepancy K π ()
   · intro i
@@ -1131,7 +1135,7 @@ private theorem lubinTateSeries_coeff_one (π : Uniformizer K) :
     PowerSeries.coeff 1 (lubinTateSeries K π) = uniformizerInteger K π := by
   rw [lubinTateSeries_eq]
   simp only [map_add, PowerSeries.coeff_C_mul, PowerSeries.coeff_X,
-    if_pos rfl, mul_one, PowerSeries.coeff_X_pow,
+    PowerSeries.coeff_X_pow,
     if_neg (one_lt_residueCard K).ne]
   simp
 
@@ -1242,6 +1246,7 @@ private theorem lubinTateEndomorphismSeries_mul (π : Uniformizer K)
       coeff_C_mul, coeff_C_mul, coeff_X]
     simp
 
+omit [TopologicalSpace K] [IsNonarchimedeanLocalField K] in
 private theorem coeff_subst_binary {τ : Type*}
     (F : MvPowerSeries (Fin 2) (RingOfIntegers K))
     (f g : MvPowerSeries τ (RingOfIntegers K))

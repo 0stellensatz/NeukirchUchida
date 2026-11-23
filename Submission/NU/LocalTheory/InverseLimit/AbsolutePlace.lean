@@ -844,9 +844,9 @@ private theorem monic_natDegree_two_eq
   · subst n; simpa [hdeg] using hq.coeff_natDegree
   have hn : q.natDegree < n := by omega
   rw [q.coeff_eq_zero_of_natDegree_lt hn]
-  simp [Polynomial.coeff_add, Polynomial.coeff_X_pow,
+  simp [Polynomial.coeff_X_pow,
     Polynomial.coeff_X, Polynomial.coeff_C,
-    h0, h1, h2, show 1 ≠ n by omega]
+    h0, h2, show 1 ≠ n by omega]
 
 open Polynomial in
 private theorem exists_irreducible_quadratic
@@ -975,7 +975,7 @@ private theorem exists_local_klein_level
     exact degree_X_pow_sub_C (by omega) πK
   obtain ⟨hpbmon, hpbdeg⟩ := quadratic_monic_natDegree aK bK
   have hαint : IsIntegral K α := ⟨pa, hpmon, by
-    simpa [pa, hαeq]⟩
+    simp [pa, hαeq]⟩
   have hβint : IsIntegral K β := ⟨pb, by simpa [pb] using hpbmon, by
     simpa [pb] using hβroot⟩
   let Eα : IntermediateField K (AlgebraicClosure K) :=
@@ -997,7 +997,7 @@ private theorem exists_local_klein_level
   have hαfin : Module.finrank K Eα ≤ 2 := by
     rw [IntermediateField.adjoin.finrank hαint]
     have hdvd : minpoly K α ∣ pa := minpoly.dvd K α (by
-      simpa [pa, hαeq])
+      simp [pa, hαeq])
     simpa [hpdeg] using Polynomial.natDegree_le_of_dvd hdvd hpmon.ne_zero
   have hβfin : Module.finrank K Eβ ≤ 2 := by
     rw [IntermediateField.adjoin.finrank hβint]

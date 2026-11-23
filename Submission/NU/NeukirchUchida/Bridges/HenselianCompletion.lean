@@ -420,9 +420,6 @@ private noncomputable def absoluteGaloisOfAlgClosure
   let m : (AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F) ≃*
       (E ≃ₐ[F] E) := AlgEquiv.autCongr e
   have hm : Continuous m := by
-    change @Continuous
-      (AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F) (E ≃ₐ[F] E)
-      (krullTopology F (AlgebraicClosure F)) (krullTopology F E) m
     apply continuous_of_continuousAt_one _ (continuousAt_def.mpr ?_)
     intro N hN
     rw [m.map_one] at hN
@@ -590,7 +587,7 @@ private theorem valuationEquivComap_uniformContinuous
   let δ : (MonoidWithZeroHom.ValueGroup₀
       (.ofClass (Valued.v : Valuation F Γ)))ˣ :=
     Units.mk0 ((Valued.v : Valuation F Γ).restrict b) (by
-      simpa [Valuation.restrict_def, hb0])
+      simp [Valuation.restrict_def, hb0])
   refine ⟨δ, trivial, ?_⟩
   intro x hx
   change (Valued.v : Valuation F Γ).restrict (σ x) < γ.1
@@ -986,11 +983,11 @@ theorem henselianCompletion_absoluteGaloisEquiv
     (v : NU.LocalTheory.FinitePlace K)
     (hv : NU.LocalTheory.primeValuationSubring v =
       P.1.comap (algebraMap K (AlgebraicClosure K)))
-    (hhens : NU.LocalTheory.IsHenselianValuationIn
+    (_hhens : NU.LocalTheory.IsHenselianValuationIn
       (NU.LocalTheory.decompositionField K P.1) (AlgebraicClosure K)
       (P.1.comap
         (NU.LocalTheory.decompositionField K P.1).val.toRingHom))
-    (hrank : NU.LocalTheory.IsRankOneValuationSubring
+    (_hrank : NU.LocalTheory.IsRankOneValuationSubring
       (P.1.comap
         (NU.LocalTheory.decompositionField K P.1).val.toRingHom)) :
     Nonempty

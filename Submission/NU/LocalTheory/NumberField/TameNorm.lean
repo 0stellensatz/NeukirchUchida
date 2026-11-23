@@ -369,10 +369,10 @@ private theorem normalizedValuation_eq_zero_iff_valuation_eq_one'
     apply le_antisymm
     · rw [← hone]
       apply (normalizedValuation_le_iff' K x (1 : Units K)).2
-      simpa only [Units.val_one, map_one, hx, le_refl]
+      simp only [Units.val_one, map_one, hx, le_refl]
     · rw [← hone]
       apply (normalizedValuation_le_iff' K (1 : Units K) x).2
-      simpa only [Units.val_one, map_one, hx, le_refl]
+      simp only [Units.val_one, map_one, hx, le_refl]
 
 /-- Residual tame local-field calculation for an already identified cyclic
 Kummer extension.  This is the ramification/residue-norm computation: every
@@ -385,8 +385,8 @@ private theorem tame_cyclic_norm_factorization_core
     [Finite (IsLocalRing.ResidueField (valuedIntegerRing Q))]
     [Algebra Q R] [FiniteDimensional Q R]
     {ℓ : ℕ} [Fact ℓ.Prime] [IsGalois Q R] [IsCyclic (R ≃ₐ[Q] R)]
-    (hℓodd : Odd ℓ) (hres : valuedResidueCharacteristic Q ≠ ℓ)
-    (ζ : Q) (hζ : IsPrimitiveRoot ζ ℓ) (a : Qˣ)
+    (hℓodd : Odd ℓ) (_hres : valuedResidueCharacteristic Q ≠ ℓ)
+    (ζ : Q) (_hζ : IsPrimitiveRoot ζ ℓ) (a : Qˣ)
     (ha : principalUnitModEllClass (valuedIntegerRing Q) ℓ a ≠ 0)
     (α : R) (hαpow : α ^ ℓ = algebraMap Q R (a : Q))
     (hαgen : Algebra.adjoin Q ({α} : Set R) = ⊤)
@@ -542,11 +542,11 @@ private theorem tame_cyclic_norm_factorization_core
     have hbord : ordQ b = 0 := by
       change NU.LCFT.normalizedValuation Q (a * (d ^ ℓ)⁻¹) = 0
       rw [NU.LCFT.normalizedValuation_mul]
-      simp only [ordQ, NU.LCFT.normalizedValuation, map_inv, map_pow,
+      simp only [NU.LCFT.normalizedValuation, map_inv, map_pow,
         toAdd_inv, toAdd_pow]
       change ordQ a + -(ℓ • ordQ d) = 0
       rw [hd', hk]
-      simp [nsmul_eq_mul]
+      simp
     let βu : Rˣ := αu * (Units.map (algebraMap Q R) d)⁻¹
     have hβunits : βu ^ ℓ = Units.map (algebraMap Q R) b := by
       rw [show βu = αu * (Units.map (algebraMap Q R) d)⁻¹ by rfl,
@@ -735,13 +735,13 @@ private theorem tame_cyclic_norm_factorization_core
         intro i
         by_contra hi
         have : i ∈ support := by simp [support, hi]
-        simpa [hempty] using this
+        simp [hempty] at this
       have hrepr : pbβ.basis.repr (z : R) = 0 := by
         ext i
         simpa [c] using hc i
       have hz0 : (z : R) = 0 := by
         apply pbβ.basis.repr.injective
-        simpa using hrepr
+        simp at hrepr
       exact z.ne_zero hz0
     let cOrd : Fin pbβ.dim → ℤ := fun i =>
       if hi : c i = 0 then 0 else ordQ (Units.mk0 (c i) hi)
@@ -962,13 +962,13 @@ private theorem tame_cyclic_norm_factorization_core
         intro i
         by_contra hi
         have : i ∈ support := by simp [support, hi]
-        simpa [hempty] using this
+        simp [hempty] at this
       have hrepr : pb.basis.repr (z : R) = 0 := by
         ext i
         simpa [c] using hc i
       have hz0 : (z : R) = 0 := by
         apply pb.basis.repr.injective
-        simpa using hrepr
+        simp at hrepr
       exact z.ne_zero hz0
     let score : Fin pb.dim → ℤ := fun i =>
       if hi : c i = 0 then 0 else
@@ -1043,9 +1043,7 @@ private theorem tame_cyclic_norm_factorization_core
     have hsplit : (z : R) = (lead : R) +
         ∑ i ∈ Finset.univ \ {s}, term i := by
       rw [← hsum]
-      simpa [hterms] using
-        (Finset.sum_eq_add_sum_sdiff_singleton_of_mem
-          (s := Finset.univ) (i := s) (Finset.mem_univ s) term)
+      simp [hterms]
     let rest : R := ∑ i ∈ Finset.univ \ {s}, term i
     have hrest : ValuativeRel.valuation R rest <
         ValuativeRel.valuation R (lead : R) := by
@@ -1055,7 +1053,7 @@ private theorem tame_cyclic_norm_factorization_core
     let w : Rˣ := z * lead⁻¹
     have hwsub : (w : R) - 1 = rest * (lead : R)⁻¹ := by
       dsimp [w]
-      simp only [Units.val_mul, Units.val_inv_eq_inv_val]
+      simp only [Units.val_inv_eq_inv_val]
       rw [hsplit]
       field_simp [lead.ne_zero]
       dsimp [rest]
@@ -1482,7 +1480,7 @@ theorem global_norm_local_line {M E : Type*} [Field M] [Field E]
   have hminroot : Polynomial.aeval (AdjoinRoot.root fM)
       (minpoly M pb.gen) = 0 := by
     rw [← hfMmin]
-    simpa [Polynomial.aeval_def] using AdjoinRoot.eval₂_root fM
+    simp [Polynomial.aeval_def]
   have hpbroot : Polynomial.aeval pb.gen fM = 0 := by
     simpa [hpgen] using hfMroot
   let eME : AdjoinRoot fM ≃ₐ[M] E :=
@@ -1503,7 +1501,7 @@ theorem global_norm_local_line {M E : Type*} [Field M] [Field E]
     ext x
     simp [j, baseLift, iMR, eME]
   have heMEroot : eME (AdjoinRoot.root fM) = α := by
-    simp [eME, pb, hpgen]
+    simp [eME, pb]
   have hjα : j α = AdjoinRoot.root fK := by
     rw [← heMEroot]
     simp [j, baseLift]

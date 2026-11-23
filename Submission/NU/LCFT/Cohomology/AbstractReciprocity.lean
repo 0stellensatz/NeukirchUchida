@@ -210,7 +210,7 @@ private theorem shiftInduced_tateAcyclic
       apply LinearMap.ext
       intro x
       have hg : (g : G) = 1 := Subgroup.mem_bot.mp g.2
-      simp [Rep.res, hg])
+      simp [hg])
   let eI := (Rep.indFunctor ℤ (⊥ : Subgroup G).subtype).mapIso e0
   let eS := (Rep.resFunctor S.subtype).mapIso eI
   let eT := (tateCohomologyFunctor n).mapIso eS
@@ -239,7 +239,7 @@ private lemma shiftCoind_norm_pointMass
   let : Module ℤ (shiftCoinduced M) := (shiftCoinduced M).hV2
   rw [Rep.norm_apply, Representation.norm]
   simp only [LinearMap.sum_apply, Submodule.coe_sum, Finset.sum_apply,
-    Representation.coind_apply, LinearMap.restrict_apply, LinearMap.funLeft_apply]
+    Representation.coind_apply]
   change (∑ g : G, if t * g = 1 then b else 0) = b
   rw [Finset.sum_eq_single t⁻¹]
   · simp
@@ -271,7 +271,6 @@ private theorem shiftCoind_H0_subsingleton
   induction x - y using QuotientAddGroup.induction_on with
   | H z =>
     apply (QuotientAddGroup.eq_zero_iff z).2
-    change z ∈ TateLowDegree.normRangeInInvariants (shiftCoinduced M)
     exact ⟨shiftCoindPointMass M (z.1.1 1),
       shiftCoind_invariant_eq_norm_pointMass M z⟩
 
@@ -292,8 +291,7 @@ private lemma shiftCoind_normKernel_mem_augmentation
     apply Subtype.ext
     apply funext
     intro y
-    simp only [Submodule.coe_sum, Finset.sum_apply, map_sub,
-      Representation.coind_apply, LinearMap.restrict_apply, LinearMap.funLeft_apply]
+    simp only [Submodule.coe_sum, Finset.sum_apply, Representation.coind_apply]
     change (∑ t : G, ((if y * t⁻¹ = 1 then x.1.1 t else 0) -
       if y = 1 then x.1.1 t else 0)) = x.1.1 y
     rw [Finset.sum_sub_distrib, Finset.sum_eq_single y]
@@ -1548,6 +1546,7 @@ private def inducedToBarRegular : InducedFromTrivial G ℤ ⟶ barRegular G :=
       (trivialBottomInteger (G := G)) (barRegular G)).symm
     (barRegularInducedSeed (G := G))
 
+omit [Fintype G] in
 private lemma inducedToBarRegular_mk (h : G) (n : ℤ) :
     (inducedToBarRegular (G := G)).hom
       (Representation.IndV.mk (⊥ : Subgroup G).subtype
@@ -1590,6 +1589,7 @@ private def barRegularToInducedAdd : barRegular G →+ InducedFromTrivial G ℤ 
 private def barRegularToInducedLinear : barRegular G →ₗ[ℤ] InducedFromTrivial G ℤ :=
   (barRegularToInducedAdd (G := G)).toIntLinearMap
 
+omit [Fintype G] in
 private lemma barRegularToInducedLinear_single (g : G) (n : ℤ) :
     barRegularToInducedLinear (G := G) (MonoidAlgebra.single g n) =
       Representation.IndV.mk (⊥ : Subgroup G).subtype
@@ -1690,6 +1690,7 @@ private def barRegularIsoInducedFromTrivial : InducedFromTrivial G ℤ ≅ barRe
       (LinearMap.id (R := ℤ) (M := MonoidAlgebra ℤ G)) (MonoidAlgebra.single h n)
     rw [LinearMap.id_apply]
 
+omit [Fintype G] in
 private theorem barRegular_tateAcyclic (S : Subgroup G) [Fintype S] (n : ℤ) :
     Subsingleton (tateCohomology (Rep.res S.subtype (barRegular G)) n) := by
   let e := (tateCohomologyFunctor n).mapIso
@@ -1705,7 +1706,7 @@ private theorem barRegular_tateAcyclic_self : TateAcyclic (barRegular G) := by
       apply LinearMap.ext
       intro n
       have hg : (g : G) = 1 := Subgroup.mem_bot.mp g.2
-      simp [Rep.res, hg])
+      simp [hg])
   let eI := (Rep.indFunctor ℤ (⊥ : Subgroup G).subtype).mapIso e0
   intro n
   let e := (tateCohomologyFunctor n).mapIso
@@ -1781,6 +1782,7 @@ private theorem H1_card_nsmul_eq_zero
   have := congrArg (comparisonH1 N) hx0
   simpa using this
 
+omit [Fintype G] in
 private theorem restrictedAugmentationIdeal_H1_isCyclic
     (S : Subgroup G) [Fintype S] :
     ∃ u : groupCohomology.H1 (Rep.res S.subtype (barAugmentationIdeal G)),
@@ -1825,6 +1827,7 @@ private theorem restrictedAugmentationIdeal_H1_isCyclic
   rw [hzn] at hz
   exact hz
 
+omit [Fintype G] in
 private theorem restrictedCocyclePushoutInclusion_kills_class
     (M : Rep ℤ G) (α : Inhomogeneous.H2 M)
     (a : Inhomogeneous.C2 M) (ha : IsNormalizedCocycle2 M a)

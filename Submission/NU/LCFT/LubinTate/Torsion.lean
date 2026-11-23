@@ -451,6 +451,7 @@ private theorem lubinTateIterate_factor_primitive
   rw [hpow, mul_add]
   ac_rfl
 
+omit [IsSepClosure K Ksep] in
 private theorem primitiveDivisionPolynomial_isRoot_iff
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m) (x : Ksep) :
     ((primitiveDivisionPolynomial K π m).map
@@ -495,6 +496,7 @@ private theorem primitiveDivisionPolynomial_isRoot_iff
       exact hmroot
     exact (mul_eq_zero.mp hprod).resolve_left hnotprev
 
+omit [IsSepClosure K Ksep] in
 /--
 **L02**, Lemma `lem:lt-eisenstein`: `Q_m` is Eisenstein of the claimed degree and its roots
 are exactly the primitive level-`m` division points.
@@ -771,7 +773,7 @@ private theorem lubinTateLevel_exists_of_root (π : Uniformizer K) (m : ℕ) (hm
       convert hu using 1
       simp only [Algebra.smul_def]
       rw [← hr, hfac]
-      simp only [map_mul, map_pow, Units.val_inv_eq_inv_val, map_inv₀]
+      simp only [map_mul, map_pow]
       rw [← IsScalarTower.algebraMap_apply (RingOfIntegers K) K E]
       rw [← IsScalarTower.algebraMap_apply (RingOfIntegers K) K E
         (uniformizerInteger K π)]
@@ -1204,7 +1206,7 @@ private theorem torsion_residueCard_sub_one_ne_zero :
     rw [Nat.card_eq_fintype_card]
     exact Nat.cast_card_eq_zero (LocalResidueField K)
   rw [hcard, zero_sub] at hmap'
-  have : (-1 : LocalResidueField K) = 0 := by simpa using hmap'
+  have : (-1 : LocalResidueField K) = 0 := by simp at hmap'
   exact one_ne_zero (neg_eq_zero.mp this)
 
 private theorem lubinTatePolynomial_derivative_eval_zero (π : Uniformizer K) :
@@ -1268,6 +1270,7 @@ private theorem primitiveDivisionPolynomial_comp_lubinTatePolynomial (π : Unifo
   congr 2
   exact congrArg (lubinTateIterate K π) (by omega)
 
+omit [IsSepClosure K Ksep] in
 private theorem primitiveDivisionPolynomial_separable (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m) :
     ((primitiveDivisionPolynomial K π m).map
       (algebraMap (RingOfIntegers K) Ksep)).Separable := by
@@ -1491,6 +1494,7 @@ structure LubinTateGaloisData (π : Uniformizer K) (T : LubinTateTower K Ksep π
     restriction m hm (galoisEquiv (m + 1) (Nat.succ_pos m) u) =
       galoisEquiv m hm (lubinTateUnitReduction K m u)
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_minpoly
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -1526,7 +1530,7 @@ private theorem lubinTateLevel_minpoly
   exact (minpoly.eq_of_irreducible_of_monic hPKirr hroot hPKmonic).symm
 
 private noncomputable def lubinTateLevelPowerBasis
-    (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
+    (π : Uniformizer K) (m : ℕ) (_hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) : PowerBasis K L.field := by
   letI : FiniteDimensional K L.field := L.finiteDimensional
   have hint : IsIntegral K L.generator := IsIntegral.of_finite K L.generator
@@ -1759,7 +1763,7 @@ private theorem formalGroup_sub_X_factor
   have hneq : e ≠ Finsupp.single 0 1 := by
     intro h
     have := congrArg (fun d : Fin 2 →₀ ℕ => d 0) h
-    simpa [e] using this
+    simp [e] at this
   have hleft : MvPowerSeries.coeff e
       (F.toPowerSeries - MvPowerSeries.X 0) = 1 := by
     rw [map_sub, F.lin_coeff_Y, MvPowerSeries.coeff_X, if_neg hneq, sub_zero]
@@ -1838,8 +1842,9 @@ private theorem lubinTateEndomorphism_add_sub_factor
     rw [mvPowerSeries_constantCoeff_subst_of_zero Q v hv0, hQ0]
     exact isUnit_one
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_evaluation_add_eq_iff
-    (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
+    (π : Uniformizer K) (m : ℕ) (_hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (a b : RingOfIntegers K) :
     L.evaluation ((lubinTateFormalModule K π).endomorphism (a + b)) =
         L.evaluation ((lubinTateFormalModule K π).endomorphism a) ↔
@@ -1963,8 +1968,9 @@ private theorem lubinTateEndomorphism_commutes_iterate
         _ = PowerSeries.subst (PowerSeries.subst t (lubinTateSeries K π)) e := by
           rw [PowerSeries.subst_comp_subst_apply hf ht]
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_evaluation_C
-    (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
+    (π : Uniformizer K) (m : ℕ) (_hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (r : RingOfIntegers K) :
     L.evaluation (PowerSeries.C r) = algebraMap (RingOfIntegers K) L.field r := by
   let : FiniteDimensional K L.field := L.finiteDimensional
@@ -1975,6 +1981,7 @@ private theorem lubinTateLevel_evaluation_C
   · intro n hn
     simp [PowerSeries.coeff_C, hn]
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_evaluation_subst_polynomial
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (p : Polynomial (RingOfIntegers K))
@@ -1990,8 +1997,9 @@ private theorem lubinTateLevel_evaluation_subst_polynomial
   have hsub : PowerSeries.HasSubst g := PowerSeries.HasSubst.of_constantCoeff_zero hg
   rw [PowerSeries.subst_coe hsub, Polynomial.aeval_def, Polynomial.hom_eval₂, hcomp]
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_evaluation_X
-    (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
+    (π : Uniformizer K) (m : ℕ) (_hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
     L.evaluation PowerSeries.X = L.generator := by
   let : FiniteDimensional K L.field := L.finiteDimensional
@@ -2002,6 +2010,7 @@ private theorem lubinTateLevel_evaluation_X
   · intro n hn
     simp [PowerSeries.coeff_X, hn]
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_evaluation_polynomial
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (p : Polynomial (RingOfIntegers K)) :
@@ -2021,6 +2030,7 @@ private theorem lubinTateIterate_toPowerSeries_constantCoeff
   rw [Polynomial.coeff_zero_eq_eval_zero]
   exact lubinTateIterate_eval_zero K π n
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_generator_iterate_values
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -2053,6 +2063,7 @@ private theorem lubinTateLevel_generator_iterate_values
     rw [Polynomial.IsRoot.def, ← ambient_eval, h, map_zero]
 
 set_option maxHeartbeats 1000000 in
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateUnitEndomorphism_preserves_primitive
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (u : Units (RingOfIntegers K)) :
@@ -2128,8 +2139,9 @@ private theorem lubinTateUnitEndomorphism_preserves_primitive
     simpa [Polynomial.IsRoot.def, Polynomial.eval_map,
       IsScalarTower.algebraMap_eq (RingOfIntegers K) L.field Ksep] using hroot
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_iterate_zero_mono
-    (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
+    (π : Uniformizer K) (m : ℕ) (_hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) {r n : ℕ} (hrn : r ≤ n)
     (hr : L.evaluation
       ((lubinTateIterate K π r : Polynomial (RingOfIntegers K)) :
@@ -2154,6 +2166,7 @@ private theorem lubinTateLevel_iterate_zero_mono
         (ih (Nat.le_add_right r d))
 
 set_option maxHeartbeats 600000 in
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_endomorphism_eq_zero_iff
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (a : RingOfIntegers K) :
@@ -2209,6 +2222,7 @@ private theorem lubinTateLevel_endomorphism_eq_zero_iff
     rw [← G.map_mul] at hz
     simpa [hc, mul_comm, p] using hz
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_evaluation_primitivePolynomial
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -2221,6 +2235,7 @@ private theorem lubinTateLevel_evaluation_primitivePolynomial
     IsScalarTower.algebraMap_eq (RingOfIntegers K) L.field Ksep] using L.isRoot
 
 set_option maxHeartbeats 600000 in
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_evaluation_ker
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (h : PowerSeries (RingOfIntegers K)) :
@@ -2296,6 +2311,7 @@ private theorem lubinTateLevel_evaluation_ker
   · rintro ⟨q, rfl⟩
     rw [map_mul, hPzero, zero_mul]
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_kernel_stable_unit
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (u : Units (RingOfIntegers K))
@@ -2323,6 +2339,7 @@ private theorem lubinTateLevel_kernel_stable_unit
   rw [hq, PowerSeries.subst_mul heu]
   exact dvd_mul_of_dvd_left hPsubdvd _
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateUnitEndomorphism_isRoot_level
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (u : Units (RingOfIntegers K)) :
@@ -2339,6 +2356,7 @@ private theorem lubinTateUnitEndomorphism_isRoot_level
   simpa [Polynomial.IsRoot.def, Polynomial.eval_map,
     IsScalarTower.algebraMap_eq (RingOfIntegers K) L.field Ksep] using hroot
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevelPowerBasis_gen
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -2363,6 +2381,7 @@ private noncomputable def lubinTateRootAlgEquiv
   let f : L.field →ₐ[K] L.field := pb.lift y hymin
   exact AlgEquiv.ofBijective f f.bijective
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateRootAlgEquiv_generator
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (y : L.field)
@@ -2373,6 +2392,7 @@ private theorem lubinTateRootAlgEquiv_generator
   rw [← lubinTateLevelPowerBasis_gen K Ksep π m hm L]
   simp [lubinTateRootAlgEquiv]
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateRootAlgEquiv_polynomial
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (y : L.field)
@@ -2408,6 +2428,7 @@ private noncomputable def lubinTateIntegralUnitAlgEquiv
       (u : RingOfIntegers K)))
     (lubinTateUnitEndomorphism_isRoot_level K Ksep π m hm L u)
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateIntegralUnitAlgEquiv_generator
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (u : Units (RingOfIntegers K)) :
@@ -2416,6 +2437,7 @@ private theorem lubinTateIntegralUnitAlgEquiv_generator
         (u : RingOfIntegers K)) :=
   lubinTateRootAlgEquiv_generator K Ksep π m hm L _ _
 
+omit [IsSepClosure K Ksep] in
 private theorem exists_lubinTateUnit_action_polynomial
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (u : Units (RingOfIntegers K)) :
@@ -2445,6 +2467,7 @@ private theorem exists_lubinTateUnit_action_polynomial
   exact ⟨p, hp⟩
 
 set_option maxHeartbeats 800000 in
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateIntegralUnitAlgEquiv_evaluation
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m)
@@ -2532,6 +2555,7 @@ private theorem torsion_integralUnitReduction_surjective
     (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective
   exact Ideal.Quotient.mk_surjective.isLocalHom (Ideal.Quotient.mk I)
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateIntegralUnitAction_ker
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -2578,6 +2602,7 @@ private noncomputable def lubinTateQuotientUnitActionHom
     ⟨lubinTateIntegralUnitActionHom K Ksep π m hm L,
       lubinTateIntegralUnitAction_ker K Ksep π m hm L⟩
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateQuotientUnitActionHom_reduction
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) (u : Units (RingOfIntegers K)) :
@@ -2586,6 +2611,7 @@ private theorem lubinTateQuotientUnitActionHom_reduction
       lubinTateIntegralUnitActionHom K Ksep π m hm L u := by
   simp [lubinTateQuotientUnitActionHom]
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateQuotientUnitActionHom_injective
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -2622,6 +2648,7 @@ private theorem lubinTateQuotientUnitActionHom_injective
   · intro h
     rw [h, map_one]
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_finrank
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -2744,6 +2771,7 @@ private theorem torsion_card_quotient_units (m : ℕ) (hm : 1 ≤ m) :
       simpa only [one_mul] using
         (Nat.mul_sub_right_distrib q 1 (q ^ (m - 1))).symm
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateQuotientUnitActionHom_bijective
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -2777,6 +2805,7 @@ private noncomputable def lubinTateLevelGaloisEquiv
   MulEquiv.ofBijective (lubinTateQuotientUnitActionHom K Ksep π m hm L)
     (lubinTateQuotientUnitActionHom_bijective K Ksep π m hm L)
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateLevel_isGalois
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) : IsGalois K L.field := by
@@ -2792,6 +2821,7 @@ private theorem lubinTateLevel_isGalois
       (lubinTateLevel_finrank K Ksep π m hm L).symm
 
 set_option maxHeartbeats 800000 in
+omit [IsSepClosure K Ksep] in
 private theorem lubinTate_conjugates_eq_primitive
     (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m)
     (L : LubinTateLevel K Ksep π m) :
@@ -2869,6 +2899,7 @@ private noncomputable def lubinTateTowerRestriction
     IsScalarTower.of_algebraMap_eq fun x => (i.commutes x).symm
   exact AlgEquiv.restrictNormalHom E
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateTowerRestriction_apply
     (π : Uniformizer K) (T : LubinTateTower K Ksep π)
     (m : ℕ) (hm : 1 ≤ m)
@@ -2889,6 +2920,7 @@ private theorem lubinTateTowerRestriction_apply
     IsScalarTower.of_algebraMap_eq fun z => (i.commutes z).symm
   exact AlgEquiv.restrictNormal_commutes σ E x
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateTower_generator_compatible_evaluation
     (π : Uniformizer K) (T : LubinTateTower K Ksep π)
     (m : ℕ) (hm : 1 ≤ m) :
@@ -2908,6 +2940,7 @@ private theorem lubinTateTower_generator_compatible_evaluation
       (T.generator_compatible m hm).symm
 
 set_option maxHeartbeats 1000000 in
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateTower_unit_evaluation_compatible
     (π : Uniformizer K) (T : LubinTateTower K Ksep π)
     (m : ℕ) (hm : 1 ≤ m) (u : Units (RingOfIntegers K)) :
@@ -2991,6 +3024,7 @@ private theorem lubinTateTower_unit_evaluation_compatible
     _ = M.evaluation (PowerSeries.subst f eu) := hsubeq.symm
 
 set_option maxHeartbeats 800000 in
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateTowerRestriction_integralUnit
     (π : Uniformizer K) (T : LubinTateTower K Ksep π)
     (m : ℕ) (hm : 1 ≤ m) (u : Units (RingOfIntegers K)) :
@@ -3044,6 +3078,7 @@ private theorem lubinTateTowerRestriction_integralUnit
       congrArg i (lubinTateIntegralUnitAlgEquiv_generator
         K Ksep π m hm L u).symm
 
+omit [TopologicalSpace K] [IsNonarchimedeanLocalField K] in
 private theorem lubinTateUnitReduction_integralUnitReduction
     (m : ℕ) (u : Units (RingOfIntegers K)) :
     lubinTateUnitReduction K m (integralUnitReduction K (m + 1) u) =
@@ -3051,6 +3086,7 @@ private theorem lubinTateUnitReduction_integralUnitReduction
   apply Units.ext
   rfl
 
+omit [IsSepClosure K Ksep] in
 private theorem lubinTateTowerRestriction_quotientUnit
     (π : Uniformizer K) (T : LubinTateTower K Ksep π)
     (m : ℕ) (hm : 1 ≤ m)

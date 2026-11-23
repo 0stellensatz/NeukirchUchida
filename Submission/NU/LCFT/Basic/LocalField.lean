@@ -720,6 +720,7 @@ structure IsCompactOpenLattice (Λ : Submodule (RingOfIntegers K) V) : Prop wher
   /-- Openness of the underlying subset. -/
   isOpen : IsOpen (Λ : Set V)
 
+omit [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ContinuousSMul K V] [FiniteDimensional K V] in
 /--
 **A03**, Lemma `lem:lattices` (Commensurability of lattices): two compact open lattices have
 finite quotients by their intersection.
@@ -752,6 +753,7 @@ section Completeness
 variable (K : Type u) [Field K] [ValuativeRel K] [UniformSpace K]
   [IsUniformAddGroup K] [IsNonarchimedeanLocalField K]
 
+omit [IsUniformAddGroup K] in
 /--
 **A04**, Lemma `lem:unit-separated`: `𝒪_K` is the inverse limit of its quotients by powers of
 `𝔪_K`; the equivalence records the canonical residue maps.
@@ -811,6 +813,7 @@ theorem ringOfIntegers_inverseLimit :
       right_inv := fun c => family_ext _ _ (funext fun n => liftFamily_spec c n) }
   exact ⟨e, fun x n => rfl⟩
 
+omit [IsUniformAddGroup K] in
 /--
 **A04**, Lemma `lem:unit-separated`: `U_K^1` is the inverse limit of
 `U_K^1/U_K^{r+1}`.
@@ -1668,7 +1671,7 @@ private theorem finiteField_irreducible_root_of_natDegree_dvd_finrank
       exact he
     _ = 0 := by
       have hroot : f.eval₂ (algebraMap k A) (AdjoinRoot.root f) = 0 := by
-        simpa [A] using AdjoinRoot.eval₂_root f
+        simp [A]
       rw [hroot, map_zero]
 
 set_option maxHeartbeats 500000 in
@@ -2796,7 +2799,6 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
   let hKW : ValuativeExtension K W := by
     constructor
     intro x y
-    change algebraMap K W x ≤ᵥ algebraMap K W y ↔ x ≤ᵥ y
     rw [show algebraMap K W x = algebraMap E W (algebraMap K E x) from rfl,
       show algebraMap K W y = algebraMap E W (algebraMap K E y) from rfl,
       ValuativeExtension.vle_iff_vle, ValuativeExtension.vle_iff_vle]
@@ -2940,7 +2942,6 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
   let hKC : ValuativeExtension K C := by
     constructor
     intro x y
-    change algebraMap K C x ≤ᵥ algebraMap K C y ↔ x ≤ᵥ y
     rw [show algebraMap K C x = algebraMap E C (algebraMap K E x) from rfl,
       show algebraMap K C y = algebraMap E C (algebraMap K E y) from rfl,
       ValuativeExtension.vle_iff_vle, ValuativeExtension.vle_iff_vle]

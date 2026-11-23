@@ -235,7 +235,7 @@ private theorem character_eq_zero_of_kummerClass_eq_zero
   obtain ⟨x, hx⟩ := ha
   change (ℓ : ℤ) • x = Additive.ofMul a at hx
   rw [← hx, map_zsmul]
-  simpa [← Nat.cast_smul_eq_nsmul (ZMod ℓ), CharP.cast_eq_zero]
+  simp [CharP.cast_eq_zero]
 
 private theorem kummerQuotientClass_eq_zero_of_pow
     {M : Type*} [Field M] (n : ℕ) (a u : Mˣ) (hu : u ^ n = a) :

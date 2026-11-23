@@ -318,6 +318,7 @@ def multiplicativeAugmentation : Subgroup (Units L) :=
   Subgroup.closure {z | ∃ (σ : L ≃ₐ[K] L) (x : Units L),
     z = Units.map σ.toRingEquiv.toRingHom x / x}
 
+omit [FiniteDimensional K L] in
 /-- **C01 (M5)**: the additive and multiplicative augmentation subgroups agree. -/
 theorem mem_mulRepAugmentation_iff (x : Units L) :
     Additive.ofMul x ∈ mulRepAugmentation K L ↔

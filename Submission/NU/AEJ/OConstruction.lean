@@ -85,8 +85,8 @@ private theorem rigid_unscale (T : Set F) (hT : IsMulSubgroup T) {c a : F}
   rcases h hm with hm | hm
   · left
     have hh := hT.mul_mem (hT.inv_mem hc) hm
-    convert hh using 1 <;> field_simp [show c ≠ 0 from fun e => hT.zero_notMem (e ▸ hc)] <;>
-      simp [smul_eq_mul] <;> ring
+    convert hh using 1; field_simp [show c ≠ 0 from fun e => hT.zero_notMem (e ▸ hc)];
+      simp [smul_eq_mul]; ring
   · right
     rcases Set.mem_smul_set.mp hm with ⟨u, hu, heu⟩
     refine Set.mem_smul_set.mpr ⟨u, hu, ?_⟩
@@ -109,7 +109,7 @@ private theorem rigid_smul_iff (T : Set F) (hT : IsMulSubgroup T) {c a : F}
     simpa [mul_assoc] using hh
 
 private theorem subset_H (T H : Set F) (hT : IsMulSubgroup T)
-    (hH : IsMulSubgroup H) (hbasic : basicPart T ⊆ H) : T ⊆ H := by
+    (_hH : IsMulSubgroup H) (hbasic : basicPart T ⊆ H) : T ⊆ H := by
   intro t ht
   have ht_basic : t ∈ basicPart T := by
     rw [basicPart]
@@ -127,8 +127,8 @@ private theorem neg_one_mem_H (T H : Set F) (hT : IsMulSubgroup T)
 
 /-- AEJ, Observation 2.3(1), journal p. 453: `O_F⁺(H,T)` is a multiplicative
 monoid and `U_F(H,T)` is a subgroup of `Ḟ`. -/
-theorem observation_2_3_part1 (T H : Set F) (hT : IsMulSubgroup T)
-    (hH : IsMulSubgroup H) (hbasic : basicPart T ⊆ H) :
+theorem observation_2_3_part1 (T H : Set F) (_hT : IsMulSubgroup T)
+    (hH : IsMulSubgroup H) (_hbasic : basicPart T ⊆ H) :
     ((1 : F) ∈ Oplus H T ∧
       ∀ ⦃x y : F⦄, x ∈ Oplus H T → y ∈ Oplus H T → x * y ∈ Oplus H T) ∧
       IsMulSubgroup (U H T) := by
@@ -173,7 +173,7 @@ theorem observation_2_3_part1 (T H : Set F) (hT : IsMulSubgroup T)
 /-- AEJ, Observation 2.3(2), journal p. 453: `0 ∈ O_F⁻(H,T)`.  This records
 explicitly that `O_F⁻` lives in `F`, rather than in `Ḟ`. -/
 theorem observation_2_3_part2 (T H : Set F) (hT : IsMulSubgroup T)
-    (hH : IsMulSubgroup H) (hbasic : basicPart T ⊆ H) :
+    (hH : IsMulSubgroup H) (_hbasic : basicPart T ⊆ H) :
     (0 : F) ∈ Ominus H T := by
   exact ⟨hH.zero_notMem, by simpa using hT.one_mem⟩
 
@@ -394,7 +394,7 @@ theorem observation_2_3_part5 (T H : Set F) (hT : IsMulSubgroup T)
       (hH.mul_mem hn (hTH hx.2))
     field_simp at hh
     simpa using hh
-  · convert hT.inv_mem hx.2 using 1 <;> field_simp <;> ring
+  · convert hT.inv_mem hx.2 using 1; field_simp; ring
 
 /-- AEJ, Observation 2.3(6), journal p. 454: every valuation ring `A` is
 recovered as `O_F(U_A,1+𝔪_A)`, with the displayed identifications of its
@@ -525,7 +525,7 @@ theorem lemma_2_6 (T H : Set F) (hT : IsMulSubgroup T)
     apply (mem_one_sub_iff T _).mpr
     have hm := hT.mul_mem hy.2 hr.2
     have hy0 : 1 + y ≠ 0 := fun e => hT.zero_notMem (e ▸ hy.2)
-    convert hm using 1 <;> field_simp [hy0] <;> ring
+    convert hm using 1; field_simp [hy0]; ring
   · intro hprod
     intro w hw
     rcases Set.mem_add.mp hw with ⟨a, ha, x, hx, hax⟩
@@ -543,7 +543,7 @@ theorem lemma_2_6 (T H : Set F) (hT : IsMulSubgroup T)
     have hTgoal : 1 + (1 + x) * y ∈ T := by
       have hm := hT.mul_mem hy.2 hpT
       have hyden : 1 + y ≠ 0 := fun e => hT.zero_notMem (e ▸ hy.2)
-      convert hm using 1 <;> field_simp [hyden] <;> ring
+      convert hm using 1; field_simp [hyden]; ring
     refine ⟨?_, hTgoal⟩
     intro hxy
     apply hy.1
@@ -555,7 +555,7 @@ theorem lemma_2_6 (T H : Set F) (hT : IsMulSubgroup T)
 `1+x ∈ O_F⁺`, and `y ∈ O_F⁻`, then `1-xy ∈ T ∩ O_F⁺`. -/
 theorem lemma_2_6_part3 (T H : Set F) (hT : IsMulSubgroup T)
     (hH : IsMulSubgroup H) (hbasic : basicPart T ⊆ H)
-    (hpre : IsPreadditive H T) {x y : F} (hx0 : x ≠ 0)
+    (hpre : IsPreadditive H T) {x y : F} (_hx0 : x ≠ 0)
     (hx : 1 + x ∈ Oplus H T) (hy : y ∈ Ominus H T) :
     1 - x * y ∈ T ∩ Oplus H T := by
   have hy' := observation_2_3_part5 T H hT hH hbasic hy
@@ -569,15 +569,15 @@ theorem lemma_2_6_part3 (T H : Set F) (hT : IsMulSubgroup T)
   refine ⟨?_, ?_⟩
   · have hm := hT.mul_mem hy.2 hr.2
     have hyden : 1 + y ≠ 0 := fun e => hT.zero_notMem (e ▸ hy.2)
-    convert hm using 1 <;> field_simp [hyden] <;> ring
+    convert hm using 1; field_simp [hyden]; ring
   · have hm := hmonoid hone_y hone_r
     have hyden : 1 + y ≠ 0 := fun e => hT.zero_notMem (e ▸ hy.2)
-    convert hm using 1 <;> field_simp [hyden] <;> ring
+    convert hm using 1; field_simp [hyden]; ring
 
 /-- AEJ, equation (2.7), journal p. 454: under preadditivity,
 `x,z ∈ O_F⁻(H,T)` implies `1 + (1+x)z ∈ T`. -/
-theorem equation_2_7 (T H : Set F) (hT : IsMulSubgroup T)
-    (hH : IsMulSubgroup H) (hbasic : basicPart T ⊆ H)
+theorem equation_2_7 (T H : Set F) (_hT : IsMulSubgroup T)
+    (_hH : IsMulSubgroup H) (_hbasic : basicPart T ⊆ H)
     (hpre : IsPreadditive H T) {x z : F}
     (hx : x ∈ Ominus H T) (hz : z ∈ Ominus H T) :
     1 + (1 + x) * z ∈ T := by
@@ -628,7 +628,7 @@ theorem lemma_2_9 (T H : Set F) (hT : IsMulSubgroup T)
     refine ⟨hnotH, ?_⟩
     have hsecond := lemma_2_6_part3 T H hT hH hbasic hpre
       (neg_ne_zero.mpr hxy0) (by simpa [sub_eq_add_neg] using hfirst.2) hz
-    convert hsecond.1 using 1 <;> ring
+    convert hsecond.1 using 1; ring
   have hpart2 : ∀ x : F, x ∉ O H T → x⁻¹ ∈ O H T := by
     intro x hx
     have hx0 : x ≠ 0 := by
@@ -687,7 +687,7 @@ theorem theorem_2_10 (T H : Set F) (hT : IsMulSubgroup T)
         have hp := (lemma_2_6 T H hT hH hbasic).mp hpre
           (Set.mul_mem_mul hnegx hy)
         have hpT := (mem_one_sub_iff T ((-x) * y)).mp hp
-        convert hpT using 1 <;> ring
+        convert hpT using 1; ring
     · exact Or.inl (by
         simpa [smul_eq_mul, mul_comm] using
           hy.2.2 (Set.smul_mem_smul_set hx))
@@ -709,7 +709,7 @@ theorem theorem_2_10 (T H : Set F) (hT : IsMulSubgroup T)
         intro y hy
         have hp := lemma_2_6_part3 T H hT hH hbasic hpre
           (neg_ne_zero.mpr honez0) (by simpa [sub_eq_add_neg] using hnegz) hy
-        convert hp.1 using 1 <;> ring
+        convert hp.1 using 1; ring
       by_cases honezH : 1 + z ∈ H
       · right
         refine ⟨honez0, honezH, ?_⟩
@@ -749,12 +749,12 @@ theorem theorem_2_10 (T H : Set F) (hT : IsMulSubgroup T)
     · simpa [hy0] using hx
     by_cases hratio : x * y⁻¹ ∈ O H T
     · have hsum := hmul hy (hone_add hratio)
-      convert hsum using 1 <;> field_simp <;> ring
+      convert hsum using 1; field_simp; ring
     · have hinv := h29.2.1 (x * y⁻¹) hratio
       have hratio' : y * x⁻¹ ∈ O H T := by
-        convert hinv using 1 <;> field_simp <;> ring
+        convert hinv using 1; field_simp <;> ring
       have hsum := hmul hx (hone_add hratio')
-      convert hsum using 1 <;> field_simp <;> ring
+      convert hsum using 1; field_simp <;> ring
   have hneg : ∀ ⦃x : F⦄, x ∈ O H T → -x ∈ O H T := by
     intro x hx
     have hm := hmul (Or.inr h29.2.2) hx
@@ -812,7 +812,7 @@ theorem theorem_2_10 (T H : Set F) (hT : IsMulSubgroup T)
       apply A.mem_nonunits_iff.mpr
       exact (A.mem_principalUnitGroup_iff u).mp hu
     have ht := hone_nonunit hnon
-    convert ht using 1 <;> ring
+    convert ht using 1; ring
   refine ⟨A, hA, hcompat, ?_⟩
   rintro q ⟨u, hu, t, ht, rfl⟩
   exact hH.mul_mem (hobs.2.2 hu) ((subset_H T H hT hH hbasic) ht)
@@ -853,7 +853,7 @@ theorem corollary_2_11_basicPart (T T_hat H : Set F)
     rcases hnorm' with hnorm | ⟨v, hv, hev⟩
     · left
       have hm := hT_hat.mul_mem hs (hT_le hnorm)
-      convert hm using 1 <;> dsimp [r] <;> field_simp <;> ring
+      convert hm using 1; dsimp [r]; field_simp <;> ring
     · right
       refine ⟨s * r * v, hT_hat.mul_mem (hT_hat.mul_mem hs hr) (hT_le hv), ?_⟩
       change (a * r) * v = 1 + a * r at hev
@@ -905,7 +905,7 @@ theorem corollary_2_11 (T T_hat H H_hat : Set F)
     change u ∈ A.principalUnitGroup
     rw [A.mem_principalUnitGroup_iff]
     change A.valuation ((1 - x * y) - 1) < 1
-    convert hv using 1 <;> ring
+    convert hv using 1; ring_nf
   have hminus_le : Ominus H_hat T ⊆ Ominus H T := by
     rintro x ⟨hxH, hxT⟩
     exact ⟨fun hx => hxH (hH_le hx), hxT⟩
@@ -1012,7 +1012,7 @@ theorem proposition_2_12 (T H : Set F) (hT : IsMulSubgroup T)
         exact ha.1 (hbasic ⟨ha0, fun hbir => hn hbir.2⟩)
       have hh := harigid
         (Set.add_mem_add ha.2 (Set.smul_mem_smul_set (a := -a) hb.2))
-      convert hh using 1 <;> ring
+      convert hh using 1; ring
     have hfirst := hsum hx hy hx0
     rcases hfirst with hfirst | hfirst
     · exact hfirst
@@ -1069,7 +1069,7 @@ theorem lemma_2_13 (T H : Set F) (hT : IsMulSubgroup T)
     have hh := hr (Set.add_mem_add hT.one_mem
       (Set.smul_mem_smul_set (a := u - 1) hT.one_mem))
     have hh' : u ∈ T ∪ (u - 1) • T := by
-      convert hh using 1 <;> ring
+      convert hh using 1; ring
     rcases hh' with hh' | ⟨t, ht, heq⟩
     · exact huT hh'
     · apply hone
@@ -1118,7 +1118,7 @@ theorem lemma_2_13 (T H : Set F) (hT : IsMulSubgroup T)
   have hsecond := hout_rigid (mul_ne_zero hsub0 hx0) hsx_notH
     (Set.add_mem_add hx.2 (Set.smul_mem_smul_set hT.one_mem))
   have hsecond' : 1 + u * x ∈ T ∪ ((u - 1) * x) • T := by
-    convert hsecond using 1 <;> ring
+    convert hsecond using 1; ring
   refine ⟨hux_notH, ?_⟩
   rcases hfirst' with hfirst | hfirst
   · exact hfirst
@@ -1322,7 +1322,7 @@ private theorem smul_set_eq_of_neg_smul_inter (T : Set F)
     ring
 
 private theorem exceptional_star (T H : Set F) (hT : IsMulSubgroup T)
-    (hH : IsMulSubgroup H) (hbasic : basicPart T ⊆ H)
+    (_hH : IsMulSubgroup H) (hbasic : basicPart T ⊆ H)
     (hall : ∀ ⦃x : F⦄, x ≠ 0 → x ∉ plusMinus T → IsBirigid T x)
     {a b : F} (ha : a ∈ Ominus H T) (hb : b ∈ Ominus H T)
     (hnot : 1 - a * b ∉ T) :
@@ -1377,7 +1377,7 @@ private theorem two_coset_mulSubgroup (H : Set F) (hH : IsMulSubgroup H)
     · left
       simp only [smul_eq_mul]
       have hh := hH.mul_mem ha2' (hH.mul_mem hu hv)
-      convert hh using 1 <;> ring
+      convert hh using 1; ring
   · rintro x (hx | ⟨u, hu, rfl⟩)
     · exact Or.inl (hH.inv_mem hx)
     · right
@@ -1414,7 +1414,7 @@ private theorem exceptional_ab_and_square (T H : Set F)
     subst a
     rcases Set.mem_smul_set.mp hfirst with ⟨t, ht, heq⟩
     simp only [smul_eq_mul] at heq
-    have heq' : (0 : F) = 1 := by simpa using heq
+    have heq' : (0 : F) = 1 := by simp at heq
     exact zero_ne_one heq'
   have hTH := subset_H T H hT hH hbasic
   have hbT : b ∉ T := fun h => hb.1 (hTH h)
@@ -1453,7 +1453,7 @@ private theorem exceptional_ab_and_square (T H : Set F)
 
 private theorem smul_overgroup_eq_of_smul_eq (T H : Set F)
     (hT : IsMulSubgroup T) (hH : IsMulSubgroup H) (hTH : T ⊆ H)
-    {a b : F} (ha0 : a ≠ 0) (hcoset : a • T = b • T) :
+    {a b : F} (_ha0 : a ≠ 0) (hcoset : a • T = b • T) :
     a • H = b • H := by
   have ha_in : a ∈ a • T := by
     simpa [smul_eq_mul] using
@@ -1548,7 +1548,7 @@ private theorem neg_a_mem_U_two_coset (T H : Set F)
     rintro q ⟨z, hz, rfl⟩
     change -a * z ∈ Ominus H_hat T
     exact ⟨subgroup_mul_not_mem hHhat hnegaH hz.1,
-      by convert hone_a hz using 1 <;> ring⟩
+      by convert hone_a hz using 1; ring⟩
   have hneg_ai_plus : (-a)⁻¹ ∈ Oplus H_hat T := by
     have hnegaInvH : (-a)⁻¹ ∈ H_hat := hHhat.inv_mem hnegaH
     refine ⟨inv_ne_zero (neg_ne_zero.mpr ha0), hnegaInvH, ?_⟩
@@ -1573,13 +1573,13 @@ private theorem neg_a_mem_U_two_coset (T H : Set F)
       exact hxnot (hobs.2.mpr hi)
     have hq : -a * z⁻¹ ∈ Ominus H T := by
       apply hminus_le
-      convert hxinv using 1 <;> field_simp [ha0, hz0] <;> ring
+      convert hxinv using 1; field_simp [ha0, hz0] <;> ring
     have hr_hat : -b * z ∈ Ominus H_hat T :=
       ⟨subgroup_mul_not_mem hHhat hnegbH hz.1,
-        by convert hone_b hz using 1 <;> ring⟩
+        by convert hone_b hz using 1; ring⟩
     have hr : -b * z ∈ Ominus H T := hminus_le hr_hat
     have hqrnot : 1 - (-a * z⁻¹) * (-b * z) ∉ T := by
-      convert hnot using 1 <;> field_simp [hz0] <;> ring
+      convert hnot using 1; field_simp [hz0] <;> ring
     have hs := exceptional_star T H hT hH hbasic hall hq hr hqrnot
     have hcaz : 1 - a * b ∈ (a * z⁻¹) • T := by
       convert hs.1 using 1 <;> field_simp [hz0] <;> ring
@@ -1603,7 +1603,7 @@ private theorem neg_a_mem_U_two_coset (T H : Set F)
       exact heq ▸ hT.mul_mem hsT (hT.inv_mem ht)
     have hnegzH : -z ∈ H := by
       have hh := hTH (hT.inv_mem hnegzi)
-      convert hh using 1 <;> field_simp [hz0] <;> ring
+      convert hh using 1; field_simp [hz0] <;> ring
     have hzH := hH.mul_mem (neg_one_mem_H T H hT hbasic) hnegzH
     apply hz.1
     left

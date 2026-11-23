@@ -161,6 +161,7 @@ private theorem exists_integralPart_coprime (m : RayModulus K)
   rw [ha]
   exact count_inf_one_of_count_eq_zero (I.1 : FractionalIdeal O⁰ K) hI p (I.2 p hp)
 
+omit [NumberField K] in
 private theorem exists_nonzero_mem_sub_one_of_isCoprime {a M : Ideal O}
     (ha : a ≠ 0) (hcop : IsCoprime a M) :
     ∃ x : O, x ≠ 0 ∧ x ∈ a ∧ x - 1 ∈ M := by
@@ -624,7 +625,7 @@ private theorem coneFaceLog_contDiff (f : ConeFace K) :
       · simp [coneFaceLog, hw]
         fun_prop
       · by_cases hi : w = i.1
-        · cases upper <;> simp [coneFaceLog, hw, hi, i.property] <;> fun_prop
+        · cases upper <;> simp [coneFaceLog, hi, i.property] <;> fun_prop
         · simp [coneFaceLog, hw, hi]
           fun_prop
 
@@ -654,7 +655,7 @@ private theorem conePolarReconstruct_self (x : mixedSpace K)
     conePolarReconstruct (coneSignOf x) (normAtAllPlaces x) p = x := by
   ext w
   · rw [conePolarReconstruct]
-    simp only [coneSignOf, Bool.decide_coe, decide_eq_true_eq]
+    simp only [coneSignOf, decide_eq_true_eq]
     rw [normAtAllPlaces_apply, normAtPlace_apply_of_isReal w.prop, Real.norm_eq_abs]
     by_cases hw : x.1 w < 0
     · rw [if_pos hw, abs_of_neg hw, neg_neg]
@@ -683,6 +684,7 @@ private theorem coneBoundaryChart_contDiff (j : ConeSign K × ConeFace K) :
     intro w
     fun_prop
 
+omit [NumberField K] in
 private theorem normAtAllPlaces_eq_zero_iff {x : mixedSpace K} :
     normAtAllPlaces x = 0 ↔ x = 0 := by
   constructor
@@ -754,9 +756,9 @@ private theorem coneBoundaryCharts_cover :
     rfl
   · have hy0neg : y w₀ < 0 := by
       have := hycl w₀
-      simp only [if_pos rfl, Set.mem_Iic] at this
+      simp only at this
       exact lt_of_le_of_ne this hy0
-    push_neg at hynot
+    push Not at hynot
     obtain ⟨w, hwbad⟩ := hynot
     have hw : w ≠ w₀ := by
       intro h
@@ -813,7 +815,7 @@ private theorem coneBoundaryCharts_cover :
         · have hvw : v = w := by simpa [i] using hvi
           rw [hvw]
           have hwi : w = i.1 := rfl
-          simp [coneFaceLog, hw, hwi, hiupper]
+          simp [coneFaceLog, hwi, hiupper]
         · simp [coneFaceLog, hv0, hvi, p]
           have hsub : (⟨v, hv0⟩ : ConeRankPlace K) ≠ i := by
             intro h
@@ -837,6 +839,7 @@ private noncomputable def normLeOneLipschitzBoundaryCover :
 private noncomputable def rayInfinitePlace (σ : K →+* ℝ) : InfinitePlace K :=
   InfinitePlace.mk (Complex.ofRealHom.comp σ)
 
+omit [NumberField K] in
 private theorem rayInfinitePlace_isReal (σ : K →+* ℝ) :
     IsReal (rayInfinitePlace σ) := by
   rw [rayInfinitePlace, isReal_mk_iff]
@@ -847,6 +850,7 @@ private theorem rayInfinitePlace_isReal (σ : K →+* ℝ) :
 private noncomputable def rayRealCoordinate (σ : K →+* ℝ) (x : mixedSpace K) : ℝ :=
   x.1 ⟨rayInfinitePlace σ, rayInfinitePlace_isReal σ⟩
 
+omit [NumberField K] in
 private theorem rayRealCoordinate_mixedEmbedding (σ : K →+* ℝ) (x : K) :
     rayRealCoordinate σ (mixedEmbedding K x) = σ x := by
   apply Complex.ofReal_injective
@@ -868,7 +872,7 @@ private theorem frontier_raySignHalfSpace_subset (σ : K →+* ℝ) (positive : 
     (ContinuousLinearMap.proj ⟨rayInfinitePlace σ, rayInfinitePlace_isReal σ⟩).comp
       (ContinuousLinearMap.fst ℝ _ _)
   have he : Function.Surjective e := fun r =>
-    ⟨(fun _ => r, 0), by simp [e, rayRealCoordinate]⟩
+    ⟨(fun _ => r, 0), by simp [e]⟩
   cases positive
   · change frontier (e ⁻¹' Set.Iio 0) ⊆ e ⁻¹' {0}
     rw [e.frontier_preimage he, frontier_Iio]
@@ -939,6 +943,7 @@ private noncomputable def raySignRegionBoundaryCover (m : RayModulus K)
     LipschitzBoundaryCover (κ := ConeBoundaryParameter K) (raySignRegion m e) :=
   raySignRegionFinsetBoundaryCover m e Finset.univ
 
+omit [NumberField K] in
 private theorem rayInfinitePlace_injective :
     Function.Injective (rayInfinitePlace (K := K)) := by
   intro σ τ h
@@ -951,6 +956,7 @@ private theorem rayInfinitePlace_injective :
     have hx := congrFun (congrArg DFunLike.coe h) x
     simpa using congrArg Complex.re hx
 
+omit [NumberField K] in
 private theorem isOpen_raySignHalfSpace (σ : K →+* ℝ) (positive : Bool) :
     IsOpen (raySignHalfSpace σ positive) := by
   let f : mixedSpace K →L[ℝ] ℝ :=
@@ -1062,6 +1068,7 @@ private noncomputable def unitRayDatum (m : RayModulus K) (u : Oˣ) :
 private abbrev GoodRayDatum (m : RayModulus K) :=
   {q : RayResidueSignData m // ∃ u : Oˣ, unitRayDatum m u = q}
 
+omit [NumberField K] in
 private theorem integralRayDatum_eq_unit_iff (m : RayModulus K)
     (y : O) (hy : y ≠ 0) (u : Oˣ) :
     integralRayDatum m y = unitRayDatum m u ↔
@@ -1256,6 +1263,7 @@ private theorem rayIdealSetMulEquiv_norm_eq (B : (Ideal O)⁰) (z : idealSet K B
   rw [← rayIdealSetMulEquiv_absNorm B z]
   simp only [Submonoid.coe_mul, map_mul, Nat.cast_mul]
 
+omit [NumberField K] in
 private theorem isCoprime_span_of_unit_congruence (m : RayModulus K)
     (y : O) (u : Oˣ) (h : (u : O) * y - 1 ∈ m.finite) :
     IsCoprime (Ideal.span {y}) m.finite := by
@@ -1307,6 +1315,7 @@ private theorem rayRepresentativeProperty_iff_datum (m : RayModulus K)
     rw [hnorm] at hnormx
     exact (mul_le_mul_iff_of_pos_left hNB).1 hnormx
 
+omit [NumberField K] in
 private theorem exists_rayDatumLift (m : RayModulus K) (B : (Ideal O)⁰)
     (hB : IsCoprime B.1 m.finite) (q : RayResidueSignData m) :
     ∃ y : O, y ∈ B.1 ∧ Ideal.Quotient.mk m.finite y = q.1 := by
@@ -1327,11 +1336,13 @@ private noncomputable def rayDatumLift (m : RayModulus K) (B : (Ideal O)⁰)
     (hB : IsCoprime B.1 m.finite) (q : RayResidueSignData m) : O :=
   Classical.choose (exists_rayDatumLift m B hB q)
 
+omit [NumberField K] in
 private theorem rayDatumLift_mem (m : RayModulus K) (B : (Ideal O)⁰)
     (hB : IsCoprime B.1 m.finite) (q : RayResidueSignData m) :
     rayDatumLift m B hB q ∈ B.1 :=
   (Classical.choose_spec (exists_rayDatumLift m B hB q)).1
 
+omit [NumberField K] in
 private theorem rayDatumLift_mod (m : RayModulus K) (B : (Ideal O)⁰)
     (hB : IsCoprime B.1 m.finite) (q : RayResidueSignData m) :
     Ideal.Quotient.mk m.finite (rayDatumLift m B hB q) = q.1 :=
@@ -1388,6 +1399,7 @@ private theorem mixedEmbedding_sub_mem_rayCongruenceLattice_iff
       rwa [rayDatumLift_mod m B hB q]
     · simp
 
+omit [NumberField K] in
 private theorem integralRayDatum_snd_eq_iff (m : RayModulus K)
     (y : O) (hy : y ≠ 0) (e : (σ : ↥m.infinite) → Bool) :
     (integralRayDatum m y).2 = e ↔
@@ -1413,10 +1425,10 @@ private theorem integralRayDatum_snd_eq_iff (m : RayModulus K)
     cases he : e σ
     · have hneg : σ.1 (algebraMap O K y) < 0 := by
         simpa [raySignHalfSpace, he, rayRealCoordinate_mixedEmbedding] using hσ
-      simp [integralRayDatum, he, not_lt_of_ge hneg.le]
+      simp [integralRayDatum, not_lt_of_ge hneg.le]
     · have hpos : 0 < σ.1 (algebraMap O K y) := by
         simpa [raySignHalfSpace, he, rayRealCoordinate_mixedEmbedding] using hσ
-      simp [integralRayDatum, he, hpos]
+      simp [integralRayDatum, hpos]
 
 private theorem mem_raySignRegion_iff (m : RayModulus K)
     (e : (σ : ↥m.infinite) → Bool) (z : mixedSpace K) :
@@ -1510,7 +1522,7 @@ private theorem exists_integer_of_mem_rayCongruence_affine
       rw [show algebraMap O K y = algebraMap O K (rayDatumLift m B hB q) + a by
         simp only [y, map_add, hka], map_add]
       rw [haemb]
-      abel
+      abel_nf
     · intro z w h
       simpa using congrArg (fun v => v + mixedEmbedding K (rayDatumLift m B hB q)) h
 
@@ -1538,7 +1550,7 @@ private noncomputable def rayDatumFiberEquiv (m : RayModulus K)
     have hsnd := congrArg Prod.snd z.2.1
     have hsign := (integralRayDatum_snd_eq_iff m y hy q.1.2).1 hsnd
     have hyemb : mixedEmbedding K y = (z.1 : mixedSpace K) := by
-      simpa [y] using mixedEmbedding_preimageOfMemIntegerSet (idealSetMap K B z.1)
+      simp [y]
     refine ⟨z.1, ?_, ?_⟩
     · apply (mem_rpow_smul_raySignRegion_iff m q.1.2 z.1 hs).2
       refine ⟨z.1.2.1, z.2.2, ?_⟩

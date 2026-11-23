@@ -289,12 +289,12 @@ noncomputable def absoluteResidueAction
     · have hm : (g.1.1 : RationalAbsoluteGaloisGroup) x.1 ∈
           (g.1.1 : RationalAbsoluteGaloisGroup) • P.valuationSubring := by
         rw [ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem]
-        simpa using x.2
+        simp
       exact (ValuationSubring.ext_iff.mp hstab' _).mp hm
     · have hm : (g.1.1 : RationalAbsoluteGaloisGroup).symm x.1 ∈
           (g.1.1 : RationalAbsoluteGaloisGroup)⁻¹ • P.valuationSubring := by
         rw [ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem]
-        simpa using x.2
+        simp
       exact (ValuationSubring.ext_iff.mp hstab_inv _).mp hm
     · intro x
       apply Subtype.ext
@@ -356,7 +356,7 @@ theorem absoluteResidueAction_mk
     have hm : (g.1.1 : RationalAbsoluteGaloisGroup) x.1 ∈
         (g.1.1 : RationalAbsoluteGaloisGroup) • P.valuationSubring := by
       rw [ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem]
-      simpa using x.2
+      simp
     exact (ValuationSubring.ext_iff.mp hstab' _).mp hm
   refine ⟨⟨(g.1.1 : RationalAbsoluteGaloisGroup) x.1, hmem⟩, rfl, ?_⟩
   unfold absoluteResidueAction

@@ -658,9 +658,9 @@ used by Kummer theory: `ℓ` is odd prime, the field has characteristic
 not `ℓ`, a primitive `ℓ`-th root is supplied, and the pair is independent. -/
 theorem alternatingPair_iff_exists_valuation {F : Type*} [Field F]
     {ℓ : ℕ} [Fact ℓ.Prime] (hℓodd : Odd ℓ)
-    (hchar : ringChar F ≠ ℓ) (ζ : F) (hζ : IsPrimitiveRoot ζ ℓ)
+    (_hchar : ringChar F ≠ ℓ) (ζ : F) (_hζ : IsPrimitiveRoot ζ ℓ)
     (p q : MulCharacter F ℓ)
-    (hind : PairIndependent (k := ZMod ℓ) p q) :
+    (_hind : PairIndependent (k := ZMod ℓ) p q) :
     AlternatingPair ℓ p q ↔
       ∃ A : ValuationSubring F, SatisfiesValuationConclusion ℓ A p q := by
   constructor

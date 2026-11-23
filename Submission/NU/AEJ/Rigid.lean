@@ -124,7 +124,7 @@ private theorem rigid_mul_right (T : Set F) (hT : IsMulSubgroup T)
   change s + a * (t * u) ∈ T ∪ a • T at hz
   rcases hz with hz | ⟨v, hv, hv_eq⟩
   · left
-    convert hz using 1 <;> ring
+    convert hz using 1; ring
   · right
     refine ⟨t⁻¹ * v, hT.mul_mem (hT.inv_mem ht) hv, ?_⟩
     simp only [smul_eq_mul]
@@ -189,7 +189,7 @@ private theorem neg_not_mem_of_rigid {K : Type*} [Field K] (S : Set K)
   intro hneg
   have hz := hr (Set.add_mem_add hneg (Set.smul_mem_smul_set hS.one_mem))
   apply zero_not_mem_union_smul S hS ha
-  convert hz using 1 <;> simp [smul_eq_mul]
+  convert hz using 1; simp [smul_eq_mul]
 
 private theorem unit_mem_of_residue_eq (A : ValuationSubring F) (T : Set F)
     (hT : IsMulSubgroup T) (hcompat : ValuationSubring.IsCompatible A T)
@@ -387,7 +387,7 @@ theorem proposition_1_5_part1 (A : ValuationSubring F) (T : Set F)
         rw [A.valuation.map_div]
         exact (div_lt_one₀ (a := A.valuation (a * t)) (b := A.valuation s)
           (A.valuation.pos_iff.mpr hs_ne)).mpr hgt))
-    convert hm using 1 <;> field_simp <;> ring
+    convert hm using 1; field_simp <;> ring
 
 /-- AEJ, Proposition 1.5(2), journal p. 451: a unit is `T`-rigid exactly when
 its residue is rigid for the image of `U_A ∩ T` in the residue field. -/
@@ -523,7 +523,7 @@ theorem proposition_1_5_part2 (A : ValuationSubring F) (T : Set F)
       rcases hnorm with hnorm | ⟨d, hd, hda⟩
       · left
         have hprod := hT.mul_mem hs hnorm
-        convert hprod using 1 <;> field_simp <;> ring
+        convert hprod using 1; field_simp <;> ring
       · right
         refine ⟨s * d, hT.mul_mem hs hd, ?_⟩
         simp only [smul_eq_mul] at hda ⊢
@@ -550,7 +550,7 @@ theorem proposition_1_5_part2 (A : ValuationSubring F) (T : Set F)
               exact (div_lt_one₀
                 (a := A.valuation (((a : Fˣ) : F) * t))
                 (b := A.valuation s) (A.valuation.pos_iff.mpr hs0)).mpr hgt))
-        convert hm using 1 <;> field_simp <;> ring
+        convert hm using 1; field_simp <;> ring
 
 /-- AEJ, Proposition 1.9(1), journal p. 452: for a `T`-compatible valuation,
 `B_F(T) ⊆ U_A · T`. -/
@@ -571,7 +571,7 @@ theorem proposition_1_9_part1 (A : ValuationSubring F) (T : Set F)
       · apply A.unitGroup.mul_mem _ hu'
         rw [A.mem_unitGroup_iff]
         simp
-      · simpa [hu'_eq]
+      · simp [hu'_eq]
     · change u * t = -b at hut
       calc
         (-u) * t = -(u * t) := by ring
@@ -605,7 +605,7 @@ theorem proposition_1_9_part2 (A : ValuationSubring F) (T : Set F)
           rw [residue_negUnit]
           exact hr.2))
       rw [coe_negUnit] at hn
-      convert hn using 1 <;> ring
+      convert hn using 1; ring
   · rintro r ⟨hr0, hr⟩
     obtain ⟨u, hu⟩ := A.surjective_unitGroupToResidueFieldUnits (Units.mk0 r hr0)
     have hures : ValuationSubring.residueOfUnit A u = r := by

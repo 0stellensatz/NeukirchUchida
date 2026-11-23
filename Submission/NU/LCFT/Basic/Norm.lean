@@ -802,7 +802,7 @@ private theorem hensel_norm_correction
     rw [← IsLocalRing.notMem_maximalIdeal]
     intro hy
     have hone := (IsLocalRing.maximalIdeal B).sub_mem hy hymem
-    simpa [y] using hone
+    simp [y] at hone
   have hgeval (s : A) :
       g.eval s = Algebra.norm A (1 + algebraMap A B s * (a : B)) := by
     rw [Algebra.norm_eq_matrix_det b]

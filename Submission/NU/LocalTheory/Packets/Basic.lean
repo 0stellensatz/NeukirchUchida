@@ -369,7 +369,7 @@ theorem weakApproximation_principalUnits {M : Type*} [Field M]
     exact (w.intValuation_le_pow_iff_mem (x - A) nw).2 hxw
   have hwx : vw (x : M) = vw (A : M) := by
     have h := vw.map_add_eq_of_lt_left hwcloseNum
-    convert h using 1 <;> ring
+    convert h using 1; ring_nf
   have hx0 : (x : M) ≠ 0 := by
     intro h
     rw [h, map_zero] at hwx
@@ -406,7 +406,7 @@ theorem packet_separation {M : Type*} [Field M] [NumberField M]
     {ℓ : ℕ} [Fact ℓ.Prime] (ζ : M) (hζ : IsPrimitiveRoot ζ ℓ)
     {v w : FinitePlace M} (hvw : v ≠ w)
     (hv : residueCharacteristic v ≠ ℓ)
-    (hw : residueCharacteristic w ≠ ℓ) :
+    (_hw : residueCharacteristic w ≠ ℓ) :
     groupLocalPlane ζ hζ v ≠ groupLocalPlane ζ hζ w := by
   intro heq
   let e := kummerDualEquiv ζ hζ

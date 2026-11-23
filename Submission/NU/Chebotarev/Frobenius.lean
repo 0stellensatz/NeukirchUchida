@@ -203,7 +203,6 @@ private theorem arithFrobAt_pow_mod
       rw [(IsArithFrobAt.arithFrobAt (NumberField.RingOfIntegers K)
         (Gal(L/K)) P.asIdeal).mk_apply]
       rw [← pow_mul]
-      congr 2
       simp [Nat.pow_succ, Nat.mul_comm]
 
 /-- Blueprint Lemma 3.3, proposed declaration `arithFrobAt_restrict_pow`:
@@ -398,7 +397,7 @@ theorem arithFrobAt_apply_rootOfUnity
     [FiniteDimensional K L] [IsGalois K L]
     (p : PrimeIdeal K) (P : PrimeIdeal L)
     (hPp : P.asIdeal.LiesOver p.asIdeal)
-    (hunr : Algebra.IsUnramifiedAt
+    (_hunr : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers K) P.asIdeal)
     (m : ℕ) (ζ : L) (hζ : ζ ^ m = 1)
     (hm : algebraMap ℤ (NumberField.RingOfIntegers L) (m : ℤ) ∉ P.asIdeal) :
@@ -466,7 +465,7 @@ theorem ramifiedPrimes_finite
   let under : PrimeIdeal L → PrimeIdeal K := fun P =>
     ⟨P.asIdeal.under A, inferInstance, by
       intro h
-      let : P.asIdeal.LiesOver (⊥ : Ideal A) := ⟨by simpa [h]⟩
+      let : P.asIdeal.LiesOver (⊥ : Ideal A) := ⟨by simp [h]⟩
       exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot A P.asIdeal)⟩
   apply (hramUp.image under).subset
   intro p hp

@@ -399,7 +399,7 @@ private noncomputable def primeValuationSubringEquiv
   invFun x := ⟨σ.symm (x : M), by
     apply (mem_primeValuationSubring_automorphism K M σ w
       (σ.symm (x : M))).2
-    simpa using x.prop⟩
+    simp⟩
   left_inv x := by ext; simp
   right_inv x := by ext; simp
   map_mul' x y := by ext; simp
@@ -739,7 +739,6 @@ theorem tower_surjectivity (K L M : Type*)
     let P0 : Ideal (𝓞 M) := σ0 • w.asIdeal
     have hP0over : P0.LiesOver p := by
       constructor
-      change p = Ideal.under (𝓞 L) P0
       rw [← under_galoisRestriction_smul, hσ0]
       change p = τ • (restrictFinitePlace L w).asIdeal
       exact congrArg HeightOneSpectrum.asIdeal hτ.symm

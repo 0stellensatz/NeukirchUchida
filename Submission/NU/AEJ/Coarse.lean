@@ -62,7 +62,7 @@ theorem lemma_3_1 (T H : Set F) (hT : IsMulSubgroup T)
   constructor
   · intro hd
     by_cases hd1 : d = 1
-    · simpa [hd1]
+    · simp [hd1]
     have hd0 : d ≠ 0 := fun e => hΔ.zero_notMem (e ▸ hd)
     let q := if d < 1 then d else d⁻¹
     have hqD : q ∈ Δ := by
@@ -134,7 +134,7 @@ theorem lemma_3_1 (T H : Set F) (hT : IsMulSubgroup T)
       · exact hi
       · exact False.elim (hinvH hi.2.1)
     have hxyminus : x * y⁻¹ ∈ Ominus H T := by
-      convert hinvminus using 1 <;> field_simp [hx0, hy0] <;> ring
+      convert hinvminus using 1; field_simp [hx0, hy0] <;> ring
     have hvxy : A.valuation (x * y⁻¹) < 1 :=
       A.mem_nonunits_iff.mp (hobs.1 hxyminus)
     have hvy : A.valuation y < 1 :=
@@ -555,7 +555,7 @@ theorem proposition_3_5 (T : Set F) (hT : IsMulSubgroup T)
   have hxA : x ∈ A := A.mul_mem _ _ haA (A.mem_or_inv_mem b |>.resolve_left hbA)
   have hxiB : x⁻¹ ∈ B := by
     have haiB : a⁻¹ ∈ B := (B.mem_or_inv_mem a).resolve_left haB
-    convert B.mul_mem _ _ haiB hbB using 1 <;> dsimp [x] <;> field_simp
+    convert B.mul_mem _ _ haiB hbB using 1; dsimp [x]; field_simp
   have hxiA : x⁻¹ ∉ A := by
     intro h
     apply hbA
@@ -626,7 +626,7 @@ theorem proposition_3_5 (T : Set F) (hT : IsMulSubgroup T)
         intro hi
         apply hziV
         have hh := V.mul_mem _ _ hi hyV
-        convert hh using 1 <;> field_simp [hz0, hy0]
+        convert hh using 1; field_simp [hz0, hy0]
       have hzyiW : (z * y)⁻¹ ∈ W.nonunits := by
         apply W.mem_nonunits_iff_or.mpr
         right
@@ -635,10 +635,10 @@ theorem proposition_3_5 (T : Set F) (hT : IsMulSubgroup T)
         have hzyW : z * y ∈ W := by
           simpa [mul_ne_zero hz0 hy0] using hi
         have hh := W.mul_mem _ _ hzyW hyiW
-        convert hh using 1 <;> field_simp [hy0]
+        convert hh using 1; field_simp [hy0]
       have hzyT := hcross V W hV hW (mul_ne_zero hz0 hy0) hzyV hzyiW
       have hm := hT.mul_mem (hT.inv_mem hzT) hzyT
-      convert hm using 1 <;> field_simp [hz0]
+      convert hm using 1; field_simp [hz0]
     by_cases hyV : (u : F) ∈ V
     · exact hmem hy0 hyW hyiW hyV
     · have hyiV : (u : F)⁻¹ ∈ V := (V.mem_or_inv_mem (u : F)).resolve_left hyV
@@ -790,7 +790,7 @@ theorem theorem_3_8 (T : Set F) (hT : IsMulSubgroup T) :
     · exact Or.inl hx
     · right
       change ∀ W : 𝒱, x⁻¹ ∈ W.1
-      push_neg at hx
+      push Not at hx
       obtain ⟨V, hxV⟩ := hx
       have hxiV : x⁻¹ ∈ V.1 := (V.1.mem_or_inv_mem x).resolve_left hxV
       intro W
@@ -811,7 +811,7 @@ theorem theorem_3_8 (T : Set F) (hT : IsMulSubgroup T) :
         have hznon : z ∈ C.nonunits := C.mem_nonunits_iff.mpr hu
         exact ((C.mem_nonunits_iff_or).mp hznon).resolve_left hz
       change ¬(∀ V : 𝒱, z⁻¹ ∈ V.1) at hzinv
-      push_neg at hzinv
+      push Not at hzinv
       obtain ⟨V, hzV⟩ := hzinv
       apply V.2.1
       refine ⟨u, ?_, rfl⟩
@@ -1046,7 +1046,7 @@ theorem theorem_3_8 (T : Set F) (hT : IsMulSubgroup T) :
         · have : d = 0 := by rw [← hx, hx0, C.valuation.map_zero]
           exact False.elim (hΔ.zero_notMem (this ▸ hd))
         · exact (inv_le_one₀ (C.valuation.pos_iff.mpr hx0)).mp hi
-      simpa [hdx]
+      simp [hdx]
     · intro hd
       rw [Set.mem_singleton_iff] at hd
       subst d

@@ -38,6 +38,7 @@ namespace CompleteSeparatedFiltration
 variable {G : Type} [Group G] [Fintype G]
 variable {M : Rep ℤ G}
 
+omit [Fintype G] in
 private lemma d0_mem_cocycles1 (b : M) :
     Inhomogeneous.d0 M b ∈ Inhomogeneous.cocycles1 M := by
   constructor
@@ -47,6 +48,7 @@ private lemma d0_mem_cocycles1 (b : M) :
   · change Inhomogeneous.d0 M b 1 = 0
     simp [Inhomogeneous.d0]
 
+omit [Fintype G] in
 private lemma d1_mem_cocycles2_of_normalized (b : Inhomogeneous.C1 M)
     (hb : b 1 = 0) :
     Inhomogeneous.d1 M b ∈ Inhomogeneous.cocycles2 M := by
@@ -61,6 +63,7 @@ private lemma d1_mem_cocycles2_of_normalized (b : Inhomogeneous.C1 M)
     · intro g
       simp [Inhomogeneous.d1, hb]
 
+omit [Fintype G] in
 /--
 **F01**, Lemma `lem:serre-approximation`: degree-one complete-filtered approximation.  The
 primitive at stage `n` is required to lie in `F n`; this is the quotient statement
@@ -143,6 +146,7 @@ theorem serreApproximation_H1 (Φ : CompleteSeparatedFiltration M)
       obtain ⟨a, ha⟩ := primitive zc zc.2
       exact ⟨a, ha⟩
 
+omit [Fintype G] in
 /--
 **F01**, Lemma `lem:serre-approximation`: degree-two complete-filtered approximation.  Here the
 one-cochain primitive is pointwise `F n`-valued, exactly as required to form compatible

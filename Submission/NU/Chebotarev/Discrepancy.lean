@@ -40,7 +40,7 @@ def affineLatticePointCount (v : E) (S : Set E) : ℕ :=
 usual set of ambient affine-lattice points. -/
 def affineLatticePointEquiv (v : E) (S : Set E) :
     affineLatticeIndexSet L v S ≃ {x : E // x ∈ S ∧ x - v ∈ L} where
-  toFun l := ⟨v + (l.1 : E), l.2, by simpa using l.1.2⟩
+  toFun l := ⟨v + (l.1 : E), l.2, by simp⟩
   invFun x := ⟨⟨x.1 - v, x.2.2⟩, by simpa [affineLatticeIndexSet] using x.2.1⟩
   left_inv l := by
     apply Subtype.ext
@@ -50,6 +50,7 @@ def affineLatticePointEquiv (v : E) (S : Set E) :
     apply Subtype.ext
     simp
 
+omit [NormedSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [DiscreteTopology ↥L] [IsZLattice ℝ L] in
 /-- `affineLatticePointCount` is literally the cardinality of the ambient
 intersection of `S` with the affine lattice `v + L`. -/
 theorem affineLatticePointCount_eq_natCard (v : E) (S : Set E) :
@@ -66,18 +67,21 @@ def boundaryCellIndices (b : Basis ι ℤ L) (v : E) (S : Set E) : Set L :=
 def fundamentalCellRadius (b : Basis ι ℤ L) : ℝ :=
   ∑ i, ‖b.ofZLatticeBasis ℝ L i‖
 
+omit [MeasurableSpace E] [BorelSpace E] in
 private theorem norm_le_fundamentalCellRadius (b : Basis ι ℤ L)
     {x : E} (hx : x ∈ ZSpan.fundamentalDomain (b.ofZLatticeBasis ℝ L)) :
     ‖x‖ ≤ fundamentalCellRadius L b := by
   rw [← ZSpan.fract_eq_self.mpr hx]
   exact ZSpan.norm_fract_le _ _
 
+omit [Fintype ι] [MeasurableSpace E] [BorelSpace E] in
 private theorem zero_mem_fundamentalDomain (b : Basis ι ℤ L) :
     (0 : E) ∈ ZSpan.fundamentalDomain (b.ofZLatticeBasis ℝ) := by
   rw [ZSpan.mem_fundamentalDomain]
   intro i
   simp
 
+omit [Fintype ι] [MeasurableSpace E] [BorelSpace E] in
 private theorem fundamentalDomain_convex (b : Basis ι ℤ L) :
     Convex ℝ (ZSpan.fundamentalDomain (b.ofZLatticeBasis ℝ)) := by
   rw [show ZSpan.fundamentalDomain (b.ofZLatticeBasis ℝ) =
@@ -86,15 +90,18 @@ private theorem fundamentalDomain_convex (b : Basis ι ℤ L) :
     simp [ZSpan.mem_fundamentalDomain]]
   exact convex_iInter fun i => (convex_Ico (0 : ℝ) 1).linear_preimage _
 
+omit [Fintype ι] [MeasurableSpace E] [BorelSpace E] in
 private theorem anchor_mem_fundamentalCell (b : Basis ι ℤ L) (v : E) (l : L) :
     v + (l : E) ∈ fundamentalCell L b v l := by
   rw [fundamentalCell, Set.mem_vadd_set]
   exact ⟨0, zero_mem_fundamentalDomain L b, by simp⟩
 
+omit [Fintype ι] [MeasurableSpace E] [BorelSpace E] in
 private theorem fundamentalCell_isPreconnected (b : Basis ι ℤ L) (v : E) (l : L) :
     IsPreconnected (fundamentalCell L b v l) :=
   ((fundamentalDomain_convex L b).vadd (v + (l : E))).isPreconnected
 
+omit [NormedSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem preconnected_cell_dichotomy {C S : Set E} {p : E}
     (hC : IsPreconnected C) (hp : p ∈ C)
     (hbd : ¬ (C ∩ frontier S).Nonempty) :
@@ -114,6 +121,7 @@ private theorem preconnected_cell_dichotomy {C S : Set E} {p : E}
     · exact Set.disjoint_left.2 fun x hxC hxS =>
         (interior_subset (hright hxC) : x ∈ Sᶜ) hxS
 
+omit [MeasurableSpace E] [BorelSpace E] [IsZLattice ℝ L] in
 private theorem affineLatticeIndexSet_finite (v : E) {S : Set E} (hS : IsBounded S) :
     (affineLatticeIndexSet L v S).Finite := by
   let K : Set E := (-v) +ᵥ S
@@ -131,6 +139,7 @@ private theorem affineLatticeIndexSet_finite (v : E) {S : Set E} (hS : IsBounded
       exact ⟨v + (l : E), hl, by simp⟩))
   exact Subtype.coe_injective.injOn
 
+omit [MeasurableSpace E] [BorelSpace E] [IsZLattice ℝ L] in
 /-- The ambient intersection of a bounded set with an affine lattice is finite. -/
 theorem finite_affineLatticePointSubtype (v : E) {S : Set E} (hS : IsBounded S) :
     Finite {x : E // x ∈ S ∧ x - v ∈ L} := by
@@ -138,6 +147,7 @@ theorem finite_affineLatticePointSubtype (v : E) {S : Set E} (hS : IsBounded S) 
     (affineLatticeIndexSet_finite L v hS).fintype
   exact Finite.of_equiv _ (affineLatticePointEquiv L v S)
 
+omit [MeasurableSpace E] [BorelSpace E] in
 private theorem boundaryCellIndices_finite (b : Basis ι ℤ L) (v : E)
     {S : Set E} (hS : IsBounded S) :
     (boundaryCellIndices L b v S).Finite := by
@@ -167,6 +177,7 @@ private theorem boundaryCellIndices_finite (b : Basis ι ℤ L) (v : E)
         abel))
   exact Subtype.coe_injective.injOn
 
+omit [Fintype ι] [MeasurableSpace E] [BorelSpace E] in
 private theorem inter_fundamentalCell_eq_of_mem (b : Basis ι ℤ L) (v : E)
     (S : Set E) (l : L) (hl : l ∉ boundaryCellIndices L b v S)
     (hp : v + (l : E) ∈ S) :
@@ -178,6 +189,7 @@ private theorem inter_fundamentalCell_eq_of_mem (b : Basis ι ℤ L) (v : E)
   simp only [Set.mem_inter_iff]
   exact ⟨fun hx => hx.2, fun hx => ⟨h.1 hp hx, hx⟩⟩
 
+omit [Fintype ι] [MeasurableSpace E] [BorelSpace E] in
 private theorem inter_fundamentalCell_eq_empty_of_not_mem (b : Basis ι ℤ L) (v : E)
     (S : Set E) (l : L) (hl : l ∉ boundaryCellIndices L b v S)
     (hp : v + (l : E) ∉ S) :
@@ -330,6 +342,7 @@ theorem abs_affineLatticePointCount_sub_volume_div_covolume_le_boundaryCells
 def latticeNormBall (r : ℝ) : Set L :=
   {l | ‖(l : E)‖ ≤ r}
 
+omit [MeasurableSpace E] [BorelSpace E] [IsZLattice ℝ L] in
 private theorem latticeNormBall_finite (r : ℝ) :
     (latticeNormBall L r).Finite := by
   have hKL : (Metric.closedBall (0 : E) r ∩ (L : Set E)).Finite := by
@@ -349,6 +362,7 @@ of `L` in a ball of radius `r`. -/
 def affineLatticeLocalMultiplicity (b : Basis ι ℤ L) (r : ℝ) : ℕ :=
   (latticeNormBall L (max r 0 + fundamentalCellRadius L b)).ncard
 
+omit [MeasurableSpace E] [BorelSpace E] in
 /-- The local multiplicity bound is independent of both the translate and the
 center of the ball. -/
 theorem ncard_affineLatticeIndexSet_closedBall_le_localMultiplicity
@@ -394,6 +408,7 @@ theorem ncard_affineLatticeIndexSet_closedBall_le_localMultiplicity
     _ ≤ (latticeNormBall L R).ncard := Set.ncard_le_ncard himage hRfinite
     _ = affineLatticeLocalMultiplicity L b r := rfl
 
+omit [MeasurableSpace E] [BorelSpace E] in
 /-- A finite metric cover of the frontier bounds the number of boundary cells.
 The bound is uniform in the affine translate `v`. -/
 theorem boundaryCellIndices_ncard_le_of_isCover
@@ -525,12 +540,14 @@ theorem unitCube_isCover_cubeGrid (n : ℕ) (hn : 0 < n) :
 def cubeProjection (x : κ → ℝ) : κ → ℝ :=
   fun i => Set.projIcc 0 1 zero_le_one (x i)
 
+omit [Fintype κ] in
 @[simp]
 theorem cubeProjection_mem_unitCube (x : κ → ℝ) :
     cubeProjection x ∈ unitCube := by
   exact ⟨fun i => (Set.projIcc 0 1 zero_le_one (x i)).2.1,
     fun i => (Set.projIcc 0 1 zero_le_one (x i)).2.2⟩
 
+omit [Fintype κ] in
 @[simp]
 theorem cubeProjection_eq_self {x : κ → ℝ} (hx : x ∈ unitCube) :
     cubeProjection x = x := by
@@ -870,6 +887,7 @@ def LipschitzBoundaryCover.scaledCenters {S : Set E}
     (data : LipschitzBoundaryCover (κ := κ) S) (t : ℝ) (n : ℕ) : Set E :=
   ⋃ j, (fun u => t • data.chart j u) '' cubeGrid n
 
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem LipschitzBoundaryCover.scaledCenters_finite {S : Set E}
     (data : LipschitzBoundaryCover (κ := κ) S) (t : ℝ) (n : ℕ) :
     (data.scaledCenters t n).Finite := by
@@ -879,6 +897,7 @@ private theorem LipschitzBoundaryCover.scaledCenters_finite {S : Set E}
   · intro j hj
     exact (hj (Set.mem_univ j)).elim
 
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- The scaled grid has at most `M (n+1)^k` centers for `M` charts. -/
 theorem LipschitzBoundaryCover.scaledCenters_ncard_le {S : Set E}
     (data : LipschitzBoundaryCover (κ := κ) S) (t : ℝ) (n : ℕ) :
@@ -896,12 +915,14 @@ theorem LipschitzBoundaryCover.scaledCenters_ncard_le {S : Set E}
     _ = data.pieces * (n + 1) ^ Fintype.card κ := by
       rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, Nat.nsmul_eq_mul]
 
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem frontier_smul_eq (S : Set E) {t : ℝ} (ht : t ≠ 0) :
     frontier (t • S) = t • frontier S := by
   let u : ℝˣ := Units.mk0 t ht
   have h := (isHomeomorph_smul u : IsHomeomorph fun x : E => u • x).image_frontier S
   simpa only [u, Units.smul_def, Units.val_mk0, Set.image_smul] using h.symm
 
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- If `n ≥ t > 0`, the scaled boundary is covered by the scaled chart-grid
 centers with the original (unscaled) Lipschitz radius. -/
 theorem LipschitzBoundaryCover.isCover_scaledFrontier {S : Set E}
@@ -955,6 +976,7 @@ def LipschitzBoundaryCover.davenportConstant {S : Set E}
     affineLatticeLocalMultiplicity L b
       ((data.K : ℝ) + fundamentalCellRadius L b)
 
+omit [MeasurableSpace E] [BorelSpace E] in
 /-- Quantitative boundary-cell estimate for a dilated Lipschitz boundary. -/
 theorem LipschitzBoundaryCover.boundaryCellIndices_ncard_smul_le {S : Set E}
     (data : LipschitzBoundaryCover (κ := κ) S) (b : Basis ι ℤ L)
@@ -1004,7 +1026,7 @@ theorem LipschitzBoundaryCover.boundaryCellIndices_ncard_smul_le {S : Set E}
       ring
 
 private theorem measureReal_smul_of_nonneg
-    (μ : Measure E) [μ.IsAddHaarMeasure] {S : Set E} (hS : IsBounded S)
+    (μ : Measure E) [μ.IsAddHaarMeasure] {S : Set E} (_hS : IsBounded S)
     {t : ℝ} (ht : 0 ≤ t) :
     μ.real (t • S) = t ^ finrank ℝ E * μ.real S := by
   rw [Measure.real_def, Measure.addHaar_smul, abs_of_nonneg (pow_nonneg ht _),

@@ -1131,6 +1131,7 @@ variable (K L : Type) [Field K] [Field L] [Algebra K L]
   [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L]
   [ValuativeExtension K L] [ContinuousSMul K L]
 
+omit [IsGalois K L] [ContinuousSMul K L] in
 private theorem normalizedValuation_algEquiv_cyclic
     (σ : L ≃ₐ[K] L) (x : Units L) :
     normalizedValuation L (Units.map σ.toRingEquiv.toRingHom x) =
@@ -1178,6 +1179,7 @@ private theorem mem_unitSubgroup_iff_normalizedValuation_eq_zero_cyclic
     apply Units.ext
     exact ha
 
+omit [IsGalois K L] [ContinuousSMul K L] in
 /--
 **F04**, Proposition `prop:herbrand-local-units`: the actual integral-unit subgroup is stable
 under every `K`-automorphism of `L`.
@@ -1262,6 +1264,7 @@ private noncomputable def valuationInclusionIsKernel_cyclic :
       apply Subtype.ext
       exact congrArg (fun q : s.pt ⟶ MulRep K L => q.hom z) hm)
 
+omit [IsGalois K L] [ContinuousSMul K L] in
 private theorem valuationSequence_cyclic_shortExact :
     (valuationSequence_cyclic K L).ShortExact := by
   apply ShortComplex.ShortExact.mk'
@@ -1274,6 +1277,7 @@ private theorem valuationSequence_cyclic_shortExact :
 
 variable [IsCyclic (L ≃ₐ[K] L)]
 
+omit [FiniteDimensional K L] [IsGalois K L] [ValuativeExtension K L] [ContinuousSMul K L] [IsCyclic Gal(L/K)] in
 private theorem deepUnitQuotient_finite (π : Uniformizer K) (D : DeepUnitFiltrationData K L π) :
     Finite ((unitSubgroup L) ⧸ (D.V 0).comap (unitSubgroup L).subtype) := by
   let U := unitSubgroup L

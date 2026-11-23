@@ -386,8 +386,8 @@ theorem regularKernelTransport_pointwise_translate
     (p : NU.LocalTheory.OddPrime)
     (M : GaloisOverfield N)
     (hcomm : ∀ a b : RegularKernelGroup N M, a * b = b * a)
-    (hExponent : ∀ a : RegularKernelGroup N M, a ^ (p : ℕ) = 1)
-    (lambda : RegularKernelGroup N M) (hlambda : lambda ≠ 1) :
+    (_hExponent : ∀ a : RegularKernelGroup N M, a ^ (p : ℕ) = 1)
+    (lambda : RegularKernelGroup N M) (_hlambda : lambda ≠ 1) :
     ∃ h : N.field ≃ₐ[ℚ] N.field,
       regularKernelTransport F₁ F₂ N theta h₁ h₂ M lambda =
         regularKernelConjugation N M hcomm h lambda := by

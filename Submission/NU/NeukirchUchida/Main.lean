@@ -141,7 +141,7 @@ theorem ambientExtension_field
     let z : F₁.field := ⟨y, hy⟩
     let x : F₂.field := e.symm z
     have h : ambientExtension e x.1 = y := by
-      simpa [x, z] using ambientExtension_apply e x
+      simp [x, z]
     rw [← h, AlgEquiv.symm_apply_apply]
     exact x.2
 
@@ -174,7 +174,7 @@ private noncomputable def fieldEquivOfAmbient
     F₂.field ≃ₐ[ℚ] F₁.field where
   toFun x := ⟨alpha x.1, by
     rw [← hfield, mem_conjugateField_iff]
-    simpa using x.2⟩
+    simp⟩
   invFun x := ⟨alpha.symm x.1, by
     have hx : x.1 ∈ conjugateField alpha F₂.field := hfield.symm ▸ x.2
     rwa [mem_conjugateField_iff] at hx⟩
@@ -483,7 +483,7 @@ private noncomputable def ambientFieldEquiv
     F₂.field ≃ₐ[ℚ] F₁.field where
   toFun x := ⟨alpha x.1, by
     rw [← hfield, mem_conjugateField_iff]
-    simpa using x.2⟩
+    simp⟩
   invFun x := ⟨alpha.symm x.1, by
     have hx : x.1 ∈ conjugateField alpha F₂.field := hfield.symm ▸ x.2
     rwa [mem_conjugateField_iff] at hx⟩

@@ -130,7 +130,7 @@ private theorem projectivelyEqual_n_one_one
   refine ⟨(u 1)⁻¹, inv_ne_zero h1ne, ?_⟩
   apply funext
   intro i
-  fin_cases i <;> simp [projectiveCoord, h0, h2, h1ne] <;> field_simp
+  fin_cases i <;> simp [projectiveCoord, h0, h2, h1ne]; field_simp
 
 private theorem projectivelyEqual_n_one_zero
     {k : Type*} [Field k] (u : ProjectiveCoord k) (a : k)
@@ -145,7 +145,7 @@ private theorem projectivelyEqual_n_one_zero
   refine ⟨(u 1)⁻¹, inv_ne_zero h1ne, ?_⟩
   apply funext
   intro i
-  fin_cases i <;> simp [projectiveCoord, h0, h2, h1ne] <;> field_simp
+  fin_cases i <;> simp [projectiveCoord, h0, h2, h1ne]; field_simp
 
 private theorem projectivelyEqual_n_m_one
     {k : Type*} [Field k] (u : ProjectiveCoord k) (a b : k)
@@ -175,7 +175,7 @@ theorem incidence_config_one_add_x_add_y {F k : Type*} [Field F] [Field k]
   have hline2 : ProjectivelyCollinear (projectiveCoord 0 0 1)
       (projectiveCoord 1 1 0) (φ (1 + x + y)) := by
     apply collinear_scale_first_two h1y hx
-    convert (hinc.2 (1 + y) x).1 using 1 <;> ring
+    convert (hinc.2 (1 + y) x).1 using 1; ring_nf
   simp [ProjectivelyCollinear, projectiveDet, projectiveCoord] at hline1 hline2
   have hz : φ (1 + x + y) 0 = φ (1 + x + y) 2 := by
     linear_combination hline1
@@ -198,11 +198,11 @@ theorem incidence_config_two_add_x_add_y {F k : Type*} [Field F] [Field k]
   have hline1 : ProjectivelyCollinear (projectiveCoord 1 0 0)
       (projectiveCoord 1 1 1) (φ ((2 : F) + x + y)) := by
     apply collinear_scale_first_two h1 ht
-    convert (hinc.2 1 (1 + x + y)).1 using 1 <;> ring
+    convert (hinc.2 1 (1 + x + y)).1 using 1; ring_nf
   have hline2 : ProjectivelyCollinear (projectiveCoord 0 1 0)
       (projectiveCoord 0 0 1) (φ ((2 : F) + x + y)) := by
     apply collinear_scale_first_two h1x h1y
-    convert (hinc.2 (1 + x) (1 + y)).1 using 1 <;> ring
+    convert (hinc.2 (1 + x) (1 + y)).1 using 1; ring_nf
   simp [ProjectivelyCollinear, projectiveDet, projectiveCoord] at hline1 hline2
   have h2 : φ ((2 : F) + x + y) 2 = φ ((2 : F) + x + y) 1 := by
     linear_combination hline1
@@ -242,13 +242,13 @@ private theorem incidence_config_n_pair {F k : Type*} [Field F] [Field k]
       have hline1 : ProjectivelyCollinear (projectiveCoord (z : k) 1 0)
           (projectiveCoord 1 0 1) (φ t) := by
         apply collinear_scale_first_two hz.2 hy
-        convert (hinc.2 (((1 - z : ℤ) : F) + x) y).1 using 1 <;>
-          dsimp [t] <;> push_cast <;> ring
+        convert (hinc.2 (((1 - z : ℤ) : F) + x) y).1 using 1;
+          dsimp [t]; push_cast; ring_nf
       have hline2 : ProjectivelyCollinear (projectiveCoord (z : k) 1 1)
           (projectiveCoord 1 0 0) (φ t) := by
         apply collinear_scale_first_two hz.1 hone
-        convert (hinc.2 (((2 - z : ℤ) : F) + x + y) 1).2 using 1 <;>
-          dsimp [t] <;> push_cast <;> ring
+        convert (hinc.2 (((2 - z : ℤ) : F) + x + y) 1).2 using 1;
+          dsimp [t]; push_cast; ring_nf
       simp [ProjectivelyCollinear, projectiveDet, projectiveCoord] at hline1 hline2
       have h2 : φ t 2 = φ t 1 := by
         linear_combination -hline2
@@ -263,13 +263,13 @@ private theorem incidence_config_n_pair {F k : Type*} [Field F] [Field k]
           (projectiveCoord (((z + 1 : ℤ) : k)) 1 1)
           (projectiveCoord 0 0 1) (φ s) := by
         apply collinear_scale_first_two ht h1y
-        convert (hinc.2 t (1 + y)).2 using 1 <;>
-          dsimp [t, s] <;> push_cast <;> ring
+        convert (hinc.2 t (1 + y)).2 using 1;
+          dsimp [t, s]; push_cast; ring_nf
       have hline2 : ProjectivelyCollinear (projectiveCoord (z : k) 1 0)
           (projectiveCoord 1 0 0) (φ s) := by
         apply collinear_scale_first_two hz.2 hone
-        convert (hinc.2 (((1 - z : ℤ) : F) + x) 1).2 using 1 <;>
-          dsimp [s] <;> push_cast <;> ring
+        convert (hinc.2 (((1 - z : ℤ) : F) + x) 1).2 using 1;
+          dsimp [s]; push_cast; ring_nf
       simp [ProjectivelyCollinear, projectiveDet, projectiveCoord] at hline1 hline2
       have h2 : φ s 2 = 0 := by
         linear_combination hline2
@@ -286,13 +286,13 @@ private theorem incidence_config_n_pair {F k : Type*} [Field F] [Field k]
       have hline1 : ProjectivelyCollinear (projectiveCoord (z : k) 1 1)
           (projectiveCoord 1 0 1) (φ s) := by
         apply collinear_scale_first_two hz.1 hy
-        convert (hinc.2 (((2 - z : ℤ) : F) + x + y) y).2 using 1 <;>
-          dsimp [s] <;> push_cast <;> ring
+        convert (hinc.2 (((2 - z : ℤ) : F) + x + y) y).2 using 1;
+          dsimp [s]; push_cast; ring_nf
       have hline2 : ProjectivelyCollinear (projectiveCoord (z : k) 1 0)
           (projectiveCoord 1 0 0) (φ s) := by
         apply collinear_scale_first_two hz.2 hone
-        convert (hinc.2 (((1 - z : ℤ) : F) + x) 1).1 using 1 <;>
-          dsimp [s] <;> push_cast <;> ring
+        convert (hinc.2 (((1 - z : ℤ) : F) + x) 1).1 using 1;
+          dsimp [s]; push_cast; ring_nf
       simp [ProjectivelyCollinear, projectiveDet, projectiveCoord] at hline1 hline2
       have h2 : φ s 2 = 0 := hline2
       have h0 : φ s 0 = ((z - 1 : ℤ) : k) * φ s 1 := by
@@ -306,13 +306,13 @@ private theorem incidence_config_n_pair {F k : Type*} [Field F] [Field k]
           (projectiveCoord (((z - 1 : ℤ) : k)) 1 0)
           (projectiveCoord 0 0 1) (φ t) := by
         apply collinear_scale_first_two hs h1y
-        convert (hinc.2 s (1 + y)).1 using 1 <;>
-          dsimp [s, t] <;> push_cast <;> ring
+        convert (hinc.2 s (1 + y)).1 using 1;
+          dsimp [s, t]; push_cast; ring_nf
       have hline2 : ProjectivelyCollinear (projectiveCoord (z : k) 1 1)
           (projectiveCoord 1 0 0) (φ t) := by
         apply collinear_scale_first_two hz.1 hone
-        convert (hinc.2 (((2 - z : ℤ) : F) + x + y) 1).1 using 1 <;>
-          dsimp [t] <;> push_cast <;> ring
+        convert (hinc.2 (((2 - z : ℤ) : F) + x + y) 1).1 using 1;
+          dsimp [t]; push_cast; ring_nf
       simp [ProjectivelyCollinear, projectiveDet, projectiveCoord] at hline1 hline2
       have h2 : φ t 2 = φ t 1 := by
         linear_combination -hline2
@@ -360,7 +360,7 @@ theorem incidence_config_n_m_one {F k : Type*} [Field F] [Field k]
     intro n
     dsimp [Q]
     convert incidence_config_n_one_one φ x y n hinc
-      ⟨hzero, hone, hx, hy, h1x, h1y⟩ using 1 <;> push_cast <;> ring
+      ⟨hzero, hone, hx, hy, h1x, h1y⟩ using 1 <;> push_cast <;> ring_nf
   have hsucc : ∀ z : ℤ, Q z → Q (z + 1) := by
     intro z hz n
     let t : F := (((1 + (z + 1) - n : ℤ) : F) + ((z + 1 : ℤ) : F) * x + y)
@@ -368,15 +368,15 @@ theorem incidence_config_n_m_one {F k : Type*} [Field F] [Field k]
         (projectiveCoord (n : k) (z : k) 1) (projectiveCoord 0 1 0) (φ t) := by
       apply collinear_scale_first_two (hz n) h1x
       convert (hinc.2
-        (((1 + z - n : ℤ) : F) + (z : F) * x + y) (1 + x)).1 using 1 <;>
-        dsimp [t] <;> push_cast <;> ring
+        (((1 + z - n : ℤ) : F) + (z : F) * x + y) (1 + x)).1 using 1;
+        dsimp [t]; push_cast; ring_nf
     have hline2 : ProjectivelyCollinear
         (projectiveCoord ((n - 1 : ℤ) : k) (z : k) 1)
         (projectiveCoord 1 1 0) (φ t) := by
       apply collinear_scale_first_two (hz (n - 1)) hx
       convert (hinc.2
-        (((1 + z - (n - 1) : ℤ) : F) + (z : F) * x + y) x).1 using 1 <;>
-        dsimp [t] <;> push_cast <;> ring
+        (((1 + z - (n - 1) : ℤ) : F) + (z : F) * x + y) x).1 using 1;
+        dsimp [t]; push_cast; ring_nf
     simp [ProjectivelyCollinear, projectiveDet, projectiveCoord] at hline1 hline2
     have h0 : φ t 0 = (n : k) * φ t 2 := by
       linear_combination -hline1
@@ -391,15 +391,15 @@ theorem incidence_config_n_m_one {F k : Type*} [Field F] [Field k]
         (projectiveCoord (n : k) (z : k) 1) (projectiveCoord 0 1 0) (φ t) := by
       apply collinear_scale_first_two (hz n) h1x
       convert (hinc.2
-        (((1 + z - n : ℤ) : F) + (z : F) * x + y) (1 + x)).2 using 1 <;>
-        dsimp [t] <;> push_cast <;> ring
+        (((1 + z - n : ℤ) : F) + (z : F) * x + y) (1 + x)).2 using 1;
+        dsimp [t]; push_cast; ring_nf
     have hline2 : ProjectivelyCollinear
         (projectiveCoord ((n + 1 : ℤ) : k) (z : k) 1)
         (projectiveCoord 1 1 0) (φ t) := by
       apply collinear_scale_first_two (hz (n + 1)) hx
       convert (hinc.2
-        (((1 + z - (n + 1) : ℤ) : F) + (z : F) * x + y) x).2 using 1 <;>
-        dsimp [t] <;> push_cast <;> ring
+        (((1 + z - (n + 1) : ℤ) : F) + (z : F) * x + y) x).2 using 1;
+        dsimp [t]; push_cast; ring_nf
     simp [ProjectivelyCollinear, projectiveDet, projectiveCoord] at hline1 hline2
     have h0 : φ t 0 = (n : k) * φ t 2 := by
       linear_combination -hline1
@@ -428,7 +428,7 @@ private theorem projectivelyEqual_n_m_zero
   funext i
   fin_cases i
   · simp [projectiveCoord, h0ne]
-  · simp only [projectiveCoord, Matrix.cons_val_one, Pi.smul_apply, smul_eq_mul]
+  · simp only [projectiveCoord, Pi.smul_apply, smul_eq_mul]
     field_simp
     exact h1.symm
   · simp [projectiveCoord, h2]
@@ -456,7 +456,7 @@ theorem incidence_config_n_m_zero {F k : Type*} [Field F] [Field k]
     convert (hinc.2
       (((1 + m - n : ℤ) : F) + (m : F) * x + y)
       (((1 + 0 - 0 : ℤ) : F) + (0 : F) * x + y)).2 using 1 <;>
-      dsimp [t] <;> push_cast <;> ring
+      dsimp [t] <;> push_cast <;> ring_nf
   have hnm1 := incidence_config_n_m_one φ x y (m + 1) n hinc hframe
   have hzeroone := incidence_config_n_m_one φ x y 1 0 hinc hframe
   have hline2 : ProjectivelyCollinear
@@ -466,11 +466,10 @@ theorem incidence_config_n_m_zero {F k : Type*} [Field F] [Field k]
     convert (hinc.2
       (((1 + (m + 1) - n : ℤ) : F) + ((m + 1 : ℤ) : F) * x + y)
       (((1 + 1 - 0 : ℤ) : F) + (1 : F) * x + y)).2 using 1 <;>
-      dsimp [t] <;> push_cast <;> ring
+      dsimp [t] <;> push_cast <;> ring_nf
   simp [ProjectivelyCollinear, projectiveDet, projectiveCoord] at hline1 hline2
   have h2 : φ t 2 = 0 := by
     apply mul_left_cancel₀ hn
-    push_cast at hline2
     linear_combination hline2 - hline1
   have h1 : (n : k) * φ t 1 = (m : k) * φ t 0 := by
     linear_combination -hline1
@@ -578,7 +577,7 @@ private theorem characterProjectiveMap_add_collinear
   let uc : Fˣ := Units.mk0 (a + b) hc
   have hsum : ((ua * uc⁻¹ : Fˣ) : F) + ((ub * uc⁻¹ : Fˣ) : F) = 1 := by
     dsimp [ua, ub, uc]
-    simp only [Units.val_mul, Units.val_inv_eq_inv_val, Units.val_mk0]
+    simp only [Units.val_inv_eq_inv_val, Units.val_mk0]
     field_simp
   have h := halt (ua * uc⁻¹) (ub * uc⁻¹) hsum
   simpa [map_sub, sub_eq_add_neg, ua, ub, uc, characterFieldValue, ha, hb, hc] using h
@@ -1025,21 +1024,21 @@ private theorem characterDet_eq_zero_of_nonrigid
         projectiveTransform, projectiveCoord] using
         (projectivelyEqual_axis_first (A * B) (mul_ne_zero hA hB))
     · convert (projectivelyEqual_repeated (1 : ZMod ℓ) 1 (B * (A - 1))
-          (mul_ne_zero hB hA1)) using 1 <;>
+          (mul_ne_zero hB hA1)) using 1;
         simp [characterProjectiveMap, characterFieldValue_unit, hpx, hqx,
-          projectiveTransform, projectiveCoord] <;> ring
+          projectiveTransform, projectiveCoord]; ring
     · convert (projectivelyEqual_first_third (1 : ZMod ℓ) 1 (A * (B - 1))
-          (mul_ne_zero hA hB1)) using 1 <;>
+          (mul_ne_zero hA hB1)) using 1;
         simp [characterProjectiveMap, characterFieldValue_unit, hpy, hqy,
-          projectiveTransform, projectiveCoord] <;> ring
+          projectiveTransform, projectiveCoord]; ring
     · convert (projectivelyEqual_axis_second (A * B * (A - 1))
-          (mul_ne_zero (mul_ne_zero hA hB) hA1)) using 1 <;>
+          (mul_ne_zero (mul_ne_zero hA hB) hA1)) using 1;
         simp [characterProjectiveMap, A, hqxsum,
           projectiveTransform, projectiveCoord] <;> ring
     · convert (projectivelyEqual_axis_third (B * A * (B - 1))
-          (mul_ne_zero (mul_ne_zero hB hA) hB1)) using 1 <;>
+          (mul_ne_zero (mul_ne_zero hB hA) hB1)) using 1;
         simp [characterProjectiveMap, B, hpysum,
-          projectiveTransform, projectiveCoord] <;> ring
+          projectiveTransform, projectiveCoord]; ring
   let m : ℤ := Int.ofNat (1 - A).val
   let t : F := (((m - 1 : ℤ) : F) + (m : F) * (x : F))
   have hcfg := incidence_config_n_m_zero φ (x : F) (y : F) m 1

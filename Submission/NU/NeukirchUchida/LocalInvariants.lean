@@ -916,7 +916,7 @@ private noncomputable def stableValuationRingEquiv_matrix
     apply (mem_primeValuationSubring_automorphism_matrix K M sigma w
       (sigma.symm (x : M))).2
     rw [hw]
-    simpa using x.prop⟩
+    simp⟩
   left_inv x := by ext; simp
   right_inv x := by ext; simp
   map_mul' x y := by ext; simp
@@ -1057,9 +1057,7 @@ private theorem localD_twisted_pullback_sub_localI
     rw [← heus, hpeq, huts]
     change p (t • Additive.ofMul u) = _
     rw [map_nsmul]
-    simpa [smul_eq_mul] using
-      (Nat.cast_smul_eq_nsmul (ZMod ell) t
-        (p (Additive.ofMul u))).symm
+    simp
   change ((packetCyclotomicCharacter K M ell zeta hzeta sigma :
       (ZMod ell)ˣ) : ZMod ell) *
       p (Additive.ofMul
@@ -1485,7 +1483,7 @@ private noncomputable def levelEquiv
     (NU.LocalTheory.OpenNormalSubgroup.mem_map e U x).2 x.property⟩
   invFun y := ⟨e.symm y, by
     rw [← NU.LocalTheory.OpenNormalSubgroup.mem_map e U]
-    simpa using y.property⟩
+    simp⟩
   left_inv x := by ext; exact e.symm_apply_apply x
   right_inv y := by ext; exact e.apply_symm_apply y
   map_mul' x y := by ext; exact e.map_mul x y
@@ -1777,7 +1775,7 @@ private theorem source_packetDeterminant_at_markedLevel
       Field.absoluteGaloisGroup K₂)
     (P₁ : NU.LocalTheory.AbsoluteFinitePlaceOf K₁)
     (P₂ : NU.LocalTheory.AbsoluteFinitePlaceOf K₂)
-    (hmap : Subgroup.map alpha.toMulEquiv.toMonoidHom
+    (_hmap : Subgroup.map alpha.toMulEquiv.toMonoidHom
         (NU.LocalTheory.absoluteDecompositionGroup K₁ P₁.1) =
       NU.LocalTheory.absoluteDecompositionGroup K₂ P₂.1)
     (g : Field.absoluteGaloisGroup K₁)
@@ -3386,7 +3384,7 @@ private theorem localFieldPrincipalUnit_is_primeDivisible
   have heval : f.eval 1 ∈ m := by
     rw [show f.eval 1 = 1 - (a : (NU.LCFT.RingOfIntegers F)) by simp [f]]
     rw [← Ideal.Quotient.eq_zero_iff_mem]
-    simpa [hares]
+    simp [hares]
   have hellResidue : ((ell : ℕ) : k) ≠ 0 := by
     intro hz
     have hdvd : ringChar k ∣ (ell : ℕ) :=
@@ -4723,13 +4721,13 @@ private theorem localUnitDecomposition_pPowerTorsion_isClosed
       apply e.injective
       rw [map_pow, map_one]
       apply Prod.ext
-      · simpa [hval]
+      · simp [hval]
       · apply Prod.ext
-        · simpa [hteich]
+        · simp [hteich]
         · apply Prod.ext
           · apply Subtype.ext
             exact ha
-          · simpa [hfree]
+          · simp [hfree]
   have hset : (units.pPowerTorsion : Set (Units F)) =
       {u | (e u).1 = 1 ∧ (e u).2.1 = 1 ∧
         (e u).2.2.2 = 1} := by
@@ -5150,9 +5148,9 @@ lines. -/
 private theorem kummerDimension_away_without_roots
     {K : Type*} [Field K] [NumberField K]
     (v : NU.LocalTheory.FinitePlace K)
-    (units : LocalUnitDecompositionData v)
+    (_units : LocalUnitDecompositionData v)
     (ell : Nat.Primes) (hne : ell ≠ residuePrime v)
-    (hroots : ¬ ∃ zeta : v.adicCompletion K,
+    (_hroots : ¬ ∃ zeta : v.adicCompletion K,
       IsPrimitiveRoot zeta (ell : ℕ)) :
     continuousCharacterRank
       (Field.absoluteGaloisGroup (v.adicCompletion K)) ell ≤ 2 := by
@@ -6128,7 +6126,7 @@ private theorem oddPrime_adjoinRoot_not_normal
   · exact (Nat.ne_of_lt (Nat.sub_lt p.2.pos Nat.zero_lt_one)) h
 
 private theorem oddPrime_not_pow_in_cyclotomic
-    (p : Nat.Primes) (hp2 : (p : ℕ) ≠ 2) (M : ℕ) (hM : 0 < M)
+    (p : Nat.Primes) (hp2 : (p : ℕ) ≠ 2) (M : ℕ) (_hM : 0 < M)
     (b : ℕ) (hb : b ≠ 0)
     (H : Irreducible (X ^ (p : ℕ) - C (b : ℚ))) :
     ∀ c : CyclotomicField ((p : ℕ) ^ M) ℚ,
@@ -6620,7 +6618,7 @@ private theorem exceptional_cyclotomic_radical_data
 
 set_option maxHeartbeats 800000 in
 private theorem twoPrime_exceptional_kummer_raw
-    (M b : ℕ) (hM : 0 < M) (hb : 1 < b)
+    (M b : ℕ) (_hM : 0 < M) (hb : 1 < b)
     (a : CyclotomicField (2 ^ (M + 2)) ℚ)
     (ha : a ^ 2 = algebraMap ℚ (CyclotomicField (2 ^ (M + 2)) ℚ) b)
     (H : Irreducible (X ^ 2 - C a)) :
@@ -8594,8 +8592,8 @@ private theorem finiteLevel_relativeDegree_eq_index
     (P : NU.LocalTheory.AbsoluteFinitePlaceOf K)
     (N : NU.LocalTheory.OpenNormalSubgroup
       (Field.absoluteGaloisGroup K)) :
-    let L := NU.LocalTheory.galoisLevelOfOpenNormal K N
-    let v := ambientFinitePlace P
+    let _L := NU.LocalTheory.galoisLevelOfOpenNormal K N
+    let _v := ambientFinitePlace P
     let w := ambientFinitePlace (finiteLevelAbsolutePlace P N)
     w.asIdeal.ramificationIdx (NumberField.RingOfIntegers K) *
         w.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) =
@@ -9097,7 +9095,7 @@ private theorem ambientCyclotomicScalar_eq_natCast_of_power
         haway r hrpow hrres
     dsimp [r] at hrone
     apply mul_right_cancel₀ (inv_ne_zero (pow_ne_zero N hzeta0))
-    simpa [hrone, hzeta0]
+    simp [hrone, hzeta0]
   let ga : Field.absoluteGaloisGroup K := R.galoisEquiv.symm g
   change absoluteCyclotomicScalar K ell ga = (N : ZMod (ell : ℕ))
   let zeta := (HasEnoughRootsOfUnity.exists_primitiveRoot
@@ -9215,7 +9213,7 @@ private theorem ambientCyclotomicScalar_eq_one_of_inertia
         haway r hrpow hrres
     dsimp [r] at hrone
     apply mul_right_cancel₀ (inv_ne_zero hzeta0)
-    simpa [hrone, hzeta0]
+    simp [hrone, hzeta0]
   let ga : Field.absoluteGaloisGroup K := R.galoisEquiv.symm g
   change absoluteCyclotomicScalar K ell ga = 1
   apply (absoluteCyclotomicScalar_eq_one_iff K ell ga).2
@@ -9527,7 +9525,7 @@ private theorem actsAsPowerOnResidue_ne_zero
   intro hN
   subst N
   have hzero := hpower (0 : W) (0 : W) (by simp)
-  simpa using hzero
+  simp at hzero
 
 /-- The residue-tower facts used by the power-map classification.  They are
 not consequences of an arbitrary ambient extension: they hold here because
@@ -9868,7 +9866,7 @@ private theorem absoluteArithmeticFrobenius_exists
     {K : Type*} [Field K] [NumberField K]
     (P : NU.LocalTheory.AbsoluteFinitePlaceOf K) :
     ∃ g : Field.absoluteGaloisGroup K,
-      ∃ hg : g ∈ NU.LocalTheory.absoluteDecompositionGroup K P.1,
+      ∃ _hg : g ∈ NU.LocalTheory.absoluteDecompositionGroup K P.1,
         @ActsAsPowerOnResidue (AlgebraicClosure K)
           (Field.absoluteGaloisGroup K) _ _ (by
             change MulSemiringAction
@@ -10053,7 +10051,7 @@ private theorem ambientArithmeticFrobenius_exists
     (R : AbsoluteGaloisActionRealization K Omega G)
     (P : AmbientAbsolutePlace K Omega) :
     ∃ g : G,
-      ∃ hg : g ∈ NU.LocalTheory.ambientDecompositionGroup (G := G) P.1,
+      ∃ _hg : g ∈ NU.LocalTheory.ambientDecompositionGroup (G := G) P.1,
         ActsAsPowerOnResidue P.1 g (ambientResidueNorm P) := by
   let A := abstractPlace R P
   obtain ⟨ga, hga, hpowerA⟩ := absoluteArithmeticFrobenius_exists A
@@ -10769,7 +10767,7 @@ private theorem ambientUnramifiedLocalData_exists
     coordinate_transport := fun g hg => by
       simpa using hcoordinate g hg
     cyclotomic_rigidity := fun _ => by
-      simpa [hf] }⟩
+      simp [hf] }⟩
 
 /-- Resistant procyclic branch of `prop:q`: consume the local quotient data
 and specialize its cyclotomic rigidity statement to the transported packet
@@ -10902,8 +10900,8 @@ private theorem ambientIntrinsicCharacterData_exists
 character dimensions.  The comparison is the literal pullback along the
 restricted profinite isomorphism packaged with the packet/orientation data. -/
 private theorem ambientDecomposition_character_finrank_eq
-    (R₁ : AbsoluteGaloisActionRealization K₁ Omega G₁)
-    (R₂ : AbsoluteGaloisActionRealization K₂ Omega G₂)
+    (_R₁ : AbsoluteGaloisActionRealization K₁ Omega G₁)
+    (_R₂ : AbsoluteGaloisActionRealization K₂ Omega G₂)
     (theta : G₁ ≃ₜ* G₂)
     (P₁ : AmbientAbsolutePlace K₁ Omega)
     (P₂ : AmbientAbsolutePlace K₂ Omega)

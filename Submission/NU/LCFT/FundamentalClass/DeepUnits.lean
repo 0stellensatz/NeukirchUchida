@@ -454,7 +454,7 @@ theorem deepUnitLattice_exists (π : Uniformizer K) :
         let ck : (L ≃ₐ[K] L) →₀ K :=
           Finsupp.equivFunOnFinite.symm (fun i => (c i : K))
         have hsum : (∑ i, Finsupp.single i (c i : K)) = ck := by
-          convert Finsupp.univ_sum_single ck using 1 <;> simp [ck]
+          convert Finsupp.univ_sum_single ck using 1; simp [ck]
         have heq : basis.coord σ x = (c σ : K) := by
           change basis.repr x σ = _
           rw [heval, hsum]
@@ -666,7 +666,6 @@ theorem deepUnitLattice_exists (π : Uniformizer K) :
         apply Subtype.ext
         simp only [Submodule.coe_smul_of_tower, Algebra.smul_def]
         rw [IsScalarTower.algebraMap_apply (RingOfIntegers K) K L, algebraMap_OK]
-        change (b : L) = algebraMap K L (ϖ : K) * (b' : L)
         simpa [hϖ] using hb'
       rw [hbsub]
       change red ((Be.symm (ϖ • b')) σ) = 0
@@ -684,10 +683,10 @@ theorem deepUnitLattice_exists (π : Uniformizer K) :
       rw [hb]
       exact (Be_equivariant σ c).symm
     rw [hsub, hb]
-    simp only [res, AddMonoidHom.comp_apply, LinearEquiv.symm_apply_apply, redF]
+    simp only [res, AddMonoidHom.comp_apply, redF]
     ext τ
     simp [red, regularFinsuppTranslate, Finsupp.domCongr_apply,
-      Finsupp.mapRange.addMonoidHom_apply, Finsupp.equivMapDomain_apply, Finsupp.mapRange_apply]
+      Finsupp.equivMapDomain_apply]
     rfl
   exact ⟨{
     rawGenerator := rawGen
@@ -780,7 +779,7 @@ structure DeepUnitFiltrationData (π : Uniformizer K) where
     (inverseLimitEquiv x).value i =
       (QuotientGroup.mk x : (V 0) ⧸ within i)
   /-- Actual Galois action on each multiplicative graded quotient. -/
-  gradedAction : ∀ i (σ : L ≃ₐ[K] L),
+  gradedAction : ∀ i (_σ : L ≃ₐ[K] L),
     DeepUnitGradedQuotient V i →+ DeepUnitGradedQuotient V i
   /-- The action is induced by applying `σ` to representatives. -/
   gradedAction_mk : ∀ i (σ : L ≃ₐ[K] L) (x : V i),
@@ -1228,7 +1227,7 @@ private theorem deepUnitFiltrationData_exists (π : Uniformizer K) :
         {x : L | ∃ y : RingOfIntegers L, x = (ϖL : L) ^ n * (y : L)} := by
       have heq : {x : L | ∃ y : RingOfIntegers L, x = (ϖL : L) ^ n * (y : L)} =
           (Homeomorph.mulLeft₀ ((ϖL : L) ^ n)
-            (pow_ne_zero n (by simpa [hϖL] using (defaultUniformizer L).val.ne_zero))) ''
+            (pow_ne_zero n (by simp [hϖL]))) ''
               (RingOfIntegers L : Set L) := by
         ext x
         simp only [Set.mem_setOf_eq, Set.mem_image, SetLike.mem_coe]
@@ -1327,7 +1326,7 @@ private theorem deepUnitFiltrationData_exists (π : Uniformizer K) :
       ⟨(one_add_unit 0 b).unit, by
         apply (memV 0 _).2
         refine ⟨b, ?_⟩
-        simpa using (one_add_unit 0 b).unit_spec⟩
+        simp⟩
     have oneAddToV0_cont : Continuous oneAddToV0 := by
       apply Continuous.subtype_mk
       apply Units.continuous_iff.mpr
@@ -1528,9 +1527,6 @@ private theorem deepUnitFiltrationData_exists (π : Uniformizer K) :
           rw [hb]
           simp only [Submodule.coe_smul_of_tower, Algebra.smul_def]
           rw [IsScalarTower.algebraMap_apply (RingOfIntegers K) K L, algebraMap_OK]
-          change 1 + algebraMap K L ((π.val : K) ^ (i + 1)) * (b : L) =
-            1 + algebraMap K L ((π.val : K) ^ i) *
-              (algebraMap K L (ϖ : K) * (b : L))
           rw [hϖ]
           push_cast
           ring
@@ -1693,6 +1689,7 @@ private def deepRepEquiv :
   right_inv x := by apply Additive.toMul.injective; apply Subtype.ext; rfl
   map_add' _ _ := rfl
 
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem deepRepEquiv_equivariant
     (g : L ≃ₐ[K] L) (x : stableUnitSubgroupRep K L (D.V 0) (D.V_stable 0)) :
     deepRepEquiv K L π D
@@ -1775,6 +1772,7 @@ private def filtrationComap
     rw [map_sub, e.apply_symm_apply]
     exact ha n
 
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem gradeMapData :
     let M := stableUnitSubgroupRep K L (D.V 0) (D.V_stable 0)
     let Ψ := filtrationFromInverseLimit D.within D.within_zero D.within_succ_le
@@ -2043,6 +2041,7 @@ private theorem gradedStepH2
   simp
 
 
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem gradedH1Subsingleton (S : Subgroup (L ≃ₐ[K] L)) [Fintype S] (n : ℕ) :
     Subsingleton (Inhomogeneous.H1 (Rep.res S.subtype (D.gradedRep n))) := by
   let ei := (Rep.resFunctor S.subtype).mapIso (D.gradedInducedIso n)
@@ -2058,6 +2057,7 @@ private theorem gradedH1Subsingleton (S : Subgroup (L ≃ₐ[K] L)) [Fintype S] 
     ⟨fun x y => (ModuleCat.mono_iff_injective ec.inv).1 inferInstance (ht.elim _ _)⟩
   exact ⟨fun x y => (comparisonH1 _).injective (hc.elim _ _)⟩
 
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem gradedH2Subsingleton (S : Subgroup (L ≃ₐ[K] L)) [Fintype S] (n : ℕ) :
     Subsingleton (Inhomogeneous.H2 (Rep.res S.subtype (D.gradedRep n))) := by
   let ei := (Rep.resFunctor S.subtype).mapIso (D.gradedInducedIso n)
@@ -2074,6 +2074,7 @@ private theorem gradedH2Subsingleton (S : Subgroup (L ≃ₐ[K] L)) [Fintype S] 
   exact ⟨fun x y => (comparisonH2 _).injective (hc.elim _ _)⟩
 
 
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem assembleDeep (D : DeepUnitFiltrationData K L π) :
     AbstractReciprocity.CohomologicallyTrivial
       (stableUnitSubgroupRep K L (D.V 0) (D.V_stable 0)) := by

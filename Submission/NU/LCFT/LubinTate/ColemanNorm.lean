@@ -1181,14 +1181,14 @@ private theorem colemanNorm_congruent_of_map_eq (π : Uniformizer K)
 `r≥1` one Coleman application improves `1 mod π^r` to `1 mod π^(r+1)`.
 -/
 theorem colemanNorm_congruences (π : Uniformizer K)
-    (g : PowerSeries (RingOfIntegers K)) (hg : IsUnit g) :
+    (g : PowerSeries (RingOfIntegers K)) (_hg : IsUnit g) :
     PowerSeriesCongruent K (uniformizerIdeal K π)
       ((colemanNorm K π).operator g) g ∧
     ∀ r, 1 ≤ r → PowerSeriesCongruent K (uniformizerIdeal K π ^ r) g 1 →
       PowerSeriesCongruent K (uniformizerIdeal K π ^ (r + 1))
         ((colemanNorm K π).operator g) 1 := by
   classical
-  clear hg
+  clear _hg
   let D := colemanNorm K π
   constructor
   · apply colemanNorm_congruent_of_map_eq K π
@@ -1860,7 +1860,7 @@ private theorem testTorsionRootInteger_mem_maximalIdeal
 
 private theorem test_primitive_monic_natDegree
     (K : Type u) [Field K] [ValuativeRel K] [TopologicalSpace K]
-    [IsNonarchimedeanLocalField K] (π : Uniformizer K) (m : ℕ) (hm : 1 ≤ m) :
+    [IsNonarchimedeanLocalField K] (π : Uniformizer K) (m : ℕ) (_hm : 1 ≤ m) :
     (primitiveDivisionPolynomial K π m).Monic ∧
       (primitiveDivisionPolynomial K π m).natDegree =
         (residueCard K - 1) * residueCard K ^ (m - 1) := by
@@ -2535,7 +2535,7 @@ private theorem test_fiber_roots_succ
               Polynomial.sub_comp, Polynomial.X_comp, Polynomial.C_comp]
   dsimp only
   rw [hpoly, Polynomial.roots_multiset_prod]
-  · simpa only [Multiset.bind_map, P, F, Fr, φ, level]
+  · simp only [Multiset.bind_map, P, F, Fr, φ, level]
   · simp only [Multiset.mem_map, not_exists, not_and]
     intro b hb
     exact (hinner b).ne_zero
@@ -3170,7 +3170,7 @@ private theorem test_primitive_product_mem_principal
           rw [map_mul, map_inv, hmapu]
           exact mul_inv_cancel _
         have hv := congrArg Units.val hu
-        simp only [Φu, Units.coe_map, Units.val_one, map_one] at hv
+        simp only [Φu, Units.coe_map, Units.val_one] at hv
         dsimp only [Φ] at hv
         rw [map_one]
         change (PowerSeries.map (Ideal.Quotient.mk (uniformizerIdeal K π)))
