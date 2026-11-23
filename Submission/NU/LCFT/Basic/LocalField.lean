@@ -2948,7 +2948,7 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
   letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation C) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let CE : IntermediateField E Ksep :=
-    IntermediateField.extendScalars (show E ≤ C from le_sup_left)
+    IntermediateField.extendScalars (by exact le_sup_left : E ≤ C)
   have hCEleW : CE ≤ W := by
     intro x hx
     exact hCleWK hx
@@ -3130,8 +3130,8 @@ private theorem unramifiedLevelFields_intersection_finrank [IsSepClosure K Ksep]
     unramifiedLevelFieldFiniteDimensional K Ksep (S b)
   letI : FiniteDimensional K I :=
     FiniteDimensional.of_injective
-      (IntermediateField.inclusion (show I ≤ U from inf_le_left)).toLinearMap
-      (IntermediateField.inclusion_injective (show I ≤ U from inf_le_left))
+      (IntermediateField.inclusion (by exact inf_le_left : I ≤ U)).toLinearMap
+      (IntermediateField.inclusion_injective (by exact inf_le_left : I ≤ U))
   let g := Nat.gcd (a + 1) (b + 1)
   let c := g - 1
   have hgpos : 0 < g := Nat.gcd_pos_of_pos_left (b + 1) (Nat.succ_pos a)
@@ -3153,10 +3153,10 @@ private theorem unramifiedLevelFields_intersection_finrank [IsSepClosure K Ksep]
     exact IntermediateField.finrank_le_of_le_right hlevel
   have hdivU : Module.finrank K I ∣ a + 1 := by
     rw [← unramifiedLevelField_finrank K Ksep (S a)]
-    exact IntermediateField.finrank_dvd_of_le_right (show I ≤ U from inf_le_left)
+    exact IntermediateField.finrank_dvd_of_le_right (by exact inf_le_left : I ≤ U)
   have hdivV : Module.finrank K I ∣ b + 1 := by
     rw [← unramifiedLevelField_finrank K Ksep (S b)]
-    exact IntermediateField.finrank_dvd_of_le_right (show I ≤ V from inf_le_right)
+    exact IntermediateField.finrank_dvd_of_le_right (by exact inf_le_right : I ≤ V)
   have hupper : Module.finrank K I ≤ g :=
     Nat.le_of_dvd hgpos (Nat.dvd_gcd hdivU hdivV)
   exact le_antisymm hupper hlower

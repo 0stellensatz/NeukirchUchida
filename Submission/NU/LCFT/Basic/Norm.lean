@@ -488,13 +488,8 @@ theorem normalizedValuation_norm (x : Units L) :
     rw [hfac, Ideal.span_singleton_mul_left_unit u.isUnit, hn, hP,
       Ideal.span_singleton_pow]
   obtain ⟨s, hs⟩ := Ideal.exists_relNorm_eq_pow_of_isPrime P p
-  letI : Algebra (FractionRing 𝒪[K]) (FractionRing 𝒪[L]) :=
-    FractionRing.liftAlgebra 𝒪[K] (FractionRing 𝒪[L])
-  have hfrac : Module.finrank (FractionRing 𝒪[K]) (FractionRing 𝒪[L]) =
-      Module.finrank K L := by
-    rw [Algebra.IsAlgebraic.finrank_of_isFractionRing 𝒪[K] (FractionRing 𝒪[K]) 𝒪[L]
-      (FractionRing 𝒪[L]),
-      Algebra.IsAlgebraic.finrank_of_isFractionRing 𝒪[K] K 𝒪[L] L]
+  have hfrac : Module.finrank 𝒪[K] 𝒪[L] = Module.finrank K L :=
+    (IsFractionRing.finrank_eq 𝒪[K] K 𝒪[L] L).symm
   have hrn := Ideal.relNorm_algebraMap (R := 𝒪[K]) 𝒪[L] p
   rw [hmap, map_pow, hs, ← pow_mul, hfrac] at hrn
   have hp0 : p ≠ ⊥ := by

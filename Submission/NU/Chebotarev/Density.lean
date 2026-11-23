@@ -103,7 +103,7 @@ private theorem tendsto_dirichletNormalizer_atTop :
           (continuousAt_const : ContinuousAt (fun _ : ℝ => (1 : ℝ)) 1)).tendsto
       convert h.mono_left nhdsWithin_le_nhds using 1 <;> ext <;> simp
     · filter_upwards [self_mem_nhdsWithin] with s hs
-      exact (show 0 < s - 1 from sub_pos.mpr hs)
+      exact (by exact sub_pos.mpr hs : 0 < s - 1)
   convert tendsto_inv_nhdsGT_zero.comp hsub using 1 <;> simp [Function.comp_def]
 
 private theorem idealNormSet_finite (x : ℝ) :

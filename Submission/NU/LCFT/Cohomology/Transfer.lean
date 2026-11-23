@@ -1062,7 +1062,7 @@ def cosetSum (T : ExplicitTransversal S ι) (M : Rep ℤ G) : M →+ M where
 /-- Decompose the full norm as the subgroup norm of a transversal sum. -/
 theorem norm_eq_subgroupNorm_cosetSum (T : ExplicitTransversal S ι)
     (M : Rep ℤ G) (a : M) :
-    M.norm.hom a = (Rep.res S.subtype M).norm.hom (cosetSum T M a) := by
+    M.norm.asHom.hom a = (Rep.res S.subtype M).norm.asHom.hom (cosetSum T M a) := by
   letI : Module ℤ M := M.hV2
   rw [Rep.norm_apply, Rep.norm_apply, Representation.norm, Representation.norm]
   simp only [LinearMap.sum_apply, cosetSum, AddMonoidHom.coe_mk, ZeroHom.coe_mk,
@@ -1094,7 +1094,7 @@ theorem norm_eq_subgroupNorm_cosetSum (T : ExplicitTransversal S ι)
 for Tate corestriction. -/
 theorem norm_eq_cor_subgroupNorm (T : ExplicitTransversal S ι)
     (M : Rep ℤ G) (a : M) :
-    M.norm.hom a = corC0 T M ((Rep.res S.subtype M).norm.hom a) := by
+    M.norm.asHom.hom a = corC0 T M ((Rep.res S.subtype M).norm.asHom.hom a) := by
   letI : Module ℤ M := M.hV2
   rw [Rep.norm_apply, Rep.norm_apply, Representation.norm, Representation.norm]
   simp only [LinearMap.sum_apply, corC0, AddMonoidHom.coe_mk, ZeroHom.coe_mk,
@@ -1147,9 +1147,9 @@ def restrictionH0Tate (T : ExplicitTransversal S ι) (M : Rep ℤ G) :
     (TateLowDegree.normRangeInInvariants (Rep.res S.subtype M))
     (restrictInvariants M) (by
       rintro x ⟨a, ha⟩
-      change M.norm.hom a = x.1 at ha
+      change M.norm.asHom.hom a = x.1 at ha
       refine ⟨cosetSum T M a, ?_⟩
-      change (Rep.res S.subtype M).norm.hom (cosetSum T M a) = x.1
+      change (Rep.res S.subtype M).norm.asHom.hom (cosetSum T M a) = x.1
       rw [← norm_eq_subgroupNorm_cosetSum T M a, ha])
 
 /-- Corestriction on concrete Tate `H⁰`, induced by the same degree-zero transfer sum. -/
@@ -1160,9 +1160,9 @@ def corestrictionH0Tate (T : ExplicitTransversal S ι) (M : Rep ℤ G) :
     (TateLowDegree.normRangeInInvariants M)
     (Inhomogeneous.Transfer.corH0 T M) (by
       rintro x ⟨a, ha⟩
-      change (Rep.res S.subtype M).norm.hom a = x.1 at ha
+      change (Rep.res S.subtype M).norm.asHom.hom a = x.1 at ha
       refine ⟨a, ?_⟩
-      change M.norm.hom a = corC0 T M x.1
+      change M.norm.asHom.hom a = corC0 T M x.1
       rw [norm_eq_cor_subgroupNorm T M a, ha])
 
 /-- The Tate-degree-zero restriction/corestriction composite is multiplication by the subgroup
@@ -1197,8 +1197,8 @@ def corestrictNormKernel (T : ExplicitTransversal S ι) (M : Rep ℤ G) :
     TateLowDegree.normKernel (Rep.res S.subtype M) →+
       TateLowDegree.normKernel M where
   toFun x := ⟨x.1, by
-    change M.norm.hom x.1 = 0
-    have hx : (Rep.res S.subtype M).norm.hom x.1 = 0 := x.2
+    change M.norm.asHom.hom x.1 = 0
+    have hx : (Rep.res S.subtype M).norm.asHom.hom x.1 = 0 := x.2
     rw [norm_eq_cor_subgroupNorm T M x.1, hx, map_zero]⟩
   map_zero' := rfl
   map_add' _ _ := rfl
@@ -1219,8 +1219,8 @@ def restrictNormKernel (T : ExplicitTransversal S ι) (M : Rep ℤ G) :
     TateLowDegree.normKernel M →+
       TateLowDegree.normKernel (Rep.res S.subtype M) where
   toFun x := ⟨cosetSum T M x.1, by
-    change (Rep.res S.subtype M).norm.hom (cosetSum T M x.1) = 0
-    have hx : M.norm.hom x.1 = 0 := x.2
+    change (Rep.res S.subtype M).norm.asHom.hom (cosetSum T M x.1) = 0
+    have hx : M.norm.asHom.hom x.1 = 0 := x.2
     rw [← norm_eq_subgroupNorm_cosetSum T M x.1, hx]⟩
   map_zero' := by apply Subtype.ext; exact map_zero (cosetSum T M)
   map_add' x y := by apply Subtype.ext; exact map_add (cosetSum T M) x.1 y.1

@@ -1440,7 +1440,7 @@ private theorem cyclotomicLocalEulerFactor
             (Ideal.under_ne_bot (NumberField.RingOfIntegers K) Q₀.ne_bot)]
         letI : Algebra.IsUnramifiedAt
             (NumberField.RingOfIntegers K) Q₀.asIdeal := hQ₀unr
-        exact Ideal.ramificationIdx_eq_one_of_isUnramifiedAt Q₀.ne_bot
+        exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt Q₀.ne_bot
       have hinertia : p.asIdeal.inertiaDegIn
           (NumberField.RingOfIntegers M) = orderOf a := by
         rw [Ideal.inertiaDegIn_eq_inertiaDeg p.asIdeal Q₀.asIdeal (Gal(M/K)),
@@ -2626,7 +2626,7 @@ private theorem cyclotomicDensity_normalizer_atTop :
           (continuousAt_const : ContinuousAt (fun _ : ℝ => (1 : ℝ)) 1)).tendsto
       convert h.mono_left nhdsWithin_le_nhds using 1 <;> ext <;> simp
     · filter_upwards [self_mem_nhdsWithin] with s hs
-      exact sub_pos.mpr (show 1 < s from hs)
+      exact sub_pos.mpr (by exact hs : 1 < s)
   convert tendsto_inv_nhdsGT_zero.comp hsub using 1 <;> simp [Function.comp_def]
 
 private theorem cyclotomicDensityLog_continuousOn

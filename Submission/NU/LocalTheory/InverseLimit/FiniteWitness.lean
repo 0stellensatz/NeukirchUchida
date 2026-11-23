@@ -285,7 +285,7 @@ theorem ramified_base_places_finite
   apply dvd_differentIdeal_iff.mpr
   intro hunramified
   have he : (w.asIdeal.under (𝓞 K)).ramificationIdx' w.asIdeal = 1 :=
-    (Algebra.isUnramifiedAt_iff_of_isDedekindDomain w.ne_bot).mp hunramified
+    (Algebra.isUnramifiedAt_iff_of_isDedekindDomain' w.ne_bot).mp hunramified
   rw [IsRamifiedAtBase, he] at hwram
   exact (Nat.lt_irrefl 1) hwram
 
@@ -341,7 +341,7 @@ theorem restrictLevelPlace_mem_finiteWitnesses
           _ = ((absoluteRestriction M g
                 (algebraMap L.field M.field x) : M.field) :
                   AlgebraicClosure K) := hr'
-          _ = (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+          _ = (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
                 (x : AlgebraicClosure K) := by
             rw [absoluteRestriction_apply]
             rfl

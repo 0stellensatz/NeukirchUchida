@@ -624,8 +624,8 @@ private theorem carryCocycle_mem
         carryExponent n r (s + t) - carryExponent n r s = 0 := by omega
     simp only [Inhomogeneous.d2, carryCocycle, AddMonoidHom.coe_mk,
       ZeroHom.coe_mk, Pi.zero_apply, map_mul, hmul]
-    change (show Additive (Units L) from ((MulRep K L).ρ σ)
-          (if carryExponent n s t = 0 then (0 : Additive (Units L)) else u)) -
+    change (by exact ((MulRep K L).ρ σ)
+          (if carryExponent n s t = 0 then (0 : Additive (Units L)) else u) : Additive (Units L)) -
         (if carryExponent n (r + s) t = 0 then 0 else u) +
         (if carryExponent n r (s + t) = 0 then 0 else u) -
         (if carryExponent n r s = 0 then 0 else u) = 0
@@ -905,7 +905,7 @@ private noncomputable def cyclicH1EquivHMinusOne_unramified
   let g := (IsCyclic.exists_generator (α := G)).choose
   have hg := (IsCyclic.exists_generator (α := G)).choose_spec
   let e : TateLowDegree.normKernel M ≃+
-      LinearMap.ker M.norm.hom.toLinearMap :=
+      LinearMap.ker M.norm.asHom.hom.toLinearMap :=
     { toFun := fun x => ⟨x, x.2⟩
       invFun := fun x => ⟨x, x.2⟩
       left_inv := fun x => by ext; rfl
@@ -2213,18 +2213,18 @@ private theorem carryCocycle_inflation_cochain
           (T.lower.frobeniusEquiv.symm (T.quotientHom τ)).toAdd = 0 then 0
         else Additive.ofMul (Units.map (algebraMap K L) π.val)) =
     (d : ℤ) • (if carryExponent N r s = 0 then 0 else u) +
-      ((show Additive (Units M) from (MulRep K M).ρ σ (b τ)) -
-        (show Additive (Units M) from b (σ * τ)) +
-        (show Additive (Units M) from b σ))
+      ((by exact (MulRep K M).ρ σ (b τ) : Additive (Units M)) -
+        (by exact b (σ * τ) : Additive (Units M)) +
+        (by exact b σ : Additive (Units M)))
   rw [hcoord, hcoord]
   change T.inflationCoefficient.hom
       (if carryExponent n (r.val : ℕ) (s.val : ℕ) = 0 then
         (0 : Additive (Units L))
       else Additive.ofMul (Units.map (algebraMap K L) π.val)) =
     (d : ℤ) • (if carryExponent N r s = 0 then (0 : Additive (Units M)) else u) +
-      ((show Additive (Units M) from (MulRep K M).ρ σ (b τ)) -
-        (show Additive (Units M) from b (σ * τ)) +
-        (show Additive (Units M) from b σ))
+      ((by exact (MulRep K M).ρ σ (b τ) : Additive (Units M)) -
+        (by exact b (σ * τ) : Additive (Units M)) +
+        (by exact b σ : Additive (Units M)))
   have hcoeff : T.inflationCoefficient.hom
       (Additive.ofMul (Units.map (algebraMap K L) π.val)) = u := by
     apply Additive.toMul.injective

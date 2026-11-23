@@ -256,7 +256,7 @@ theorem mulRep_zero :
 norm, after embedding the latter back into `L`.
 -/
 theorem mulRep_norm [IsGalois K L] (x : Units L) :
-    Additive.toMul ((MulRep K L).norm.hom (Additive.ofMul x)) =
+    Additive.toMul ((MulRep K L).norm.asHom.hom (Additive.ofMul x)) =
       Units.map (algebraMap K L) (normUnitsHom K L x) := by
   apply Units.ext
   exact groupCohomology.norm_ofAlgebraAutOnUnits_eq x
@@ -285,22 +285,22 @@ theorem mulRep_invariants [IsGalois K L] :
     apply Units.ext
     apply (algebraMap K L).injective
     have h' := congrArg (fun z : (MulRep K L).ρ.invariants =>
-      ((show Units L from Additive.toMul z.1) : L)) h
+      ((by exact Additive.toMul z.1 : Units L) : L)) h
     exact h'
   have hf_surj : Function.Surjective f := by
     rintro ⟨x, hx⟩
     have hfixed : ∀ σ : L ≃ₐ[K] L,
-        σ ((show Units L from Additive.toMul x) : L) =
-          ((show Units L from Additive.toMul x) : L) := by
+        σ ((by exact Additive.toMul x : Units L) : L) =
+          ((by exact Additive.toMul x : Units L) : L) := by
       intro σ
       have h := congrArg (fun z : Additive (Units L) => ((z.toMul : Units L) : L)) (hx σ)
       exact h
     rcases (IsGalois.mem_range_algebraMap_iff_fixed (F := K) (E := L)
-      ((show Units L from Additive.toMul x) : L)).2 hfixed with ⟨y, hy⟩
+      ((by exact Additive.toMul x : Units L) : L)).2 hfixed with ⟨y, hy⟩
     have hy0 : y ≠ 0 := by
       intro hyz
       rw [hyz, map_zero] at hy
-      exact (show Units L from Additive.toMul x).ne_zero hy.symm
+      exact (by exact Additive.toMul x : Units L).ne_zero hy.symm
     refine ⟨Additive.ofMul (Units.mk0 y hy0), ?_⟩
     apply Subtype.ext
     apply Additive.toMul.injective
@@ -706,6 +706,7 @@ noncomputable def corestrictionComparison (S : Subgroup G) [S.FiniteIndex] (M : 
       rw [← Category.assoc]
       erw [groupCohomology.coindIso_inv_δ_res S hX]
     slice_lhs 2 3 => erw [coindCounit_connecting S X hX]
+    simp only [Rep.coindResAdjunction_counit_app]
 
 /-- Existence wrapper for the named corestriction comparison data. -/
 theorem corestrictionComparison_exists (S : Subgroup G) [S.FiniteIndex] (M : Rep ℤ G) :

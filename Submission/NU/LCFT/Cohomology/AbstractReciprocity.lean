@@ -234,7 +234,7 @@ private def shiftCoindPointMass {G : Type} [Group G] (M : Rep ℤ G)
 private lemma shiftCoind_norm_pointMass
     {G : Type} [Group G] [Fintype G] (M : Rep ℤ G)
     (b : Rep.res (⊥ : Subgroup G).subtype M) (t : G) :
-    ((shiftCoinduced M).norm.hom (shiftCoindPointMass M b)).1 t = b := by
+    ((shiftCoinduced M).norm.asHom.hom (shiftCoindPointMass M b)).1 t = b := by
   classical
   letI : Module ℤ (shiftCoinduced M) := (shiftCoinduced M).hV2
   rw [Rep.norm_apply, Representation.norm]
@@ -252,7 +252,7 @@ private lemma shiftCoind_norm_pointMass
 private lemma shiftCoind_invariant_eq_norm_pointMass
     {G : Type} [Group G] [Fintype G] (M : Rep ℤ G)
     (x : Inhomogeneous.invariants0 (shiftCoinduced M)) :
-    (shiftCoinduced M).norm.hom
+    (shiftCoinduced M).norm.asHom.hom
       (shiftCoindPointMass M (x.1.1 1)) = x.1 := by
   apply Subtype.ext
   apply funext
@@ -282,7 +282,7 @@ private lemma shiftCoind_normKernel_mem_augmentation
   classical
   letI : Module ℤ (shiftCoinduced M) := (shiftCoinduced M).hV2
   have hsum := congrArg (fun z : shiftCoinduced M => z.1 1) x.2
-  change (((shiftCoinduced M).norm.hom x.1).1 1) = 0 at hsum
+  change (((shiftCoinduced M).norm.asHom.hom x.1).1 1) = 0 at hsum
   rw [Rep.norm_apply, Representation.norm] at hsum
   simp only [LinearMap.sum_apply, Submodule.coe_sum, Finset.sum_apply,
     Representation.coind_apply, LinearMap.restrict_apply, LinearMap.funLeft_apply,
@@ -1021,7 +1021,7 @@ private theorem cyclic_tateAcyclic
       | H z =>
         apply (QuotientAddGroup.eq_zero_iff z).2
         let e : TateLowDegree.normKernel M →
-            LinearMap.ker M.norm.hom.toLinearMap := fun a => ⟨a, a.2⟩
+            LinearMap.ker M.norm.asHom.hom.toLinearMap := fun a => ⟨a, a.2⟩
         have hz : Rep.FiniteCyclicGroup.groupCohomologyπOdd
             M gen hgen 1 (by simp) (e z) = 0 := h1.elim _ _
         rw [Rep.FiniteCyclicGroup.groupCohomologyπOdd_eq_zero_iff] at hz
@@ -1408,7 +1408,7 @@ theorem rowSumClass_mul (M : Rep ℤ G) (a : Inhomogeneous.C2 M)
       (rowSumInvariant M a ha g + rowSumInvariant M a ha h) ∈
     TateLowDegree.normRangeInInvariants M
   refine ⟨a g h, ?_⟩
-  change M.norm.hom (a g h) =
+  change M.norm.asHom.hom (a g h) =
     -(∑ x : G, a x (g * h)) + ((∑ x : G, a x g) + ∑ x : G, a x h)
   rw [Rep.norm_apply, Representation.norm]
   simp only [LinearMap.sum_apply]
@@ -1457,7 +1457,7 @@ theorem rowSumClass_coboundary_independent (M : Rep ℤ G)
   change -rowSumInvariant M a ha g + rowSumInvariant M b hb g ∈
     TateLowDegree.normRangeInInvariants M
   refine ⟨c g, ?_⟩
-  change M.norm.hom (c g) = -(∑ x : G, a x g) + ∑ x : G, b x g
+  change M.norm.asHom.hom (c g) = -(∑ x : G, a x g) + ∑ x : G, b x g
   rw [Rep.norm_apply, Representation.norm]
   simp only [LinearMap.sum_apply]
   have hρ (x : G) :

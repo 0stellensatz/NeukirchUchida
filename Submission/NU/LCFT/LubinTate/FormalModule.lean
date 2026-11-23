@@ -871,7 +871,7 @@ private theorem lubinTateFunctional_unique
   intro d
   generalize hdn : d.degree = n
   induction n using Nat.strong_induction_on generalizing d with
-  | h n ih =>
+  | ind n ih =>
       by_cases hn0 : n = 0
       · have hd0 : d = 0 := Finsupp.degree_eq_zero_iff d |>.mp (hdn.trans hn0)
         subst d

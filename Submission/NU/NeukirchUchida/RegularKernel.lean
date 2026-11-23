@@ -67,8 +67,8 @@ def cyclotomicRoot
     (N : NumberFieldInOmega) (p : NU.LocalTheory.OddPrime) :
     (cyclotomicCompositum N p).field :=
   ⟨primitiveRootInOmega p,
-    (show cyclotomicFieldInOmega p ≤
-        N.field ⊔ cyclotomicFieldInOmega p from le_sup_right)
+    (by exact le_sup_right : cyclotomicFieldInOmega p ≤
+        N.field ⊔ cyclotomicFieldInOmega p)
       ((IntermediateField.subset_adjoin ℚ
         {primitiveRootInOmega p})
           (Set.mem_singleton (primitiveRootInOmega p)))⟩
@@ -1024,7 +1024,7 @@ private theorem cyclotomicCompositum_isGaloisOverBase
         rw [← htau]
         exact pow_mem (show zeta ∈ EN by
           change zeta ∈ E.field
-          exact (show cyclotomicFieldInOmega p ≤ E.field from le_sup_right)
+          exact (by exact le_sup_right : cyclotomicFieldInOmega p ≤ E.field)
             ((IntermediateField.subset_adjoin ℚ {zeta})
               (Set.mem_singleton zeta))) i
       · intro y
@@ -1585,7 +1585,7 @@ private theorem kummerDescentConstruction : KummerDescentConstruction := by
       _ = Nat.card D := Nat.card_congr Subgroup.topEquiv.toEquiv
   have hcardC : Nat.card C = (p : ℕ) := by
     apply Nat.eq_of_mul_eq_mul_right
-      (show 0 < Module.finrank N.field E.field from Module.finrank_pos)
+      (by exact Module.finrank_pos : 0 < Module.finrank N.field E.field)
     calc
       Nat.card C * Module.finrank N.field E.field = Nat.card C * C.index := by
         rw [hindexC, IsGalois.card_aut_eq_finrank]
@@ -1818,8 +1818,8 @@ private theorem existsIdentityFrobeniusPrimeAway
       ((ConjClasses.mk (1 : F.field ≃ₐ[ℚ] F.field)).carrier.ncard : ℝ) := by
     exact_mod_cast ((Set.ncard_pos
       (s := (ConjClasses.mk (1 : F.field ≃ₐ[ℚ] F.field)).carrier)).2
-        (show (ConjClasses.mk (1 : F.field ≃ₐ[ℚ] F.field)).carrier.Nonempty
-          from ⟨1, ConjClasses.mem_carrier_mk⟩))
+        (by exact ⟨1, ConjClasses.mem_carrier_mk⟩ : (ConjClasses.mk (1 : F.field ≃ₐ[ℚ] F.field)).carrier.Nonempty
+         ))
   have hdenom : (0 : ℝ) < Nat.card (F.field ≃ₐ[ℚ] F.field) := by
     exact_mod_cast Nat.card_pos (α := F.field ≃ₐ[ℚ] F.field)
   have hpositive : (0 : ℝ) <
@@ -1880,7 +1880,7 @@ private theorem splitsCompletelyAt_of_identityFrobenius
     · rw [asymmetricAbsoluteRamificationIndex,
         ← Ideal.ramificationIdx_eq_ramificationIdx'
           q.asIdeal W.asIdeal q.ne_bot]
-      have hu := (Algebra.isUnramifiedAt_iff_of_isDedekindDomain
+      have hu := (Algebra.isUnramifiedAt_iff_of_isDedekindDomain'
         W.ne_bot).mp hWu
       simpa [← hWover.over] using hu
     · rw [asymmetricAbsoluteResidueDegree,
@@ -3023,8 +3023,8 @@ private theorem tameKummerRadical_ramified
     exact hk hd
   let R := radicalNumberFieldExtension E p a
   let alpha : R.field.field := ⟨radicalRoot E p a, by
-    exact (show IntermediateField.adjoin ℚ {radicalRoot E p a} ≤
-        radicalExtension E p a from le_sup_right)
+    exact (by exact le_sup_right : IntermediateField.adjoin ℚ {radicalRoot E p a} ≤
+        radicalExtension E p a)
       (IntermediateField.subset_adjoin ℚ {radicalRoot E p a}
         (Set.mem_singleton (radicalRoot E p a)))⟩
   have hpow : alpha ^ (p : ℕ) = algebraMap E.field R.field.field a.1 := by
@@ -4140,8 +4140,8 @@ private theorem kummerRadical_ramificationIndex_eq_prime
       (p : ℕ) := by
   let R := radicalNumberFieldExtension E p a
   let alpha : R.field.field := ⟨radicalRoot E p a, by
-    exact (show IntermediateField.adjoin ℚ {radicalRoot E p a} ≤
-        radicalExtension E p a from le_sup_right)
+    exact (by exact le_sup_right : IntermediateField.adjoin ℚ {radicalRoot E p a} ≤
+        radicalExtension E p a)
       (IntermediateField.subset_adjoin ℚ {radicalRoot E p a}
         (Set.mem_singleton (radicalRoot E p a)))⟩
   have hpow : alpha ^ (p : ℕ) = algebraMap E.field R.field.field a.1 := by
@@ -4377,8 +4377,8 @@ private theorem transportRadicalRamificationToDescent
     intro x hx
     have hxR : x ∈ radicalExtension (cyclotomicCompositum N p) p a := by
       rw [← hcompositum]
-      exact (show L.field.field ≤
-        (cyclotomicCompositum N p).field ⊔ L.field.field from le_sup_right) hx
+      exact (by exact le_sup_right : L.field.field ≤
+        (cyclotomicCompositum N p).field ⊔ L.field.field) hx
     exact hxR
   letI : Algebra N.field E.field :=
     (IntermediateField.inclusion le_sup_left).toAlgebra
@@ -4530,8 +4530,8 @@ private theorem transportRadicalSplittingToDescent
     intro x hx
     change x ∈ radicalExtension (cyclotomicCompositum N p) p a
     rw [← hcompositum]
-    exact (show L.field.field ≤
-      (cyclotomicCompositum N p).field ⊔ L.field.field from le_sup_right) hx
+    exact (by exact le_sup_right : L.field.field ≤
+      (cyclotomicCompositum N p).field ⊔ L.field.field) hx
   let LR : NumberFieldExtension L.field :=
     { field := R.field
       le_base := hLR }

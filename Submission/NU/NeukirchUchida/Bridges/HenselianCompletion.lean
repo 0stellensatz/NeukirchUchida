@@ -93,7 +93,7 @@ private theorem intermediateFieldRestrictionHom_apply
     (show AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F from
       intermediateFieldRestrictionHom F E sigma) x =
       intermediateFieldClosureEquiv F E
-        ((show AlgebraicClosure E ≃ₐ[E] AlgebraicClosure E from sigma)
+        ((by exact sigma : AlgebraicClosure E ≃ₐ[E] AlgebraicClosure E)
           ((intermediateFieldClosureEquiv F E).symm x)) := by
   rfl
 

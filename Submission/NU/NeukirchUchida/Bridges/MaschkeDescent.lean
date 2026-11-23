@@ -328,7 +328,7 @@ private theorem intermediateFieldRestrictionHom_apply
     (show AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F from
       intermediateFieldRestrictionHom F E sigma) x =
       intermediateFieldClosureEquiv F E
-        ((show AlgebraicClosure E ≃ₐ[E] AlgebraicClosure E from sigma)
+        ((by exact sigma : AlgebraicClosure E ≃ₐ[E] AlgebraicClosure E)
           ((intermediateFieldClosureEquiv F E).symm x)) := by
   rfl
 
@@ -484,14 +484,14 @@ private theorem localCyclotomic_characterPull_injective
     rw [show c = a - b from rfl, map_sub, hab, sub_self]
   have hfix (tau : E.fixingSubgroup) :
       c (Additive.ofMul
-        (show Field.absoluteGaloisGroup F from tau.1)) = 0 := by
+        (by exact tau.1 : Field.absoluteGaloisGroup F)) = 0 := by
     let sigma : Field.absoluteGaloisGroup E :=
       (localCyclotomicGaloisMulEquiv F p).symm tau
     have hz := DFunLike.congr_fun hpull (Additive.ofMul sigma)
     change c (Additive.ofMul
       (localCyclotomicRestrictionContinuousHom F p sigma)) = 0 at hz
     have hsigma : localCyclotomicRestrictionContinuousHom F p sigma =
-        (show Field.absoluteGaloisGroup F from tau.1) := by
+        (by exact tau.1 : Field.absoluteGaloisGroup F) := by
       change localCyclotomicRestrictionHom F p sigma = tau.1
       change ((localCyclotomicGaloisMulEquiv F p) sigma).1 = tau.1
       rw [(localCyclotomicGaloisMulEquiv F p).apply_symm_apply]

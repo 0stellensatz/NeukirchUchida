@@ -739,22 +739,22 @@ private noncomputable def explicitMulRepInvariantsEquiv :
     apply Units.ext
     apply (algebraMap K L).injective
     have h' := congrArg (fun z : Inhomogeneous.invariants0 (MulRep K L) =>
-      ((show Units L from Additive.toMul z.1) : L)) h
+      ((by exact Additive.toMul z.1 : Units L) : L)) h
     exact h'
   have hf_surj : Function.Surjective f := by
     rintro ⟨x, hx⟩
     have hfixed : ∀ σ : L ≃ₐ[K] L,
-        σ ((show Units L from Additive.toMul x) : L) =
-          ((show Units L from Additive.toMul x) : L) := by
+        σ ((by exact Additive.toMul x : Units L) : L) =
+          ((by exact Additive.toMul x : Units L) : L) := by
       intro σ
       have h := congrArg (fun z : Additive (Units L) => ((z.toMul : Units L) : L)) (hx σ)
       exact h
     rcases (IsGalois.mem_range_algebraMap_iff_fixed (F := K) (E := L)
-      ((show Units L from Additive.toMul x) : L)).2 hfixed with ⟨y, hy⟩
+      ((by exact Additive.toMul x : Units L) : L)).2 hfixed with ⟨y, hy⟩
     have hy0 : y ≠ 0 := by
       intro hyz
       rw [hyz, map_zero] at hy
-      exact (show Units L from Additive.toMul x).ne_zero hy.symm
+      exact (by exact Additive.toMul x : Units L).ne_zero hy.symm
     refine ⟨Additive.ofMul (Units.mk0 y hy0), ?_⟩
     apply Subtype.ext
     apply Additive.toMul.injective
@@ -785,7 +785,7 @@ private theorem mem_tateNormRange_iff (x : Inhomogeneous.invariants0 (MulRep K L
     let y : Units L := Additive.toMul z
     have hxbase : x = baseUnitInvariant K L (normUnitsHom K L y) := by
       apply Subtype.ext
-      have hz' : (MulRep K L).norm.hom z = x.1 := hz
+      have hz' : (MulRep K L).norm.asHom.hom z = x.1 := hz
       rw [← hz']
       apply Additive.toMul.injective
       exact mulRep_norm K L y
@@ -804,7 +804,7 @@ private theorem mem_tateNormRange_iff (x : Inhomogeneous.invariants0 (MulRep K L
             Additive (Units L)) := rfl
     refine ⟨Additive.ofMul y, ?_⟩
     apply Additive.toMul.injective
-    change Additive.toMul ((MulRep K L).norm.hom (Additive.ofMul y)) =
+    change Additive.toMul ((MulRep K L).norm.asHom.hom (Additive.ofMul y)) =
       Additive.toMul x.1
     rw [mulRep_norm K L y, hy]
     exact hbaseval.trans (congrArg
@@ -4988,8 +4988,8 @@ private theorem e01_rectangular_relIndex
       have hp : p ∈ Subgroup.zpowers (π.val ^ 1) := by
         rw [Subgroup.mem_zpowers_iff]
         exact ⟨z, by simp [p]⟩
-      exact (show Subgroup.zpowers (π.val ^ 1) ≤
-        Subgroup.zpowers (π.val ^ 1) ⊔ principalUnitSubgroup K b from le_sup_left) hp
+      exact (by exact le_sup_left : Subgroup.zpowers (π.val ^ 1) ≤
+        Subgroup.zpowers (π.val ^ 1) ⊔ principalUnitSubgroup K b) hp
     refine ⟨⟨p, hpJ⟩, ?_⟩
     apply Multiplicative.toAdd.injective
     change ((normalizedValuation K p : ℤ) : ZMod a) = y.toAdd
@@ -5486,7 +5486,7 @@ theorem rectangularClassField_exists (π : Uniformizer K)
   have hPUFirr : Irreducible PUF :=
     hPUmonic.irreducible_iff_irreducible_map_fraction_map.mp hPUirr
   let level := lubinTateLevel K Ksep π b hb
-  let α : C := IntermediateField.inclusion (show E ≤ C from le_sup_left) level.generator
+  let α : C := IntermediateField.inclusion (by exact le_sup_left : E ≤ C) level.generator
   have hroot : Polynomial.aeval α PUF = 0 := by
     apply (algebraMap C Ksep).injective
     rw [map_zero, Polynomial.aeval_def, Polynomial.hom_eval₂]
@@ -5524,7 +5524,7 @@ theorem rectangularClassField_exists (π : Uniformizer K)
   have hUle : U ≤ IntermediateField.lift B := by
     intro x hx
     let xu : U := ⟨x, hx⟩
-    let xC : C := IntermediateField.inclusion (show U ≤ C from le_sup_right) xu
+    let xC : C := IntermediateField.inclusion (by exact le_sup_right : U ≤ C) xu
     have hxA : xC ∈ A := by
       change algebraMap U C xu ∈ A
       exact A.algebraMap_mem xu
@@ -5597,11 +5597,11 @@ theorem rectangularClassField_exists (π : Uniformizer K)
         inv_mem' := fun x hx => by
           change σ x⁻¹ = τ x⁻¹
           rw [map_inv₀, map_inv₀, hx] }
-    have hErestrict : E.restrict (show E ≤ C from le_sup_left) ≤ F := by
+    have hErestrict : E.restrict (by exact le_sup_left : E ≤ C) ≤ F := by
       intro x hx
       change σ x = τ x
       let xe : E := ⟨((x : C) : Ksep),
-        (IntermediateField.mem_restrict (show E ≤ C from le_sup_left) x).1 hx⟩
+        (IntermediateField.mem_restrict (by exact le_sup_left : E ≤ C) x).1 hx⟩
       have heq := congrArg (fun f : GE => f xe) hEres
       have hxalg : algebraMap E C xe = x := by apply Subtype.ext; rfl
       calc
@@ -5613,11 +5613,11 @@ theorem rectangularClassField_exists (π : Uniformizer K)
             (by simpa [rE, AlgEquiv.restrictNormalHom] using heq)
         _ = τ (algebraMap E C xe) := AlgEquiv.restrictNormal_commutes τ E xe
         _ = τ x := congrArg τ hxalg
-    have hUrestrict : U.restrict (show U ≤ C from le_sup_right) ≤ F := by
+    have hUrestrict : U.restrict (by exact le_sup_right : U ≤ C) ≤ F := by
       intro x hx
       change σ x = τ x
       let xu : U := ⟨((x : C) : Ksep),
-        (IntermediateField.mem_restrict (show U ≤ C from le_sup_right) x).1 hx⟩
+        (IntermediateField.mem_restrict (by exact le_sup_right : U ≤ C) x).1 hx⟩
       have heq := congrArg (fun f : GU => f xu) hUres
       have hxalg : algebraMap U C xu = x := by apply Subtype.ext; rfl
       calc
@@ -5629,8 +5629,8 @@ theorem rectangularClassField_exists (π : Uniformizer K)
             (by simpa [rU, AlgEquiv.restrictNormalHom] using heq)
         _ = τ (algebraMap U C xu) := AlgEquiv.restrictNormal_commutes τ U xu
         _ = τ x := congrArg τ hxalg
-    have hsup : E.restrict (show E ≤ C from le_sup_left) ⊔
-        U.restrict (show U ≤ C from le_sup_right) = ⊤ := by
+    have hsup : E.restrict (by exact le_sup_left : E ≤ C) ⊔
+        U.restrict (by exact le_sup_right : U ≤ C) = ⊤ := by
       apply IntermediateField.lift_injective C
       rw [IntermediateField.lift_sup, IntermediateField.lift_restrict,
         IntermediateField.lift_restrict, IntermediateField.lift_top]

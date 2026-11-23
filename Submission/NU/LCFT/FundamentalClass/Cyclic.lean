@@ -126,7 +126,7 @@ private noncomputable def cyclicH1EquivHMinusOne
   let g := (IsCyclic.exists_generator (α := G)).choose
   have hg := (IsCyclic.exists_generator (α := G)).choose_spec
   let e : TateLowDegree.normKernel M ≃+
-      LinearMap.ker M.norm.hom.toLinearMap :=
+      LinearMap.ker M.norm.asHom.hom.toLinearMap :=
     { toFun := fun x => ⟨x, x.2⟩
       invFun := fun x => ⟨x, x.2⟩
       left_inv := fun x => by ext; rfl
@@ -289,7 +289,7 @@ private noncomputable def periodicOddEquivHMinusOne
   let SC := Rep.FiniteCyclicGroup.subCompNormHom M gen
   letI : Module ℤ (LinearMap.ker SC.g.hom) := (LinearMap.ker SC.g.hom).module
   let e : TateLowDegree.normKernel M ≃+
-      LinearMap.ker M.norm.hom.toLinearMap :=
+      LinearMap.ker M.norm.asHom.hom.toLinearMap :=
     { toFun := fun x => ⟨x, x.2⟩
       invFun := fun x => ⟨x, x.2⟩
       left_inv := fun x => by ext; rfl
@@ -405,7 +405,7 @@ private noncomputable def periodicEvenEquivH0
     ext x
     rw [AddMonoidHom.mem_ker]
     change q x = 0 ↔ _
-    have hzero : q x = 0 ↔ (x : M) ∈ LinearMap.range M.norm.hom.toLinearMap := by
+    have hzero : q x = 0 ↔ (x : M) ∈ LinearMap.range M.norm.asHom.hom.toLinearMap := by
       change SC.homologyπ (SC.moduleCatCyclesIso.inv (e x)) = 0 ↔ _
       rw [SC.moduleCatCyclesIso_inv_π_apply]
       rw [map_eq_zero_iff _ ((ModuleCat.mono_iff_injective _).1 inferInstance)]
@@ -459,12 +459,12 @@ private noncomputable def cyclicPeriodicHom
       rintro i j ⟨rfl⟩
       by_cases hi : Even i
       · simp only [Rep.FiniteCyclicGroup.moduleCatCochainComplex,
-          HomologicalComplex.alternatingConst, if_pos (show (ComplexShape.up ℕ).Rel i (i + 1) from rfl), hi, ↓reduceIte, dite_eq_ite]
+          HomologicalComplex.alternatingConst, if_pos (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
         ext x
         change B.ρ g (f.hom x) - f.hom x = f.hom (A.ρ g x - x)
         rw [map_sub, Rep.hom_comm_apply]
       · simp only [Rep.FiniteCyclicGroup.moduleCatCochainComplex,
-          HomologicalComplex.alternatingConst, if_pos (show (ComplexShape.up ℕ).Rel i (i + 1) from rfl), hi, ↓reduceIte, dite_eq_ite]
+          HomologicalComplex.alternatingConst, if_pos (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
         ext x
         exact Rep.norm_comm_apply f x }
 
@@ -630,7 +630,7 @@ private theorem card_cycle
 
 private theorem topRes_norm_eq {G : Type} [Group G] [Fintype G]
     [Fintype (⊤ : Subgroup G)] (M : Rep ℤ G) (x : M) :
-    (Rep.res (⊤ : Subgroup G).subtype M).norm.hom x = M.norm.hom x := by
+    (Rep.res (⊤ : Subgroup G).subtype M).norm.asHom.hom x = M.norm.asHom.hom x := by
   rw [Rep.norm_apply, Rep.norm_apply]
   simp only [Representation.norm, LinearMap.sum_apply]
   simpa using Equiv.sum_comp Subgroup.topEquiv.toEquiv (fun g : G => M.ρ g x)
@@ -652,12 +652,12 @@ private noncomputable def topResH0Equiv {G : Type} [Group G] [Fintype G]
     constructor
     · rintro ⟨y, hy⟩
       refine ⟨y, ?_⟩
-      change N.norm.hom y = (x : M)
+      change N.norm.asHom.hom y = (x : M)
       rw [topRes_norm_eq M]
       exact hy
     · rintro ⟨y, hy⟩
       refine ⟨y, ?_⟩
-      change M.norm.hom y = (x : M)
+      change M.norm.asHom.hom y = (x : M)
       rw [← topRes_norm_eq M]
       exact hy
   let r : TateLowDegree.H0 M →+ TateLowDegree.H0 N :=
@@ -697,11 +697,11 @@ private noncomputable def topResHMinusOneEquiv {G : Type} [Group G] [Fintype G]
   let N := Rep.res (⊤ : Subgroup G).subtype M
   let e : TateLowDegree.normKernel M ≃+ TateLowDegree.normKernel N :=
     { toFun := fun x => ⟨x, by
-          change N.norm.hom (x : M) = 0
+          change N.norm.asHom.hom (x : M) = 0
           rw [topRes_norm_eq M]
           exact x.2⟩
       invFun := fun x => ⟨x, by
-          change M.norm.hom (x : M) = 0
+          change M.norm.asHom.hom (x : M) = 0
           rw [← topRes_norm_eq M]
           exact x.2⟩
       left_inv := fun x => by ext; rfl

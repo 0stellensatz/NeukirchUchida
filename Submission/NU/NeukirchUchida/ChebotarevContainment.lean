@@ -400,7 +400,7 @@ theorem chebotarev_containment
       change v.asIdeal.ramificationIdx (𝓞 ℚ) = 1
       rw [← Ideal.ramificationIdx_eq_ramificationIdx'
         (rationalPrime L v).asIdeal v.asIdeal (rationalPrime L v).ne_bot]
-      exact Ideal.ramificationIdx_eq_one_of_isUnramifiedAt
+      exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt
         (R := 𝓞 ℚ) v.ne_bot
     have hsplitK : SplitsCompletelyAt K (rationalPrime L v) :=
       hsplit (rationalPrime L v) hqexc ⟨v, rfl, he, hvdeg⟩
@@ -425,7 +425,7 @@ theorem chebotarev_containment
         rw [Ideal.ramificationIdx_eq_ramificationIdx'
           v.asIdeal W.asIdeal v.ne_bot]
         exact heW
-      apply (Algebra.isUnramifiedAt_iff_of_isDedekindDomain W.ne_bot).mpr
+      apply (Algebra.isUnramifiedAt_iff_of_isDedekindDomain' W.ne_bot).mpr
       rw [← hWv.over]
       exact heW'
     change v ∈ NU.Chebotarev.frobeniusPrimeSet
@@ -505,10 +505,10 @@ theorem chebotarev_containment
       =O[atTop] fun x => Real.sqrt x := by
     apply (Asymptotics.IsBigO.of_bound' (Eventually.of_forall fun x => ?_)).trans hDbound
     simp only [Real.norm_eq_abs]
-    rw [abs_of_nonneg (show 0 ≤
-      (NU.Chebotarev.primeCounting A x : ℝ) from Nat.cast_nonneg _),
-      abs_of_nonneg (show 0 ≤
-        (NU.Chebotarev.primeCounting D x : ℝ) from Nat.cast_nonneg _)]
+    rw [abs_of_nonneg (by exact Nat.cast_nonneg _ : 0 ≤
+      (NU.Chebotarev.primeCounting A x : ℝ)),
+      abs_of_nonneg (by exact Nat.cast_nonneg _ : 0 ≤
+        (NU.Chebotarev.primeCounting D x : ℝ))]
     exact_mod_cast primeCounting_mono hA_subset_D x
   have hAzero : NU.Chebotarev.HasDirichletDensity A 0 :=
     NU.Chebotarev.sqrt_bound_hasDirichletDensity_zero A hAcount

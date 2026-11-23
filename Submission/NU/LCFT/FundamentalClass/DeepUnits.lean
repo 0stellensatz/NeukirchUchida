@@ -410,7 +410,7 @@ theorem deepUnitLattice_exists (π : Uniformizer K) :
       ∑ σ, algebraMap K L ((c σ : RingOfIntegers K) : K) * basis σ
     have halg : Continuous (algebraMap K L) := by
       have ht := continuous_smul.comp
-        (continuous_id.prodMk (show Continuous (fun _ : K => (1 : L)) from continuous_const))
+        (continuous_id.prodMk (by exact continuous_const : Continuous (fun _ : K => (1 : L))))
       convert ht using 1
       funext x
       simp [Algebra.smul_def]
@@ -1128,8 +1128,8 @@ private theorem deepUnitFiltrationData_exists (π : Uniformizer K) :
       let f : Units L → L := fun x => (x : L) - 1
       change IsOpen (f ⁻¹' (C 0 : Set L))
       have hf : Continuous f :=
-        (show Continuous (fun x : Units L => (x : L)) from Units.continuous_val).sub
-          (show Continuous (fun _ : Units L => (1 : L)) from continuous_const)
+        (by exact Units.continuous_val : Continuous (fun x : Units L => (x : L))).sub
+          (by exact continuous_const : Continuous (fun _ : Units L => (1 : L)))
       exact (C_open 0).preimage hf
     have integralRep (i : ℕ) (x : Units L) (hx : x ∈ V i) :
         ∃ u : Units (RingOfIntegers L), ringUnitsToFieldUnits L u = x := by

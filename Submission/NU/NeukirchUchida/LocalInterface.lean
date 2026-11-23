@@ -436,8 +436,8 @@ noncomputable def ambientAbsoluteGaloisEquiv (F : NumberFieldInOmega) :
   have hspec (g : absoluteGaloisGroup F)
       (x : AlgebraicClosure F.field) :
       ambientClosureEquiv F
-          ((show AlgebraicClosure F.field ≃ₐ[F.field]
-            AlgebraicClosure F.field from mulEquiv g) x) =
+          ((by exact mulEquiv g : AlgebraicClosure F.field ≃ₐ[F.field]
+            AlgebraicClosure F.field) x) =
         (g.1 : RationalAbsoluteGaloisGroup) (ambientClosureEquiv F x) := by
     change ambientClosureEquiv F
         (((AlgEquiv.autCongr (ambientClosureEquiv F)).symm
@@ -486,8 +486,8 @@ noncomputable def ambientAbsoluteGaloisEquiv (F : NumberFieldInOmega) :
     apply Filter.mem_of_superset (hEℚopen.mem_nhds hEℚone)
     intro g hg
     apply hEs
-    change (show AlgebraicClosure F.field ≃ₐ[F.field]
-      AlgebraicClosure F.field from mulEquiv g) ∈ E.fixingSubgroup
+    change (by exact mulEquiv g : AlgebraicClosure F.field ≃ₐ[F.field]
+      AlgebraicClosure F.field) ∈ E.fixingSubgroup
     rw [IntermediateField.mem_fixingSubgroup_iff E]
     intro x hx
     apply (ambientClosureEquiv F).injective
@@ -525,8 +525,8 @@ theorem ambientAbsoluteGaloisEquiv_spec
     (F : NumberFieldInOmega) (g : absoluteGaloisGroup F)
     (x : AlgebraicClosure F.field) :
     ambientClosureEquiv F
-        ((show AlgebraicClosure F.field ≃ₐ[F.field] AlgebraicClosure F.field
-          from ambientAbsoluteGaloisEquiv F g) x) =
+        ((by exact ambientAbsoluteGaloisEquiv F g : AlgebraicClosure F.field ≃ₐ[F.field] AlgebraicClosure F.field
+         ) x) =
       (g.1 : RationalAbsoluteGaloisGroup) (ambientClosureEquiv F x) := by
   let omegaAutEquivAmbient :
       (Omega ≃ₐ[F.field] Omega) ≃* absoluteGaloisGroup F :=
@@ -591,12 +591,12 @@ private theorem abstractGaloisCompat (F : NumberFieldInOmega)
     (g : Field.absoluteGaloisGroup F.field)
     (x : AlgebraicClosure F.field) :
     ambientClosureEquiv F
-        ((show AlgebraicClosure F.field ≃ₐ[F.field] AlgebraicClosure F.field
-          from g) x) =
+        ((by exact g : AlgebraicClosure F.field ≃ₐ[F.field] AlgebraicClosure F.field
+         ) x) =
       ((ambientAbsoluteGaloisEquiv F).symm g) • ambientClosureEquiv F x := by
   change ambientClosureEquiv F
-      ((show AlgebraicClosure F.field ≃ₐ[F.field] AlgebraicClosure F.field
-        from g) x) =
+      ((by exact g : AlgebraicClosure F.field ≃ₐ[F.field] AlgebraicClosure F.field
+       ) x) =
     (((ambientAbsoluteGaloisEquiv F).symm g).1 :
       RationalAbsoluteGaloisGroup) (ambientClosureEquiv F x)
   simpa using ambientAbsoluteGaloisEquiv_spec F

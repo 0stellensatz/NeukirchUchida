@@ -68,10 +68,10 @@ noncomputable def absoluteRestriction {K : Type*} [Field K] [NumberField K]
 theorem absoluteRestriction_apply {K : Type*} [Field K] [NumberField K]
     (L : GaloisLevel K) (σ : Field.absoluteGaloisGroup K) (x : L.field) :
     ((absoluteRestriction L σ x : L.field) : AlgebraicClosure K) =
-      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from σ)
+      (by exact σ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
         (x : AlgebraicClosure K) :=
   AlgEquiv.restrictNormal_commutes
-    (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from σ) L.field x
+    (by exact σ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) L.field x
 
 /-- The subgroup fixing a finite Galois level. -/
 def levelKernel {K : Type*} [Field K] [NumberField K]
@@ -889,7 +889,7 @@ private noncomputable def comparisonLevelToAutEL
     orientedCyclotomicLevel o L p ≃*
       (AlgebraicClosure K ≃ₐ[comparisonEL L p] AlgebraicClosure K) where
   toFun u :=
-    { (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from u.1) with
+    { (by exact u.1 : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) with
       commutes' := fun x => by
         let σ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K := u.1
         have hL : ∀ z : L.field, σ (z : AlgebraicClosure K) = z := by
@@ -1001,10 +1001,10 @@ private noncomputable def comparisonAutELToAbsolute
   invFun σ := by
     let j := comparisonClosureRingEquiv L p
     let r : AlgebraicClosure K ≃+* AlgebraicClosure K :=
-      j.symm.trans ((show AlgebraicClosure
+      j.symm.trans ((by exact σ : AlgebraicClosure
         (CyclotomicField (p : ℕ) L.field) ≃ₐ[
           CyclotomicField (p : ℕ) L.field]
-          AlgebraicClosure (CyclotomicField (p : ℕ) L.field) from σ).toRingEquiv.trans j)
+          AlgebraicClosure (CyclotomicField (p : ℕ) L.field)).toRingEquiv.trans j)
     exact
       { r with
         commutes' := fun e => by
@@ -1019,15 +1019,15 @@ private noncomputable def comparisonAutELToAbsolute
               (AlgebraicClosure K) (comparisonCycloEquiv L p).toRingEquiv c
           have hjs : j.symm eA = cA := by
             rw [← hj, j.symm_apply_apply]
-          change j ((show AlgebraicClosure
+          change j ((by exact σ : AlgebraicClosure
             (CyclotomicField (p : ℕ) L.field) ≃ₐ[
               CyclotomicField (p : ℕ) L.field]
-              AlgebraicClosure (CyclotomicField (p : ℕ) L.field) from σ)
+              AlgebraicClosure (CyclotomicField (p : ℕ) L.field))
                 (j.symm eA)) = eA
-          rw [hjs, (show AlgebraicClosure
+          rw [hjs, (by exact σ : AlgebraicClosure
             (CyclotomicField (p : ℕ) L.field) ≃ₐ[
               CyclotomicField (p : ℕ) L.field]
-              AlgebraicClosure (CyclotomicField (p : ℕ) L.field) from σ).commutes]
+              AlgebraicClosure (CyclotomicField (p : ℕ) L.field)).commutes]
           exact hj }
   left_inv τ := by
     apply AlgEquiv.ext
@@ -1059,10 +1059,10 @@ private theorem comparisonRestrictionToEL_apply
     (L : GaloisLevel K) (p : OddPrime)
     (g : Field.absoluteGaloisGroup K) (x : comparisonEL L p) :
     (((comparisonRestrictionToEL L p g) x : comparisonEL L p) : AlgebraicClosure K) =
-      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+      (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
         (x : AlgebraicClosure K) :=
   AlgEquiv.restrictNormal_commutes
-    (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+    (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
     (comparisonEL L p) x
 
 private noncomputable def comparisonQuotientHom
@@ -1133,7 +1133,7 @@ private theorem comparisonQuotientHom_ker
     intro x
     apply Subtype.ext
     have hL : ∀ z : L.field,
-        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+        (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
             (z : AlgebraicClosure K) = z := by
       intro z
       have hk := MonoidHom.mem_ker.mp hg.1
@@ -1203,7 +1203,7 @@ private theorem comparisonQuotient_restrict
   rw [he, he']
   apply Subtype.ext
   rw [comparisonRestrictionToEL_apply]
-  change (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+  change (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
       (x : AlgebraicClosure K) =
     ((absoluteRestriction L g x : L.field) : AlgebraicClosure K)
   exact (absoluteRestriction_apply L g x).symm
@@ -1222,7 +1222,7 @@ private noncomputable def comparisonSemilinearLift
     AlgebraicClosure (CyclotomicField (p : ℕ) L.field) ≃+*
       AlgebraicClosure (CyclotomicField (p : ℕ) L.field) :=
   (comparisonClosureRingEquiv L p).trans
-    ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g).toRingEquiv.trans
+    ((by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K).toRingEquiv.trans
       (comparisonClosureRingEquiv L p).symm)
 
 private theorem comparisonSemilinearLift_commutes
@@ -1239,7 +1239,7 @@ private theorem comparisonSemilinearLift_commutes
   let j := comparisonClosureRingEquiv L p
   let e := comparisonCycloEquiv L p
   apply j.injective
-  change j (j.symm ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+  change j (j.symm ((by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
       (j (algebraMap (CyclotomicField (p : ℕ) L.field)
         (AlgebraicClosure (CyclotomicField (p : ℕ) L.field)) x)))) =
     j (algebraMap (CyclotomicField (p : ℕ) L.field)
@@ -1256,7 +1256,7 @@ private theorem comparisonSemilinearLift_commutes
       (AlgebraicClosure K) (comparisonCycloEquiv L p).toRingEquiv y
   rw [hj, hj]
   calc
-    (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+    (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
         (algebraMap (comparisonEL L p) (AlgebraicClosure K) (e x)) =
       algebraMap (comparisonEL L p) (AlgebraicClosure K)
         (comparisonRestrictionToEL L p g (e x)) :=
@@ -1307,9 +1307,9 @@ private theorem comparisonLevelMulEquiv_conjugate
   let j := comparisonClosureRingEquiv L p
   apply j.injective
   rw [j.apply_symm_apply, j.apply_symm_apply]
-  change (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
-      ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from h.1)
-        ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g⁻¹)
+  change (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+      ((by exact h.1 : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+        ((by exact g⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
           (j x))) = _
   rfl
 
@@ -1381,7 +1381,7 @@ private theorem comparisonLevelMulEquiv_continuous
   let eTJ : T ≃ₐ[K] J := AlgEquiv.ofInjectiveField f
   letI : FiniteDimensional K J := eTJ.toLinearEquiv.finiteDimensional
   let W : Set (orientedCyclotomicLevel o L p) :=
-    (fun u => (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from u.1)) ⁻¹'
+    (fun u => (by exact u.1 : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)) ⁻¹'
       (J.fixingSubgroup : Set
         (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K))
   have hWopen : IsOpen W := by
@@ -1398,9 +1398,9 @@ private theorem comparisonLevelMulEquiv_continuous
   intro x hx
   let xT : T := ⟨x, hx⟩
   let y : J := ⟨f xT, ⟨xT, rfl⟩⟩
-  have hu' : (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from u.1) ∈
+  have hu' : (by exact u.1 : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) ∈
       J.fixingSubgroup := hu
-  have huy : (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from u.1)
+  have huy : (by exact u.1 : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
       (y : AlgebraicClosure K) = y :=
     (IntermediateField.mem_fixingSubgroup_iff J _).mp hu' y y.property
   change (show AlgebraicClosure
@@ -1409,7 +1409,7 @@ private theorem comparisonLevelMulEquiv_continuous
       AlgebraicClosure (CyclotomicField (p : ℕ) L.field) from
         comparisonLevelMulEquiv o L p u) x = x
   change j.symm
-      ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from u.1)
+      ((by exact u.1 : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
         (j x)) = x
   apply j.injective
   rw [j.apply_symm_apply]
@@ -1706,17 +1706,17 @@ theorem exists_orientedCyclotomicComparison
         rw [ZMod.val_mul]
         exact pow_eq_pow_of_modEq (Nat.mod_modEq _ _) hζA.pow_eq_one
       have hβact :
-          (show A ≃ₐ[M] A from τ') β = ζA ^ (c * a).val * β := by
+          (by exact τ' : A ≃ₐ[M] A) β = ζA ^ (c * a).val * β := by
         calc
-          (show A ≃ₐ[M] A from τ') β =
-              s ((show A ≃ₐ[M] A from τ) (s.symm β)) := by
+          (by exact τ' : A ≃ₐ[M] A) β =
+              s ((by exact τ : A ≃ₐ[M] A) (s.symm β)) := by
             exact comparisonLevelMulEquiv_conjugate
               orientation L p g h β
-          _ = s ((show A ≃ₐ[M] A from τ) α) := by
+          _ = s ((by exact τ : A ≃ₐ[M] A) α) := by
             rw [show s.symm β = α by
               exact s.symm_apply_apply α]
           _ = s (ζA ^ a.val * α) := by
-            rw [show (show A ≃ₐ[M] A from τ) α =
+            rw [show (by exact τ : A ≃ₐ[M] A) α =
               ζA ^ a.val * α by exact hαact τ]
           _ = s ζA ^ a.val * s α := by
             rw [map_mul, map_pow]

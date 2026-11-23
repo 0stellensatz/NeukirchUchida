@@ -252,9 +252,8 @@ theorem exists_valuationSubring_extension
       map_mul' := fun x y => by ext; exact map_mul f (x : E) (y : E) }
   have he : Function.Surjective e := by
     intro y
-    have hy : (y : F) ∈ Subring.map f B.toSubring := by
+    obtain ⟨x, hx, hxy⟩ : ∃ x ∈ B.toLocalSubring.toSubring, f x = (y : F) := by
       simpa [S, LocalSubring.map_toSubring] using y.property
-    obtain ⟨x, hx, hxy⟩ := hy
     refine ⟨⟨x, hx⟩, ?_⟩
     apply Subtype.ext
     simpa [e] using hxy

@@ -1187,7 +1187,7 @@ private theorem fixedH1_le_quotientInvariantH1 : fixedH1 N M ≤ quotientInvaria
           simp [mul_assoc]
         rw [hconj] at hcorrns
         simpa [add_comm] using sub_eq_sub_iff_add_eq_add.mp
-          (show M.ρ ns (corr q) - corr q = M.ρ s (a.1 n) - a.1 ns from hcorrns)
+          (by exact hcorrns : M.ρ ns (corr q) - corr q = M.ρ s (a.1 n) - a.1 ns)
       have ha := congrFun (congrFun a.2.1 k) ns
       change M.ρ k (a.1 ns) - a.1 (k * ns) + a.1 k = 0 at ha
       have hak : a.1 (k * ns) = M.ρ k (a.1 ns) + a.1 k := by

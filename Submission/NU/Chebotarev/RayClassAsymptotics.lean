@@ -153,7 +153,7 @@ private theorem exists_integralPart_coprime (m : RayModulus K)
     rw [h, zero_mul, mul_one] at hprod
     exact hI hprod.symm
   obtain ⟨a, ha⟩ := FractionalIdeal.le_one_iff_exists_coeIdeal.mp
-    (show ((I.1 : FractionalIdeal O⁰ K) ⊓ 1) ≤ 1 from inf_le_right)
+    (by exact inf_le_right : ((I.1 : FractionalIdeal O⁰ K) ⊓ 1) ≤ 1)
   have ha0 : a ≠ 0 := FractionalIdeal.coeIdeal_ne_zero.mp (ha.symm ▸ hF)
   refine ⟨a, ha0, ?_, ha⟩
   apply isCoprime_of_count_eq_zero ha0 m.finite_ne
@@ -1609,7 +1609,7 @@ private theorem rayDatumFiber_count_isBigO_raw (m : RayModulus K)
       (Module.Free.chooseBasis ℤ L) (raySignRegion_isBounded m q.1.2) hdim v
   have hk : Tendsto (fun x : ℝ => NB * x) atTop atTop := by
     simpa [mul_comm, NB] using
-      (tendsto_id.atTop_mul_const' (show 0 < (Ideal.absNorm B.1 : ℝ) from hNB))
+      (tendsto_id.atTop_mul_const' (by exact hNB : 0 < (Ideal.absNorm B.1 : ℝ)))
   have hc := h0.comp_tendsto hk
   have hf : ((fun x : ℝ =>
       (Discrepancy.affineLatticePointCount L v

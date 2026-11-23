@@ -468,8 +468,8 @@ lemma krasner_fixed {F Ω : Type u} [Field F] [Field Ω] [Algebra F Ω]
       _ = w (b - a) := hab
   have hle : w (b - a) ≤ w (a - σ a) := by
     have hadd := w.map_le_add (x := a - b) (y := b - σ a)
-      (show w (b - a) ≤ w (a - b) from hab.ge)
-      (show w (b - a) ≤ w (b - σ a) from hbσa.ge)
+      (by exact hab.ge : w (b - a) ≤ w (a - b))
+      (by exact hbσa.ge : w (b - a) ≤ w (b - σ a))
     simpa only [sub_add_sub_cancel] using hadd
   exact (not_lt_of_ge hle) (hclose σ hσa)
 

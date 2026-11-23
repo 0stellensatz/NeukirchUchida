@@ -76,7 +76,7 @@ private theorem frobenius_smul (P : PrimeIdeal L)
     simpa only [smul_smul, inv_mul_cancel, one_smul, Ideal.smul_bot] using h'
   let Q : PrimeIdeal L := ⟨s • P.asIdeal, inferInstance, hne⟩
   have hunrQ : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) Q.asIdeal := by
-    rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain Q.ne_bot]
+    rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain' Q.ne_bot]
     rw [Ideal.ramificationIdx_eq_ramificationIdx'
       (Q.asIdeal.under (NumberField.RingOfIntegers K)) Q.asIdeal
       (Ideal.under_ne_bot (NumberField.RingOfIntegers K) Q.ne_bot)]
@@ -86,7 +86,7 @@ private theorem frobenius_smul (P : PrimeIdeal L)
     rw [← Ideal.ramificationIdx_eq_ramificationIdx'
       (P.asIdeal.under (NumberField.RingOfIntegers K)) P.asIdeal
       (Ideal.under_ne_bot (NumberField.RingOfIntegers K) P.ne_bot)]
-    exact Ideal.ramificationIdx_eq_one_of_isUnramifiedAt P.ne_bot
+    exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt P.ne_bot
   symm
   apply frobenius_eq_of_isArith Q hunrQ
   exact (IsArithFrobAt.arithFrobAt (NumberField.RingOfIntegers K)
@@ -176,7 +176,7 @@ private theorem fixedField_contraction_degreeOne
         (NumberField.RingOfIntegers K) q.asIdeal P.asIdeal
     letI : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) q.asIdeal := hunrq
-    exact Ideal.ramificationIdx_eq_one_of_isUnramifiedAt q.ne_bot
+    exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt q.ne_bot
   refine ⟨hqe, hqf, ?_⟩
   intro Q hQq
   letI : Q.asIdeal.LiesOver q.asIdeal := hQq
@@ -201,9 +201,8 @@ private theorem isArithFrobAt_restrictScalars_of_inertiaDeg_one
         P.asIdeal.under (NumberField.RingOfIntegers K)) =
       Nat.card (NumberField.RingOfIntegers E ⧸
         P.asIdeal.under (NumberField.RingOfIntegers E)) := by
-    change Ideal.absNorm (P.asIdeal.under (NumberField.RingOfIntegers K)) =
-      Ideal.absNorm (P.asIdeal.under (NumberField.RingOfIntegers E))
-    rw [← Ideal.under_under (B := NumberField.RingOfIntegers E) P.asIdeal,
+    rw [← Ideal.absNorm_eq_natCard, ← Ideal.absNorm_eq_natCard,
+      ← Ideal.under_under (B := NumberField.RingOfIntegers E) P.asIdeal,
       ← hPq.over]
     let p : PrimeIdeal K :=
       ⟨q.asIdeal.under (NumberField.RingOfIntegers K), inferInstance, by
@@ -396,7 +395,7 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
     have hunrE := q.prop.1.1.1 P hPq
     have hunrqK : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) q.val.asIdeal := by
-      rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain q.val.ne_bot]
+      rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain' q.val.ne_bot]
       exact q.prop.1.2.1
     have hunrP : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) P.asIdeal := by
@@ -575,7 +574,7 @@ theorem deuring_exceptional_primeCounting (g : Gal(L/K)) :
         P.asIdeal = 1 := by
       letI : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers E) P.asIdeal := hunrPE
-      exact Ideal.ramificationIdx_eq_one_of_isUnramifiedAt P.ne_bot
+      exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt P.ne_bot
     rw [← hPq.over] at hePE
     have hePK : (P.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' P.asIdeal =
         (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' q.asIdeal := by
@@ -591,7 +590,7 @@ theorem deuring_exceptional_primeCounting (g : Gal(L/K)) :
     have hunrPK := hunrp P hPp
     letI : Algebra.IsUnramifiedAt
         (NumberField.RingOfIntegers K) P.asIdeal := hunrPK
-    have := Ideal.ramificationIdx_eq_one_of_isUnramifiedAt
+    have := Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt
       (R := NumberField.RingOfIntegers K) (p := P.asIdeal) P.ne_bot
     exact hq.2 (hePK.symm.trans this))
   have hsub : A ⊆ B ∪ C ∪ D := by
@@ -676,7 +675,7 @@ private theorem degreeOne_contraction_mem
   have hunrPE := hq.1.1 P hPq
   have hunrqK : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers K) q.asIdeal := by
-    rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain q.ne_bot]
+    rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain' q.ne_bot]
     exact hq.2.1
   have hunrPK : Algebra.IsUnramifiedAt
       (NumberField.RingOfIntegers K) P.asIdeal := by
@@ -706,7 +705,7 @@ private theorem degreeOne_contraction_mem
     have heP : (P.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' P.asIdeal = 1 := by
       letI : Algebra.IsUnramifiedAt
           (NumberField.RingOfIntegers K) P.asIdeal := hunrPK
-      exact Ideal.ramificationIdx_eq_one_of_isUnramifiedAt P.ne_bot
+      exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt P.ne_bot
     have heQ : (Q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' Q.asIdeal = 1 := by
       letI : P.asIdeal.LiesOver p.asIdeal := hPp
       letI : Q.asIdeal.LiesOver p.asIdeal := hQp
@@ -716,7 +715,7 @@ private theorem degreeOne_contraction_mem
         ← Ideal.ramificationIdx_eq_ramificationIdx' p.asIdeal P.asIdeal p.ne_bot]
       rw [← hPp.over] at heP
       exact heP
-    rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain Q.ne_bot]
+    rw [Algebra.isUnramifiedAt_iff_of_isDedekindDomain' Q.ne_bot]
     exact heQ
   refine ⟨⟨hunrp, P, hPp, ?_⟩, ?_⟩
   · exact congrArg ConjClasses.mk hfrobP

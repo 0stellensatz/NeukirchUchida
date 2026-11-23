@@ -48,7 +48,7 @@ theorem subspace_cover
   intro x
   obtain ⟨i, hi⟩ := hcover x
   exact Set.mem_iUnion₂.mpr
-    ⟨i, Finset.mem_univ i, (show x ∈ (U i : Set V) from hi)⟩
+    ⟨i, Finset.mem_univ i, (by exact hi : x ∈ (U i : Set V))⟩
 
 /-- The agreement subspace `U_h = {x | tau(x) = rho(h)(x)}` from blueprint
 §6.  Its carrier is the displayed equality, so it cannot be replaced by an

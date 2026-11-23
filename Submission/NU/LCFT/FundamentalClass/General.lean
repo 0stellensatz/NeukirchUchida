@@ -312,7 +312,7 @@ private noncomputable def quotientH2Equiv
           (Additive.toMul ((MulRep K (IntermediateField.fixedField H)).ρ
             (eG (σ : (L ≃ₐ[K] L) ⧸ H)) (quotientCoefficientEquiv H x))))
       change Additive.ofMul
-          (σ • Additive.toMul (show Additive (Units L) from x.1)) =
+          (σ • Additive.toMul (by exact x.1 : Additive (Units L))) =
         Additive.ofMul (Units.map
           (algebraMap (IntermediateField.fixedField H) L).toMonoidHom
           (Units.map (eG (σ : (L ≃ₐ[K] L) ⧸ H)).toRingEquiv.toRingHom.toMonoidHom
@@ -2201,11 +2201,11 @@ private theorem envelope_compositum_relative_finrank
       map_add' := fun _ _ => rfl }
   let eE : E ≃+* A :=
     { toFun := fun x =>
-        let xc : C := ⟨x.1, (show E ≤ C from le_sup_left) x.2⟩
+        let xc : C := ⟨x.1, (by exact le_sup_left : E ≤ C) x.2⟩
         ⟨xc, (IntermediateField.mem_extendScalars hIC_EC).2
-          ((IntermediateField.mem_restrict (show E ≤ C from le_sup_left) xc).2 x.2)⟩
+          ((IntermediateField.mem_restrict (by exact le_sup_left : E ≤ C) xc).2 x.2)⟩
       invFun := fun x =>
-        ⟨x.1.1, (IntermediateField.mem_restrict (show E ≤ C from le_sup_left) x.1).1
+        ⟨x.1.1, (IntermediateField.mem_restrict (by exact le_sup_left : E ≤ C) x.1).1
           ((IntermediateField.mem_extendScalars hIC_EC).1 x.2)⟩
       left_inv := fun _ => rfl
       right_inv := fun _ => rfl
@@ -2213,11 +2213,11 @@ private theorem envelope_compositum_relative_finrank
       map_add' := fun _ _ => rfl }
   let eU : U ≃+* B :=
     { toFun := fun x =>
-        let xc : C := ⟨x.1, (show U ≤ C from le_sup_right) x.2⟩
+        let xc : C := ⟨x.1, (by exact le_sup_right : U ≤ C) x.2⟩
         ⟨xc, (IntermediateField.mem_extendScalars hIC_UC).2
-          ((IntermediateField.mem_restrict (show U ≤ C from le_sup_right) xc).2 x.2)⟩
+          ((IntermediateField.mem_restrict (by exact le_sup_right : U ≤ C) xc).2 x.2)⟩
       invFun := fun x =>
-        ⟨x.1.1, (IntermediateField.mem_restrict (show U ≤ C from le_sup_right) x.1).1
+        ⟨x.1.1, (IntermediateField.mem_restrict (by exact le_sup_right : U ≤ C) x.1).1
           ((IntermediateField.mem_extendScalars hIC_UC).1 x.2)⟩
       left_inv := fun _ => rfl
       right_inv := fun _ => rfl
@@ -2284,13 +2284,13 @@ private theorem envelope_tower_intersection_finrank
   letI : IsGalois K U := T.isGalois (n - 1)
   letI : FiniteDimensional K I :=
     FiniteDimensional.of_injective
-      (IntermediateField.inclusion (show I ≤ U from inf_le_right)).toLinearMap
-      (IntermediateField.inclusion_injective (show I ≤ U from inf_le_right))
+      (IntermediateField.inclusion (by exact inf_le_right : I ≤ U)).toLinearMap
+      (IntermediateField.inclusion_injective (by exact inf_le_right : I ≤ U))
   let d := Module.finrank K I
   have hdpos : 0 < d := Module.finrank_pos
   have hd : d - 1 + 1 = d := Nat.sub_add_cancel hdpos
   have hdn : d ∣ n := by
-    have hdiv := IntermediateField.finrank_dvd_of_le_right (show I ≤ U from inf_le_right)
+    have hdiv := IntermediateField.finrank_dvd_of_le_right (by exact inf_le_right : I ≤ U)
     rw [T.finrank (n - 1), hn] at hdiv
     exact hdiv
   let V := T.field (d - 1)
@@ -2498,7 +2498,7 @@ private theorem unramifiedEnvelopeGeometry_exists
     have hEL : EL ≤ A := by
       intro x hx
       let xe : E := ⟨x.1,
-        (IntermediateField.mem_restrict (show E ≤ C from le_sup_left) x).1 hx⟩
+        (IntermediateField.mem_restrict (by exact le_sup_left : E ≤ C) x).1 hx⟩
       obtain ⟨l, hl⟩ := eLE.surjective xe
       apply IntermediateField.subset_adjoin K
       left
@@ -2509,7 +2509,7 @@ private theorem unramifiedEnvelopeGeometry_exists
     have hUC : UC ≤ A := by
       intro x hx
       let xu : U := ⟨x.1,
-        (IntermediateField.mem_restrict (show U ≤ C from le_sup_right) x).1 hx⟩
+        (IntermediateField.mem_restrict (by exact le_sup_right : U ≤ C) x).1 hx⟩
       apply IntermediateField.subset_adjoin K
       right
       refine ⟨xu, ?_⟩
@@ -2979,10 +2979,10 @@ private theorem envelopeRange_eq
       · obtain ⟨l, rfl⟩ := hy
         change jMK (algebraMap L M l) ∈ S
         rw [hLM]
-        exact (show jL.fieldRange ≤ S from le_sup_left) ⟨l, rfl⟩
+        exact (by exact le_sup_left : jL.fieldRange ≤ S) ⟨l, rfl⟩
       · obtain ⟨u, rfl⟩ := hy
         change jU u ∈ S
-        apply (show V ≤ S from le_sup_right)
+        apply (by exact le_sup_right : V ≤ S)
         rw [← hU]
         exact ⟨u, rfl⟩
     have htop : (⊤ : Subalgebra K M) ≤ A := by
@@ -4379,19 +4379,19 @@ private theorem envelope_tower_intersection_finrank_of_dvd
   letI : FiniteDimensional F (T.field m) := T.finiteDimensional m
   letI : FiniteDimensional F I :=
     FiniteDimensional.of_injective
-      (IntermediateField.inclusion (show I ≤ T.field m from inf_le_right)).toLinearMap
-      (IntermediateField.inclusion_injective (show I ≤ T.field m from inf_le_right))
+      (IntermediateField.inclusion (by exact inf_le_right : I ≤ T.field m)).toLinearMap
+      (IntermediateField.inclusion_injective (by exact inf_le_right : I ≤ T.field m))
   let d := Module.finrank F I
   have hd : d - 1 + 1 = d := Nat.sub_add_cancel Module.finrank_pos
   have hdm : d ∣ m + 1 := by
     have h := IntermediateField.finrank_dvd_of_le_right
-      (show I ≤ T.field m from inf_le_right)
+      (by exact inf_le_right : I ≤ T.field m)
     rwa [T.finrank m] at h
   have hdn : d ∣ n := by
     letI : FiniteDimensional F j.fieldRange :=
       j.equivFieldRange.toLinearEquiv.finiteDimensional
     have h := IntermediateField.finrank_dvd_of_le_right
-      (show I ≤ j.fieldRange from inf_le_left)
+      (by exact inf_le_left : I ≤ j.fieldRange)
     rw [← j.equivFieldRange.toLinearEquiv.finrank_eq] at h
     exact h
   letI : IsGalois F (T.field m) := T.isGalois m
@@ -4780,9 +4780,9 @@ private theorem fundamentalRestriction_descended_baseChange_face_aux :
     jU₁.equivFieldRange.toLinearEquiv.finiteDimensional
   letI : FiniteDimensional K I₀ :=
     FiniteDimensional.of_injective
-      (IntermediateField.inclusion (show I₀ ≤ jU₁.fieldRange from inf_le_left)).toLinearMap
+      (IntermediateField.inclusion (by exact inf_le_left : I₀ ≤ jU₁.fieldRange)).toLinearMap
       (IntermediateField.inclusion_injective
-        (show I₀ ≤ jU₁.fieldRange from inf_le_left))
+        (by exact inf_le_left : I₀ ≤ jU₁.fieldRange))
   letI : FiniteDimensional K C₀ :=
     IntermediateField.finiteDimensional_sup jU₁.fieldRange jE.fieldRange
   letI : IsGalois K jU₁.fieldRange := IsGalois.of_algEquiv jU₁.equivFieldRange

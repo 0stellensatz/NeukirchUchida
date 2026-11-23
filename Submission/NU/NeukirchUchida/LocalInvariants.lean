@@ -47,7 +47,7 @@ structure AbsoluteGaloisActionRealization
   action_compat : ∀ (g : Field.absoluteGaloisGroup K)
       (x : AlgebraicClosure K),
     closureEquiv
-        ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) x) =
+        ((by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) x) =
       galoisEquiv g • closureEquiv x
 
 /-- An absolute finite place in a supplied ambient algebraic closure. -/
@@ -1381,15 +1381,15 @@ private theorem absoluteCyclotomicScalar_eq_one_iff
       NU.LocalTheory.absoluteGaloisAlgEquiv g zeta := by
     change zeta ^
       (hzeta.autToPow K
-        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) :
+        (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) :
           ZMod (ell : ℕ)).val = _
     exact hzeta.autToPow_spec K
-      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+      (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
   constructor
   · intro hscalar eta heta
     obtain ⟨i, _, hi⟩ := hzeta.eq_pow_of_pow_eq_one heta
     rw [← hi]
-    change (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+    change (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
       (zeta ^ i) = zeta ^ i
     rw [map_pow, ← hspec, hscalar, ZMod.val_one, pow_one]
   · intro hfix
@@ -1936,7 +1936,7 @@ private theorem source_packetDeterminant_at_markedLevel
       NU.LocalTheory.absoluteRestriction L g := by
     simpa [sigma, gamma, eQ0] using hrestrict g
   have habsSpec :
-      (show AlgebraicClosure K₁ ≃ₐ[K₁] AlgebraicClosure K₁ from g)
+      (by exact g : AlgebraicClosure K₁ ≃ₐ[K₁] AlgebraicClosure K₁)
           zetaAbs =
         zetaAbs ^ (absoluteCyclotomicScalar K₁ ell g).val := by
     exact (hzetaAbs.autToPow_spec K₁ g).symm
@@ -2399,7 +2399,7 @@ private theorem target_packetDeterminant_identifies_cyclotomic
       NU.LocalTheory.absoluteRestriction L g₂ := by
     simpa [sigma, gamma, eQ0] using hrestrict g₂
   have habsSpec :
-      (show AlgebraicClosure K₂ ≃ₐ[K₂] AlgebraicClosure K₂ from g₂)
+      (by exact g₂ : AlgebraicClosure K₂ ≃ₐ[K₂] AlgebraicClosure K₂)
           zetaAbs =
         zetaAbs ^ (absoluteCyclotomicScalar K₂ ell g₂).val := by
     exact (hzetaAbs.autToPow_spec K₂ g₂).symm
@@ -2534,8 +2534,8 @@ private theorem mem_galoisLevelJoinElement
   change zeta ∈ IntermediateField.normalClosure K
     ↥(L.field ⊔ IntermediateField.adjoin K {zeta}) (AlgebraicClosure K)
   apply IntermediateField.le_normalClosure
-  apply (show IntermediateField.adjoin K {zeta} ≤
-    L.field ⊔ IntermediateField.adjoin K {zeta} from le_sup_right)
+  apply (by exact le_sup_right : IntermediateField.adjoin K {zeta} ≤
+    L.field ⊔ IntermediateField.adjoin K {zeta})
   exact IntermediateField.subset_adjoin K {zeta} (Set.mem_singleton zeta)
 
 /-- Restricting an element of an absolute decomposition group to any
@@ -2567,11 +2567,11 @@ private theorem absoluteRestriction_trivialGaloisLevel
         (NU.LocalTheory.trivialGaloisLevel K) g = 1 := by
   ext x
   rw [NU.LocalTheory.absoluteRestriction_apply]
-  change (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+  change (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
       (x : AlgebraicClosure K) = (x : AlgebraicClosure K)
   obtain ⟨a, ha⟩ := IntermediateField.mem_bot.mp x.property
   rw [← ha]
-  exact (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g).commutes a
+  exact (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K).commutes a
 
 /-- The standard T5 comparison between the local completion's absolute
 Galois group and the recovered absolute decomposition group. -/
@@ -2669,7 +2669,7 @@ private theorem intermediateFieldRestrictionHom_apply
     (show AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F from
       intermediateFieldRestrictionHom F E sigma) x =
       intermediateFieldClosureEquiv F E
-        ((show AlgebraicClosure E ≃ₐ[E] AlgebraicClosure E from sigma)
+        ((by exact sigma : AlgebraicClosure E ≃ₐ[E] AlgebraicClosure E)
           ((intermediateFieldClosureEquiv F E).symm x)) := by
   rfl
 
@@ -3215,9 +3215,9 @@ private theorem localCyclotomicRestrictionHom_apply
     (show AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F from
       localCyclotomicRestrictionHom F ell sigma) x =
       localCyclotomicClosureEquiv F ell
-        ((show AlgebraicClosure (localCyclotomicExtension F ell) ≃ₐ[
+        ((by exact sigma : AlgebraicClosure (localCyclotomicExtension F ell) ≃ₐ[
             localCyclotomicExtension F ell]
-              AlgebraicClosure (localCyclotomicExtension F ell) from sigma)
+              AlgebraicClosure (localCyclotomicExtension F ell))
           ((localCyclotomicClosureEquiv F ell).symm x)) := by
   rfl
 
@@ -3291,14 +3291,14 @@ private theorem localCyclotomic_characterPull_injective
     rw [show c = a - b from rfl, map_sub, hab, sub_self]
   have hfix (tau : E.fixingSubgroup) :
       c (Additive.ofMul
-        (show Field.absoluteGaloisGroup F from tau.1)) = 0 := by
+        (by exact tau.1 : Field.absoluteGaloisGroup F)) = 0 := by
     let sigma : Field.absoluteGaloisGroup E :=
       (localCyclotomicGaloisMulEquiv F ell).symm tau
     have hz := DFunLike.congr_fun hpull (Additive.ofMul sigma)
     change c (Additive.ofMul
       (localCyclotomicRestrictionContinuousHom F ell sigma)) = 0 at hz
     have hsigma : localCyclotomicRestrictionContinuousHom F ell sigma =
-        (show Field.absoluteGaloisGroup F from tau.1) := by
+        (by exact tau.1 : Field.absoluteGaloisGroup F) := by
       change localCyclotomicRestrictionHom F ell sigma = tau.1
       change ((localCyclotomicGaloisMulEquiv F ell) sigma).1 = tau.1
       rw [(localCyclotomicGaloisMulEquiv F ell).apply_symm_apply]
@@ -6078,7 +6078,7 @@ private theorem oddPrime_adjoinRoot_not_normal
   letI : Normal ℚ (AdjoinRoot poly) := by
     simpa [poly] using hnormal
   have hpoly0 : poly ≠ 0 := by
-    exact (show Irreducible poly from Fact.out).ne_zero
+    exact (by exact Fact.out : Irreducible poly).ne_zero
   have hrootEval : aeval (AdjoinRoot.root poly) poly = 0 := by
     dsimp [poly]
     rw [aeval_def, eval₂_sub, eval₂_X_pow, eval₂_C,
@@ -6087,12 +6087,12 @@ private theorem oddPrime_adjoinRoot_not_normal
         algebraMap ℚ (AdjoinRoot poly) := RingHom.ext_rat _ _
     rw [hmaps, sub_self]
   have hmin : minpoly ℚ (AdjoinRoot.root poly) = poly := by
-    have hm := minpoly.eq_of_irreducible (show Irreducible poly from Fact.out)
+    have hm := minpoly.eq_of_irreducible (by exact Fact.out : Irreducible poly)
       hrootEval
     have hmonic : poly.Monic := monic_X_pow_sub_C _ p.2.ne_zero
     simpa [hmonic.leadingCoeff] using hm.symm
   have hsplitsPoly : (poly.map (algebraMap ℚ (AdjoinRoot poly))).Splits := by
-    have hs := (show Normal ℚ (AdjoinRoot poly) from inferInstance).splits
+    have hs := (by exact inferInstance : Normal ℚ (AdjoinRoot poly)).splits
       (AdjoinRoot.root poly)
     rw [hmin] at hs
     exact hs
@@ -6462,7 +6462,7 @@ private theorem quartic_adjoinRoot_not_normal
   letI : Normal ℚ (AdjoinRoot poly) := by
     simpa [poly] using hnormal
   have hpoly0 : poly ≠ 0 :=
-    (show Irreducible poly from Fact.out).ne_zero
+    (by exact Fact.out : Irreducible poly).ne_zero
   have hrootEval : aeval (AdjoinRoot.root poly) poly = 0 := by
     dsimp [poly]
     rw [aeval_def, eval₂_sub, eval₂_X_pow, eval₂_C,
@@ -6472,13 +6472,13 @@ private theorem quartic_adjoinRoot_not_normal
     rw [hmaps, sub_self]
   have hmin : minpoly ℚ (AdjoinRoot.root poly) = poly := by
     have hm := minpoly.eq_of_irreducible
-      (show Irreducible poly from Fact.out) hrootEval
+      (by exact Fact.out : Irreducible poly) hrootEval
     have hmonic : poly.Monic :=
       monic_X_pow_sub_C _ (by norm_num)
     simpa [hmonic.leadingCoeff] using hm.symm
   have hsplitsPoly :
       (poly.map (algebraMap ℚ (AdjoinRoot poly))).Splits := by
-    have hs := (show Normal ℚ (AdjoinRoot poly) from inferInstance).splits
+    have hs := (by exact inferInstance : Normal ℚ (AdjoinRoot poly)).splits
       (AdjoinRoot.root poly)
     rw [hmin] at hs
     exact hs
@@ -8018,10 +8018,10 @@ private theorem finiteLevelResidueAction_eq_primePower_of_cyclotomic
         NU.LocalTheory.absoluteGaloisAlgEquiv g zeta := by
       change zeta ^
         (hzeta.autToPow K
-          (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) :
+          (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) :
             ZMod (ell : ℕ)).val = _
       exact hzeta.autToPow_spec K
-        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
+        (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
     have hscalarMod : (absoluteCyclotomicScalar K ellOdd g).val ≡
         p ^ Aexp [MOD (ell : ℕ)] := by
       apply (ZMod.natCast_eq_natCast_iff _ _ _).1
@@ -8570,13 +8570,13 @@ private noncomputable def finiteLevelDecompositionEquiv
     MulSemiringAction.compHom (AlgebraicClosure K) N.toSubgroup.subtype
   have hcompat : ∀ (g : Field.absoluteGaloisGroup L.field)
       (x : AlgebraicClosure L.field),
-      E ((show AlgebraicClosure L.field ≃ₐ[L.field]
-        AlgebraicClosure L.field from g) x) =
+      E ((by exact g : AlgebraicClosure L.field ≃ₐ[L.field]
+        AlgebraicClosure L.field) x) =
         eG g • E x := by
     intro g x
     change E
-      ((show AlgebraicClosure L.field ≃ₐ[L.field]
-        AlgebraicClosure L.field from g) x) =
+      ((by exact g : AlgebraicClosure L.field ≃ₐ[L.field]
+        AlgebraicClosure L.field) x) =
       (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from
         ((eG g : N.toSubgroup) : Field.absoluteGaloisGroup K)) (E x)
     have heG : ((eG g : N.toSubgroup) : Field.absoluteGaloisGroup K) =
@@ -8584,8 +8584,8 @@ private noncomputable def finiteLevelDecompositionEquiv
       rfl
     rw [heG]
     change E
-      ((show AlgebraicClosure L.field ≃ₐ[L.field]
-        AlgebraicClosure L.field from g) x) =
+      ((by exact g : AlgebraicClosure L.field ≃ₐ[L.field]
+        AlgebraicClosure L.field) x) =
       (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from
         intermediateFieldRestrictionHom K L.field g) (E x)
     rw [intermediateFieldRestrictionHom_apply]
@@ -9135,10 +9135,10 @@ private theorem ambientCyclotomicScalar_eq_natCast_of_power
       NU.LocalTheory.absoluteGaloisAlgEquiv ga zeta := by
     change zeta ^
       (hzeta.autToPow K
-        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga) :
+        (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) :
           ZMod (ell : ℕ)).val = _
     exact hzeta.autToPow_spec K
-      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
+      (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
   have hact : NU.LocalTheory.absoluteGaloisAlgEquiv ga zeta =
       zeta ^ N := by
     apply R.closureEquiv.injective
@@ -9317,7 +9317,7 @@ private theorem ambientInertia_iff_cyclotomic
     let xa : A.1 := e.symm x
     let ya : A.1 := e.symm y
     have hya : (ya : AlgebraicClosure K) =
-        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
+        (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
           (xa : AlgebraicClosure K) := by
       apply R.closureEquiv.injective
       calc
@@ -9328,7 +9328,7 @@ private theorem ambientInertia_iff_cyclotomic
             R.closureEquiv (xa : AlgebraicClosure K) := by
           simp [ga, xa, e, abstractPlaceValuationEquiv]
         _ = R.closureEquiv
-            ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
+            ((by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
               (xa : AlgebraicClosure K)) :=
           (R.action_compat ga (xa : AlgebraicClosure K)).symm
     have hresA : IsLocalRing.residue A.1 ya =
@@ -9407,7 +9407,7 @@ private theorem ambientActsAsPrimePower_of_cyclotomic
   let xa : A.1 := e.symm x
   let ya : A.1 := e.symm y
   have hya : (ya : AlgebraicClosure K) =
-      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
+      (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
         (xa : AlgebraicClosure K) := by
     apply R.closureEquiv.injective
     calc
@@ -9418,7 +9418,7 @@ private theorem ambientActsAsPrimePower_of_cyclotomic
           R.closureEquiv (xa : AlgebraicClosure K) := by
         simp [ga, xa, e, abstractPlaceValuationEquiv]
       _ = R.closureEquiv
-          ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
+          ((by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
             (xa : AlgebraicClosure K)) :=
         (R.action_compat ga (xa : AlgebraicClosure K)).symm
   have hresA : IsLocalRing.residue A.1 ya =
@@ -10050,7 +10050,7 @@ private theorem ambientResidueDegree_dvd_powerExponent
           (NU.LocalTheory.absoluteGaloisAlgEquiv ga
             (algebraMap K (AlgebraicClosure K) (x : K))) := by
         congr 1
-        exact ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga).commutes
+        exact ((by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K).commutes
           (x : K)).symm
       _ = R.galoisEquiv ga •
           R.closureEquiv (algebraMap K (AlgebraicClosure K) (x : K)) :=
@@ -10105,7 +10105,7 @@ private theorem ambientArithmeticFrobenius_exists
   let xa : A.1 := e.symm x
   let ya : A.1 := e.symm y
   have hya : (ya : AlgebraicClosure K) =
-      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
+      (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
         (xa : AlgebraicClosure K) := by
     apply R.closureEquiv.injective
     calc
@@ -10116,7 +10116,7 @@ private theorem ambientArithmeticFrobenius_exists
           R.closureEquiv (xa : AlgebraicClosure K) := by
         simp [g, xa, e, abstractPlaceValuationEquiv]
       _ = R.closureEquiv
-          ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
+          ((by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
             (xa : AlgebraicClosure K)) :=
         (R.action_compat ga (xa : AlgebraicClosure K)).symm
   have hresA : IsLocalRing.residue A.1 ya =
