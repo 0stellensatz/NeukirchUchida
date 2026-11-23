@@ -25,6 +25,8 @@ are isolated under descriptive names and documented at their exact intended
 mathematical strength.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 open scoped NumberField Pointwise ValuativeRel
 open IsDedekindDomain
 
@@ -301,8 +303,8 @@ theorem residueCharacteristic_prime
         v.asIdeal from inferInstance
   let e : (𝓞 K ⧸ v.asIdeal) ≃+*
       NU.LocalTheory.ResidueFieldAt v :=
-    IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
-      (NU.LocalTheory.primeValuationSubring v)
+    (IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
+      (NU.LocalTheory.primeValuationSubring v)).toRingEquiv
   letI : Finite (NU.LocalTheory.ResidueFieldAt v) :=
     Finite.of_equiv (𝓞 K ⧸ v.asIdeal) e.toEquiv
   exact CharP.prime_ringChar _
@@ -775,8 +777,8 @@ private noncomputable def quotientEquivResidueFieldAt_matrix
   change (𝓞 K ⧸ v.asIdeal) ≃+*
     IsLocalRing.ResidueField
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
-  exact IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
-    (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
+  exact (IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
+    (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)).toRingEquiv
 
 private theorem residueFieldAt_finite_matrix
     {K : Type*} [Field K] [NumberField K] (v : FinitePlace K) :
@@ -3312,7 +3314,8 @@ private theorem localCyclotomic_characterPull_injective
       change c (H.index • Additive.ofMul g) = 0 at hzpow
       rw [map_nsmul, nsmul_eq_mul] at hzpow
       have hindexpos : 0 < H.index := by
-        rw [← IntermediateField.finrank_eq_fixingSubgroup_index E]
+        show 0 < E.fixingSubgroup.index
+        rw [← IntermediateField.finrank_eq_fixingSubgroup_index (E' := AlgebraicClosure F) E]
         exact Module.finrank_pos
       have hcast : ((H.index : ℕ) : ZMod (ell : ℕ)) ≠ 0 := by
         intro hz
@@ -3366,23 +3369,22 @@ private theorem localFieldPrincipalUnit_is_primeDivisible
     (hchar : ringChar (NU.LCFT.LocalResidueField F) ≠ (ell : ℕ))
     (u : Units F) (hu : u ∈ NU.LCFT.principalUnitSubgroup F 1) :
     ∃ y : Units F, y ^ (ell : ℕ) = u := by
-  let O := NU.LCFT.RingOfIntegers F
   let m := NU.LCFT.LocalMaximalIdeal F
   let k := NU.LCFT.LocalResidueField F
-  letI : IsAdicComplete m O := localFieldIntegers_isAdicComplete F
-  letI : HenselianRing O m := IsAdicComplete.henselianRing _ _
+  letI : IsAdicComplete m (NU.LCFT.RingOfIntegers F) := localFieldIntegers_isAdicComplete F
+  letI : HenselianRing (NU.LCFT.RingOfIntegers F) m := IsAdicComplete.henselianRing _ _
   obtain ⟨a, ha, hau⟩ := hu
-  have hares : Ideal.Quotient.mk m (a : O) = 1 := by
+  have hares : Ideal.Quotient.mk m (a : (NU.LCFT.RingOfIntegers F)) = 1 := by
     have h := congrArg Units.val ha
-    change Ideal.Quotient.mk (m ^ 1) (a : O) = 1 at h
+    change Ideal.Quotient.mk (m ^ 1) (a : (NU.LCFT.RingOfIntegers F)) = 1 at h
     rw [pow_one] at h
     exact h
-  let f : Polynomial O :=
-    Polynomial.X ^ (ell : ℕ) - Polynomial.C (a : O)
+  let f : Polynomial (NU.LCFT.RingOfIntegers F) :=
+    Polynomial.X ^ (ell : ℕ) - Polynomial.C (a : (NU.LCFT.RingOfIntegers F))
   have hf : f.Monic :=
     Polynomial.monic_X_pow_sub_C _ ell.2.ne_zero
   have heval : f.eval 1 ∈ m := by
-    rw [show f.eval 1 = 1 - (a : O) by simp [f]]
+    rw [show f.eval 1 = 1 - (a : (NU.LCFT.RingOfIntegers F)) by simp [f]]
     rw [← Ideal.Quotient.eq_zero_iff_mem]
     simpa [hares]
   have hellResidue : ((ell : ℕ) : k) ≠ 0 := by
@@ -3392,17 +3394,17 @@ private theorem localFieldPrincipalUnit_is_primeDivisible
     rcases (Nat.dvd_prime ell.2).mp hdvd with h | h
     · exact (CharP.prime_ringChar k).ne_one h
     · exact hchar h
-  have hellUnit : IsUnit ((ell : ℕ) : O) := by
+  have hellUnit : IsUnit ((ell : ℕ) : (NU.LCFT.RingOfIntegers F)) := by
     apply IsLocalRing.notMem_maximalIdeal.mp
     intro hm
     apply hellResidue
     rw [show ((ell : ℕ) : k) =
-        Ideal.Quotient.mk m ((ell : ℕ) : O) by
+        Ideal.Quotient.mk m ((ell : ℕ) : (NU.LCFT.RingOfIntegers F)) by
       exact (map_natCast (Ideal.Quotient.mk m) (ell : ℕ)).symm]
     exact Ideal.Quotient.eq_zero_iff_mem.mpr hm
   have hderiv :
       IsUnit ((Ideal.Quotient.mk m) (f.derivative.eval 1)) := by
-    have hdeval : f.derivative.eval 1 = ((ell : ℕ) : O) := by
+    have hdeval : f.derivative.eval 1 = ((ell : ℕ) : (NU.LCFT.RingOfIntegers F)) := by
       simp only [f, Polynomial.derivative_sub,
         Polynomial.derivative_X_pow, Polynomial.derivative_C, sub_zero,
         Polynomial.eval_mul, Polynomial.eval_C, Polynomial.eval_pow,
@@ -3411,26 +3413,26 @@ private theorem localFieldPrincipalUnit_is_primeDivisible
     exact hellUnit.map _
   obtain ⟨b, hb, hbmod⟩ :=
     HenselianRing.is_henselian f hf 1 heval hderiv
-  have hbpow : b ^ (ell : ℕ) = (a : O) := by
-    have hzero : b ^ (ell : ℕ) - (a : O) = 0 := by
+  have hbpow : b ^ (ell : ℕ) = (a : (NU.LCFT.RingOfIntegers F)) := by
+    have hzero : b ^ (ell : ℕ) - (a : (NU.LCFT.RingOfIntegers F)) = 0 := by
       simpa [f, Polynomial.IsRoot] using hb
     exact sub_eq_zero.mp hzero
   have hbnot : b ∉ m := by
     intro hbm
-    have hbone : (1 : O) ∈ m := by
+    have hbone : (1 : (NU.LCFT.RingOfIntegers F)) ∈ m := by
       have hsub := m.sub_mem hbm hbmod
       simpa [sub_sub_cancel] using hsub
-    exact (IsLocalRing.maximalIdeal.isMaximal O).ne_top
+    exact (IsLocalRing.maximalIdeal.isMaximal (NU.LCFT.RingOfIntegers F)).ne_top
       ((Ideal.eq_top_iff_one m).mpr hbone)
-  let bu : Units O := (IsLocalRing.notMem_maximalIdeal.mp hbnot).unit
-  have hbu : (bu : O) = b :=
+  let bu : Units (NU.LCFT.RingOfIntegers F) := (IsLocalRing.notMem_maximalIdeal.mp hbnot).unit
+  have hbu : (bu : (NU.LCFT.RingOfIntegers F)) = b :=
     (IsLocalRing.notMem_maximalIdeal.mp hbnot).unit_spec
   let y : Units F := NU.LCFT.ringUnitsToFieldUnits F bu
   refine ⟨y, ?_⟩
   apply Units.ext
-  change (((bu : O) : F) ^ (ell : ℕ)) = (u : F)
+  change (((bu : (NU.LCFT.RingOfIntegers F)) : F) ^ (ell : ℕ)) = (u : F)
   rw [hbu]
-  exact (congrArg (fun z : O => (z : F)) hbpow).trans
+  exact (congrArg (fun z : (NU.LCFT.RingOfIntegers F) => (z : F)) hbpow).trans
     (congrArg Units.val hau)
 
 /-- The spectral norm equips every finite extension of a nonarchimedean
@@ -3540,9 +3542,8 @@ private theorem localField_tameUnitFactorization
     ∃ pi tau : Units F, ∀ x : Units F,
       ∃ n : ℤ, ∃ a : ℕ, ∃ y : Units F,
         x = pi ^ n * tau ^ a * y ^ (ell : ℕ) := by
-  let O := RingOfIntegers F
   let m := LocalMaximalIdeal F
-  let res : O →+* LocalResidueField F := IsLocalRing.residue O
+  let res : (RingOfIntegers F) →+* LocalResidueField F := IsLocalRing.residue (RingOfIntegers F)
   let pi : Units F := (defaultUniformizer F).val
   obtain ⟨g, hg⟩ := IsCyclic.exists_monoid_generator
     (α := Units (LocalResidueField F))
@@ -3554,8 +3555,8 @@ private theorem localField_tameUnitFactorization
       rw [← hc]
       exact Ideal.Quotient.eq_zero_iff_mem.mpr hcm
     exact Units.ne_zero g hzero
-  let cu : Units O := (IsLocalRing.notMem_maximalIdeal.mp hcnot).unit
-  have hcu : (cu : O) = c :=
+  let cu : Units (RingOfIntegers F) := (IsLocalRing.notMem_maximalIdeal.mp hcnot).unit
+  have hcu : (cu : (RingOfIntegers F)) = c :=
     (IsLocalRing.notMem_maximalIdeal.mp hcnot).unit_spec
   let tau : Units F := ringUnitsToFieldUnits F cu
   refine ⟨pi, tau, ?_⟩
@@ -3583,7 +3584,7 @@ private theorem localField_tameUnitFactorization
   obtain ⟨dw, hdw⟩ :=
     (exists_normalizedValuationHom F).choose_spec.2 w⁻¹ |>.1
       hwinvval.ge
-  let wu : Units O :=
+  let wu : Units (RingOfIntegers F) :=
     { val := cw
       inv := dw
       val_inv := by
@@ -3605,10 +3606,10 @@ private theorem localField_tameUnitFactorization
     (Submonoid.mem_powers_iff rwunit g).mp (hg rwunit)
   have hcug : Units.map res.toMonoidHom cu = g := by
     apply Units.ext
-    change res (cu : O) = (g : LocalResidueField F)
+    change res (cu : (RingOfIntegers F)) = (g : LocalResidueField F)
     rw [hcu]
     exact hc
-  let ru : Units O := wu * (cu ^ a)⁻¹
+  let ru : Units (RingOfIntegers F) := wu * (cu ^ a)⁻¹
   have hruResidue : Units.map res.toMonoidHom ru = 1 := by
     rw [show Units.map res.toMonoidHom ru =
         rwunit * (Units.map res.toMonoidHom cu ^ a)⁻¹ by
@@ -3620,7 +3621,7 @@ private theorem localField_tameUnitFactorization
     refine ⟨ru, ?_, rfl⟩
     change integralUnitReduction F 1 ru = 1
     apply Units.ext
-    change Ideal.Quotient.mk (m ^ 1) (ru : O) = 1
+    change Ideal.Quotient.mk (m ^ 1) (ru : (RingOfIntegers F)) = 1
     rw [pow_one]
     exact congrArg Units.val hruResidue
   obtain ⟨y, hy⟩ := localFieldPrincipalUnit_is_primeDivisible
@@ -4499,8 +4500,7 @@ private theorem pPowerTorsion_finite_of_isClosed
       ((u : F) ^ ((p : ℕ) ^ a)) =
         ValuativeRel.valuation F (1 : F) at hv
     rw [map_pow, map_one] at hv
-    apply pow_left_injective hN
-    simpa using hv
+    exact (pow_eq_one_iff.mp hv).resolve_right hN
   have hcompact : IsCompact (P : Set (Units F)) :=
     IsCompact.of_isClosed_subset (localField_unitSphere_isCompact F)
       hclosed hsubset
@@ -5183,7 +5183,7 @@ private theorem kummerDimension_away_without_roots
     rw [← finiteValuativeExtension_residueChar F E]
     exact hcharF
   have hindex : E.fixingSubgroup.index < (ell : ℕ) := by
-    rw [← IntermediateField.finrank_eq_fixingSubgroup_index E]
+    rw [← IntermediateField.finrank_eq_fixingSubgroup_index (E' := AlgebraicClosure F) E]
     exact localCyclotomicExtension_finrank_lt F ell
   let zeta : E := localCyclotomicRootInExtension F ell
   have hzeta : IsPrimitiveRoot zeta (ell : ℕ) :=
@@ -5471,7 +5471,7 @@ private theorem extract_primePower_with_order_bound
         ∀ c : ℚ, c ^ (lambda : ℕ) ≠ b := by
     intro q
     induction q using Nat.strong_induction_on with
-    | h q ih =>
+    | ind q ih =>
         intro hq
         by_cases hpow : ∃ d : ℕ, d ^ (lambda : ℕ) = q
         · obtain ⟨d, hdq⟩ := hpow
@@ -6120,7 +6120,7 @@ private theorem oddPrime_adjoinRoot_not_normal
       Module.finrank ℚ (AdjoinRoot poly) = (AdjoinRoot.powerBasis hpoly0).dim :=
         (AdjoinRoot.powerBasis hpoly0).finrank
       _ = poly.natDegree := AdjoinRoot.powerBasis_dim hpoly0
-      _ = (p : ℕ) := by exact natDegree_X_pow_sub_C
+      _ = (p : ℕ) := by simp only [poly]; exact natDegree_X_pow_sub_C (b : ℚ)
   rw [natDegree_cyclotomic, Nat.totient_prime p.2, hfin] at hdegree
   rcases (Nat.dvd_prime p.2).mp hdegree with h | h
   · have hpval : (p : ℕ) = 2 := by omega
@@ -6203,8 +6203,7 @@ private theorem exists_oddPrime_odd_factorization
     rw [Nat.factorization_floorRoot]
     simp only [Finsupp.floorDiv_apply, Nat.floorDiv_eq_div]
     by_cases hp : p.Prime
-    · have heven : Even (b.factorization p) :=
-        Nat.not_odd_iff_even.mp (H ⟨p, hp⟩ hp2)
+    · have heven : Even (b.factorization p) := H ⟨p, hp⟩ hp2
       obtain ⟨k, hk⟩ := heven
       omega
     · rw [Nat.factorization_eq_zero_of_not_prime b hp]
@@ -6237,7 +6236,7 @@ private theorem exists_oddPrime_odd_factorization
       obtain ⟨k, hk⟩ := hodd
       rw [Nat.factorization_floorRoot]
       simp only [Finsupp.floorDiv_apply, Nat.floorDiv_eq_div]
-      norm_num [Nat.prime_two.factorization]
+      norm_num [Nat.prime_two.factorization] at hk ⊢
       omega
     · simp [Nat.prime_two.factorization, hp2, (hfac_away p hp2).symm]
 
@@ -6318,11 +6317,11 @@ private theorem no_square_in_twoPower_cyclotomic_of_oddFactor
             rw [← Int.multiplicity_natAbs (p : ℕ) (b : ℤ)]
             simp
           _ = b.factorization (p : ℕ) :=
-            Nat.multiplicity_eq_factorization p.2 (by omega))
+            Nat.multiplicity_eq_factorization p.2)
   have hvb : w.valuation F (algebraMap ℚ F b) =
       WithZero.exp (-(b.factorization (p : ℕ) : ℤ)) := by
     have hlie := v.intValuation_liesOver w (b : ℤ)
-    rw [he', pow_one] at hlie
+    rw [he, pow_one] at hlie
     calc
       w.valuation F (algebraMap ℚ F b) =
           w.intValuation (algebraMap ℤ
@@ -6414,39 +6413,14 @@ private theorem quartic_radical_irreducible
   have hquad : Irreducible (X ^ 2 - C (b : ℚ)) :=
     X_pow_sub_C_irreducible_of_prime Nat.prime_two hbmax
   rw [show 4 = 2 * 2 by norm_num]
-  apply X_pow_mul_sub_C_irreducible hquad
-  intro E _ _ x hx
+  apply irreducible_X_pow_mul_sub_C hquad
+  have := Fact.mk hquad
   apply X_pow_sub_C_irreducible_of_prime Nat.prime_two
   intro y hy
-  have hxint : IsIntegral ℚ x := not_not.mp fun h ↦ by
-    simpa only [degree_zero,
-      degree_X_pow_sub_C (show 0 < 2 by norm_num) (b : ℚ),
-      WithBot.natCast_ne_bot] using
-        congr_arg degree (hx.symm.trans (dif_neg h))
-  let L : IntermediateField ℚ E := IntermediateField.adjoin ℚ {x}
-  letI : Algebra ℚ ↥L := IntermediateField.algebra' L
-  have hnormgen : Algebra.norm ℚ
-      (IntermediateField.AdjoinSimple.gen ℚ x) = -(b : ℚ) := by
-    let pb := IntermediateField.adjoin.powerBasis hxint
-    calc
-      Algebra.norm ℚ (IntermediateField.AdjoinSimple.gen ℚ x) =
-          Algebra.norm ℚ pb.gen := by
-        exact congrArg (Algebra.norm ℚ)
-          (IntermediateField.adjoin.powerBasis_gen hxint).symm
-      _ = (-1 : ℚ) ^ pb.dim * (minpoly ℚ pb.gen).coeff 0 :=
-        Algebra.PowerBasis.norm_gen_eq_coeff_zero_minpoly pb
-      _ = -(b : ℚ) := by
-        have hnat0 : (X ^ 2 - C (b : ℚ)).natDegree = 2 :=
-          natDegree_X_pow_sub_C
-        have hnat : (X ^ 2 - (b : ℚ[X])).natDegree = 2 := by
-          simpa using hnat0
-        simp [pb, IntermediateField.minpoly_gen, hx, hnat]
-  have hnorm := congrArg (Algebra.norm ℚ) hy
-  rw [map_pow, hnormgen] at hnorm
-  have hnonneg : 0 ≤ (Algebra.norm ℚ y) ^ 2 := sq_nonneg _
-  have hbQ : (0 : ℚ) < b := by
-    exact_mod_cast (show 0 < b by omega)
-  nlinarith
+  have hn := congrArg (Algebra.norm ℚ) hy
+  rw [map_pow, norm_root_X_pow_sub_C (by norm_num)] at hn
+  have hb' : (0 : ℚ) < b := by exact_mod_cast (by omega : 0 < b)
+  nlinarith [sq_nonneg (Algebra.norm ℚ y)]
 
 /-- The real pure quartic field generated by a fourth root of a positive
 integer is not normal.  Normality would force it to contain a root of
@@ -7807,9 +7781,7 @@ private theorem rootOfUnity_mem_valuationSubring
     Valuation.mem_valuationSubring_iff]
   have hvpow : A.valuation x ^ n = 1 := by
     rw [← map_pow, hx, map_one]
-  have hv : A.valuation x = 1 := by
-    apply pow_left_injective hn
-    simpa using hvpow
+  have hv : A.valuation x = 1 := (pow_eq_one_iff.mp hvpow).resolve_right hn
   rw [hv]
 
 /-- In residue characteristic `p`, a root of prime order `ell ≠ p` cannot
@@ -8735,6 +8707,7 @@ private theorem finiteLevel_localDegree_eq_index_mul
           w.asIdeal.inertiaDeg (NumberField.RingOfIntegers K)) := by
     letI := Localization.AtPrime.algebraOfLiesOver v.asIdeal w.asIdeal
     unfold finitePlaceLocalDegree
+    set_option synthInstance.maxHeartbeats 400000 in
     rw [Ideal.ramificationIdx'_tower' v.asIdeal w.asIdeal,
       Ideal.inertiaDeg'_tower v.asIdeal w.asIdeal]
     ring
@@ -9135,10 +9108,10 @@ private theorem ambientCyclotomicScalar_eq_natCast_of_power
       NU.LocalTheory.absoluteGaloisAlgEquiv ga zeta := by
     change zeta ^
       (hzeta.autToPow K
-        (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) :
+        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga) :
           ZMod (ell : ℕ)).val = _
     exact hzeta.autToPow_spec K
-      (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
   have hact : NU.LocalTheory.absoluteGaloisAlgEquiv ga zeta =
       zeta ^ N := by
     apply R.closureEquiv.injective
@@ -9317,7 +9290,7 @@ private theorem ambientInertia_iff_cyclotomic
     let xa : A.1 := e.symm x
     let ya : A.1 := e.symm y
     have hya : (ya : AlgebraicClosure K) =
-        (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
           (xa : AlgebraicClosure K) := by
       apply R.closureEquiv.injective
       calc
@@ -9328,7 +9301,7 @@ private theorem ambientInertia_iff_cyclotomic
             R.closureEquiv (xa : AlgebraicClosure K) := by
           simp [ga, xa, e, abstractPlaceValuationEquiv]
         _ = R.closureEquiv
-            ((by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+            ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
               (xa : AlgebraicClosure K)) :=
           (R.action_compat ga (xa : AlgebraicClosure K)).symm
     have hresA : IsLocalRing.residue A.1 ya =
@@ -9407,7 +9380,7 @@ private theorem ambientActsAsPrimePower_of_cyclotomic
   let xa : A.1 := e.symm x
   let ya : A.1 := e.symm y
   have hya : (ya : AlgebraicClosure K) =
-      (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
         (xa : AlgebraicClosure K) := by
     apply R.closureEquiv.injective
     calc
@@ -9418,7 +9391,7 @@ private theorem ambientActsAsPrimePower_of_cyclotomic
           R.closureEquiv (xa : AlgebraicClosure K) := by
         simp [ga, xa, e, abstractPlaceValuationEquiv]
       _ = R.closureEquiv
-          ((by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+          ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
             (xa : AlgebraicClosure K)) :=
         (R.action_compat ga (xa : AlgebraicClosure K)).symm
   have hresA : IsLocalRing.residue A.1 ya =
@@ -10050,7 +10023,7 @@ private theorem ambientResidueDegree_dvd_powerExponent
           (NU.LocalTheory.absoluteGaloisAlgEquiv ga
             (algebraMap K (AlgebraicClosure K) (x : K))) := by
         congr 1
-        exact ((by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K).commutes
+        exact ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga).commutes
           (x : K)).symm
       _ = R.galoisEquiv ga •
           R.closureEquiv (algebraMap K (AlgebraicClosure K) (x : K)) :=
@@ -10105,7 +10078,7 @@ private theorem ambientArithmeticFrobenius_exists
   let xa : A.1 := e.symm x
   let ya : A.1 := e.symm y
   have hya : (ya : AlgebraicClosure K) =
-      (by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
         (xa : AlgebraicClosure K) := by
     apply R.closureEquiv.injective
     calc
@@ -10116,7 +10089,7 @@ private theorem ambientArithmeticFrobenius_exists
           R.closureEquiv (xa : AlgebraicClosure K) := by
         simp [g, xa, e, abstractPlaceValuationEquiv]
       _ = R.closureEquiv
-          ((by exact ga : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+          ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from ga)
             (xa : AlgebraicClosure K)) :=
         (R.action_compat ga (xa : AlgebraicClosure K)).symm
   have hresA : IsLocalRing.residue A.1 ya =
@@ -10396,7 +10369,7 @@ private theorem additive_power_exponent_eq_primePower
       ∃ a : ℕ, n = p ^ a := by
     intro n
     induction n using Nat.strong_induction_on with
-    | h n ih =>
+    | ind n ih =>
       intro hn haddn
       by_cases hn1 : n = 1
       · exact ⟨0, by simp [hn1]⟩
@@ -10436,8 +10409,7 @@ private theorem additive_power_exponent_eq_primePower
         exact Nat.mul_comm _ _⟩
   obtain ⟨a, ha⟩ := aux N hN hadd
   refine ⟨multiplicity p N, ?_⟩
-  rw [ha, Nat.multiplicity_eq_factorization hp
-    (pow_ne_zero _ hp.ne_zero), Nat.factorization_pow]
+  rw [ha, Nat.multiplicity_eq_factorization hp, Nat.factorization_pow]
   simp [hp.factorization]
 
 /-- **Arithmetic micro-obligation, Blueprint `lem:bridge`.**  On the actual
