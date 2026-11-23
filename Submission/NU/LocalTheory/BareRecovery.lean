@@ -13,6 +13,8 @@ cofinal descent; they are not data of `bareCrit`, `bareRecoveredAtPrime`, or
 `bareRecovered`.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 open IsDedekindDomain
 open scoped NumberField Pointwise
 
@@ -1478,7 +1480,7 @@ private theorem restrictLevelPlace_refl
     (L : GaloisLevel K) (w : FinitePlace L.field) :
     restrictLevelPlace (L := L) (M := L) le_rfl w = w := by
   letI : Algebra L.field L.field :=
-    (IntermediateField.inclusion (by exact le_rfl : L.field ≤ L.field)).toAlgebra
+    (IntermediateField.inclusion (show L.field ≤ L.field from le_rfl)).toAlgebra
   apply HeightOneSpectrum.ext
   rw [restrictLevelPlace, restrictFinitePlace_asIdeal]
   ext x
@@ -1948,7 +1950,7 @@ private noncomputable def levelQuotientEquiv
     (Field.absoluteGaloisGroup K ⧸ (kernelOpenNormal K L).toSubgroup) ≃*
       (L.field ≃ₐ[K] L.field) :=
   (QuotientGroup.quotientMulEquivOfEq
-    (by exact rfl : (kernelOpenNormal K L).toSubgroup = levelKernel L)).trans
+    (show (kernelOpenNormal K L).toSubgroup = levelKernel L from rfl)).trans
       (QuotientGroup.quotientKerEquivOfSurjective (absoluteRestriction L)
         (AlgEquiv.restrictNormalHom_surjective
           (F := K) (K₁ := L.field) (AlgebraicClosure K)))
@@ -2259,9 +2261,9 @@ theorem bare_recovery_sound
         levelKernel_eq_fixingSubgroup K (Λ V),
         levelKernel_eq_fixingSubgroup K (Λ U)]
       intro g hg
-      change (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) ∈
+      change (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) ∈
           (Λ V).field.fixingSubgroup at hg
-      change (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) ∈
+      change (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) ∈
           (Λ U).field.fixingSubgroup
       rw [IntermediateField.mem_fixingSubgroup_iff] at hg ⊢
       intro y hy
@@ -2270,7 +2272,7 @@ theorem bare_recovery_sound
     exact hr
   obtain ⟨W, hWlevels⟩ := exists_union_valuationSubring Λ hΛ
     (fun U => (x U).1) hcompat
-  let i₀ : ι := Classical.choice (by exact hΛ.1 : Nonempty ι)
+  let i₀ : ι := Classical.choice (show Nonempty ι from hΛ.1)
   let w₀ : FinitePlace (Λ i₀).field := (x i₀).1
   have hW₀ : W.comap (Λ i₀).field.val.toRingHom =
       primeValuationSubring w₀ := hWlevels i₀
@@ -3786,7 +3788,7 @@ theorem conjugateAbsoluteFinitePlace_val
     (g : Field.absoluteGaloisGroup K) (P : AbsoluteFinitePlaceOf K) :
     (conjugateAbsoluteFinitePlace K g P :
       ValuationSubring (AlgebraicClosure K)) =
-        (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) • P.1 :=
+        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) • P.1 :=
   rfl
 
 /-- Stabilizer of an ambient valuation subring under a supplied group of
@@ -3808,7 +3810,7 @@ theorem map_absoluteDecompositionGroup_ambient
     (eG : Field.absoluteGaloisGroup K ≃* G)
     (hcompat : ∀ (g : Field.absoluteGaloisGroup K)
         (x : AlgebraicClosure K),
-      eΩ ((by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) x) =
+      eΩ ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) x) =
         eG g • eΩ x)
     (P : AbsoluteFinitePlaceOf K) :
     Subgroup.map eG.toMonoidHom (absoluteDecompositionGroup K P.1) =
@@ -3817,13 +3819,13 @@ theorem map_absoluteDecompositionGroup_ambient
   let W := transportValuationSubring eΩ.toRingEquiv P.1
   have hinv (g : Field.absoluteGaloisGroup K) (x : Ω) :
       eΩ.symm ((eG g)⁻¹ • x) =
-        (by exact g⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g⁻¹)
           (eΩ.symm x) := by
     apply eΩ.injective
     rw [eΩ.apply_symm_apply]
     symm
     calc
-      eΩ ((by exact g⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+      eΩ ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g⁻¹)
           (eΩ.symm x)) = eG (g⁻¹) • eΩ (eΩ.symm x) :=
         hcompat g⁻¹ (eΩ.symm x)
       _ = (eG g)⁻¹ • x := by simp
@@ -3831,7 +3833,7 @@ theorem map_absoluteDecompositionGroup_ambient
       g ∈ absoluteDecompositionGroup K P.1 ↔
         eG g ∈ ambientDecompositionGroup W := by
     change
-      ((by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) • P.1 =
+      ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) • P.1 =
           P.1) ↔ eG g • W = W
     constructor
     · intro hg
@@ -3850,7 +3852,7 @@ theorem map_absoluteDecompositionGroup_ambient
       rw [ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem] at hm
       simp only [W, mem_transportValuationSubring] at hm
       have hi : eΩ.toRingEquiv.symm ((eG g)⁻¹ • eΩ x) =
-          (by exact g⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+          (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g⁻¹)
             (eΩ.toRingEquiv.symm (eΩ x)) := by
         exact hinv g (eΩ x)
       have hs : eΩ.toRingEquiv.symm (eΩ x) = x := eΩ.symm_apply_apply x
@@ -3875,7 +3877,7 @@ theorem ambientAbsoluteFinitePlaceEquiv_conjugate_val
     (eG : Field.absoluteGaloisGroup K ≃* G)
     (hcompat : ∀ (g : Field.absoluteGaloisGroup K)
         (x : AlgebraicClosure K),
-      eΩ ((by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) x) =
+      eΩ ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) x) =
         eG g • eΩ x)
     (g : Field.absoluteGaloisGroup K) (P : AbsoluteFinitePlaceOf K) :
     (ambientAbsoluteFinitePlaceEquiv K Ω eΩ
@@ -3883,27 +3885,27 @@ theorem ambientAbsoluteFinitePlaceEquiv_conjugate_val
         eG g • (ambientAbsoluteFinitePlaceEquiv K Ω eΩ P).1 := by
   have hinv (x : Ω) :
       eΩ.symm ((eG g)⁻¹ • x) =
-        (by exact g⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g⁻¹)
           (eΩ.symm x) := by
     apply eΩ.injective
     rw [eΩ.apply_symm_apply]
     symm
     calc
-      eΩ ((by exact g⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+      eΩ ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g⁻¹)
           (eΩ.symm x)) = eG (g⁻¹) • eΩ (eΩ.symm x) :=
         hcompat g⁻¹ (eΩ.symm x)
       _ = (eG g)⁻¹ • x := by simp
   have hinvR (x : Ω) :
       eΩ.toRingEquiv.symm ((eG g)⁻¹ • x) =
-        (by exact g⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g⁻¹)
           (eΩ.toRingEquiv.symm x) := by
     exact hinv x
   change transportValuationSubring eΩ.toRingEquiv
-      ((by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) • P.1) =
+      ((show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) • P.1) =
     eG g • transportValuationSubring eΩ.toRingEquiv P.1
   have hg_inv :
-      (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)⁻¹ =
-        (by exact g⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) := rfl
+      (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)⁻¹ =
+        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g⁻¹) := rfl
   ext x
   rw [mem_transportValuationSubring,
     ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem,
@@ -3924,7 +3926,7 @@ theorem map_absoluteDecompositionGroup_ambientOfFiniteExtension
     (eG : Field.absoluteGaloisGroup L ≃* G)
     (hcompat : ∀ (g : Field.absoluteGaloisGroup L)
         (x : AlgebraicClosure L),
-      eΩ ((by exact g : AlgebraicClosure L ≃ₐ[L] AlgebraicClosure L) x) =
+      eΩ ((show AlgebraicClosure L ≃ₐ[L] AlgebraicClosure L from g) x) =
         eG g • eΩ x)
     (P : AbsoluteFinitePlaceOf L) :
     Subgroup.map eG.toMonoidHom (absoluteDecompositionGroup L P.1) =
@@ -3946,7 +3948,7 @@ theorem ambientAbsoluteFinitePlaceEquivOfFiniteExtension_conjugate_val
     (eG : Field.absoluteGaloisGroup L ≃* G)
     (hcompat : ∀ (g : Field.absoluteGaloisGroup L)
         (x : AlgebraicClosure L),
-      eΩ ((by exact g : AlgebraicClosure L ≃ₐ[L] AlgebraicClosure L) x) =
+      eΩ ((show AlgebraicClosure L ≃ₐ[L] AlgebraicClosure L from g) x) =
         eG g • eΩ x)
     (g : Field.absoluteGaloisGroup L) (P : AbsoluteFinitePlaceOf L) :
     (ambientAbsoluteFinitePlaceEquivOfFiniteExtension K L Ω eΩ

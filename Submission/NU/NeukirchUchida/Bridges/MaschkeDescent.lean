@@ -981,7 +981,7 @@ private theorem completionResidueFinite
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
   letI : IsLocalHom f :=
-    ((IsLocalRing.local_hom_TFAE f).out 3 0).mp hfmax
+    ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
   let rf : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
   have hrf : Function.Surjective rf := by

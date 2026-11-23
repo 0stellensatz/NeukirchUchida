@@ -9,6 +9,8 @@ Neukirch--Uchida Maschke bridge.  In particular, its import closure does not
 contain the unfinished finite-projection theorem.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace NU.LCFT
 
 noncomputable section
@@ -1227,7 +1229,9 @@ private theorem shrink_local
           {z | ValuativeRel.valuation A z < γ} ⊆ s) ↔
         ∃ γ : (MonoidWithZeroHom.ValueGroup₀ (.ofClass w))ˣ,
           {z | w.restrict z < γ.val} ⊆ s by
-      simpa only [sub_zero] using (w.exists_setOf_restrict_le_iff 0 s).symm]
+      have h := (w.exists_setOf_restrict_le_iff 0 s).symm
+      simp only [sub_zero] at h
+      exact h]
     -- transport the valuation-neighborhood criterion across e
     have heh : (h : A → K) = e := rfl
     rw [show s ∈ 𝓝 (0 : A) ↔ e '' s ∈ 𝓝 (0 : K) by
@@ -4324,7 +4328,7 @@ private theorem normGroup_primitive_constantCoeff
         exact Nat.card_pos.ne'
   have hne : residueCard K - 1 ≠ 0 :=
     (Nat.sub_pos_of_lt (normGroup_one_lt_residueCard K)).ne'
-  rw [primitiveDivisionPolynomial, map_add, map_pow, hit, zero_pow hne, add_zero]
+  rw [primitiveDivisionPolynomial, RingHom.map_add, RingHom.map_pow, hit, zero_pow hne, add_zero]
   simp
 
 private theorem normGroup_level_minpoly
@@ -4850,7 +4854,7 @@ private theorem e01_rectangular_inf_unramified
     rw [Subgroup.mem_zpowers_iff] at hx ⊢
     obtain ⟨k, rfl⟩ := hx
     refine ⟨(a : ℤ) * k, ?_⟩
-    simp [← zpow_natCast, ← zpow_mul]
+    simp only [zpow_mul, zpow_natCast, pow_one]
   ext x
   constructor
   · rintro ⟨hxb, hxa⟩
@@ -4894,7 +4898,7 @@ private theorem e01_rectangular_inf_unramified
     rw [Subgroup.mem_zpowers_iff]
     refine ⟨k, ?_⟩
     rw [← hz, hzk]
-    simp [← zpow_natCast, ← zpow_mul]
+    simp only [zpow_mul, zpow_natCast, pow_one]
   · intro hx
     exact ⟨(sup_le_sup hpow le_rfl) hx, (sup_le_sup le_rfl hprincipal) hx⟩
 
@@ -4908,7 +4912,7 @@ private theorem e01_rectangular_relIndex
     rw [Subgroup.mem_zpowers_iff] at hx ⊢
     obtain ⟨k, rfl⟩ := hx
     refine ⟨(a : ℤ) * k, ?_⟩
-    simp [← zpow_natCast, ← zpow_mul]
+    simp only [zpow_mul, zpow_natCast, pow_one]
   have hHJ : H ≤ J := sup_le_sup hpow le_rfl
   let valMod : Units K →* Multiplicative (ZMod a) :=
     (Int.castAddHom (ZMod a)).toMultiplicative.comp (normalizedValuationHom K)
@@ -4978,7 +4982,7 @@ private theorem e01_rectangular_relIndex
       rw [Subgroup.mem_zpowers_iff]
       refine ⟨k, ?_⟩
       rw [← hz, hk]
-      simp [← zpow_natCast, ← zpow_mul]
+      simp only [zpow_mul, zpow_natCast, pow_one]
   have hsurj : Function.Surjective f := by
     intro y
     obtain ⟨z, hz⟩ := ZMod.intCast_surjective y.toAdd
@@ -5610,7 +5614,7 @@ theorem rectangularClassField_exists (π : Uniformizer K)
           (AlgEquiv.restrictNormal_commutes σ E xe).symm
         _ = algebraMap E C ((τ.restrictNormal E) xe) :=
           congrArg (algebraMap E C)
-            (by simpa [rE, AlgEquiv.restrictNormalHom] using heq)
+            heq
         _ = τ (algebraMap E C xe) := AlgEquiv.restrictNormal_commutes τ E xe
         _ = τ x := congrArg τ hxalg
     have hUrestrict : U.restrict (by exact le_sup_right : U ≤ C) ≤ F := by
@@ -5626,7 +5630,7 @@ theorem rectangularClassField_exists (π : Uniformizer K)
           (AlgEquiv.restrictNormal_commutes σ U xu).symm
         _ = algebraMap U C ((τ.restrictNormal U) xu) :=
           congrArg (algebraMap U C)
-            (by simpa [rU, AlgEquiv.restrictNormalHom] using heq)
+            heq
         _ = τ (algebraMap U C xu) := AlgEquiv.restrictNormal_commutes τ U xu
         _ = τ x := congrArg τ hxalg
     have hsup : E.restrict (by exact le_sup_left : E ≤ C) ⊔

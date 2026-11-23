@@ -93,7 +93,7 @@ private noncomputable def completionResidueEquiv
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
   letI : IsLocalHom f :=
-    ((IsLocalRing.local_hom_TFAE f).out 3 0).mp hfmax
+    ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
   let rf : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
   have hrf : Function.Surjective rf := by
@@ -135,7 +135,7 @@ private noncomputable def completionResidueEquiv
   let er : IsLocalRing.ResidueField A ≃+*
       IsLocalRing.ResidueField B :=
     RingEquiv.ofBijective rf ⟨rf.injective, hrf⟩
-  exact eA.trans er
+  exact eA.toRingEquiv.trans er
 
 /-- In particular, the residue field of a number-field completion is finite. -/
 private theorem completionResidueFinite
@@ -393,7 +393,9 @@ private noncomputable def rationalCompletionMap
   have hf : UniformContinuous f :=
     IsDedekindDomain.HeightOneSpectrum.uniformContinuous_algebraMap_liesOver
       ℚ K q v
-  exact UniformSpace.Completion.mapRingHom f hf.continuous
+  exact (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv K v).symm.toRingHom.comp
+    ((UniformSpace.Completion.mapRingHom f hf.continuous).comp
+      (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv ℚ q).toRingHom)
 
 @[simp] private theorem rationalCompletionMap_algebraMap
     {K : Type*} [Field K] [NumberField K]
@@ -408,7 +410,9 @@ private theorem continuous_rationalCompletionMap
     {K : Type*} [Field K] [NumberField K]
     (v : NU.LocalTheory.FinitePlace K) :
     Continuous (rationalCompletionMap v) := by
-  exact UniformSpace.Completion.continuous_map
+  exact (IsDedekindDomain.HeightOneSpectrum.adicCompletion.continuous_ofCompletion K v).comp
+    (UniformSpace.Completion.continuous_map.comp
+      (IsDedekindDomain.HeightOneSpectrum.adicCompletion.continuous_toCompletion ℚ _))
 
 /-- The completed valuation at the restricted rational place is the
 restriction of the completed valuation at `v`. -/
@@ -465,8 +469,7 @@ private theorem rationalCompletionMap_hasExtension
   letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   rw [← IsDedekindDomain.HeightOneSpectrum.valuation_liesOver K q v a]
   exact (pow_le_one_iff (M := ℤᵐ⁰)
-    (Ideal.IsDedekindDomain.ramificationIdx_ne_zero_of_liesOver
-      v.asIdeal q.ne_bot)).symm
+    (Ideal.ramificationIdx_pos (q := v.asIdeal) (𝓞 ℚ)).ne').symm
 
 /-- In `ℤᵐ⁰`, being strictly below one is the same as being at most
 the largest element below one. -/
@@ -551,7 +554,7 @@ private theorem rationalCompletionIntegers_module_finite
   letI : vF.Compatible := Valuation.Compatible.ofValuation vF
   letI : IsNonarchimedeanLocalField Fb := completionIsLocalField q
   letI : IsNonarchimedeanLocalField F := completionIsLocalField v
-  letI : ValuativeExtension Fb F := ⟨fun a b => by
+  letI : ValuativeExtension Fb F := ⟨fun {a b} => by
     rw [Valuation.Compatible.vle_iff_le
         (v := ValuativeRel.valuation F),
       Valuation.Compatible.vle_iff_le
@@ -789,6 +792,7 @@ private theorem rationalCompletion_finrank_eq_localDegree
       rw [← IsDedekindDomain.HeightOneSpectrum.valuation_liesOver K q v
         (π : ℚ), hqπ, ← WithZero.exp_nsmul]
       congr 1
+      rw [← Ideal.ramificationIdx'_eq_ramificationIdx q.asIdeal v.asIdeal q.ne_bot]
       simp [e]
     have hpowval : vF ((ϖB ^ e : B) : F) =
         WithZero.exp (-(e : ℤ)) := by
@@ -1682,7 +1686,7 @@ private theorem ringOfIntegers_henselianLocalRing :
     ringOfIntegers_isAdicComplete F
   letI : HenselianRing (RingOfIntegers F) (LocalMaximalIdeal F) :=
     inferInstance
-  apply (HenselianLocalRing.TFAE (RingOfIntegers F)).out 1 0 |>.mp
+  apply (HenselianLocalRing.TFAE (RingOfIntegers F)).out 2 1 |>.mp
   intro f hf a₀ hroot hderiv
   obtain ⟨a, rfl⟩ := IsLocalRing.residue_surjective a₀
   have hevalzero : IsLocalRing.residue (RingOfIntegers F) (f.eval a) = 0 := by
@@ -1761,7 +1765,7 @@ private theorem exists_teichmullerGenerator :
     rw [hNcast]
     exact mul_ne_zero (neg_ne_zero.mpr one_ne_zero)
       (pow_ne_zero _ g.ne_zero)
-  have hH := ((HenselianLocalRing.TFAE R).out 0 1).mp
+  have hH := ((HenselianLocalRing.TFAE R).out 1 2).mp
     (inferInstance : HenselianLocalRing R)
   obtain ⟨t, htroot, htres⟩ :=
     hH f hfmonic (g : k) hfroot hfderiv
@@ -2605,10 +2609,10 @@ private theorem completion_factorial_inv_norm_le
     (n : ℕ) :
     ‖((n.factorial : v.adicCompletion K)⁻¹)‖ ≤
       ‖(p : v.adicCompletion K)‖⁻¹ ^ n := by
-  let k := padicValNat (p : ℕ) n.factorial
+  let k := multiplicity (p : ℕ) n.factorial
   have hfact : n.factorial ≠ 0 := Nat.factorial_ne_zero n
   have hpk : (p : ℕ) ^ k ∣ n.factorial :=
-    (padicValNat_dvd_iff_le hfact).mpr le_rfl
+    pow_multiplicity_dvd _ _
   let m := n.factorial / (p : ℕ) ^ k
   have hfac : (p : ℕ) ^ k * m = n.factorial :=
     Nat.mul_div_cancel' hpk
@@ -3125,8 +3129,10 @@ private theorem deepUnitFiltration_pPowerTorsion_spec
     have hvpow : w (u : F) ^ N = 1 := by
       simpa only [map_pow, map_one] using congrArg w hpowF
     have hv : w (u : F) = 1 := by
-      apply pow_left_injective hN
-      simpa using hvpow
+      first
+        | exact (pow_eq_one_iff hN).mp hvpow
+        | exact (pow_eq_one_iff_of_nonneg zero_le' hN).mp hvpow
+        | exact pow_left_injective₀ zero_le' zero_le' hN (by simpa using hvpow)
     have huA : u ∈ A.unitGroup := by
       rw [A.mem_unitGroup_iff]
       exact (Valuation.isEquiv_valuation_valuationSubring w).eq_one_iff_eq_one.mp hv
