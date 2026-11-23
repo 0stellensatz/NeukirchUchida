@@ -13,8 +13,6 @@ cofinal descent; they are not data of `bareCrit`, `bareRecoveredAtPrime`, or
 `bareRecovered`.
 -/
 
-set_option backward.isDefEq.respectTransparency false
-
 open IsDedekindDomain
 open scoped NumberField Pointwise
 
@@ -1482,7 +1480,8 @@ private theorem restrictLevelPlace_refl
   letI : Algebra L.field L.field :=
     (IntermediateField.inclusion (show L.field ≤ L.field from le_rfl)).toAlgebra
   apply HeightOneSpectrum.ext
-  rw [restrictLevelPlace, restrictFinitePlace_asIdeal]
+  unfold restrictLevelPlace
+  rw [restrictFinitePlace_asIdeal]
   ext x
   change algebraMap (𝓞 L.field) (𝓞 L.field) x ∈ w.asIdeal ↔ _
   have hx : algebraMap (𝓞 L.field) (𝓞 L.field) x = x := by
@@ -1504,8 +1503,8 @@ private theorem restrictLevelPlace_trans
   letI : IsScalarTower L.field M.field N.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   apply HeightOneSpectrum.ext
-  rw [restrictLevelPlace, restrictLevelPlace, restrictLevelPlace,
-    restrictFinitePlace_asIdeal, restrictFinitePlace_asIdeal,
+  unfold restrictLevelPlace
+  rw [restrictFinitePlace_asIdeal, restrictFinitePlace_asIdeal,
     restrictFinitePlace_asIdeal]
   ext x
   change algebraMap (𝓞 M.field) (𝓞 N.field)
@@ -2507,9 +2506,7 @@ theorem decompositionField_fixingSubgroup
       absoluteDecompositionGroup K W := by
   change (IntermediateField.fixedField
     (absoluteDecompositionGroup K W)).fixingSubgroup = _
-  rw [show absoluteDecompositionGroup K W =
-      (decompositionGroupClosedSubgroup K W).toSubgroup from rfl,
-    InfiniteGalois.fixingSubgroup_fixedField]
+  exact InfiniteGalois.fixingSubgroup_fixedField (decompositionGroupClosedSubgroup K W)
 
 /-- Restriction of the chosen absolute place supplies a prolongation at every
 intermediate extension. -/
@@ -4051,8 +4048,8 @@ theorem orientation_free_local_interface
   have he_spec (P : AbsoluteFinitePlaceOf K) :
       Subgroup.map α.toMulEquiv.toMonoidHom
           (absoluteDecompositionGroup K P.1) =
-        absoluteDecompositionGroup K' (e P).1 := by
-    simpa [e] using hf_spec P
+        absoluteDecompositionGroup K' (e P).1 :=
+    hf_spec P
   refine ⟨e, he_spec, ?_, ?_⟩
   · intro P Q
     constructor

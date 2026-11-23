@@ -8,8 +8,6 @@ fixed algebraic closure.  Absolute decomposition groups are stabilizers of
 that valuation subring.  The terminal theorem is Blueprint Theorem 8.7.
 -/
 
-set_option backward.isDefEq.respectTransparency false
-
 open scoped NumberField Pointwise
 
 namespace NU.LocalTheory
@@ -764,7 +762,7 @@ theorem absoluteDecompositionGroup_finiteImage
       change (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) ∈
         MulAction.stabilizer
           (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) W
-      rw [MulAction.mem_stabilizer_iff]
+      refine MulAction.mem_stabilizer_iff.mpr ?_
       change (δK⁻¹ *
         (by exact τ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)) • W = W
       rw [mul_smul, hδK]
@@ -1440,7 +1438,8 @@ private theorem restrictLevelPlace_refl
     (IntermediateField.inclusion
       (by exact le_rfl : L.field ≤ L.field)).toAlgebra
   apply IsDedekindDomain.HeightOneSpectrum.ext
-  rw [restrictLevelPlace, restrictFinitePlace_asIdeal]
+  unfold restrictLevelPlace
+  rw [restrictFinitePlace_asIdeal]
   ext x
   change algebraMap (𝓞 L.field) (𝓞 L.field) x ∈ w.asIdeal ↔ _
   have hx : algebraMap (𝓞 L.field) (𝓞 L.field) x = x := by
@@ -1461,8 +1460,8 @@ private theorem restrictLevelPlace_trans
   letI : IsScalarTower L.field M.field N.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   apply IsDedekindDomain.HeightOneSpectrum.ext
-  rw [restrictLevelPlace, restrictLevelPlace, restrictLevelPlace,
-    restrictFinitePlace_asIdeal, restrictFinitePlace_asIdeal,
+  unfold restrictLevelPlace
+  rw [restrictFinitePlace_asIdeal, restrictFinitePlace_asIdeal,
     restrictFinitePlace_asIdeal]
   ext x
   change algebraMap (𝓞 M.field) (𝓞 N.field)

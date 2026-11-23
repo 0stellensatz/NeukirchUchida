@@ -9,8 +9,6 @@ subgroups `G_L ∩ C_ℓ`.  In particular, neither `packetImagesAtOddPrime` nor
 fields `L(μ_ℓ)` occur only in the comparison theorems at the end of the file.
 -/
 
-set_option backward.isDefEq.respectTransparency false
-
 open IsDedekindDomain
 open scoped NumberField
 
@@ -311,8 +309,7 @@ theorem orientedRestriction_surjective
   obtain ⟨g, hg⟩ := AlgEquiv.restrictNormalHom_surjective
     (AlgebraicClosure K) σ
   refine ⟨QuotientGroup.mk g, ?_⟩
-  rw [orientedRestriction_mk]
-  exact hg
+  exact (orientedRestriction_mk orientation L p g).trans hg
 
 private noncomputable def topologicalAbelianizationTransport
     {G H : Type*} [Group G] [Group H]
@@ -1039,6 +1036,7 @@ private noncomputable def comparisonAutELToAbsolute
     apply AlgEquiv.ext
     intro x
     simp [comparisonClosureRingEquiv]
+    rfl
   map_mul' τ₁ τ₂ := by
     apply AlgEquiv.ext
     intro x
