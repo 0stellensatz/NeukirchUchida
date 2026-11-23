@@ -710,7 +710,7 @@ theorem finiteLevel_conjugacy
       MonoidAlgebra.single_mul_single] using hsE
   have hrel : hN * g.1 =
       (normalLevelQuotientIso theta N h₁ h₂ g).1 * hN :=
-    Finsupp.single_left_injective one_ne_zero hsingle
+    MonoidAlgebra.single_left_injective one_ne_zero hsingle
   calc
     (normalLevelQuotientIso theta N h₁ h₂ g).1 =
         (normalLevelQuotientIso theta N h₁ h₂ g).1 * hN * hN⁻¹ := by
