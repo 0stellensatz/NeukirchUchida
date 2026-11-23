@@ -3773,20 +3773,20 @@ private theorem residueCharacteristic_coprime_norm_sub_one
   let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hnorm : NU.Chebotarev.PrimeIdeal.norm v =
       NU.Chebotarev.PrimeIdeal.norm q ^
-        q.asIdeal.inertiaDeg' v.asIdeal := by
+        v.asIdeal.inertiaDeg (𝓞 ℚ) := by
     exact NU.Chebotarev.PrimeIdeal.norm_pow_inertiaDeg
       v q inferInstance
   have hq : NU.Chebotarev.PrimeIdeal.norm q =
       NU.LocalTheory.residueCharacteristic v := by
     rw [rationalPrimeNorm_eq_residueCharacteristic,
       NU.NeukirchUchida.LocalInvariants.residueCharacteristic_restrictFinitePlace]
-  have hf : 0 < q.asIdeal.inertiaDeg' v.asIdeal :=
-    Ideal.inertiaDeg'_pos q.asIdeal v.asIdeal
+  have hf : 0 < v.asIdeal.inertiaDeg (𝓞 ℚ) :=
+    Ideal.inertiaDeg_pos v.asIdeal (𝓞 ℚ)
   rw [hnorm, hq]
   have hpow : (NU.LocalTheory.residueCharacteristic v ^
-      q.asIdeal.inertiaDeg' v.asIdeal).Coprime
+      v.asIdeal.inertiaDeg (𝓞 ℚ)).Coprime
       (NU.LocalTheory.residueCharacteristic v ^
-        q.asIdeal.inertiaDeg' v.asIdeal - 1) :=
+        v.asIdeal.inertiaDeg (𝓞 ℚ) - 1) :=
     (Nat.coprime_self_sub_right
       (pow_pos
         (NU.NeukirchUchida.LocalInvariants.residueCharacteristic_prime v).pos
@@ -5858,8 +5858,7 @@ private theorem odd_kummer_raw
       (ringChar.eq_iff).mp hringChar
     let : P.asIdeal.LiesOver v.asIdeal := hPv
     have hnormPcoprime : (Ideal.absNorm P.asIdeal).Coprime (lambda : ℕ) := by
-      rw [Ideal.absNorm_eq_pow_inertiaDeg'_of_liesOver
-        P.asIdeal v.asIdeal inferInstance v.ne_bot]
+      rw [← Ideal.absNorm_pow_inertiaDeg v.asIdeal P.asIdeal]
       change (NU.Chebotarev.PrimeIdeal.norm v ^ _).Coprime (lambda : ℕ)
       rw [norm_eq_residueCharacteristic_rat]
       exact ((Nat.coprime_primes
@@ -6910,8 +6909,7 @@ private theorem twoPrime_exceptional_kummer_raw
       (ringChar.eq_iff).mp hringChar
     let : P.asIdeal.LiesOver v.asIdeal := hPv
     have hnormPcoprime : (Ideal.absNorm P.asIdeal).Coprime 2 := by
-      rw [Ideal.absNorm_eq_pow_inertiaDeg'_of_liesOver
-        P.asIdeal v.asIdeal inferInstance v.ne_bot]
+      rw [← Ideal.absNorm_pow_inertiaDeg v.asIdeal P.asIdeal]
       change (NU.Chebotarev.PrimeIdeal.norm v ^ _).Coprime 2
       rw [norm_eq_residueCharacteristic_rat]
       exact ((Nat.coprime_primes
@@ -8239,7 +8237,6 @@ theorem ambientResidueNorm_eq_pow
   change NU.Chebotarev.PrimeIdeal.norm v =
     NU.Chebotarev.PrimeIdeal.norm q ^
       v.asIdeal.inertiaDeg (NumberField.RingOfIntegers ℚ)
-  rw [← Ideal.inertiaDeg'_eq_inertiaDeg q.asIdeal v.asIdeal]
   exact NU.Chebotarev.PrimeIdeal.norm_pow_inertiaDeg v q inferInstance
 
 /-! ### Ambient assembly: `cor:chi`, `prop:inertia`, `prop:q`, and `lem:bridge` -/

@@ -1876,10 +1876,9 @@ private theorem splitsCompletelyAt_of_identityFrobenius
       have hu := (Algebra.isUnramifiedAt_iff_of_isDedekindDomain'
         W.ne_bot).mp hWu
       simpa [← hWover.over] using hu
-    · rw [asymmetricAbsoluteResidueDegree,
-        ← Ideal.inertiaDeg'_eq_inertiaDeg q.asIdeal W.asIdeal]
+    · rw [asymmetricAbsoluteResidueDegree]
       have hord := NU.Chebotarev.arithFrobAt_order_eq_inertiaDeg W hWu
-      rw [hfrob, orderOf_one, ← hWover.over] at hord
+      rw [hfrob, orderOf_one] at hord
       exact hord.symm
 
 private noncomputable def restrictFinitePlaceAlong
@@ -2250,7 +2249,7 @@ private theorem kummerRadicalRamifiedAt
   have hple : (p : ℕ) ≤ e := Nat.le_of_dvd hepos hpe
   have hele : e ≤ (p : ℕ) := by
     rw [← hdegree]
-    exact Ideal.ramificationIdx_le_finrank B E R W.asIdeal
+    exact Ideal.ramificationIdx'_le_finrank (S := B) E R W.asIdeal
   have heq : e = (p : ℕ) := Nat.le_antisymm hele hple
   refine ⟨W, hrestrict, ?_⟩
   rw [← Ideal.ramificationIdx'_eq_ramificationIdx
@@ -2970,7 +2969,7 @@ private theorem kummerRadicalFieldRamifiedAt
   have hple : (p : ℕ) ≤ e := Nat.le_of_dvd hepos hpe
   have hele : e ≤ (p : ℕ) := by
     rw [← hdegree]
-    exact Ideal.ramificationIdx_le_finrank B E R W.asIdeal
+    exact Ideal.ramificationIdx'_le_finrank (S := B) E R W.asIdeal
   have heq : e = (p : ℕ) := Nat.le_antisymm hele hple
   refine ⟨W, hrestrict, ?_⟩
   rw [← Ideal.ramificationIdx'_eq_ramificationIdx
@@ -3836,8 +3835,8 @@ private theorem regularKernel_localEmbedding_place (P : FinitePlace K)
     obtain ⟨x, hx⟩ := hqbasesurj (qf z)
     refine ⟨x, hqfinj ?_⟩
     rw [← RingHom.comp_apply, hcompat, hx]
-  have hf : P.asIdeal.inertiaDeg' W.asIdeal = 1 := by
-    rw [Ideal.inertiaDeg'_algebraMap]
+  have hf : W.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) = 1 := by
+    rw [Ideal.inertiaDeg_eq_of_isMaximal P.asIdeal W.asIdeal]
     have haInj : Function.Injective
         (Algebra.ofId (NumberField.RingOfIntegers K ⧸ P.asIdeal)
           (NumberField.RingOfIntegers L ⧸ W.asIdeal)) := by
@@ -3860,11 +3859,7 @@ private theorem regularKernel_localEmbedding_place (P : FinitePlace K)
     rw [← Ideal.ramificationIdx'_eq_ramificationIdx
       P.asIdeal W.asIdeal P.ne_bot]
     exact he
-  have hf' : W.asIdeal.inertiaDeg
-      (NumberField.RingOfIntegers K) = 1 := by
-    rw [← Ideal.inertiaDeg'_eq_inertiaDeg P.asIdeal W.asIdeal]
-    exact hf
-  exact ⟨W, hrestrict, he', hf'⟩
+  exact ⟨W, hrestrict, he', hf⟩
 
 private theorem regularKernel_allIndices_one_of_galois
     {K L : Type*} [Field K] [Field L] [NumberField K] [NumberField L]
@@ -4185,7 +4180,7 @@ private theorem kummerRadical_ramificationIndex_eq_prime
   have hple : (p : ℕ) ≤ e := Nat.le_of_dvd hepos hpe
   have hele : e ≤ (p : ℕ) := by
     rw [← hdegree]
-    exact Ideal.ramificationIdx_le_finrank B E.field R.field.field W.asIdeal
+    exact Ideal.ramificationIdx'_le_finrank (S := B) E.field R.field.field W.asIdeal
   have heq : e = (p : ℕ) := Nat.le_antisymm hele hple
   rw [relativeRamificationIndex,
     ← Ideal.ramificationIdx'_eq_ramificationIdx
@@ -4495,8 +4490,8 @@ private theorem transportRadicalRamificationToDescent
     rw [heTowerLW]
     rw [← Ideal.ramificationIdx'_eq_ramificationIdx
       w.asIdeal W.asIdeal w.ne_bot]
-    exact Ideal.ramificationIdx_le_finrank
-      BLR L.field.field R.field.field W.asIdeal
+    exact Ideal.ramificationIdx'_le_finrank (S := BLR)
+      L.field.field R.field.field W.asIdeal
   have hpLeSub : (p : ℕ) ≤ (p : ℕ) - 1 :=
     hpLeDegree.trans (hRLdegree.le.trans hEbound)
   exact (Nat.not_le_of_lt
@@ -4962,9 +4957,8 @@ private theorem regularKernel_inertiaDeg_map_equiv
     Ideal.IsMaximal.map_bijective f f.bijective inferInstance
   let : (Ideal.map g Q).IsMaximal :=
     Ideal.IsMaximal.map_bijective g g.bijective inferInstance
-  rw [← Ideal.inertiaDeg'_eq_inertiaDeg (Ideal.map f P) (Ideal.map g Q),
-    ← Ideal.inertiaDeg'_eq_inertiaDeg P Q,
-    Ideal.inertiaDeg'_algebraMap, Ideal.inertiaDeg'_algebraMap]
+  rw [Ideal.inertiaDeg_eq_of_isMaximal (Ideal.map f P) (Ideal.map g Q),
+    Ideal.inertiaDeg_eq_of_isMaximal P Q]
   let ef : (R ⧸ P) ≃+* (R' ⧸ Ideal.map f P) :=
     Ideal.quotientEquiv P (Ideal.map f P) f rfl
   let eg : (S ⧸ Q) ≃+* (S' ⧸ Ideal.map g Q) :=

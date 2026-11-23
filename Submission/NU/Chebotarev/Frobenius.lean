@@ -92,7 +92,7 @@ theorem arithFrobAt_order_eq_inertiaDeg
     (P : PrimeIdeal L)
     (hP : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) P.asIdeal) :
     orderOf (arithFrobeniusAt (K := K) (L := L) P) =
-      (P.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' P.asIdeal := by
+      P.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) := by
   let R := NumberField.RingOfIntegers K
   let S := NumberField.RingOfIntegers L
   let G := Gal(L/K)
@@ -143,10 +143,10 @@ theorem arithFrobAt_order_eq_inertiaDeg
       FiniteField.coe_frobeniusAlgEquivOfAlgebraic]
     congr 1
     exact Nat.card_eq_fintype_card
-  have hordσ : orderOf σ = p.inertiaDeg' P.asIdeal := by
+  have hordσ : orderOf σ = P.asIdeal.inertiaDeg R := by
     rw [← orderOf_injective ρ hρinj σ, himage,
       FiniteField.orderOf_frobeniusAlgEquivOfAlgebraic,
-      ← Ideal.inertiaDeg'_algebraMap p P.asIdeal]
+      Ideal.inertiaDeg_eq_of_isMaximal p P.asIdeal]
   rw [← hordσ]
   exact orderOf_injective (Subgroup.subtype _) Subtype.coe_injective σ
 
@@ -175,8 +175,6 @@ theorem arithFrobAt_generates_decomposition
       ← Ideal.ramificationIdx'_eq_ramificationIdx
         (P.asIdeal.under (NumberField.RingOfIntegers K)) P.asIdeal
         (Ideal.under_ne_bot (NumberField.RingOfIntegers K) P.ne_bot),
-      ← Ideal.inertiaDeg'_eq_inertiaDeg
-        (P.asIdeal.under (NumberField.RingOfIntegers K)) P.asIdeal,
       Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt P.ne_bot, one_mul]
 
 private theorem arithFrobAt_pow_mod
@@ -219,11 +217,11 @@ theorem arithFrobAt_restrict_pow
       (NumberField.RingOfIntegers K) P.asIdeal) :
     AlgEquiv.restrictScalarsHom K (arithFrobeniusAt (K := E) P) =
       arithFrobeniusAt (K := K) P ^
-        (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal := by
+        q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) := by
   classical
   let G := Gal(L/K)
   let s := arithFrobeniusAt (K := K) (L := L) P
-  let m := (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal
+  let m := q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K)
   let i : Gal(L/E) →* G := AlgEquiv.restrictScalarsHom K
   let D : Subgroup G := Subgroup.zpowers s
   let H : Subgroup G := i.range
@@ -266,26 +264,24 @@ theorem arithFrobAt_restrict_pow
     apply Subtype.ext
     apply Subtype.ext
     exact ht
-  have hJcard : Nat.card J = q.asIdeal.inertiaDeg' P.asIdeal := by
+  have hJcard : Nat.card J = P.asIdeal.inertiaDeg (NumberField.RingOfIntegers E) := by
     rw [Nat.card_congr (Equiv.ofBijective fromDE ⟨hfromDE_inj, hfromDE_surj⟩).symm]
     rw [arithFrobAt_generates_decomposition P hunrE, Nat.card_zpowers,
-      arithFrobAt_order_eq_inertiaDeg P hunrE, ← hPq.over]
-  have hDcard : Nat.card D =
-      (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' P.asIdeal := by
-    rw [Nat.card_zpowers, arithFrobAt_order_eq_inertiaDeg P hunr,
-      ← Ideal.under_under (B := NumberField.RingOfIntegers E) P.asIdeal,
-      ← hPq.over]
-  have htower := Ideal.inertiaDeg'_algebra_tower
-    (q.asIdeal.under (NumberField.RingOfIntegers K)) q.asIdeal P.asIdeal
+      arithFrobAt_order_eq_inertiaDeg P hunrE]
+  have hDcard : Nat.card D = P.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) := by
+    rw [Nat.card_zpowers, arithFrobAt_order_eq_inertiaDeg P hunr]
+  have htower := Ideal.inertiaDeg_tower (R := NumberField.RingOfIntegers K)
+    q.asIdeal P.asIdeal
   let : IsMulCommutative D := Subgroup.zpowers_isMulCommutative s
   let : J.Normal := Subgroup.normal_of_isMulCommutative J
   have hindex : J.index = m := by
     have hc := Subgroup.card_mul_index J
     rw [hJcard, hDcard, htower] at hc
-    have hc' : q.asIdeal.inertiaDeg' P.asIdeal * J.index =
-        q.asIdeal.inertiaDeg' P.asIdeal * m :=
-      hc.trans (Nat.mul_comm m (q.asIdeal.inertiaDeg' P.asIdeal))
-    exact Nat.eq_of_mul_eq_mul_left (q.asIdeal.inertiaDeg'_pos P.asIdeal) hc'
+    have hc' : P.asIdeal.inertiaDeg (NumberField.RingOfIntegers E) * J.index =
+        P.asIdeal.inertiaDeg (NumberField.RingOfIntegers E) * m :=
+      hc.trans (Nat.mul_comm m (P.asIdeal.inertiaDeg (NumberField.RingOfIntegers E)))
+    exact Nat.eq_of_mul_eq_mul_left
+      (Ideal.inertiaDeg_pos P.asIdeal (NumberField.RingOfIntegers E)) hc'
   have hpowJ := J.pow_index_mem (⟨s, Subgroup.mem_zpowers s⟩ : D)
   rw [hindex] at hpowJ
   have hpowH : s ^ m ∈ H := hpowJ
@@ -302,9 +298,8 @@ theorem arithFrobAt_restrict_pow
         ← Ideal.under_under (B := NumberField.RingOfIntegers E) P.asIdeal,
         ← hPq.over]
       symm
-      exact Ideal.absNorm_eq_pow_inertiaDeg'_of_liesOver q.asIdeal
-        (q.asIdeal.under (NumberField.RingOfIntegers K)) inferInstance
-        (Ideal.under_ne_bot (NumberField.RingOfIntegers K) q.ne_bot)
+      exact (Ideal.absNorm_pow_inertiaDeg
+        (q.asIdeal.under (NumberField.RingOfIntegers K)) q.asIdeal).symm
     rw [← hcard]
     change Ideal.Quotient.mk P.asIdeal (i t • x) = _
     rw [ht]

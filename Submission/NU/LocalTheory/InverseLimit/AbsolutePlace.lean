@@ -1195,8 +1195,7 @@ private theorem exists_local_klein_level
     rw [hkres] at hktower
     omega
   have hf : 2 ≤ w.asIdeal.inertiaDeg (𝓞 K) := by
-    rw [← Ideal.inertiaDeg'_eq_inertiaDeg p w.asIdeal,
-      Ideal.inertiaDeg'_algebraMap]
+    rw [Ideal.inertiaDeg_eq_of_isMaximal p w.asIdeal]
     exact hfres
   let G := E ≃ₐ[K] E
   have hcardstab :

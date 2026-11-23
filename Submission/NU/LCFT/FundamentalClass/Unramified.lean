@@ -1576,19 +1576,20 @@ private theorem residueFinrank_eq_residueDegree
     omega
   have hram : p.ramificationIdx' P = ramificationIndex K L :=
     Ideal.ramificationIdx'_spec hmap.le hnot
-  have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
+  have hdegree := Ideal.ramificationIdx'_mul_inertiaDeg_of_isLocalRing
     (S := RingOfIntegers L) K L (p := p) (by
       rw [hp, ne_eq, Ideal.span_singleton_eq_bot]
       exact hϖKirr.ne_zero)
   rw [hram] at hdegree
   have hselected := finrank_eq_ramificationIndex_mul_residueDegree K L
-  have hinertia : p.inertiaDeg' P = residueDegree K L := by
+  have hinertia : P.inertiaDeg (RingOfIntegers K) = residueDegree K L := by
     apply Nat.eq_of_mul_eq_mul_left
       (ramificationInvariants_exists K L).choose_spec.choose_spec.1
     exact hdegree.trans hselected
   calc
-    Module.finrank (LocalResidueField K) (LocalResidueField L) = p.inertiaDeg' P := by
-      rw [Ideal.inertiaDeg'_algebraMap]
+    Module.finrank (LocalResidueField K) (LocalResidueField L) =
+        P.inertiaDeg (RingOfIntegers K) := by
+      rw [Ideal.inertiaDeg_eq_of_isMaximal p P]
       rfl
     _ = residueDegree K L := hinertia
 

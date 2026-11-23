@@ -1348,18 +1348,18 @@ private theorem residueCharacteristic_coprime_norm_sub_one
   let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hnorm : NU.Chebotarev.PrimeIdeal.norm v =
       NU.Chebotarev.PrimeIdeal.norm q ^
-        q.asIdeal.inertiaDeg' v.asIdeal := by
+        v.asIdeal.inertiaDeg (𝓞 ℚ) := by
     exact NU.Chebotarev.PrimeIdeal.norm_pow_inertiaDeg
       v q inferInstance
   have hq : NU.Chebotarev.PrimeIdeal.norm q =
       NU.LocalTheory.residueCharacteristic v := by
     rw [rationalPrimeNorm_eq_residueCharacteristic,
       residueCharacteristic_restrictFinitePlace]
-  have hf : 0 < q.asIdeal.inertiaDeg' v.asIdeal :=
-    Ideal.inertiaDeg'_pos q.asIdeal v.asIdeal
+  have hf : 0 < v.asIdeal.inertiaDeg (𝓞 ℚ) :=
+    Ideal.inertiaDeg_pos v.asIdeal (𝓞 ℚ)
   rw [hnorm, hq, ← hp]
-  have hpow : ((p : ℕ) ^ q.asIdeal.inertiaDeg' v.asIdeal).Coprime
-      ((p : ℕ) ^ q.asIdeal.inertiaDeg' v.asIdeal - 1) :=
+  have hpow : ((p : ℕ) ^ v.asIdeal.inertiaDeg (𝓞 ℚ)).Coprime
+      ((p : ℕ) ^ v.asIdeal.inertiaDeg (𝓞 ℚ) - 1) :=
     (Nat.coprime_self_sub_right
       (pow_pos p.2.pos _)).2 (Nat.coprime_one_right _)
   exact (Nat.coprime_pow_left_iff hf _ _).mp hpow

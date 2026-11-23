@@ -350,18 +350,18 @@ private theorem residueCharacteristic_coprime_norm_sub_one
   let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hnorm : NU.Chebotarev.PrimeIdeal.norm v =
       NU.Chebotarev.PrimeIdeal.norm q ^
-        q.asIdeal.inertiaDeg' v.asIdeal := by
+        v.asIdeal.inertiaDeg (𝓞 ℚ) := by
     exact NU.Chebotarev.PrimeIdeal.norm_pow_inertiaDeg
       v q inferInstance
   have hq : NU.Chebotarev.PrimeIdeal.norm q =
       NU.LocalTheory.residueCharacteristic v := by
     rw [← rational_residueCharacteristic_eq_norm,
       residueCharacteristic_restrictFinitePlace]
-  have hf : 0 < q.asIdeal.inertiaDeg' v.asIdeal :=
-    Ideal.inertiaDeg'_pos q.asIdeal v.asIdeal
+  have hf : 0 < v.asIdeal.inertiaDeg (𝓞 ℚ) :=
+    Ideal.inertiaDeg_pos v.asIdeal (𝓞 ℚ)
   rw [hnorm, hq, ← hp]
-  have hpow : ((p : ℕ) ^ q.asIdeal.inertiaDeg' v.asIdeal).Coprime
-      ((p : ℕ) ^ q.asIdeal.inertiaDeg' v.asIdeal - 1) :=
+  have hpow : ((p : ℕ) ^ v.asIdeal.inertiaDeg (𝓞 ℚ)).Coprime
+      ((p : ℕ) ^ v.asIdeal.inertiaDeg (𝓞 ℚ) - 1) :=
     (Nat.coprime_self_sub_right (pow_pos p.2.pos _)).2
       (Nat.coprime_one_right _)
   exact (Nat.coprime_pow_left_iff hf _ _).mp hpow
@@ -675,12 +675,12 @@ private theorem rationalCompletion_finrank_eq_localDegree
   have hlocalCard :=
     Module.natCard_eq_pow_finrank (K := A ⧸ pA) (V := B ⧸ pB)
   have hlocalPow : NU.Chebotarev.PrimeIdeal.norm q ^
-        pA.inertiaDeg' pB = NU.Chebotarev.PrimeIdeal.norm v := by
-    rw [← hcardA, ← hcardB, Ideal.inertiaDeg'_algebraMap]
+        pB.inertiaDeg A = NU.Chebotarev.PrimeIdeal.norm v := by
+    rw [← hcardA, ← hcardB, Ideal.inertiaDeg_eq_of_isMaximal pA pB]
     exact hlocalCard.symm
   let : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hglobalPow : NU.Chebotarev.PrimeIdeal.norm q ^
-        q.asIdeal.inertiaDeg' v.asIdeal =
+        v.asIdeal.inertiaDeg (𝓞 ℚ) =
       NU.Chebotarev.PrimeIdeal.norm v := by
     exact (NU.Chebotarev.PrimeIdeal.norm_pow_inertiaDeg
       v q inferInstance).symm
@@ -692,8 +692,7 @@ private theorem rationalCompletion_finrank_eq_localDegree
         (rational_residueCharacteristic_eq_norm q).symm
       _ = NU.LocalTheory.residueCharacteristic v :=
         residueCharacteristic_restrictFinitePlace ℚ v
-  have hinertia : pA.inertiaDeg' pB =
-      q.asIdeal.inertiaDeg' v.asIdeal := by
+  have hinertia : pB.inertiaDeg A = v.asIdeal.inertiaDeg (𝓞 ℚ) := by
     apply Nat.pow_right_injective
       (show 2 ≤ NU.Chebotarev.PrimeIdeal.norm q by
         rw [← rational_residueCharacteristic_eq_norm,
@@ -829,12 +828,12 @@ private theorem rationalCompletion_finrank_eq_localDegree
       have : e = e + 1 := by exact_mod_cast hc
       omega
     exact Ideal.ramificationIdx'_spec hmap.le hnot
-  have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
+  let : Module.IsTorsionFree A B := Valuation.HasExtension.instIsTorsionFreeInteger
+  have hdegree := Ideal.ramificationIdx'_mul_inertiaDeg_of_isLocalRing
     (S := B) Fb F (p := pA) hpA0
   change Module.finrank Fb F = finitePlaceLocalDegree v
   rw [← hdegree, hramification, hinertia,
-    Ideal.ramificationIdx'_eq_ramificationIdx q.asIdeal v.asIdeal q.ne_bot,
-    Ideal.inertiaDeg'_eq_inertiaDeg q.asIdeal v.asIdeal]
+    Ideal.ramificationIdx'_eq_ramificationIdx q.asIdeal v.asIdeal q.ne_bot]
   rfl
 
 set_option maxHeartbeats 200000
@@ -1728,6 +1727,7 @@ private theorem residueCard_sub_one_cast :
     simp [residueCard, Nat.card_eq_fintype_card]]
   simp
 
+omit [IsUniformAddGroup F] in
 private theorem exists_teichmullerGenerator :
     ∃ (g : Units (LocalResidueField F)) (t : Units (RingOfIntegers F)),
       (∀ x, x ∈ Subgroup.zpowers g) ∧
@@ -1917,6 +1917,7 @@ private structure LocalUnitTeichmullerData where
   teichmullerEquiv : teichmullerFactor ≃ₜ*
     Multiplicative (ZMod (residueCard F - 1))
 
+omit [IsUniformAddGroup F] in
 private theorem localUnitTeichmullerData_exists :
     Nonempty (LocalUnitTeichmullerData F) := by
   let A := (ValuativeRel.valuation F).valuationSubring

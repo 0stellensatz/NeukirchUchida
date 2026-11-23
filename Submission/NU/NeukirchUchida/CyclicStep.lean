@@ -568,12 +568,8 @@ private theorem absoluteNorm_eq_of_degreeOne
     rw [Nat.mul_comm]
     exact hdegree.symm
   have hf' : v.asIdeal.inertiaDeg (𝓞 ℚ) = 1 := hf
-  have hf'' : q.asIdeal.inertiaDeg' v.asIdeal = 1 := by
-    rw [Ideal.inertiaDeg'_eq_inertiaDeg q.asIdeal v.asIdeal]
-    exact hf'
-  have hnorm := (Ideal.absNorm_eq_pow_inertiaDeg'_of_liesOver
-    v.asIdeal q.asIdeal inferInstance q.ne_bot).symm
-  rw [hf'', pow_one] at hnorm
+  have hnorm := Ideal.absNorm_pow_inertiaDeg q.asIdeal v.asIdeal
+  rw [hf', pow_one] at hnorm
   calc
     Nat.card (𝓞 ℚ ⧸ q.asIdeal) = Ideal.absNorm q.asIdeal := by
       rw [Ideal.absNorm_apply, Submodule.cardQuot_apply]

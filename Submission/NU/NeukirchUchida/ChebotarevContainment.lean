@@ -69,18 +69,13 @@ theorem higherDegreePrimes_hasDirichletDensity_zero
     NU.Chebotarev.HasDirichletDensity
       ((degreeOnePrimeSet L)ᶜ) 0 := by
   let S : Set (NU.Chebotarev.PrimeIdeal L.field) :=
-    {v | 2 ≤ (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal}
+    {v | 2 ≤ v.asIdeal.inertiaDeg (𝓞 ℚ)}
   have hset : (degreeOnePrimeSet L)ᶜ = S := by
     ext v
     rw [Set.mem_compl_iff]
-    let : v.asIdeal.LiesOver (Ideal.under (𝓞 ℚ) v.asIdeal) := ⟨rfl⟩
-    change absoluteResidueDegree L v ≠ 1 ↔
-      2 ≤ (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal
-    rw [absoluteResidueDegree_eq_inertiaDeg,
-      ← Ideal.inertiaDeg'_eq_inertiaDeg
-        (Ideal.under (𝓞 ℚ) v.asIdeal) v.asIdeal]
-    have hpos : 0 < (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal :=
-      Ideal.inertiaDeg'_pos (Ideal.under (𝓞 ℚ) v.asIdeal) v.asIdeal
+    change absoluteResidueDegree L v ≠ 1 ↔ 2 ≤ v.asIdeal.inertiaDeg (𝓞 ℚ)
+    rw [absoluteResidueDegree_eq_inertiaDeg]
+    have hpos : 0 < v.asIdeal.inertiaDeg (𝓞 ℚ) := Ideal.inertiaDeg_pos v.asIdeal (𝓞 ℚ)
     omega
   rw [hset]
   exact NU.Chebotarev.sqrt_bound_hasDirichletDensity_zero S
@@ -484,16 +479,12 @@ theorem chebotarev_containment
         v.asIdeal.inertiaDeg (𝓞 ℚ) := rfl
   let D : Set (NU.Chebotarev.PrimeIdeal L.field) := (degreeOnePrimeSet L)ᶜ
   let D' : Set (NU.Chebotarev.PrimeIdeal L.field) :=
-    {v | 2 ≤ (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal}
+    {v | 2 ≤ v.asIdeal.inertiaDeg (𝓞 ℚ)}
   have hDD' : D = D' := by
     ext v
-    let : v.asIdeal.LiesOver (Ideal.under (𝓞 ℚ) v.asIdeal) := ⟨rfl⟩
-    change absoluteResidueDegree L v ≠ 1 ↔
-      2 ≤ (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal
-    rw [hresidue, ← Ideal.inertiaDeg'_eq_inertiaDeg
-      (Ideal.under (𝓞 ℚ) v.asIdeal) v.asIdeal]
-    have hpos : 0 < (Ideal.under (𝓞 ℚ) v.asIdeal).inertiaDeg' v.asIdeal :=
-      Ideal.inertiaDeg'_pos (Ideal.under (𝓞 ℚ) v.asIdeal) v.asIdeal
+    change absoluteResidueDegree L v ≠ 1 ↔ 2 ≤ v.asIdeal.inertiaDeg (𝓞 ℚ)
+    rw [hresidue]
+    have hpos : 0 < v.asIdeal.inertiaDeg (𝓞 ℚ) := Ideal.inertiaDeg_pos v.asIdeal (𝓞 ℚ)
     omega
   have hDbound : (fun x => (NU.Chebotarev.primeCounting D x : ℝ))
       =O[atTop] fun x => Real.sqrt x := by

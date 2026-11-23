@@ -1,4 +1,5 @@
 import Mathlib
+import Submission.NU.Compat
 
 /-!
 # Local fields: normalized valuations, units, lattices, and unramified towers
@@ -597,10 +598,10 @@ theorem ramificationInvariants_exists :
   have hp0 : p ≠ ⊥ := by
     rw [hp, ne_eq, Ideal.span_singleton_eq_bot]
     exact hϖKirr.ne_zero
-  have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
+  have hdegree := Ideal.ramificationIdx'_mul_inertiaDeg_of_isLocalRing
     (S := 𝒪[L]) K L (p := p) hp0
-  let f := p.inertiaDeg' P
-  have hf : 0 < f := Ideal.inertiaDeg'_pos p P
+  let f := P.inertiaDeg 𝒪[K]
+  have hf : 0 < f := Ideal.inertiaDeg_pos P 𝒪[K]
   refine ⟨e, f, he, hf, ?_, ?_⟩
   · intro x
     rw [hecast]
@@ -1535,17 +1536,17 @@ private theorem unramifiedLevelSeed_isUnramified [IsSepClosure K Ksep]
           apply Module.IsTorsionFree.isSMulRegular (IsRegular.of_ne_zero hc)
           simpa using hcx }
   have hupper : Module.finrank k kU ≤ Module.finrank K U := by
-    have h := Ideal.inertiaDeg_le_finrank (S := 𝒪[U]) K U P hp0
-    rw [Ideal.inertiaDeg'_algebraMap] at h
+    have h := Ideal.inertiaDeg_le_finrank' (S := 𝒪[U]) K U (p := p) P hp0
+    rw [Ideal.inertiaDeg_eq_of_isMaximal p P] at h
     exact h
   have hres : Module.finrank k kU = d := by
     apply le_antisymm
     · exact hupper.trans_eq (unramifiedLevelSeed_finrank K Ksep S)
     · exact hlower
-  have hinertia : p.inertiaDeg' P = d := by
-    rw [Ideal.inertiaDeg'_algebraMap]
+  have hinertia : P.inertiaDeg 𝒪[K] = d := by
+    rw [Ideal.inertiaDeg_eq_of_isMaximal p P]
     exact hres
-  have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
+  have hdegree := Ideal.ramificationIdx'_mul_inertiaDeg_of_isLocalRing
     (S := 𝒪[U]) K U (p := p) hp0
   have hramification : p.ramificationIdx' P = 1 := by
     rw [hinertia, unramifiedLevelSeed_finrank K Ksep S] at hdegree
@@ -1767,14 +1768,16 @@ private theorem residue_finrank_eq_finrank_of_unramified
   have hram : p.ramificationIdx' P = 1 := by
     apply Ideal.ramificationIdx'_spec (by simpa using hmap.le)
     simpa only [one_add_one_eq_two] using hnot
-  have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
+  let : Module.IsTorsionFree 𝒪[K] 𝒪[E] :=
+    Valuation.HasExtension.instIsTorsionFreeInteger
+  have hdegree := Ideal.ramificationIdx'_mul_inertiaDeg_of_isLocalRing
     (S := 𝒪[E]) K E (p := p) (by
       rw [hp, ne_eq, Ideal.span_singleton_eq_bot]
       exact hϖKirr.ne_zero)
   rw [hram, one_mul] at hdegree
   calc
-    Module.finrank (LocalResidueField K) (LocalResidueField E) = p.inertiaDeg' P := by
-      rw [Ideal.inertiaDeg'_algebraMap]
+    Module.finrank (LocalResidueField K) (LocalResidueField E) = P.inertiaDeg 𝒪[K] := by
+      rw [Ideal.inertiaDeg_eq_of_isMaximal p P]
       rfl
     _ = Module.finrank K E := hdegree
 

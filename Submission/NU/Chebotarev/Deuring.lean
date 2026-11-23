@@ -40,7 +40,7 @@ def deuringDegreeOnePrimeSet (g : Gal(L/K)) :
     Set (PrimeIdeal (deuringFixedField g)) :=
   {q | q ∈ deuringUpstairsPrimeSet g ∧
     (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' q.asIdeal = 1 ∧
-    (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal = 1}
+    q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) = 1}
 
 private theorem frobenius_eq_of_isArith (P : PrimeIdeal L)
     (hunr : Algebra.IsUnramifiedAt (NumberField.RingOfIntegers K) P.asIdeal)
@@ -107,7 +107,7 @@ private theorem fixedField_contraction_degreeOne
           exact P.ne_bot (Ideal.eq_bot_of_liesOver_bot
             (NumberField.RingOfIntegers (deuringFixedField g)) P.asIdeal)⟩
     (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' q.asIdeal = 1 ∧
-      (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal = 1 ∧
+      q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) = 1 ∧
       (∀ Q : PrimeIdeal L, Q.asIdeal.LiesOver q.asIdeal → Q = P) := by
   let H := Subgroup.zpowers g
   let E := deuringFixedField g
@@ -145,7 +145,7 @@ private theorem fixedField_contraction_degreeOne
     ext s
     simp only [decompositionSubgroup, Subgroup.mem_top, iff_true]
     exact MulAction.mem_stabilizer_iff.mpr (hfix s)
-  have hfPE : (P.asIdeal.under (NumberField.RingOfIntegers E)).inertiaDeg' P.asIdeal =
+  have hfPE : P.asIdeal.inertiaDeg (NumberField.RingOfIntegers E) =
       orderOf g := by
     rw [← arithFrobAt_order_eq_inertiaDeg P hunrE]
     rw [← Nat.card_zpowers]
@@ -155,15 +155,11 @@ private theorem fixedField_contraction_degreeOne
     rw [IsGalois.card_aut_eq_finrank]
     rw [IntermediateField.finrank_fixedField_eq_card]
     rw [Nat.card_zpowers]
-  have hfPK : (P.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' P.asIdeal =
+  have hfPK : P.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) =
       orderOf g := by
     rw [← arithFrobAt_order_eq_inertiaDeg P hunr, hfrob]
-  change (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' P.asIdeal =
-    orderOf g at hfPK
-  change q.asIdeal.inertiaDeg' P.asIdeal = orderOf g at hfPE
-  have hqf : (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal = 1 := by
-    have ht := Ideal.inertiaDeg'_algebra_tower
-      (q.asIdeal.under (NumberField.RingOfIntegers K)) q.asIdeal P.asIdeal
+  have hqf : q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) = 1 := by
+    have ht := Ideal.inertiaDeg_tower (R := NumberField.RingOfIntegers K) q.asIdeal P.asIdeal
     rw [hfPK, hfPE] at ht
     apply Nat.eq_of_mul_eq_mul_right (orderOf_pos g)
     simpa using ht.symm
@@ -192,7 +188,7 @@ private theorem isArithFrobAt_restrictScalars_of_inertiaDeg_one
     [FiniteDimensional E L] [IsGalois E L]
     (P : PrimeIdeal L) (q : PrimeIdeal E)
     (hPq : P.asIdeal.LiesOver q.asIdeal)
-    (hf : (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal = 1)
+    (hf : q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) = 1)
     (s : Gal(L/E))
     (hs : IsArithFrobAt (NumberField.RingOfIntegers E) s P.asIdeal) :
     IsArithFrobAt (NumberField.RingOfIntegers K)
@@ -339,7 +335,7 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
     have hunrP := hunrp P.val P.prop.1
     have hdata := fixedField_contraction_degreeOne g p P.val P.prop.1 hunrP P.prop.2
     change (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' q.asIdeal = 1 ∧
-      (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal = 1 ∧
+      q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) = 1 ∧
       (∀ Q : PrimeIdeal L, Q.asIdeal.LiesOver q.asIdeal → Q = P.val) at hdata
     rcases hdata with ⟨hqe, hqf, hunique⟩
     have hPq : P.val.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
@@ -376,7 +372,7 @@ theorem deuring_degreeOne_fiber_card (g : Gal(L/K))
     let q := contract P.val
     have hunique : ∀ R : PrimeIdeal L, R.asIdeal.LiesOver q.asIdeal → R = P.val := by
       change (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' q.asIdeal = 1 ∧
-        (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal = 1 ∧
+        q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) = 1 ∧
         (∀ R : PrimeIdeal L, R.asIdeal.LiesOver q.asIdeal → R = P.val) at hdata
       exact hdata.2.2
     symm
@@ -555,7 +551,7 @@ theorem deuring_exceptional_primeCounting (g : Gal(L/K)) :
     {q | q ∈ A ∧
       (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx' q.asIdeal ≠ 1}
   let D : Set (PrimeIdeal E) :=
-    {q | 2 ≤ (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal}
+    {q | 2 ≤ q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K)}
   have hR : R.Finite := ramifiedPrimes_finite (K := K) (L := L)
   have hpre : {q : PrimeIdeal E | primeUnder (K := K) q ∈ R}.Finite := by
     exact hR.preimage' (fun p _ => primeUnder_fiber_finite (E := E) p)
@@ -597,13 +593,12 @@ theorem deuring_exceptional_primeCounting (g : Gal(L/K)) :
     intro q hqA
     by_cases he : (q.asIdeal.under (NumberField.RingOfIntegers K)).ramificationIdx'
         q.asIdeal = 1
-    · by_cases hf : (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg'
-          q.asIdeal = 1
+    · by_cases hf : q.asIdeal.inertiaDeg
+          (NumberField.RingOfIntegers K) = 1
       · exact Or.inl (Or.inl ⟨hqA, he, hf⟩)
       · apply Or.inr
         apply (Nat.two_le_iff _).mpr
-        exact ⟨((q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg'_pos
-          q.asIdeal).ne', hf⟩
+        exact ⟨(Ideal.inertiaDeg_pos q.asIdeal (NumberField.RingOfIntegers K)).ne', hf⟩
     · exact Or.inl (Or.inr ⟨hqA, he⟩)
   have hCle (x : ℝ) : primeCounting C x ≤ Nat.card C := by
     let : Fintype C := hC.fintype
@@ -723,9 +718,7 @@ private theorem degreeOne_contraction_mem
       change q.asIdeal.LiesOver
         (q.asIdeal.under (NumberField.RingOfIntegers K))
       exact ⟨rfl⟩)
-    have hf : p.asIdeal.inertiaDeg' q.asIdeal = 1 := by
-      change (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal = 1
-      exact hq.2.2
+    have hf : q.asIdeal.inertiaDeg (NumberField.RingOfIntegers K) = 1 := hq.2.2
     simpa [hf] using hnorm
 
 /-- Blueprint Proposition 4.1, equation (D), proposed declaration
