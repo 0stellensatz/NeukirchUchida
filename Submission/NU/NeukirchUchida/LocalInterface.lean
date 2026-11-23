@@ -488,7 +488,7 @@ noncomputable def ambientAbsoluteGaloisEquiv (F : NumberFieldInOmega) :
     apply hEs
     change (by exact mulEquiv g : AlgebraicClosure F.field ≃ₐ[F.field]
       AlgebraicClosure F.field) ∈ E.fixingSubgroup
-    rw [IntermediateField.mem_fixingSubgroup_iff E]
+    refine (IntermediateField.mem_fixingSubgroup_iff E _).2 ?_
     intro x hx
     apply (ambientClosureEquiv F).injective
     rw [hspec]
