@@ -1,6 +1,7 @@
 name = "neukirch_uchida"
 testDriver = "workspace_test"
 defaultTargets = ["Challenge", "Solution", "Submission"]
+allowNonModules = true
 
 [leanOptions]
 autoImplicit = false
