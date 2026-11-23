@@ -11,8 +11,6 @@ are finite.  It ends with the compactness theorem for finite inverse systems,
 without a surjectivity hypothesis.
 -/
 
-set_option backward.isDefEq.respectTransparency false
-
 open IsDedekindDomain
 open scoped NumberField
 

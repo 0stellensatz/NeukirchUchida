@@ -11,8 +11,6 @@ restriction, and the injective descent map.  Thus the descent and functoriality 
 be witnessed by zero or otherwise unrelated homomorphisms.
 -/
 
-set_option backward.isDefEq.respectTransparency false
-
 namespace NU.LCFT
 
 noncomputable section
@@ -326,6 +324,7 @@ private noncomputable def quotientH2Equiv
       dsimp [quotientCoefficientEquiv, eG]
       rw [IsGalois.normalAutEquivQuotient_apply,
         AlgEquiv.restrictNormalHom_apply]
+      rfl
   exact (comparisonH2 _).trans
     ((groupCohomology_mapIso eG eM he 2).toLinearEquiv.toAddEquiv.trans
       (comparisonH2 _).symm)
