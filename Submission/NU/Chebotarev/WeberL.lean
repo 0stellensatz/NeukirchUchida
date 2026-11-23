@@ -1294,8 +1294,9 @@ theorem weberLSeries_eq_eulerProduct (m : RayModulus K)
         have haeq := (weberPrivateIdealFactorEquiv (K := K)).left_inv a
         exact congrArg (fun z : {a : Ideal O // a ≠ 0} =>
           weberPrivateIdealTerm m ψ s z.1) haeq
-      _ = _ := tsum_subtype_eq_of_support_subset (fun a ha hzero => by
-        subst a
+      _ = _ := tsum_subtype_eq_of_support_subset (s := {a : Ideal O | a ≠ 0}) (by
+        intro a ha hzero
+        subst hzero
         exact ha (weberPrivateIdealTerm_zero m ψ s))
   calc
     weberLSeries m ψ s =

@@ -258,9 +258,9 @@ private lemma shiftCoind_invariant_eq_norm_pointMass
   apply funext
   intro t
   rw [shiftCoind_norm_pointMass]
-  have h := congrArg (fun z : shiftCoinduced M => z.1 1) (x.2 t)
-  simpa only [Representation.coind_apply, LinearMap.restrict_apply,
-    LinearMap.funLeft_apply, one_mul] using h.symm
+  have h : x.1.1 (1 * t) = x.1.1 1 :=
+    congrArg (fun z : shiftCoinduced M => z.1 1) (x.2 t)
+  simpa only [one_mul] using h.symm
 
 private theorem shiftCoind_H0_subsingleton
     {G : Type} [Group G] [Fintype G] (M : Rep ℤ G) :
@@ -284,10 +284,9 @@ private lemma shiftCoind_normKernel_mem_augmentation
   have hsum := congrArg (fun z : shiftCoinduced M => z.1 1) x.2
   change (((shiftCoinduced M).norm.asHom.hom x.1).1 1) = 0 at hsum
   rw [Rep.norm_apply, Representation.norm] at hsum
-  simp only [LinearMap.sum_apply, Submodule.coe_sum, Finset.sum_apply,
-    Representation.coind_apply, LinearMap.restrict_apply, LinearMap.funLeft_apply,
-    one_mul] at hsum
-  change (∑ g : G, x.1.1 g) = 0 at hsum
+  simp only [LinearMap.sum_apply, Submodule.coe_sum, Finset.sum_apply] at hsum
+  change ∑ g : G, x.1.1 (1 * g) = 0 at hsum
+  simp only [one_mul] at hsum
   have heq : (∑ t : G, ((shiftCoinduced M).ρ t⁻¹
       (shiftCoindPointMass M (x.1.1 t)) - shiftCoindPointMass M (x.1.1 t))) = x.1 := by
     apply Subtype.ext
@@ -1221,7 +1220,7 @@ private theorem finiteGroup_tateAcyclic_of_lowCohomology
   have hP : ∀ n, P n := by
     intro n
     induction n using Nat.strong_induction_on with
-    | h n ih =>
+    | ind n ih =>
       dsimp only [P]
       intro H _ _ hcardEq X h1X h2X
       by_cases hcyc : IsCyclic H
@@ -1260,7 +1259,7 @@ private theorem finiteGroup_tateAcyclic_of_lowCohomology
             eq_top_or_exists_le_coatom (⊥ : Subgroup H)
           · exact (hbotne hbot).elim
           · have hnall : ∀ K : Subgroup H, IsCoatom K → K.Normal :=
-              (Group.isNilpotent_of_finite_tfae.out 0 2 rfl rfl).mp inferInstance
+              ((Group.isNilpotent_of_finite_tfae (G := H)).out 1 3).mp (inferInstance : Group.IsNilpotent H)
             letI : N.Normal := hnall N hNcoat
             letI : Fintype N := Fintype.ofFinite N
             letI : Fintype (H ⧸ N) := Fintype.ofFinite (H ⧸ N)
@@ -1578,7 +1577,7 @@ private lemma inducedToBarRegular_mk (h : G) (n : ℤ) :
       rw [he1]
     _ = _ := by
       change Representation.ofMulAction ℤ G G h⁻¹
-        (n • (Finsupp.single 1 1 : G →₀ ℤ)) = Finsupp.single h⁻¹ n
+        (n • (MonoidAlgebra.single 1 1 : MonoidAlgebra ℤ G)) = MonoidAlgebra.single h⁻¹ n
       rw [map_smul, Representation.ofMulAction_single]
       simp
 
@@ -1608,12 +1607,12 @@ private def barRegularToInduced : barRegular G ⟶ InducedFromTrivial G ℤ :=
     change barRegularToInducedLinear (G := G) ((barRegular G).ρ g z) =
       (InducedFromTrivial G ℤ).ρ g (barRegularToInducedLinear (G := G) z)
     induction z using MonoidAlgebra.induction_on with
-    | hM h =>
+    | of h =>
         rw [MonoidAlgebra.of_apply, Representation.ofMulAction_single,
           barRegularToInducedLinear_single, barRegularToInducedLinear_single,
           Representation.ind_mk]
         simp [smul_eq_mul]
-    | hadd x y hx hy =>
+    | add x y hx hy =>
         calc
           _ = barRegularToInducedLinear (G := G)
               ((barRegular G).ρ g x + (barRegular G).ρ g y) :=
@@ -1629,7 +1628,7 @@ private def barRegularToInduced : barRegular G ⟶ InducedFromTrivial G ℤ :=
                 barRegularToInducedLinear (G := G) y) :=
             (((InducedFromTrivial G ℤ).ρ g).map_add _ _).symm
           _ = _ := congrArg _ ((barRegularToInducedLinear (G := G)).map_add x y).symm
-    | hsmul n x hx =>
+    | smul n x hx =>
         change (barRegularToInducedAdd (G := G))
             ((barRegular G).ρ g
               ((inferInstance : Module ℤ (MonoidAlgebra ℤ G)).smul n x)) =
@@ -1822,7 +1821,7 @@ private theorem restrictedAugmentationIdeal_H1_isCyclic
     simp [n, one0, oneInv]
   refine ⟨n, ?_⟩
   change n • groupCohomology.δ hA 0 1 rfl one0 = x
-  rw [← map_zsmul]
+  erw [← map_zsmul]
   rw [hzn] at hz
   exact hz
 

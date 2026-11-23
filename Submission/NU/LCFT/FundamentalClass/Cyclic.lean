@@ -9,6 +9,8 @@ never hidden behind `Nat.card`: every rule that divides cardinalities assumes ex
 instances (or, for the fixed trivial module, records positive-cardinality guards).
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace NU.LCFT
 
 universe u
@@ -309,7 +311,7 @@ private noncomputable def periodicOddEquivHMinusOne
     have hzero : q x = 0 ↔
         (x : M) ∈ LinearMap.range (M.applyAsHom gen - 𝟙 M).hom.toLinearMap := by
       change SC.homologyπ (SC.moduleCatCyclesIso.inv (e x)) = 0 ↔ _
-      rw [SC.moduleCatCyclesIso_inv_π_apply]
+      erw [SC.moduleCatCyclesIso_inv_π_apply]
       rw [map_eq_zero_iff _ ((ModuleCat.mono_iff_injective _).1 inferInstance)]
       change Submodule.Quotient.mk (e x) = 0 ↔ _
       rw [Submodule.Quotient.mk_eq_zero]
@@ -407,7 +409,7 @@ private noncomputable def periodicEvenEquivH0
     change q x = 0 ↔ _
     have hzero : q x = 0 ↔ (x : M) ∈ LinearMap.range M.norm.asHom.hom.toLinearMap := by
       change SC.homologyπ (SC.moduleCatCyclesIso.inv (e x)) = 0 ↔ _
-      rw [SC.moduleCatCyclesIso_inv_π_apply]
+      erw [SC.moduleCatCyclesIso_inv_π_apply]
       rw [map_eq_zero_iff _ ((ModuleCat.mono_iff_injective _).1 inferInstance)]
       change Submodule.Quotient.mk (e x) = 0 ↔ _
       rw [Submodule.Quotient.mk_eq_zero]
@@ -1026,17 +1028,22 @@ private theorem herbrandQuotient_mul
   let oddPeriod (M : Rep.{u} ℤ G) : (P M).homology 1 ≃+ (P M).homology 3 :=
     (cyclicOddIsoOne M gen).toLinearEquiv.toAddEquiv |>.trans
       (cyclicOddIsoThree M gen).symm.toLinearEquiv.toAddEquiv
+  have hcancel (M : Rep.{u} ℤ G) y :
+      (cyclicOddIsoThree M gen).hom ((cyclicOddIsoThree M gen).symm.toLinearEquiv y) = y :=
+    (cyclicOddIsoThree M gen).inv_hom_id_apply y
   have hp13 (x : (P A).homology 1) : oddPeriod B (p1 x) = p3 (oddPeriod A x) := by
     apply (ModuleCat.mono_iff_injective (cyclicOddIsoThree B gen).hom).1 inferInstance
     calc
-      _ = (cyclicOddIsoOne B gen).hom (p1 x) := by simp [oddPeriod]
+      _ = (cyclicOddIsoOne B gen).hom (p1 x) := hcancel B _
       _ = (ShortComplex.homologyMap (cyclicPeriodicSCMap gen f))
           ((cyclicOddIsoOne A gen).hom x) := by
         have h := ConcreteCategory.congr_hom
           (cyclicPeriodicHom_naturality_one gen f) x
         simpa [p1, PS, PF] using h
       _ = (ShortComplex.homologyMap (cyclicPeriodicSCMap gen f))
-          ((cyclicOddIsoThree A gen).hom (oddPeriod A x)) := by simp [oddPeriod]
+          ((cyclicOddIsoThree A gen).hom (oddPeriod A x)) :=
+        (congrArg (fun z => (ShortComplex.homologyMap (cyclicPeriodicSCMap gen f)) z)
+          (hcancel A _)).symm
       _ = (cyclicOddIsoThree B gen).hom (p3 (oddPeriod A x)) := by
         have h := ConcreteCategory.congr_hom
           (cyclicPeriodicHom_naturality_three gen f) (oddPeriod A x)

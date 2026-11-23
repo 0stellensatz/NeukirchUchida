@@ -11,6 +11,8 @@ relation `B = π_K^(N+1) A`.  The multiplicative package then records the litera
 residue coordinates on every graded quotient.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace NU.LCFT
 
 noncomputable section
@@ -415,7 +417,7 @@ theorem deepUnitLattice_exists (π : Uniformizer K) :
       funext x
       simp [Algebra.smul_def]
     have hf : Continuous f := by
-      apply continuous_finset_sum
+      apply continuous_finsetSum
       intro σ _
       exact (halg.comp (continuous_subtype_val.comp (continuous_apply σ))).mul continuous_const
     have hrange : Set.range f = (A : Set L) := by
@@ -686,7 +688,8 @@ theorem deepUnitLattice_exists (π : Uniformizer K) :
     rw [hsub, hb]
     simp only [res, AddMonoidHom.comp_apply, LinearEquiv.symm_apply_apply, redF]
     ext τ
-    simp [red, regularFinsuppTranslate, Finsupp.domCongr_apply]
+    simp [red, regularFinsuppTranslate, Finsupp.domCongr_apply,
+      Finsupp.mapRange.addMonoidHom_apply, Finsupp.equivMapDomain_apply, Finsupp.mapRange_apply]
   exact ⟨{
     rawGenerator := rawGen
     rawNormalBasis := rawBasis
