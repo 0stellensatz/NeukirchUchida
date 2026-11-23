@@ -755,7 +755,7 @@ private theorem hyperplaneChart_lipschitz {k : ℕ} (i : Fin (k + 1))
     {R : ℝ} (hR : 0 ≤ R) :
     LipschitzWith (⟨2 * R, mul_nonneg (by norm_num) hR⟩ : ℝ≥0)
       (hyperplaneChart i R) := by
-  rw [lipschitzWith_iff_dist_le_mul]
+  refine LipschitzWith.of_dist_le_mul ?_
   intro x y
   unfold hyperplaneChart
   rw [Fin.dist_insertNth_insertNth, dist_self, max_eq_right dist_nonneg]

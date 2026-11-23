@@ -9,6 +9,8 @@ Neukirch--Uchida Maschke bridge.  In particular, its import closure does not
 contain the unfinished finite-projection theorem.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace NU.LCFT
 
 noncomputable section
@@ -654,7 +656,7 @@ private noncomputable def reciprocityFixedFieldLocalData
     intro a b
     rw [← ValuativeExtension.vle_iff_vle (A := E) (B := L)]
     simpa only [IsScalarTower.algebraMap_apply K E L] using
-      (ValuativeExtension.vle_iff_vle (A := K) (B := L) a b)
+      (ValuativeExtension.vle_iff_vle (A := K) (B := L) (a := a) (b := b))
   exact ⟨inferInstance, hlocal, hlower, hupper⟩
 
 set_option maxHeartbeats 1000000 in
@@ -739,22 +741,22 @@ private noncomputable def explicitMulRepInvariantsEquiv :
     apply Units.ext
     apply (algebraMap K L).injective
     have h' := congrArg (fun z : Inhomogeneous.invariants0 (MulRep K L) =>
-      ((show Units L from Additive.toMul z.1) : L)) h
+      ((by exact Additive.toMul z.1 : Units L) : L)) h
     exact h'
   have hf_surj : Function.Surjective f := by
     rintro ⟨x, hx⟩
     have hfixed : ∀ σ : L ≃ₐ[K] L,
-        σ ((show Units L from Additive.toMul x) : L) =
-          ((show Units L from Additive.toMul x) : L) := by
+        σ ((by exact Additive.toMul x : Units L) : L) =
+          ((by exact Additive.toMul x : Units L) : L) := by
       intro σ
       have h := congrArg (fun z : Additive (Units L) => ((z.toMul : Units L) : L)) (hx σ)
       exact h
     rcases (IsGalois.mem_range_algebraMap_iff_fixed (F := K) (E := L)
-      ((show Units L from Additive.toMul x) : L)).2 hfixed with ⟨y, hy⟩
+      ((by exact Additive.toMul x : Units L) : L)).2 hfixed with ⟨y, hy⟩
     have hy0 : y ≠ 0 := by
       intro hyz
       rw [hyz, map_zero] at hy
-      exact (show Units L from Additive.toMul x).ne_zero hy.symm
+      exact (by exact Additive.toMul x : Units L).ne_zero hy.symm
     refine ⟨Additive.ofMul (Units.mk0 y hy0), ?_⟩
     apply Subtype.ext
     apply Additive.toMul.injective
@@ -785,7 +787,7 @@ private theorem mem_tateNormRange_iff (x : Inhomogeneous.invariants0 (MulRep K L
     let y : Units L := Additive.toMul z
     have hxbase : x = baseUnitInvariant K L (normUnitsHom K L y) := by
       apply Subtype.ext
-      have hz' : (MulRep K L).norm.hom z = x.1 := hz
+      have hz' : (MulRep K L).norm.asHom.hom z = x.1 := hz
       rw [← hz']
       apply Additive.toMul.injective
       exact mulRep_norm K L y
@@ -804,7 +806,7 @@ private theorem mem_tateNormRange_iff (x : Inhomogeneous.invariants0 (MulRep K L
             Additive (Units L)) := rfl
     refine ⟨Additive.ofMul y, ?_⟩
     apply Additive.toMul.injective
-    change Additive.toMul ((MulRep K L).norm.hom (Additive.ofMul y)) =
+    change Additive.toMul ((MulRep K L).norm.asHom.hom (Additive.ofMul y)) =
       Additive.toMul x.1
     rw [mulRep_norm K L y, hy]
     exact hbaseval.trans (congrArg
@@ -903,7 +905,7 @@ noncomputable def cohomologicalConstruction : CohomologicalConstruction K₀ L�
 
 /-- The uncompensated map: remove upstream's compensation once, exposing the negative row sum. -/
 noncomputable def cohomologicalRawTateEquiv :
-    Additive (Abelianization (L₀ ≃ₐ[K₀] L₀)) ≃+ TateLowDegree.H0 (MulRep K₀ L₀) :=
+    Additive (Group.Abelianization (L₀ ≃ₐ[K₀] L₀)) ≃+ TateLowDegree.H0 (MulRep K₀ L₀) :=
   let D := cohomologicalConstruction K₀ L₀
   (AbstractReciprocity.abstractReciprocity (MulRep K₀ L₀) D.hypotheses
     (fundamentalClassValue K₀ L₀) D.order_class D.cocycle D.cocycle_mem D.represents).trans
@@ -915,7 +917,7 @@ The right-hand side literally instantiates `AbstractReciprocity.abstractReciproc
 `fundamentalClassValue K₀ L₀`.  The latter is the class whose retained invariant sends it to `1`.
 The final negation removes the bar-generator compensation, so this is the *raw* map. -/
 noncomputable def normalizedFundamentalClassRawNormTateEquiv :
-    Additive (Abelianization (L₀ ≃ₐ[K₀] L₀)) ≃+
+    Additive (Group.Abelianization (L₀ ≃ₐ[K₀] L₀)) ≃+
       Additive (Units K₀ ⧸ normSubgroup K₀ L₀) :=
   let D := cohomologicalConstruction K₀ L₀
   ((AbstractReciprocity.abstractReciprocity (MulRep K₀ L₀) D.hypotheses
@@ -932,7 +934,7 @@ theorem normalizedFundamentalClassRawNormTateEquiv_def :
 
 /-- Reinsert the literal sign compensation and then identify `H⁰` with the norm quotient. -/
 noncomputable def cohomologicalCompensatedNormTateEquiv :
-    Additive (Abelianization (L₀ ≃ₐ[K₀] L₀)) ≃+
+    Additive (Group.Abelianization (L₀ ≃ₐ[K₀] L₀)) ≃+
       Additive (Units K₀ ⧸ normSubgroup K₀ L₀) :=
   ((cohomologicalRawTateEquiv K₀ L₀).trans
     (AddEquiv.neg (TateLowDegree.H0 (MulRep K₀ L₀)))).trans
@@ -940,7 +942,7 @@ noncomputable def cohomologicalCompensatedNormTateEquiv :
 
 /-- Before compensation, a Frobenius generator has the negative row-sum value. -/
 theorem cohomologicalRawTateEquiv_apply (g : L₀ ≃ₐ[K₀] L₀) :
-    cohomologicalRawTateEquiv K₀ L₀ (Additive.ofMul (Abelianization.of g)) =
+    cohomologicalRawTateEquiv K₀ L₀ (Additive.ofMul (Group.Abelianization.of g)) =
       -AbstractReciprocity.rowSumClass (MulRep K₀ L₀)
         (cohomologicalConstruction K₀ L₀).cocycle
         (cohomologicalConstruction K₀ L₀).cocycle_mem g := by
@@ -950,7 +952,7 @@ theorem cohomologicalRawTateEquiv_apply (g : L₀ ≃ₐ[K₀] L₀) :
 theorem cohomologicalCompensatedTate_apply (g : L₀ ≃ₐ[K₀] L₀) :
     ((cohomologicalRawTateEquiv K₀ L₀).trans
       (AddEquiv.neg (TateLowDegree.H0 (MulRep K₀ L₀))))
-        (Additive.ofMul (Abelianization.of g)) =
+        (Additive.ofMul (Group.Abelianization.of g)) =
       AbstractReciprocity.rowSumClass (MulRep K₀ L₀)
         (cohomologicalConstruction K₀ L₀).cocycle
         (cohomologicalConstruction K₀ L₀).cocycle_mem g := by
@@ -1048,7 +1050,7 @@ equations preserve the `+1` orientation of the normalized local fundamental clas
 `raw_eq_normalizedFundamentalClass` is the required commuting-square *field*: it identifies the
 transported raw map with `AbstractReciprocity.abstractReciprocity` instantiated at that class. -/
 structure UniverseBridge
-    (raw : Additive (Abelianization (L ≃ₐ[K] L)) ≃+
+    (raw : Additive (Group.Abelianization (L ≃ₐ[K] L)) ≃+
       Additive (Units K ⧸ normSubgroup K L)) where
   model : UniverseZeroLocalFieldModel
   baseEquiv : K ≃+* model.K₀
@@ -1059,11 +1061,11 @@ structure UniverseBridge
   galoisTransport_apply : ∀ (σ : L ≃ₐ[K] L) (x : L),
     extensionEquiv (σ x) = galoisTransport σ (extensionEquiv x)
   abelianizationTransport :
-    Additive (Abelianization (L ≃ₐ[K] L)) ≃+
-      Additive (Abelianization (model.L₀ ≃ₐ[model.K₀] model.L₀))
+    Additive (Group.Abelianization (L ≃ₐ[K] L)) ≃+
+      Additive (Group.Abelianization (model.L₀ ≃ₐ[model.K₀] model.L₀))
   abelianizationTransport_of : ∀ σ : L ≃ₐ[K] L,
-    abelianizationTransport (Additive.ofMul (Abelianization.of σ)) =
-      Additive.ofMul (Abelianization.of (galoisTransport σ))
+    abelianizationTransport (Additive.ofMul (Group.Abelianization.of σ)) =
+      Additive.ofMul (Group.Abelianization.of (galoisTransport σ))
   normQuotientTransport :
     Additive (Units K ⧸ normSubgroup K L) ≃+
       Additive (Units model.K₀ ⧸ normSubgroup model.K₀ model.L₀)
@@ -1090,10 +1092,10 @@ after actual field transport, to the abstract reciprocity map attached to the no
 fundamental class. -/
 structure Construction where
   /-- The raw Tate map, whose bar-generator formula has the negative row-sum sign. -/
-  rawNormTateEquiv : Additive (Abelianization (L ≃ₐ[K] L)) ≃+
+  rawNormTateEquiv : Additive (Group.Abelianization (L ≃ₐ[K] L)) ≃+
     Additive (Units K ⧸ normSubgroup K L)
   /-- The compensated Tate map. -/
-  compensatedNormTateEquiv : Additive (Abelianization (L ≃ₐ[K] L)) ≃+
+  compensatedNormTateEquiv : Additive (Group.Abelianization (L ≃ₐ[K] L)) ≃+
     Additive (Units K ⧸ normSubgroup K L)
   /-- Defining sign equation: compensation is literal postcomposition by negation. -/
   compensation : compensatedNormTateEquiv =
@@ -1227,7 +1229,9 @@ private theorem shrink_local
           {z | ValuativeRel.valuation A z < γ} ⊆ s) ↔
         ∃ γ : (MonoidWithZeroHom.ValueGroup₀ (.ofClass w))ˣ,
           {z | w.restrict z < γ.val} ⊆ s by
-      simpa only [sub_zero] using (w.exists_setOf_restrict_le_iff 0 s).symm]
+      have h := (w.exists_setOf_restrict_le_iff 0 s).symm
+      simp only [sub_zero] at h
+      exact h]
     -- transport the valuation-neighborhood criterion across e
     have heh : (h : A → K) = e := rfl
     rw [show s ∈ 𝓝 (0 : A) ↔ e '' s ∈ 𝓝 (0 : K) by
@@ -1672,15 +1676,15 @@ theorem construction_exists : Nonempty (Construction K L) := by
       e (algebraMap K L x) = algebraMap model.K₀ model.L₀ (b x) :=
     data.algebra_compatibility
   let gt := galoisTransportEquiv b e hcompat
-  let abT : Additive (Abelianization (L ≃ₐ[K] L)) ≃+
-      Additive (Abelianization (model.L₀ ≃ₐ[model.K₀] model.L₀)) :=
+  let abT : Additive (Group.Abelianization (L ≃ₐ[K] L)) ≃+
+      Additive (Group.Abelianization (model.L₀ ≃ₐ[model.K₀] model.L₀)) :=
     gt.abelianizationCongr.toAdditive
   let nt : Additive (Units K ⧸ normSubgroup K L) ≃+
       Additive (Units model.K₀ ⧸ normSubgroup model.K₀ model.L₀) :=
     (normQuotientTransportEquiv b e hcompat).toAdditive
   let normalized :=
     normalizedFundamentalClassRawNormTateEquiv model.K₀ model.L₀
-  let raw : Additive (Abelianization (L ≃ₐ[K] L)) ≃+
+  let raw : Additive (Group.Abelianization (L ≃ₐ[K] L)) ≃+
       Additive (Units K ⧸ normSubgroup K L) :=
     (abT.trans normalized).trans nt.symm
   have hbval : ∀ x : Units K,
@@ -1720,13 +1724,13 @@ noncomputable def construction : Construction K L :=
 
 /-- The raw finite Tate map before Deviation 15's sign correction. -/
 noncomputable def rawNormTateEquiv :
-    Additive (Abelianization (L ≃ₐ[K] L)) ≃+
+    Additive (Group.Abelianization (L ≃ₐ[K] L)) ≃+
       Additive (Units K ⧸ normSubgroup K L) :=
   (construction K L).rawNormTateEquiv
 
 /-- The compensated finite Tate map. -/
 noncomputable def compensatedNormTateEquiv :
-    Additive (Abelianization (L ≃ₐ[K] L)) ≃+
+    Additive (Group.Abelianization (L ≃ₐ[K] L)) ≃+
       Additive (Units K ⧸ normSubgroup K L) :=
   (construction K L).compensatedNormTateEquiv
 
@@ -1749,7 +1753,7 @@ theorem rawNormTateEquiv_universeBridge :
 /-- Finite reciprocity for a finite Galois scalar extension: definitionally the inverse of the
 compensated Tate equivalence. -/
 noncomputable def artin :
-    (Units K ⧸ normSubgroup K L) ≃* Abelianization (L ≃ₐ[K] L) :=
+    (Units K ⧸ normSubgroup K L) ≃* Group.Abelianization (L ≃ₐ[K] L) :=
   MulEquiv.toAdditive.symm (compensatedNormTateEquiv K L).symm
 
 /-- Defining equation for finite reciprocity: the inverse direction is explicit. -/
@@ -1917,7 +1921,7 @@ variable (K₀ L₀ : Type)
 
 set_option maxHeartbeats 2000000 in
 private theorem normalizedFundamentalClassRawNormTateEquiv_bridge
-    {raw : Additive (Abelianization (L₀ ≃ₐ[K₀] L₀)) ≃+
+    {raw : Additive (Group.Abelianization (L₀ ≃ₐ[K₀] L₀)) ≃+
       Additive (Units K₀ ⧸ normSubgroup K₀ L₀)}
     (B : UniverseBridge K₀ L₀ raw) :
     (normalizedFundamentalClassRawNormTateEquiv K₀ L₀).trans
@@ -1963,7 +1967,7 @@ private theorem normalizedFundamentalClassRawNormTateEquiv_bridge
     change (algebraMap B.model.K₀ B.model.L₀ (b x) ≤ᵥ
       algebraMap B.model.K₀ B.model.L₀ (b y)) ↔ x ≤ᵥ y
     rw [ValuativeExtension.vle_iff_vle (A := B.model.K₀) (B := B.model.L₀)]
-    exact ValuativeExtension.vle_iff_vle (A := K₀) (B := B.model.K₀) x y
+    exact ValuativeExtension.vle_iff_vle (A := K₀) (B := B.model.K₀) (a := x) (b := y)
   have hbcont : Continuous b :=
     ringEquiv_continuous_of_valuativeExtension b (fun _ => rfl)
   have hecont : Continuous e :=
@@ -2059,9 +2063,9 @@ private theorem normalizedFundamentalClassRawNormTateEquiv_bridge
   have hgenerator (σ : L₀ ≃ₐ[K₀] L₀) :
       B.normQuotientTransport
           (normalizedFundamentalClassRawNormTateEquiv K₀ L₀
-            (Additive.ofMul (Abelianization.of σ))) =
+            (Additive.ofMul (Group.Abelianization.of σ))) =
         normalizedFundamentalClassRawNormTateEquiv B.model.K₀ B.model.L₀
-          (B.abelianizationTransport (Additive.ofMul (Abelianization.of σ))) := by
+          (B.abelianizationTransport (Additive.ofMul (Group.Abelianization.of σ))) := by
     let r₀ := AbstractReciprocity.rowSumInvariant (MulRep K₀ L₀) a₀ ha₀ σ
     let nr₀ : Inhomogeneous.invariants0 (MulRep K₀ L₀) := -r₀
     let x : Units K₀ := Additive.toMul
@@ -2136,14 +2140,14 @@ private theorem normalizedFundamentalClassRawNormTateEquiv_bridge
       exact hqR
     have heval₀ :
         normalizedFundamentalClassRawNormTateEquiv K₀ L₀
-            (Additive.ofMul (Abelianization.of σ)) =
+            (Additive.ofMul (Group.Abelianization.of σ)) =
           Additive.ofMul (QuotientGroup.mk x : Units K₀ ⧸ normSubgroup K₀ L₀) := by
       rw [normalizedFundamentalClassRawNormTateEquiv_def, AddEquiv.trans_apply,
         cohomologicalRawTateEquiv_apply, hq₀]
       exact C₀.tateQuotient_apply x
     have heval₁ :
         normalizedFundamentalClassRawNormTateEquiv B.model.K₀ B.model.L₀
-            (Additive.ofMul (Abelianization.of (B.galoisTransport σ))) =
+            (Additive.ofMul (Group.Abelianization.of (B.galoisTransport σ))) =
           Additive.ofMul (QuotientGroup.mk bx :
             Units B.model.K₀ ⧸ normSubgroup B.model.K₀ B.model.L₀) := by
       rw [normalizedFundamentalClassRawNormTateEquiv_def, AddEquiv.trans_apply,
@@ -2157,7 +2161,7 @@ private theorem normalizedFundamentalClassRawNormTateEquiv_bridge
     normalizedFundamentalClassRawNormTateEquiv B.model.K₀ B.model.L₀
       (B.abelianizationTransport z)
   obtain ⟨σ, hσ⟩ := QuotientGroup.mk_surjective (Additive.toMul z)
-  have hz : z = Additive.ofMul (Abelianization.of σ) := by
+  have hz : z = Additive.ofMul (Group.Abelianization.of σ) := by
     apply Additive.toMul.injective
     exact hσ.symm
   rw [hz]
@@ -2281,7 +2285,7 @@ private theorem finiteReciprocity_fundamentalClass_eq_unramifiedClass
     (D : UnramifiedCyclicExtensionData K L) (π : Uniformizer K)
     (C : UnramifiedClassData K L D π) :
     fundamentalClassValue K L = C.class := by
-  letI veLL : ValuativeExtension L L := ⟨fun _ _ => Iff.rfl⟩
+  letI veLL : ValuativeExtension L L := ⟨Iff.rfl⟩
   letI csLL : ContinuousSMul L L := inferInstance
   letI stKLL : IsScalarTower K L L :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
@@ -2400,7 +2404,7 @@ private theorem finiteReciprocity_cohomologicalCompensated_unramified
     [ValuativeExtension K L] [ContinuousSMul K L]
     (D : UnramifiedCyclicExtensionData K L) (π : Uniformizer K) :
     FiniteReciprocity.cohomologicalCompensatedNormTateEquiv K L
-        (Additive.ofMul (Abelianization.of D.frobenius)) =
+        (Additive.ofMul (Group.Abelianization.of D.frobenius)) =
       Additive.ofMul (QuotientGroup.mk π.val : Units K ⧸ normSubgroup K L) := by
   obtain ⟨C⟩ := carryCocycle_isGenerator K L D π
   let C₀ := FiniteReciprocity.cohomologicalConstruction K L
@@ -2425,7 +2429,7 @@ private theorem finiteReciprocity_cohomologicalCompensated_unramified
         rw [IsGalois.card_aut_eq_finrank K L]
         exact hn
       letI : Subsingleton (L ≃ₐ[K] L) := (Nat.card_eq_one_iff_unique.mp hcard).1
-      letI : Subsingleton (Abelianization (L ≃ₐ[K] L)) := by
+      letI : Subsingleton (Group.Abelianization (L ≃ₐ[K] L)) := by
         constructor
         intro x y
         obtain ⟨a, rfl⟩ := QuotientGroup.mk_surjective x
@@ -2514,7 +2518,7 @@ private noncomputable def finiteReciprocity_ringOfIntegersEquiv
         apply (Valuation.Compatible.vle_iff_le _ _).mp
         rw [← he]
         have hv := (ValuativeExtension.vle_iff_vle
-          (A := A) (B := B) (x : A) 1).2
+          (A := A) (B := B) (a := (x : A)) (b := 1)).2
           ((Valuation.Compatible.vle_iff_le _ _).2
             ((Valuation.mem_integer_iff _ _).mp x.property))
         simpa using hv⟩
@@ -2528,7 +2532,7 @@ private noncomputable def finiteReciprocity_ringOfIntegersEquiv
         apply (Valuation.Compatible.vle_iff_le _ _).mp
         rw [← hes]
         have hv := (ValuativeExtension.vle_iff_vle
-          (A := B) (B := A) (x : B) 1).2
+          (A := B) (B := A) (a := (x : B)) (b := 1)).2
           ((Valuation.Compatible.vle_iff_le _ _).2
             ((Valuation.mem_integer_iff _ _).mp x.property))
         simpa using hv⟩
@@ -2584,7 +2588,7 @@ private noncomputable def finiteReciprocity_transportUnramifiedData
     [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
     [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L]
     [ValuativeExtension K L] [ContinuousSMul K L]
-    {raw : Additive (Abelianization (L ≃ₐ[K] L)) ≃+
+    {raw : Additive (Group.Abelianization (L ≃ₐ[K] L)) ≃+
       Additive (Units K ⧸ normSubgroup K L)}
     (B : FiniteReciprocity.UniverseBridge K L raw)
     (hunr : IsUnramifiedLocalExtension K L)
@@ -2771,7 +2775,7 @@ variable (K : Type u) (Ksep : Type v)
 structure is selected only to instantiate the finite-extension theorem; the defining equation
 below pins the resulting map to compensated Tate reciprocity. -/
 noncomputable def finiteArtin (L : FiniteGaloisIntermediateField K Ksep) :
-    (Units K ⧸ normSubgroup K L) ≃* Abelianization (L ≃ₐ[K] L) := by
+    (Units K ⧸ normSubgroup K L) ≃* Group.Abelianization (L ≃ₐ[K] L) := by
   let D := localFieldExtensionData K L
   letI : ValuativeRel L := D.valuativeRel
   letI : TopologicalSpace L := D.topology
@@ -2784,7 +2788,7 @@ noncomputable def finiteArtin (L : FiniteGaloisIntermediateField K Ksep) :
 normalized construction, not by an unrelated `Nonempty.some`. -/
 theorem finiteArtin_exists (L : FiniteGaloisIntermediateField K Ksep) :
     Nonempty ((Units K ⧸ normSubgroup K L) ≃*
-      Abelianization (L ≃ₐ[K] L)) :=
+      Group.Abelianization (L ≃ₐ[K] L)) :=
   ⟨finiteArtin K Ksep L⟩
 
 /-- Public defining equation tying `finiteArtin` to the inverse of the twice-displayed
@@ -2850,7 +2854,7 @@ theorem finiteArtin_universeBridge (L : FiniteGaloisIntermediateField K Ksep) :
 
 /-- **R01**, Corollary `cor:norm-index`: the norm index is the order of the abelianization. -/
 theorem normSubgroup_index (L : FiniteGaloisIntermediateField K Ksep) :
-    (normSubgroup K L).index = Nat.card (Abelianization (L ≃ₐ[K] L)) := by
+    (normSubgroup K L).index = Nat.card (Group.Abelianization (L ≃ₐ[K] L)) := by
   rw [Subgroup.index_eq_card]
   exact Nat.card_congr (finiteArtin K Ksep L).toEquiv
 
@@ -2860,7 +2864,7 @@ theorem finiteArtin_uniformizer_unramified
     (L : FiniteGaloisIntermediateField K Ksep)
     (hL : UnramifiedFiniteExtension L) (π : Uniformizer K) :
     finiteArtin K Ksep L (QuotientGroup.mk π.val) =
-      Abelianization.of (arithmeticFrobenius hL) := by
+      Group.Abelianization.of (arithmeticFrobenius hL) := by
   let D := localFieldExtensionData K L
   letI : ValuativeRel L := D.valuativeRel
   letI : TopologicalSpace L := D.topology
@@ -2897,18 +2901,18 @@ theorem finiteArtin_uniformizer_unramified
           B.model.K₀ B.model.L₀).trans
         (AddEquiv.neg (Additive
           (Units B.model.K₀ ⧸ normSubgroup B.model.K₀ B.model.L₀))))
-          (Additive.ofMul (Abelianization.of DU.frobenius)) =
+          (Additive.ofMul (Group.Abelianization.of DU.frobenius)) =
         Additive.ofMul (QuotientGroup.mk π₁.val :
           Units B.model.K₀ ⧸ normSubgroup B.model.K₀ B.model.L₀) := by
     rw [FiniteReciprocity.normalizedFundamentalClassRawNormTateEquiv_def]
     change -((FiniteReciprocity.cohomologicalConstruction
         B.model.K₀ B.model.L₀).tateQuotient
       (FiniteReciprocity.cohomologicalRawTateEquiv B.model.K₀ B.model.L₀
-        (Additive.ofMul (Abelianization.of DU.frobenius)))) = _
+        (Additive.ofMul (Group.Abelianization.of DU.frobenius)))) = _
     change (FiniteReciprocity.cohomologicalConstruction
         B.model.K₀ B.model.L₀).tateQuotient
       (-(FiniteReciprocity.cohomologicalRawTateEquiv B.model.K₀ B.model.L₀
-        (Additive.ofMul (Abelianization.of DU.frobenius)))) = _ at hmodel
+        (Additive.ofMul (Group.Abelianization.of DU.frobenius)))) = _ at hmodel
     rw [← hmodel]
     exact (@AddEquiv.map_neg
       (TateLowDegree.H0 (MulRep B.model.K₀ B.model.L₀))
@@ -2919,20 +2923,20 @@ theorem finiteArtin_uniformizer_unramified
   have hbridge := finiteArtin_universeBridge K Ksep L
   have hcomp :
       (MulEquiv.toAdditive (finiteArtin K Ksep L)).symm
-          (Additive.ofMul (Abelianization.of hL.frobenius)) =
+          (Additive.ofMul (Group.Abelianization.of hL.frobenius)) =
         Additive.ofMul (QuotientGroup.mk π.val : Units K ⧸ normSubgroup K L) := by
     apply B.normQuotientTransport.injective
     calc
       B.normQuotientTransport
           ((MulEquiv.toAdditive (finiteArtin K Ksep L)).symm
-            (Additive.ofMul (Abelianization.of hL.frobenius))) =
+            (Additive.ofMul (Group.Abelianization.of hL.frobenius))) =
           ((FiniteReciprocity.normalizedFundamentalClassRawNormTateEquiv
               B.model.K₀ B.model.L₀).trans
             (AddEquiv.neg (Additive
               (Units B.model.K₀ ⧸ normSubgroup B.model.K₀ B.model.L₀))))
             (B.abelianizationTransport
-              (Additive.ofMul (Abelianization.of hL.frobenius))) :=
-        DFunLike.congr_fun hbridge (Additive.ofMul (Abelianization.of hL.frobenius))
+              (Additive.ofMul (Group.Abelianization.of hL.frobenius))) :=
+        DFunLike.congr_fun hbridge (Additive.ofMul (Group.Abelianization.of hL.frobenius))
       _ = Additive.ofMul (QuotientGroup.mk π₁.val :
           Units B.model.K₀ ⧸ normSubgroup B.model.K₀ B.model.L₀) := by
         rw [B.abelianizationTransport_of]
@@ -2986,13 +2990,13 @@ def galoisInclusion : (M ≃ₐ[E] M) →* (M ≃ₐ[K] M) :=
     galoisInclusion K E M σ x = σ x := rfl
 
 /-- Actual subgroup inclusion induced on abelianizations. -/
-def inclusionAb : Abelianization (M ≃ₐ[E] M) →* Abelianization (M ≃ₐ[K] M) :=
-  Abelianization.map (galoisInclusion K E M)
+def inclusionAb : Group.Abelianization (M ≃ₐ[E] M) →* Group.Abelianization (M ≃ₐ[K] M) :=
+  Group.Abelianization.map (galoisInclusion K E M)
 
 /-- Pointwise defining equation for inclusion on abelianizations. -/
 @[simp] theorem inclusionAb_of (σ : M ≃ₐ[E] M) :
-    inclusionAb K E M (Abelianization.of σ) =
-      Abelianization.of (galoisInclusion K E M σ) := rfl
+    inclusionAb K E M (Group.Abelianization.of σ) =
+      Group.Abelianization.of (galoisInclusion K E M σ) := rfl
 
 private theorem finiteReciprocity_restrictionToClosure_surjective
     (F : Type u) (E : Type v) (L : Type w)
@@ -3299,10 +3303,10 @@ private theorem finiteReciprocity_compensated_norm_typeZero
   have hgenerator (σ : L ≃ₐ[E] L) :
       MonoidHom.toAdditive (normOnQuotient F E L)
           (FiniteReciprocity.compensatedNormTateEquiv E L
-            (Additive.ofMul (Abelianization.of σ))) =
+            (Additive.ofMul (Group.Abelianization.of σ))) =
         FiniteReciprocity.compensatedNormTateEquiv F L
           (MonoidHom.toAdditive (inclusionAb F E L)
-            (Additive.ofMul (Abelianization.of σ))) := by
+            (Additive.ofMul (Group.Abelianization.of σ))) := by
     let rR := AbstractReciprocity.rowSumInvariant (MulRep E L) aR haR σ
     let x : Units E := Additive.toMul
       (FiniteReciprocity.explicitMulRepInvariantsEquiv E L rR)
@@ -3320,7 +3324,7 @@ private theorem finiteReciprocity_compensated_norm_typeZero
         QuotientAddGroup.mk (FiniteReciprocity.baseUnitInvariant E L x)
       rw [hx]
     have hevalH : FiniteReciprocity.compensatedNormTateEquiv E L
-        (Additive.ofMul (Abelianization.of σ)) =
+        (Additive.ofMul (Group.Abelianization.of σ)) =
           Additive.ofMul (QuotientGroup.mk x : Units E ⧸ normSubgroup E L) := by
       rw [FiniteReciprocity.compensatedNormTateEquiv_eq_abstractReciprocity]
       rw [FiniteReciprocity.cohomologicalCompensatedNormTateEquiv,
@@ -3367,7 +3371,7 @@ private theorem finiteReciprocity_compensated_norm_typeZero
         QuotientAddGroup.mk (FiniteReciprocity.baseUnitInvariant F L y)
       rw [hbase]
     have hevalG : FiniteReciprocity.compensatedNormTateEquiv F L
-        (Additive.ofMul (Abelianization.of (s σ))) =
+        (Additive.ofMul (Group.Abelianization.of (s σ))) =
           Additive.ofMul (QuotientGroup.mk y : Units F ⧸ normSubgroup F L) := by
       rw [FiniteReciprocity.compensatedNormTateEquiv_eq_abstractReciprocity]
       rw [FiniteReciprocity.cohomologicalCompensatedNormTateEquiv,
@@ -3379,13 +3383,13 @@ private theorem finiteReciprocity_compensated_norm_typeZero
     rw [normOnQuotient_mk]
     change Additive.ofMul (QuotientGroup.mk y) = _
     rw [show MonoidHom.toAdditive (inclusionAb F E L)
-        (Additive.ofMul (Abelianization.of σ)) =
-      Additive.ofMul (Abelianization.of (s σ)) by rfl]
+        (Additive.ofMul (Group.Abelianization.of σ)) =
+      Additive.ofMul (Group.Abelianization.of (s σ)) by rfl]
     exact hevalG.symm
   apply AddMonoidHom.ext
   intro z
   obtain ⟨σ, hσ⟩ := QuotientGroup.mk_surjective (Additive.toMul z)
-  have hz : z = Additive.ofMul (Abelianization.of σ) := by
+  have hz : z = Additive.ofMul (Group.Abelianization.of σ) := by
     apply Additive.toMul.injective
     exact hσ.symm
   rw [hz]
@@ -3430,14 +3434,14 @@ private theorem finiteReciprocity_normalized_transport
       valuativeExtension := inferInstance
       continuousSMul := inferInstance }
   let gt := FiniteReciprocity.galoisTransportEquiv b e h
-  let abT : Additive (Abelianization (B ≃ₐ[A] B)) ≃+
-      Additive (Abelianization (B' ≃ₐ[A'] B')) := gt.abelianizationCongr.toAdditive
+  let abT : Additive (Group.Abelianization (B ≃ₐ[A] B)) ≃+
+      Additive (Group.Abelianization (B' ≃ₐ[A'] B')) := gt.abelianizationCongr.toAdditive
   let nt : Additive (Units A ⧸ normSubgroup A B) ≃+
       Additive (Units A' ⧸ normSubgroup A' B') :=
     (FiniteReciprocity.normQuotientTransportEquiv b e h).toAdditive
   let normalized :=
     FiniteReciprocity.normalizedFundamentalClassRawNormTateEquiv A' B'
-  let raw : Additive (Abelianization (B ≃ₐ[A] B)) ≃+
+  let raw : Additive (Group.Abelianization (B ≃ₐ[A] B)) ≃+
       Additive (Units A ⧸ normSubgroup A B) :=
     (abT.trans normalized).trans nt.symm
   let UB : FiniteReciprocity.UniverseBridge A B raw :=
@@ -3513,8 +3517,8 @@ private theorem finiteReciprocity_compensated_transport
   let C := FiniteReciprocity.construction A B
   let U := C.universeBridge
   let gt := FiniteReciprocity.galoisTransportEquiv b e h
-  let abT : Additive (Abelianization (B ≃ₐ[A] B)) ≃+
-      Additive (Abelianization (B' ≃ₐ[A'] B')) := gt.abelianizationCongr.toAdditive
+  let abT : Additive (Group.Abelianization (B ≃ₐ[A] B)) ≃+
+      Additive (Group.Abelianization (B' ≃ₐ[A'] B')) := gt.abelianizationCongr.toAdditive
   let nt : Additive (Units A ⧸ normSubgroup A B) ≃+
       Additive (Units A' ⧸ normSubgroup A' B') :=
     (FiniteReciprocity.normQuotientTransportEquiv b e h).toAdditive
@@ -3571,8 +3575,8 @@ private theorem finiteReciprocity_compensated_transport
         apply Units.ext
         simp [xB]
   let gt₂ := FiniteReciprocity.galoisTransportEquiv cb ce hc
-  let abT₂ : Additive (Abelianization (B' ≃ₐ[A'] B')) ≃+
-      Additive (Abelianization (U.model.L₀ ≃ₐ[U.model.K₀] U.model.L₀)) :=
+  let abT₂ : Additive (Group.Abelianization (B' ≃ₐ[A'] B')) ≃+
+      Additive (Group.Abelianization (U.model.L₀ ≃ₐ[U.model.K₀] U.model.L₀)) :=
     gt₂.abelianizationCongr.toAdditive
   let nt₂ : Additive (Units A' ⧸ normSubgroup A' B') ≃+
       Additive (Units U.model.K₀ ⧸ normSubgroup U.model.K₀ U.model.L₀) :=
@@ -3608,17 +3612,17 @@ private theorem finiteReciprocity_compensated_transport
       _ = U.extensionEquiv (σ x) := by simp [ce]
       _ = U.galoisTransport σ (U.extensionEquiv x) :=
         U.galoisTransport_apply σ x
-  have habcomp (z : Additive (Abelianization (B ≃ₐ[A] B))) :
+  have habcomp (z : Additive (Group.Abelianization (B ≃ₐ[A] B))) :
       abT₂ (abT z) = U.abelianizationTransport z := by
     obtain ⟨σ, hσ⟩ := QuotientGroup.mk_surjective (Additive.toMul z)
-    have hz : z = Additive.ofMul (Abelianization.of σ) := by
+    have hz : z = Additive.ofMul (Group.Abelianization.of σ) := by
       apply Additive.toMul.injective
       exact hσ.symm
     rw [hz, U.abelianizationTransport_of]
-    change Additive.ofMul (Abelianization.of (gt₂ (gt σ))) =
-      Additive.ofMul (Abelianization.of (U.galoisTransport σ))
+    change Additive.ofMul (Group.Abelianization.of (gt₂ (gt σ))) =
+      Additive.ofMul (Group.Abelianization.of (U.galoisTransport σ))
     rw [hgtcomp]
-  have hraw (z : Additive (Abelianization (B ≃ₐ[A] B))) :
+  have hraw (z : Additive (Group.Abelianization (B ≃ₐ[A] B))) :
       nt (FiniteReciprocity.rawNormTateEquiv A B z) =
         FiniteReciprocity.normalizedFundamentalClassRawNormTateEquiv A' B' (abT z) := by
     apply nt₂.injective
@@ -3683,8 +3687,8 @@ private theorem finiteReciprocity_artin_transport
       FiniteReciprocity.artin A' B'
         (FiniteReciprocity.normQuotientTransportEquiv b e h q) := by
   let gt := FiniteReciprocity.galoisTransportEquiv b e h
-  let abT : Additive (Abelianization (B ≃ₐ[A] B)) ≃+
-      Additive (Abelianization (B' ≃ₐ[A'] B')) := gt.abelianizationCongr.toAdditive
+  let abT : Additive (Group.Abelianization (B ≃ₐ[A] B)) ≃+
+      Additive (Group.Abelianization (B' ≃ₐ[A'] B')) := gt.abelianizationCongr.toAdditive
   let nt : Additive (Units A ⧸ normSubgroup A B) ≃+
       Additive (Units A' ⧸ normSubgroup A' B') :=
     (FiniteReciprocity.normQuotientTransportEquiv b e h).toAdditive
@@ -3768,7 +3772,7 @@ private theorem finiteReciprocity_artin_norm_typeZero
   rw [hcH] at hz
   have hdefG := congrArg
     (fun e : Additive (Units F ⧸ normSubgroup F L) ≃+
-        Additive (Abelianization (L ≃ₐ[F] L)) => e.symm)
+        Additive (Group.Abelianization (L ≃ₐ[F] L)) => e.symm)
       (FiniteReciprocity.artin_defining_equation F L)
   change MulEquiv.toAdditive (FiniteReciprocity.artin F L).symm =
     FiniteReciprocity.compensatedNormTateEquiv F L at hdefG
@@ -3886,13 +3890,13 @@ private theorem finiteArtin_norm_core :
       _ = gtEM σ (bM x) :=
         (FiniteReciprocity.galoisTransportEquiv_apply bE bM hEM σ x).symm
       _ = galoisInclusion K₀ E₀ M₀ (gtEM σ) (bM x) := rfl
-  have hincl (a : Abelianization (M ≃ₐ[E] M)) :
+  have hincl (a : Group.Abelianization (M ≃ₐ[E] M)) :
       gtKM.abelianizationCongr (inclusionAb K E M a) =
         inclusionAb K₀ E₀ M₀ (gtEM.abelianizationCongr a) := by
     obtain ⟨σ, hσ⟩ := QuotientGroup.mk_surjective a
     rw [← hσ]
-    change Abelianization.of (gtKM (galoisInclusion K E M σ)) =
-      Abelianization.of (galoisInclusion K₀ E₀ M₀ (gtEM σ))
+    change Group.Abelianization.of (gtKM (galoisInclusion K E M σ)) =
+      Group.Abelianization.of (galoisInclusion K₀ E₀ M₀ (gtEM σ))
     rw [hgincl]
   have hnorm (x : Units E) :
       Units.map bK.toRingHom (normUnitsHom K E x) =
@@ -4146,7 +4150,7 @@ theorem normSubgroup_isClosed : IsClosed (normSubgroup K L : Set (Units K)) := b
 /-- **R04**, Lemma `lem:norm-open`: finite index plus closedness makes the norm subgroup open. -/
 theorem normSubgroup_isOpen : IsOpen (normSubgroup K L : Set (Units K)) := by
   letI : Finite (Units K ⧸ normSubgroup K L) :=
-    Finite.of_equiv (Abelianization (L ≃ₐ[K] L))
+    Finite.of_equiv (Group.Abelianization (L ≃ₐ[K] L))
       (FiniteReciprocity.artin K L).symm.toEquiv
   letI : (normSubgroup K L).FiniteIndex := Subgroup.finiteIndex_of_finite_quotient
   exact (normSubgroup K L).isOpen_of_isClosed_of_finiteIndex
@@ -4324,7 +4328,7 @@ private theorem normGroup_primitive_constantCoeff
         exact Nat.card_pos.ne'
   have hne : residueCard K - 1 ≠ 0 :=
     (Nat.sub_pos_of_lt (normGroup_one_lt_residueCard K)).ne'
-  rw [primitiveDivisionPolynomial, map_add, map_pow, hit, zero_pow hne, add_zero]
+  rw [primitiveDivisionPolynomial, RingHom.map_add, RingHom.map_pow, hit, zero_pow hne, add_zero]
   simp
 
 private theorem normGroup_level_minpoly
@@ -4777,10 +4781,10 @@ theorem lubinTate_normSubgroup
     exact (lubinTate_norm_inclusion K Ksep π m hm).1
   have hnormIndex : (normSubgroup K L.field).index = Nat.card G := by
     calc
-      (normSubgroup K L.field).index = Nat.card (Abelianization G) :=
+      (normSubgroup K L.field).index = Nat.card (Group.Abelianization G) :=
         normSubgroup_index K Ksep L.field
       _ = Nat.card G :=
-        Nat.card_congr (Abelianization.equivOfComm (H := G)).symm.toEquiv
+        Nat.card_congr (Group.Abelianization.equivOfComm (H := G)).symm.toEquiv
   have hrectIndex : (rectangularSubgroup K π 1 m).index = Nat.card G := by
     rw [normGroup_rectangular_index K Ksep π m hm]
     exact Nat.card_congr (lubinTateGaloisEquiv K Ksep π m hm).toEquiv
@@ -4850,7 +4854,7 @@ private theorem e01_rectangular_inf_unramified
     rw [Subgroup.mem_zpowers_iff] at hx ⊢
     obtain ⟨k, rfl⟩ := hx
     refine ⟨(a : ℤ) * k, ?_⟩
-    simp [← zpow_natCast, ← zpow_mul]
+    simp only [zpow_mul, zpow_natCast, pow_one]
   ext x
   constructor
   · rintro ⟨hxb, hxa⟩
@@ -4894,7 +4898,7 @@ private theorem e01_rectangular_inf_unramified
     rw [Subgroup.mem_zpowers_iff]
     refine ⟨k, ?_⟩
     rw [← hz, hzk]
-    simp [← zpow_natCast, ← zpow_mul]
+    simp only [zpow_mul, zpow_natCast, pow_one]
   · intro hx
     exact ⟨(sup_le_sup hpow le_rfl) hx, (sup_le_sup le_rfl hprincipal) hx⟩
 
@@ -4908,7 +4912,7 @@ private theorem e01_rectangular_relIndex
     rw [Subgroup.mem_zpowers_iff] at hx ⊢
     obtain ⟨k, rfl⟩ := hx
     refine ⟨(a : ℤ) * k, ?_⟩
-    simp [← zpow_natCast, ← zpow_mul]
+    simp only [zpow_mul, zpow_natCast, pow_one]
   have hHJ : H ≤ J := sup_le_sup hpow le_rfl
   let valMod : Units K →* Multiplicative (ZMod a) :=
     (Int.castAddHom (ZMod a)).toMultiplicative.comp (normalizedValuationHom K)
@@ -4978,7 +4982,7 @@ private theorem e01_rectangular_relIndex
       rw [Subgroup.mem_zpowers_iff]
       refine ⟨k, ?_⟩
       rw [← hz, hk]
-      simp [← zpow_natCast, ← zpow_mul]
+      simp only [zpow_mul, zpow_natCast, pow_one]
   have hsurj : Function.Surjective f := by
     intro y
     obtain ⟨z, hz⟩ := ZMod.intCast_surjective y.toAdd
@@ -4988,8 +4992,8 @@ private theorem e01_rectangular_relIndex
       have hp : p ∈ Subgroup.zpowers (π.val ^ 1) := by
         rw [Subgroup.mem_zpowers_iff]
         exact ⟨z, by simp [p]⟩
-      exact (show Subgroup.zpowers (π.val ^ 1) ≤
-        Subgroup.zpowers (π.val ^ 1) ⊔ principalUnitSubgroup K b from le_sup_left) hp
+      exact (by exact le_sup_left : Subgroup.zpowers (π.val ^ 1) ≤
+        Subgroup.zpowers (π.val ^ 1) ⊔ principalUnitSubgroup K b) hp
     refine ⟨⟨p, hpJ⟩, ?_⟩
     apply Multiplicative.toAdd.injective
     change ((normalizedValuation K p : ℤ) : ZMod a) = y.toAdd
@@ -5486,7 +5490,7 @@ theorem rectangularClassField_exists (π : Uniformizer K)
   have hPUFirr : Irreducible PUF :=
     hPUmonic.irreducible_iff_irreducible_map_fraction_map.mp hPUirr
   let level := lubinTateLevel K Ksep π b hb
-  let α : C := IntermediateField.inclusion (show E ≤ C from le_sup_left) level.generator
+  let α : C := IntermediateField.inclusion (by exact le_sup_left : E ≤ C) level.generator
   have hroot : Polynomial.aeval α PUF = 0 := by
     apply (algebraMap C Ksep).injective
     rw [map_zero, Polynomial.aeval_def, Polynomial.hom_eval₂]
@@ -5524,7 +5528,7 @@ theorem rectangularClassField_exists (π : Uniformizer K)
   have hUle : U ≤ IntermediateField.lift B := by
     intro x hx
     let xu : U := ⟨x, hx⟩
-    let xC : C := IntermediateField.inclusion (show U ≤ C from le_sup_right) xu
+    let xC : C := IntermediateField.inclusion (by exact le_sup_right : U ≤ C) xu
     have hxA : xC ∈ A := by
       change algebraMap U C xu ∈ A
       exact A.algebraMap_mem xu
@@ -5597,11 +5601,11 @@ theorem rectangularClassField_exists (π : Uniformizer K)
         inv_mem' := fun x hx => by
           change σ x⁻¹ = τ x⁻¹
           rw [map_inv₀, map_inv₀, hx] }
-    have hErestrict : E.restrict (show E ≤ C from le_sup_left) ≤ F := by
+    have hErestrict : E.restrict (by exact le_sup_left : E ≤ C) ≤ F := by
       intro x hx
       change σ x = τ x
       let xe : E := ⟨((x : C) : Ksep),
-        (IntermediateField.mem_restrict (show E ≤ C from le_sup_left) x).1 hx⟩
+        (IntermediateField.mem_restrict (by exact le_sup_left : E ≤ C) x).1 hx⟩
       have heq := congrArg (fun f : GE => f xe) hEres
       have hxalg : algebraMap E C xe = x := by apply Subtype.ext; rfl
       calc
@@ -5610,14 +5614,14 @@ theorem rectangularClassField_exists (π : Uniformizer K)
           (AlgEquiv.restrictNormal_commutes σ E xe).symm
         _ = algebraMap E C ((τ.restrictNormal E) xe) :=
           congrArg (algebraMap E C)
-            (by simpa [rE, AlgEquiv.restrictNormalHom] using heq)
+            heq
         _ = τ (algebraMap E C xe) := AlgEquiv.restrictNormal_commutes τ E xe
         _ = τ x := congrArg τ hxalg
-    have hUrestrict : U.restrict (show U ≤ C from le_sup_right) ≤ F := by
+    have hUrestrict : U.restrict (by exact le_sup_right : U ≤ C) ≤ F := by
       intro x hx
       change σ x = τ x
       let xu : U := ⟨((x : C) : Ksep),
-        (IntermediateField.mem_restrict (show U ≤ C from le_sup_right) x).1 hx⟩
+        (IntermediateField.mem_restrict (by exact le_sup_right : U ≤ C) x).1 hx⟩
       have heq := congrArg (fun f : GU => f xu) hUres
       have hxalg : algebraMap U C xu = x := by apply Subtype.ext; rfl
       calc
@@ -5626,11 +5630,11 @@ theorem rectangularClassField_exists (π : Uniformizer K)
           (AlgEquiv.restrictNormal_commutes σ U xu).symm
         _ = algebraMap U C ((τ.restrictNormal U) xu) :=
           congrArg (algebraMap U C)
-            (by simpa [rU, AlgEquiv.restrictNormalHom] using heq)
+            heq
         _ = τ (algebraMap U C xu) := AlgEquiv.restrictNormal_commutes τ U xu
         _ = τ x := congrArg τ hxalg
-    have hsup : E.restrict (show E ≤ C from le_sup_left) ⊔
-        U.restrict (show U ≤ C from le_sup_right) = ⊤ := by
+    have hsup : E.restrict (by exact le_sup_left : E ≤ C) ⊔
+        U.restrict (by exact le_sup_right : U ≤ C) = ⊤ := by
       apply IntermediateField.lift_injective C
       rw [IntermediateField.lift_sup, IntermediateField.lift_restrict,
         IntermediateField.lift_restrict, IntermediateField.lift_top]
@@ -5671,10 +5675,10 @@ theorem rectangularClassField_exists (π : Uniformizer K)
     calc
       (rectangularSubgroup K π 1 b).index = (normSubgroup K E).index :=
         congrArg Subgroup.index hEnorm.symm
-      _ = Nat.card (Abelianization GE) :=
+      _ = Nat.card (Group.Abelianization GE) :=
         normSubgroup_index K Ksep (lubinTateFiniteAbelianExtension K Ksep π b hb).field
       _ = Nat.card GE :=
-        Nat.card_congr (Abelianization.equivOfComm (H := GE)).symm.toEquiv
+        Nat.card_congr (Group.Abelianization.equivOfComm (H := GE)).symm.toEquiv
       _ = Module.finrank K E := IsGalois.card_aut_eq_finrank K E
       _ = (residueCard K - 1) * residueCard K ^ (b - 1) := level.degree
   have hrectIndex : (rectangularSubgroup K π a b).index =
@@ -5690,10 +5694,10 @@ theorem rectangularClassField_exists (π : Uniformizer K)
     let FC : FiniteGaloisIntermediateField K Ksep :=
       FiniteGaloisIntermediateField.mk C
     calc
-      (normSubgroup K C).index = Nat.card (Abelianization GC) :=
+      (normSubgroup K C).index = Nat.card (Group.Abelianization GC) :=
         normSubgroup_index K Ksep FC
       _ = Nat.card GC :=
-        Nat.card_congr (Abelianization.equivOfComm (H := GC)).symm.toEquiv
+        Nat.card_congr (Group.Abelianization.equivOfComm (H := GC)).symm.toEquiv
       _ = Module.finrank K C := IsGalois.card_aut_eq_finrank K C
       _ = a * (residueCard K - 1) * residueCard K ^ (b - 1) := hfinC
   have hnorm : normSubgroup K C = rectangularSubgroup K π a b := by

@@ -9,6 +9,8 @@ never hidden behind `Nat.card`: every rule that divides cardinalities assumes ex
 instances (or, for the fixed trivial module, records positive-cardinality guards).
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace NU.LCFT
 
 universe u
@@ -126,7 +128,7 @@ private noncomputable def cyclicH1EquivHMinusOne
   let g := (IsCyclic.exists_generator (α := G)).choose
   have hg := (IsCyclic.exists_generator (α := G)).choose_spec
   let e : TateLowDegree.normKernel M ≃+
-      LinearMap.ker M.norm.hom.toLinearMap :=
+      LinearMap.ker M.norm.asHom.hom.toLinearMap :=
     { toFun := fun x => ⟨x, x.2⟩
       invFun := fun x => ⟨x, x.2⟩
       left_inv := fun x => by ext; rfl
@@ -289,7 +291,7 @@ private noncomputable def periodicOddEquivHMinusOne
   let SC := Rep.FiniteCyclicGroup.subCompNormHom M gen
   letI : Module ℤ (LinearMap.ker SC.g.hom) := (LinearMap.ker SC.g.hom).module
   let e : TateLowDegree.normKernel M ≃+
-      LinearMap.ker M.norm.hom.toLinearMap :=
+      LinearMap.ker M.norm.asHom.hom.toLinearMap :=
     { toFun := fun x => ⟨x, x.2⟩
       invFun := fun x => ⟨x, x.2⟩
       left_inv := fun x => by ext; rfl
@@ -309,7 +311,7 @@ private noncomputable def periodicOddEquivHMinusOne
     have hzero : q x = 0 ↔
         (x : M) ∈ LinearMap.range (M.applyAsHom gen - 𝟙 M).hom.toLinearMap := by
       change SC.homologyπ (SC.moduleCatCyclesIso.inv (e x)) = 0 ↔ _
-      rw [SC.moduleCatCyclesIso_inv_π_apply]
+      erw [SC.moduleCatCyclesIso_inv_π_apply]
       rw [map_eq_zero_iff _ ((ModuleCat.mono_iff_injective _).1 inferInstance)]
       change Submodule.Quotient.mk (e x) = 0 ↔ _
       rw [Submodule.Quotient.mk_eq_zero]
@@ -405,9 +407,9 @@ private noncomputable def periodicEvenEquivH0
     ext x
     rw [AddMonoidHom.mem_ker]
     change q x = 0 ↔ _
-    have hzero : q x = 0 ↔ (x : M) ∈ LinearMap.range M.norm.hom.toLinearMap := by
+    have hzero : q x = 0 ↔ (x : M) ∈ LinearMap.range M.norm.asHom.hom.toLinearMap := by
       change SC.homologyπ (SC.moduleCatCyclesIso.inv (e x)) = 0 ↔ _
-      rw [SC.moduleCatCyclesIso_inv_π_apply]
+      erw [SC.moduleCatCyclesIso_inv_π_apply]
       rw [map_eq_zero_iff _ ((ModuleCat.mono_iff_injective _).1 inferInstance)]
       change Submodule.Quotient.mk (e x) = 0 ↔ _
       rw [Submodule.Quotient.mk_eq_zero]
@@ -459,12 +461,12 @@ private noncomputable def cyclicPeriodicHom
       rintro i j ⟨rfl⟩
       by_cases hi : Even i
       · simp only [Rep.FiniteCyclicGroup.moduleCatCochainComplex,
-          HomologicalComplex.alternatingConst, if_pos (show (ComplexShape.up ℕ).Rel i (i + 1) from rfl), hi, ↓reduceIte, dite_eq_ite]
+          HomologicalComplex.alternatingConst, if_pos (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
         ext x
         change B.ρ g (f.hom x) - f.hom x = f.hom (A.ρ g x - x)
         rw [map_sub, Rep.hom_comm_apply]
       · simp only [Rep.FiniteCyclicGroup.moduleCatCochainComplex,
-          HomologicalComplex.alternatingConst, if_pos (show (ComplexShape.up ℕ).Rel i (i + 1) from rfl), hi, ↓reduceIte, dite_eq_ite]
+          HomologicalComplex.alternatingConst, if_pos (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
         ext x
         exact Rep.norm_comm_apply f x }
 
@@ -630,7 +632,7 @@ private theorem card_cycle
 
 private theorem topRes_norm_eq {G : Type} [Group G] [Fintype G]
     [Fintype (⊤ : Subgroup G)] (M : Rep ℤ G) (x : M) :
-    (Rep.res (⊤ : Subgroup G).subtype M).norm.hom x = M.norm.hom x := by
+    (Rep.res (⊤ : Subgroup G).subtype M).norm.asHom.hom x = M.norm.asHom.hom x := by
   rw [Rep.norm_apply, Rep.norm_apply]
   simp only [Representation.norm, LinearMap.sum_apply]
   simpa using Equiv.sum_comp Subgroup.topEquiv.toEquiv (fun g : G => M.ρ g x)
@@ -652,12 +654,12 @@ private noncomputable def topResH0Equiv {G : Type} [Group G] [Fintype G]
     constructor
     · rintro ⟨y, hy⟩
       refine ⟨y, ?_⟩
-      change N.norm.hom y = (x : M)
+      change N.norm.asHom.hom y = (x : M)
       rw [topRes_norm_eq M]
       exact hy
     · rintro ⟨y, hy⟩
       refine ⟨y, ?_⟩
-      change M.norm.hom y = (x : M)
+      change M.norm.asHom.hom y = (x : M)
       rw [← topRes_norm_eq M]
       exact hy
   let r : TateLowDegree.H0 M →+ TateLowDegree.H0 N :=
@@ -697,11 +699,11 @@ private noncomputable def topResHMinusOneEquiv {G : Type} [Group G] [Fintype G]
   let N := Rep.res (⊤ : Subgroup G).subtype M
   let e : TateLowDegree.normKernel M ≃+ TateLowDegree.normKernel N :=
     { toFun := fun x => ⟨x, by
-          change N.norm.hom (x : M) = 0
+          change N.norm.asHom.hom (x : M) = 0
           rw [topRes_norm_eq M]
           exact x.2⟩
       invFun := fun x => ⟨x, by
-          change M.norm.hom (x : M) = 0
+          change M.norm.asHom.hom (x : M) = 0
           rw [← topRes_norm_eq M]
           exact x.2⟩
       left_inv := fun x => by ext; rfl
@@ -1026,17 +1028,22 @@ private theorem herbrandQuotient_mul
   let oddPeriod (M : Rep.{u} ℤ G) : (P M).homology 1 ≃+ (P M).homology 3 :=
     (cyclicOddIsoOne M gen).toLinearEquiv.toAddEquiv |>.trans
       (cyclicOddIsoThree M gen).symm.toLinearEquiv.toAddEquiv
+  have hcancel (M : Rep.{u} ℤ G) y :
+      (cyclicOddIsoThree M gen).hom ((cyclicOddIsoThree M gen).symm.toLinearEquiv y) = y :=
+    (cyclicOddIsoThree M gen).inv_hom_id_apply y
   have hp13 (x : (P A).homology 1) : oddPeriod B (p1 x) = p3 (oddPeriod A x) := by
     apply (ModuleCat.mono_iff_injective (cyclicOddIsoThree B gen).hom).1 inferInstance
     calc
-      _ = (cyclicOddIsoOne B gen).hom (p1 x) := by simp [oddPeriod]
+      _ = (cyclicOddIsoOne B gen).hom (p1 x) := hcancel B _
       _ = (ShortComplex.homologyMap (cyclicPeriodicSCMap gen f))
           ((cyclicOddIsoOne A gen).hom x) := by
         have h := ConcreteCategory.congr_hom
           (cyclicPeriodicHom_naturality_one gen f) x
         simpa [p1, PS, PF] using h
       _ = (ShortComplex.homologyMap (cyclicPeriodicSCMap gen f))
-          ((cyclicOddIsoThree A gen).hom (oddPeriod A x)) := by simp [oddPeriod]
+          ((cyclicOddIsoThree A gen).hom (oddPeriod A x)) :=
+        (congrArg (fun z => (ShortComplex.homologyMap (cyclicPeriodicSCMap gen f)) z)
+          (hcancel A _)).symm
       _ = (cyclicOddIsoThree B gen).hom (p3 (oddPeriod A x)) := by
         have h := ConcreteCategory.congr_hom
           (cyclicPeriodicHom_naturality_three gen f) (oddPeriod A x)

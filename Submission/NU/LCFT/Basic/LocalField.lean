@@ -593,14 +593,14 @@ theorem ramificationInvariants_exists :
       IsDiscreteValuationRing.coheight_pow_maximalIdeal] at hc
     have : e = e + 1 := by exact_mod_cast hc
     omega
-  have hram : p.ramificationIdx P = e := Ideal.ramificationIdx_spec hmap.le hnot
+  have hram : p.ramificationIdx' P = e := Ideal.ramificationIdx_spec hmap.le hnot
   have hp0 : p ≠ ⊥ := by
     rw [hp, ne_eq, Ideal.span_singleton_eq_bot]
     exact hϖKirr.ne_zero
   have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
     (S := 𝒪[L]) K L (p := p) hp0
-  let f := p.inertiaDeg P
-  have hf : 0 < f := Ideal.inertiaDeg_pos p P
+  let f := p.inertiaDeg' P
+  have hf : 0 < f := Ideal.inertiaDeg'_pos p P
   refine ⟨e, f, he, hf, ?_, ?_⟩
   · intro x
     rw [hecast]
@@ -1536,12 +1536,12 @@ private theorem unramifiedLevelSeed_isUnramified [IsSepClosure K Ksep]
     apply le_antisymm
     · exact hupper.trans_eq (unramifiedLevelSeed_finrank K Ksep S)
     · exact hlower
-  have hinertia : p.inertiaDeg P = d := by
+  have hinertia : p.inertiaDeg' P = d := by
     rw [Ideal.inertiaDeg_algebraMap]
     exact hres
   have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
     (S := 𝒪[U]) K U (p := p) hp0
-  have hramification : p.ramificationIdx P = 1 := by
+  have hramification : p.ramificationIdx' P = 1 := by
     rw [hinertia, unramifiedLevelSeed_finrank K Ksep S] at hdegree
     apply Nat.eq_of_mul_eq_mul_right hd
     simpa using hdegree
@@ -1573,7 +1573,7 @@ private theorem unramifiedLevelSeed_isUnramified [IsSepClosure K Ksep]
       IsDiscreteValuationRing.coheight_pow_maximalIdeal] at hc
     have : n = n + 1 := by exact_mod_cast hc
     omega
-  have hnram : p.ramificationIdx P = n :=
+  have hnram : p.ramificationIdx' P = n :=
     Ideal.ramificationIdx_spec hmap.le hnot
   have hn : n = 1 := hnram ▸ hramification
   let xu : Units U := Units.map (algebraMap 𝒪[U] U) unit
@@ -1613,8 +1613,9 @@ private theorem hensel_lift_residue_root
   obtain ⟨a₀', ha₀'⟩ := IsLocalRing.residue_surjective a₀
   have heval : f.eval a₀' ∈ IsLocalRing.maximalIdeal R := by
     rw [← Ideal.Quotient.eq_zero_iff_mem]
+    change IsLocalRing.residue R (f.eval a₀') = 0
     calc
-      Ideal.Quotient.mk (IsLocalRing.maximalIdeal R) (f.eval a₀') =
+      IsLocalRing.residue R (f.eval a₀') =
           Polynomial.eval₂ (IsLocalRing.residue R)
             (IsLocalRing.residue R a₀') f := by
               exact (Polynomial.eval₂_at_apply (IsLocalRing.residue R) a₀').symm
@@ -1757,7 +1758,7 @@ private theorem residue_finrank_eq_finrank_of_unramified
       IsDiscreteValuationRing.coheight_pow_maximalIdeal,
       IsDiscreteValuationRing.coheight_pow_maximalIdeal] at hc
     norm_num at hc
-  have hram : p.ramificationIdx P = 1 := by
+  have hram : p.ramificationIdx' P = 1 := by
     apply Ideal.ramificationIdx_spec (by simpa using hmap.le)
     simpa only [one_add_one_eq_two] using hnot
   have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
@@ -1766,7 +1767,7 @@ private theorem residue_finrank_eq_finrank_of_unramified
       exact hϖKirr.ne_zero)
   rw [hram, one_mul] at hdegree
   calc
-    Module.finrank (LocalResidueField K) (LocalResidueField E) = p.inertiaDeg P := by
+    Module.finrank (LocalResidueField K) (LocalResidueField E) = p.inertiaDeg' P := by
       rw [Ideal.inertiaDeg_algebraMap]
       rfl
     _ = Module.finrank K E := hdegree
@@ -1941,7 +1942,7 @@ private theorem unramifiedLevelSeed_isGalois [IsSepClosure K Ksep]
       · rw [Polynomial.aeval_def, ← Polynomial.eval_map]
         change fKU.IsRoot (lift x : U)
         rw [← hpoly]
-        exact (hlift_root x).map⟩
+        exact (hlift_root x).map _⟩
   have hrootMap_injective : Function.Injective rootMap := by
     intro x y hxy
     apply Subtype.ext
@@ -2031,7 +2032,7 @@ private theorem unramifiedLevelSeed_le_of_dvd [IsSepClosure K Ksep]
     congr 1
   have haE : (fK.map (algebraMap K E)).IsRoot (a : E) := by
     rw [← hpolyE]
-    exact ha.map
+    exact ha.map _
   let z : Ksep := E.val (a : E)
   have hzroot : (fK.map (algebraMap K Ksep)).IsRoot z := by
     have hz := haE.map (f := E.val.toRingHom)
@@ -2165,7 +2166,7 @@ private theorem unramifiedLift_root_unique
     rw [← IsLocalRing.residue_ne_zero_iff_isUnit]
     have hrootred : (fE.map (IsLocalRing.residue 𝒪[E])).IsRoot
         (IsLocalRing.residue 𝒪[E] a) := by
-      exact ha.map
+      exact ha.map _
     have hsepred : (fE.map (IsLocalRing.residue 𝒪[E])).Separable := by
       rw [hredpoly]
       exact hfbar_sep.map
@@ -2181,7 +2182,7 @@ private theorem unramifiedLift_root_unique
       Polynomial.eval₂_at_apply] using hderivred
   apply IsLocalRing.eq_of_eval_eq_zero_of_not_isUnit_sub ha hb
   · rw [← mem_nonunits_iff, ← IsLocalRing.mem_maximalIdeal,
-      ← IsLocalRing.residue_eq_zero_iff, map_sub, hab, sub_self]
+      ← IsLocalRing.residue_eq_zero_iff, RingHom.map_sub, hab, sub_self]
   · exact hunit
 
 /-- Reduction of a level automorphism to the corresponding residue-field automorphism. -/
@@ -2876,7 +2877,7 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
     congr 1
   have hzW : (fK.map (algebraMap K W)).IsRoot (zO : W) := by
     rw [← hpolyW]
-    exact hzO.map
+    exact hzO.map _
   let z : Ksep := W.val (zO : W)
   have hzaeval : Polynomial.aeval z fK = 0 := by
     rw [Polynomial.aeval_def, ← Polynomial.eval_map]
@@ -2947,7 +2948,7 @@ private theorem unramifiedLevelField_compositumData_exists [IsSepClosure K Ksep]
   letI : (ValuativeRel.valuation K).HasExtension (ValuativeRel.valuation C) :=
     ⟨ValuativeRel.isEquiv _ _⟩
   let CE : IntermediateField E Ksep :=
-    IntermediateField.extendScalars (show E ≤ C from le_sup_left)
+    IntermediateField.extendScalars (by exact le_sup_left : E ≤ C)
   have hCEleW : CE ≤ W := by
     intro x hx
     exact hCleWK hx
@@ -3129,8 +3130,8 @@ private theorem unramifiedLevelFields_intersection_finrank [IsSepClosure K Ksep]
     unramifiedLevelFieldFiniteDimensional K Ksep (S b)
   letI : FiniteDimensional K I :=
     FiniteDimensional.of_injective
-      (IntermediateField.inclusion (show I ≤ U from inf_le_left)).toLinearMap
-      (IntermediateField.inclusion_injective (show I ≤ U from inf_le_left))
+      (IntermediateField.inclusion (by exact inf_le_left : I ≤ U)).toLinearMap
+      (IntermediateField.inclusion_injective (by exact inf_le_left : I ≤ U))
   let g := Nat.gcd (a + 1) (b + 1)
   let c := g - 1
   have hgpos : 0 < g := Nat.gcd_pos_of_pos_left (b + 1) (Nat.succ_pos a)
@@ -3152,10 +3153,10 @@ private theorem unramifiedLevelFields_intersection_finrank [IsSepClosure K Ksep]
     exact IntermediateField.finrank_le_of_le_right hlevel
   have hdivU : Module.finrank K I ∣ a + 1 := by
     rw [← unramifiedLevelField_finrank K Ksep (S a)]
-    exact IntermediateField.finrank_dvd_of_le_right (show I ≤ U from inf_le_left)
+    exact IntermediateField.finrank_dvd_of_le_right (by exact inf_le_left : I ≤ U)
   have hdivV : Module.finrank K I ∣ b + 1 := by
     rw [← unramifiedLevelField_finrank K Ksep (S b)]
-    exact IntermediateField.finrank_dvd_of_le_right (show I ≤ V from inf_le_right)
+    exact IntermediateField.finrank_dvd_of_le_right (by exact inf_le_right : I ≤ V)
   have hupper : Module.finrank K I ≤ g :=
     Nat.le_of_dvd hgpos (Nat.dvd_gcd hdivU hdivV)
   exact le_antisymm hupper hlower

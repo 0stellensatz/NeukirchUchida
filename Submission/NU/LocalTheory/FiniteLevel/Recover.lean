@@ -309,8 +309,7 @@ theorem orientedRestriction_surjective
   obtain ⟨g, hg⟩ := AlgEquiv.restrictNormalHom_surjective
     (AlgebraicClosure K) σ
   refine ⟨QuotientGroup.mk g, ?_⟩
-  rw [orientedRestriction_mk]
-  exact hg
+  exact (orientedRestriction_mk orientation L p g).trans hg
 
 private noncomputable def topologicalAbelianizationTransport
     {G H : Type*} [Group G] [Group H]
@@ -1037,6 +1036,7 @@ private noncomputable def comparisonAutELToAbsolute
     apply AlgEquiv.ext
     intro x
     simp [comparisonClosureRingEquiv]
+    rfl
   map_mul' τ₁ τ₂ := by
     apply AlgEquiv.ext
     intro x
@@ -1698,7 +1698,8 @@ theorem exists_orientedCyclotomicComparison
           _ = algebraMap M A (σ (u₀ : M)) := hs (u₀ : M)
           _ = algebraMap M A (u : M) := by
             congr 1
-            simp [u₀, σ]
+            simp only [u₀, σ]
+            exact AlgEquiv.apply_symm_apply _ _
       let ζA : A := algebraMap M A ζ
       have hζA : IsPrimitiveRoot ζA (p : ℕ) :=
         hζ.map_of_injective (algebraMap M A).injective

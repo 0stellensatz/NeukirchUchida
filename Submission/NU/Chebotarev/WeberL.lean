@@ -255,11 +255,11 @@ private theorem weberPrivatePartialZeta_eq_LSeries (m : RayModulus K)
     by_cases ha : a ≠ 0 ∧ IsCoprime a m.finite ∧
       RayClassGroup.IsClassOfIdeal m a c
     · rw [if_pos ha, Set.indicator_apply,
-        if_pos (show a ∈ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
-          RayClassGroup.IsClassOfIdeal m a c} from ha)]
+        if_pos (by exact ha : a ∈ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
+          RayClassGroup.IsClassOfIdeal m a c})]
     · rw [if_neg ha, Set.indicator_apply,
-        if_neg (show a ∉ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
-          RayClassGroup.IsClassOfIdeal m a c} from ha)]]
+        if_neg (by exact ha : a ∉ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
+          RayClassGroup.IsClassOfIdeal m a c})]]
   rw [← tsum_subtype]
   change (∑' a : A, f a) = _
   let e := Equiv.sigmaFiberEquiv (fun a : A => Ideal.absNorm a.1)
@@ -363,11 +363,11 @@ private theorem weberPrivatePartialZeta_summable (m : RayModulus K)
   by_cases ha : a ≠ 0 ∧ IsCoprime a m.finite ∧
       RayClassGroup.IsClassOfIdeal m a c
   · rw [Set.indicator_apply,
-      if_pos (show a ∈ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
-        RayClassGroup.IsClassOfIdeal m a c} from ha), if_pos ha]
+      if_pos (by exact ha : a ∈ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
+        RayClassGroup.IsClassOfIdeal m a c}), if_pos ha]
   · rw [Set.indicator_apply,
-      if_neg (show a ∉ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
-        RayClassGroup.IsClassOfIdeal m a c} from ha), if_neg ha]
+      if_neg (by exact ha : a ∉ {a : Ideal O | a ≠ 0 ∧ IsCoprime a m.finite ∧
+        RayClassGroup.IsClassOfIdeal m a c}), if_neg ha]
 
 private theorem weberPrivateError_LSeriesSummable (m : RayModulus K)
     (c : RayClassGroup m) (ρ : ℝ)
@@ -466,18 +466,18 @@ private theorem weberPrivateMellin_eq_integral (m : RayModulus K)
     simp [ae_iff, measure_singleton]
   filter_upwards [hne] with t ht
   by_cases h1 : 1 < t
-  · rw [Set.indicator_of_mem (show t ∈ Set.Ioi (0 : ℝ) from zero_lt_one.trans h1),
-      Set.indicator_of_mem (show t ∈ Set.Ioi (1 : ℝ) from h1)]
+  · rw [Set.indicator_of_mem (by exact zero_lt_one.trans h1 : t ∈ Set.Ioi (0 : ℝ)),
+      Set.indicator_of_mem (by exact h1 : t ∈ Set.Ioi (1 : ℝ))]
     rw [show -s - 1 = -(s + 1) by ring, mul_comm]
   · by_cases h0 : 0 < t
     · have ht1 : t < 1 := lt_of_le_of_ne (le_of_not_gt h1) ht
       have hfloor : ⌊t⌋₊ = 0 := Nat.floor_eq_zero.mpr ht1
-      rw [Set.indicator_of_mem (show t ∈ Set.Ioi (0 : ℝ) from h0),
-        Set.indicator_of_notMem (show t ∉ Set.Ioi (1 : ℝ) from h1),
+      rw [Set.indicator_of_mem (by exact h0 : t ∈ Set.Ioi (0 : ℝ)),
+        Set.indicator_of_notMem (by exact h1 : t ∉ Set.Ioi (1 : ℝ)),
         weberPrivateErrorStep, hfloor]
       simp
-    · rw [Set.indicator_of_notMem (show t ∉ Set.Ioi (0 : ℝ) from h0),
-        Set.indicator_of_notMem (show t ∉ Set.Ioi (1 : ℝ) from fun h => h0 (zero_lt_one.trans h))]
+    · rw [Set.indicator_of_notMem (by exact h0 : t ∉ Set.Ioi (0 : ℝ)),
+        Set.indicator_of_notMem (by exact fun h => h0 (zero_lt_one.trans h) : t ∉ Set.Ioi (1 : ℝ))]
 
 private theorem weberPrivateErrorContinuation_eq_LSeries (m : RayModulus K)
     (c : RayClassGroup m) (ρ : ℝ)
@@ -1294,8 +1294,9 @@ theorem weberLSeries_eq_eulerProduct (m : RayModulus K)
         have haeq := (weberPrivateIdealFactorEquiv (K := K)).left_inv a
         exact congrArg (fun z : {a : Ideal O // a ≠ 0} =>
           weberPrivateIdealTerm m ψ s z.1) haeq
-      _ = _ := tsum_subtype_eq_of_support_subset (fun a ha hzero => by
-        subst a
+      _ = _ := tsum_subtype_eq_of_support_subset (s := {a : Ideal O | a ≠ 0}) (by
+        intro a ha hzero
+        subst hzero
         exact ha (weberPrivateIdealTerm_zero m ψ s))
   calc
     weberLSeries m ψ s =

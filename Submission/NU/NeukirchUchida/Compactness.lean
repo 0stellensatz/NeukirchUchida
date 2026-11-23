@@ -874,7 +874,7 @@ theorem exists_global_inducingAutomorphism
       isGalois := hLgal }
   have hxA : x ∈ A :=
     IntermediateField.subset_adjoin ℚ ({x} : Set Omega) (Set.mem_singleton x)
-  have hxL : x ∈ L.field := hKL ((show A ≤ K from le_sup_right) hxA)
+  have hxL : x ∈ L.field := hKL ((by exact le_sup_right : A ≤ K) hxA)
   let xL : L.field := ⟨x, hxL⟩
   have hsol : FiniteSolutionPredicate theta level
       (ambientRestriction L alpha) := hall level

@@ -9,6 +9,8 @@ recovery argument.  It is deliberately independent of
 proved in a separate worktree.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 open scoped IntermediateField NNReal NumberField Pointwise
 
 namespace NU.NeukirchUchida.Bridges
@@ -601,6 +603,7 @@ private theorem valuationEquivComap_uniformContinuous
   rw [← Valuation.restrict_lt_iff] at hmap
   rwa [ha] at hmap
 
+set_option backward.isDefEq.respectTransparency true in
 set_option maxHeartbeats 1000000 in
 set_option synthInstance.maxHeartbeats 100000 in
 /-- The completion's absolute Galois group is the decomposition group of an
@@ -671,7 +674,7 @@ private theorem completionGaloisEquivDecomposition
   let D : Subfield C := iC.fieldRange.topologicalClosure
   let eD0 : (v.valuation K).Completion ≃+* D :=
     valuedCompletionEquivClosure (v.valuation K) (algebraMap K Ω) hequiv
-  let eD : v.adicCompletion K ≃+* D := eD0
+  let eD : v.adicCompletion K ≃+* D := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv K v).trans eD0
   let kToD : K →+* D := iC.codRestrict D fun x =>
     Subfield.le_topologicalClosure iC.fieldRange ⟨x, rfl⟩
   letI : IsClosed (D : Set C) := Subfield.isClosed_topologicalClosure _
@@ -701,18 +704,17 @@ private theorem completionGaloisEquivDecomposition
   let omegaToE : Ω →ₐ[K] E :=
     { toRingHom := omegaToC.toRingHom.codRestrict E homegaE
       commutes' := fun _ => rfl }
-  let O : IntermediateField K E := omegaToE.fieldRange
-  let omegaEquiv : Ω ≃ₐ[K] O := AlgEquiv.ofInjectiveField omegaToE
-  let normalO : Normal K O := by
+  let omegaEquiv := AlgEquiv.ofInjectiveField omegaToE
+  let normalO : Normal K omegaToE.fieldRange := by
     letI : Normal K Ω := IsAlgClosure.normal K Ω
     exact Normal.of_algEquiv omegaEquiv
-  letI normalOInst : Normal K O := normalO
+  letI normalOInst : Normal K omegaToE.fieldRange := normalO
   let restrictScalarsHom : (E ≃ₐ[D] E) →* (E ≃ₐ[K] E) :=
     { toFun := fun τ => τ.restrictScalars K
       map_one' := rfl
       map_mul' := fun _ _ => rfl }
-  let restrictO : (E ≃ₐ[D] E) →* (O ≃ₐ[K] O) :=
-    (AlgEquiv.restrictNormalHom O).comp restrictScalarsHom
+  let restrictO : (E ≃ₐ[D] E) →* (omegaToE.fieldRange ≃ₐ[K] omegaToE.fieldRange) :=
+    (AlgEquiv.restrictNormalHom omegaToE.fieldRange).comp restrictScalarsHom
   let restrictOmega : (E ≃ₐ[D] E) →*
       (Ω ≃ₐ[K] Ω) :=
     (AlgEquiv.autCongr omegaEquiv).symm.toMonoidHom.comp restrictO
@@ -726,7 +728,7 @@ private theorem completionGaloisEquivDecomposition
             exact congrArg Subtype.val
               (omegaEquiv.apply_symm_apply (restrictO τ (omegaEquiv x)))
       _ = τ (omegaToE x) := by
-        exact @AlgEquiv.restrictNormalHom_apply K _ E _ _ O normalOInst
+        exact @AlgEquiv.restrictNormalHom_apply K _ E _ _ omegaToE.fieldRange normalOInst
           (restrictScalarsHom τ) (omegaEquiv x)
   letI : NontriviallyNormedField D :=
     { non_trivial := by

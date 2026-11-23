@@ -664,14 +664,14 @@ theorem absoluteDecompositionGroup_finiteImage
     letI := finitePlaceAction K L.field
     change conjugateFinitePlace K (absoluteRestriction L g) v = v
     have hgW :
-        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) • W = W := by
+        (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) • W = W := by
       exact (MulAction.mem_stabilizer_iff.mp hg)
     have hpres (x : L.field) : x ∈ A ↔ absoluteRestriction L g x ∈ A := by
       change (x : AlgebraicClosure K) ∈ W ↔
         ((absoluteRestriction L g x : L.field) : AlgebraicClosure K) ∈ W
       rw [absoluteRestriction_apply]
       have hs := ValuationSubring.smul_mem_pointwise_smul_iff
-        (g := (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g))
+        (g := (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K))
         (S := W) (x := (x : AlgebraicClosure K))
       rw [hgW] at hs
       exact hs.symm
@@ -724,9 +724,9 @@ theorem absoluteDecompositionGroup_finiteImage
       have he' := congrArg Subtype.val he
       rw [absoluteRestriction_apply] at he'
       have hleft :
-          (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from τ⁻¹)
+          (by exact τ⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
               (x : AlgebraicClosure K) ∈ W ↔ (σ⁻¹ x) ∈ A := by
-        change (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from τ⁻¹)
+        change (by exact τ⁻¹ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
               (x : AlgebraicClosure K) ∈ W ↔
           ((σ⁻¹ x : L.field) : AlgebraicClosure K) ∈ W
         exact iff_of_eq (congrArg (fun z => z ∈ W) he')
@@ -751,20 +751,20 @@ theorem absoluteDecompositionGroup_finiteImage
       rwa [hτbase]
     obtain ⟨δ, hδ⟩ := exists_smul_of_valuationSubring_comap_eq
       K L.field W (τE • W) hWbase hτnontrivial
-        (show W.comap L.field.val.toRingHom =
-          (τE • W).comap L.field.val.toRingHom from hτcomap.symm)
+        (by exact hτcomap.symm : W.comap L.field.val.toRingHom =
+          (τE • W).comap L.field.val.toRingHom)
     let δK : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K :=
       δ.restrictScalars K
     have hδK : τE • W = δK • W := hδ
     let d : Field.absoluteGaloisGroup K := δK
     let g : Field.absoluteGaloisGroup K := d⁻¹ * τ
     have hg : g ∈ absoluteDecompositionGroup K W := by
-      change (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g) ∈
+      change (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) ∈
         MulAction.stabilizer
           (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) W
-      rw [MulAction.mem_stabilizer_iff]
+      refine MulAction.mem_stabilizer_iff.mpr ?_
       change (δK⁻¹ *
-        (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from τ)) • W = W
+        (by exact τ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)) • W = W
       rw [mul_smul, hδK]
       simp
     refine ⟨g, hg, ?_⟩
@@ -1130,23 +1130,23 @@ private theorem exists_local_klein_level
   have hαE : αE ^ 2 = algebraMap K E πK := by
     apply Subtype.ext
     exact hαeq
-  have he_ne_one : w.asIdeal.ramificationIdx' (𝓞 K) ≠ 1 := by
+  have he_ne_one : w.asIdeal.ramificationIdx (𝓞 K) ≠ 1 := by
     intro he
     have hlie := v.valuation_liesOver E w πK
-    have he' : p.ramificationIdx w.asIdeal = 1 := by
+    have he' : p.ramificationIdx' w.asIdeal = 1 := by
       rw [Ideal.ramificationIdx_eq_ramificationIdx' p w.asIdeal v.ne_bot]
       exact he
     have hπw : w.valuation E (algebraMap K E πK) =
         WithZero.exp (-1 : ℤ) := by
-      rw [he', pow_one, hπK] at hlie
+      rw [he, pow_one, hπK] at hlie
       exact hlie.symm
     have hαval : (w.valuation E αE) ^ 2 = WithZero.exp (-1 : ℤ) := by
       rw [← hπw, ← hαE]
       exact (map_pow (w.valuation E) αE 2).symm
     exact square_ne_exp_neg_one (w.valuation E αE) hαval
-  have he_pos : 0 < w.asIdeal.ramificationIdx' (𝓞 K) :=
-    Ideal.ramificationIdx'_pos w.asIdeal (𝓞 K)
-  have he : 2 ≤ w.asIdeal.ramificationIdx' (𝓞 K) := by
+  have he_pos : 0 < w.asIdeal.ramificationIdx (𝓞 K) :=
+    Ideal.ramificationIdx_pos (q := w.asIdeal) (𝓞 K)
+  have he : 2 ≤ w.asIdeal.ramificationIdx (𝓞 K) := by
     omega
   let βE : E :=
     ⟨β, IntermediateField.subset_adjoin K ({α, β} : Set _) (by simp)⟩
@@ -1194,15 +1194,15 @@ private theorem exists_local_klein_level
   have hfres : 2 ≤ Module.finrank k kE := by
     rw [hkres] at hktower
     omega
-  have hf : 2 ≤ w.asIdeal.inertiaDeg' (𝓞 K) := by
+  have hf : 2 ≤ w.asIdeal.inertiaDeg (𝓞 K) := by
     rw [← Ideal.inertiaDeg_eq_inertiaDeg' p w.asIdeal,
       Ideal.inertiaDeg_algebraMap]
     exact hfres
   let G := E ≃ₐ[K] E
   have hcardstab :
       Nat.card (MulAction.stabilizer G w.asIdeal) =
-        w.asIdeal.ramificationIdx' (𝓞 K) *
-          w.asIdeal.inertiaDeg' (𝓞 K) := by
+        w.asIdeal.ramificationIdx (𝓞 K) *
+          w.asIdeal.inertiaDeg (𝓞 K) := by
     rw [Ideal.card_stabilizer_eq p w.asIdeal,
       Ideal.ramificationIdxIn_eq_ramificationIdx p w.asIdeal G,
       Ideal.inertiaDegIn_eq_inertiaDeg p w.asIdeal G]
@@ -1436,9 +1436,10 @@ private theorem restrictLevelPlace_refl
     restrictLevelPlace (L := L) (M := L) le_rfl w = w := by
   letI : Algebra L.field L.field :=
     (IntermediateField.inclusion
-      (show L.field ≤ L.field from le_rfl)).toAlgebra
+      (by exact le_rfl : L.field ≤ L.field)).toAlgebra
   apply IsDedekindDomain.HeightOneSpectrum.ext
-  rw [restrictLevelPlace, restrictFinitePlace_asIdeal]
+  unfold restrictLevelPlace
+  rw [restrictFinitePlace_asIdeal]
   ext x
   change algebraMap (𝓞 L.field) (𝓞 L.field) x ∈ w.asIdeal ↔ _
   have hx : algebraMap (𝓞 L.field) (𝓞 L.field) x = x := by
@@ -1459,8 +1460,8 @@ private theorem restrictLevelPlace_trans
   letI : IsScalarTower L.field M.field N.field :=
     IsScalarTower.of_algebraMap_eq (fun _ => rfl)
   apply IsDedekindDomain.HeightOneSpectrum.ext
-  rw [restrictLevelPlace, restrictLevelPlace, restrictLevelPlace,
-    restrictFinitePlace_asIdeal, restrictFinitePlace_asIdeal,
+  unfold restrictLevelPlace
+  rw [restrictFinitePlace_asIdeal, restrictFinitePlace_asIdeal,
     restrictFinitePlace_asIdeal]
   ext x
   change algebraMap (𝓞 M.field) (𝓞 N.field)

@@ -1,4 +1,5 @@
 import Submission.NU.LocalTheory.FiniteLevel.Recover
+import Submission.NU.Compat
 
 /-!
 # Finite witnesses in a cofinal Galois system
@@ -194,7 +195,7 @@ ramification index. -/
 def IsRamifiedAtBase {K L : Type*} [Field K] [Field L]
     [NumberField K] [NumberField L] [Algebra K L]
     (w : FinitePlace L) : Prop :=
-  1 < (w.asIdeal.under (𝓞 K)).ramificationIdx w.asIdeal
+  1 < (w.asIdeal.under (𝓞 K)).ramificationIdx' w.asIdeal
 
 /-- Blueprint Lemma 8.2 (`lem:noncyclic-ramified`): a noncyclic finite
 decomposition group lies over a ramified base prime. -/
@@ -209,12 +210,12 @@ theorem noncyclic_decompositionGroup_ramified
   by_contra hunramified
   apply hnoncyclic
   rw [IsRamifiedAtBase, not_lt] at hunramified
-  have he : (w.asIdeal.under (𝓞 K)).ramificationIdx w.asIdeal = 1 := by
+  have he : (w.asIdeal.under (𝓞 K)).ramificationIdx' w.asIdeal = 1 := by
     apply Nat.le_antisymm hunramified
     rw [Ideal.ramificationIdx_eq_ramificationIdx'
       (w.asIdeal.under (𝓞 K)) w.asIdeal
       (Ideal.under_ne_bot (𝓞 K) w.ne_bot)]
-    exact Ideal.ramificationIdx'_pos w.asIdeal (𝓞 K)
+    exact Ideal.ramificationIdx_pos (q := w.asIdeal) (𝓞 K)
   let G := L ≃ₐ[K] L
   let R := 𝓞 K
   let S := 𝓞 L
@@ -284,8 +285,8 @@ theorem ramified_base_places_finite
   change w.asIdeal ∣ I
   apply dvd_differentIdeal_iff.mpr
   intro hunramified
-  have he : (w.asIdeal.under (𝓞 K)).ramificationIdx w.asIdeal = 1 :=
-    (Algebra.isUnramifiedAt_iff_of_isDedekindDomain w.ne_bot).mp hunramified
+  have he : (w.asIdeal.under (𝓞 K)).ramificationIdx' w.asIdeal = 1 :=
+    (Algebra.isUnramifiedAt_iff_of_isDedekindDomain' w.ne_bot).mp hunramified
   rw [IsRamifiedAtBase, he] at hwram
   exact (Nat.lt_irrefl 1) hwram
 

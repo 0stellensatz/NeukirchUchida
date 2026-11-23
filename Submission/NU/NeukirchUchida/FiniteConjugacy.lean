@@ -48,7 +48,7 @@ theorem subspace_cover
   intro x
   obtain ⟨i, hi⟩ := hcover x
   exact Set.mem_iUnion₂.mpr
-    ⟨i, Finset.mem_univ i, (show x ∈ (U i : Set V) from hi)⟩
+    ⟨i, Finset.mem_univ i, (by exact hi : x ∈ (U i : Set V))⟩
 
 /-- The agreement subspace `U_h = {x | tau(x) = rho(h)(x)}` from blueprint
 §6.  Its carrier is the displayed equality, so it cannot be replaced by an
@@ -710,7 +710,7 @@ theorem finiteLevel_conjugacy
       MonoidAlgebra.single_mul_single] using hsE
   have hrel : hN * g.1 =
       (normalLevelQuotientIso theta N h₁ h₂ g).1 * hN :=
-    Finsupp.single_left_injective one_ne_zero hsingle
+    MonoidAlgebra.single_left_injective one_ne_zero hsingle
   calc
     (normalLevelQuotientIso theta N h₁ h₂ g).1 =
         (normalLevelQuotientIso theta N h₁ h₂ g).1 * hN * hN⁻¹ := by

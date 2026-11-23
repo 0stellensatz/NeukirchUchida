@@ -1275,7 +1275,7 @@ private theorem abelian_chebotarev_lower_bound
       intro p hpa hpb
       exact Set.disjoint_left.1
         (frobeniusElementPrimeSet_disjoint (K := K) (L := M)
-          (show a.val ≠ b.val from fun h => hab (Subtype.ext h))) hpa.2 hpb.2
+          (by exact fun h => hab (Subtype.ext h) : a.val ≠ b.val)) hpa.2 hpb.2
     have hA (τ : T) : HasDirichletDensity (A τ)
         (1 / ((Nat.card G : ℝ) * Nat.card Gal(M/K))) := by
       exact fieldCrossing_pair_dirichletDensity

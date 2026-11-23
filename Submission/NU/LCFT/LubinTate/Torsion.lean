@@ -1680,9 +1680,9 @@ private lemma formalGroupXzero_constantCoeff
       have hzero : ![0, 0] = (0 : Fin 2 → PowerSeries R) := by
         ext x : 1
         fin_cases x <;> rfl
-      simp [formalGroup_assoc' F, hzero,
-        mvPowerSeries_subst_zero_of_constantCoeff_zero F.zero_constantCoeff,
-        PowerSeries.HasSubst.X', PowerSeries.HasSubst]
+      rw [formalGroup_assoc' F PowerSeries.HasSubst.X' PowerSeries.HasSubst.zero'
+        PowerSeries.HasSubst.zero']
+      simp [hzero, mvPowerSeries_subst_zero_of_constantCoeff_zero F.zero_constantCoeff]
 
 private lemma formalGroupXzero_eq_X
     {R : Type*} [CommRing R] (F : FormalGroup R) :
@@ -1732,7 +1732,7 @@ private theorem formalGroup_sub_X_dvd
           intro hs
           apply hn
           simpa using congrArg (fun e : Fin 2 →₀ ℕ => e 0) hs
-        simp [MvPowerSeries.coeff_X, hn, hs]
+        simp [MvPowerSeries.coeff_X, PowerSeries.coeff_X, hn, hs]
     · intro e he
       by_cases he1 : e 1 = 0
       · by_cases he0 : e 0 = n

@@ -35,6 +35,13 @@ kills `n`-th powers automatically. -/
 abbrev MulCharacter (F : Type*) [Field F] (n : ℕ) :=
   Additive Fˣ →+ ZMod n
 
+/-- Since Lean/mathlib v4.36 the unifier cannot see that the two `AddCommMonoid` paths on a
+submodule of `MulCharacter F n` agree (`ZMod n` is defined by cases on `n`), so `W ⧸ N`,
+`Module.Projective`, etc. fail to synthesize. Supplying the group structure directly fixes it. -/
+instance MulCharacter.submoduleAddCommGroup {F : Type*} [Field F] {n : ℕ}
+    (W : Submodule (ZMod n) (MulCharacter F n)) : AddCommGroup W :=
+  Submodule.addCommGroup W
+
 /-- Pull a multiplicative character back along a field homomorphism. -/
 def pullbackCharacter {F E : Type*} [Field F] [Field E] (n : ℕ)
     (f : F →+* E) (p : MulCharacter E n) : MulCharacter F n where

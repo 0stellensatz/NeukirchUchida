@@ -11,6 +11,8 @@ by local character-rank recovery.  It can be proved without editing
 `NU.NeukirchUchida.LocalInvariants`.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 open scoped NumberField
 
 namespace NU.NeukirchUchida.Bridges
@@ -79,14 +81,13 @@ private theorem maschkeCyclotomicProjector_translate
   classical
   letI := Fintype.ofFinite Delta
   have hcoeff (d : Delta) :
-      maschkeCyclotomicProjector p hcard chi d =
+      (maschkeCyclotomicProjector p hcard chi).coeff d =
         (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
-          ((chi d)⁻¹ : ZMod (p : ℕ)) := by
-    simpa only [MonoidAlgebra.coeff] using
-      maschkeCyclotomicProjector_coeff p hcard chi d
+          ((chi d)⁻¹ : ZMod (p : ℕ)) :=
+    maschkeCyclotomicProjector_coeff p hcard chi d
   ext delta
-  rw [MonoidAlgebra.single_mul_apply, one_mul, hcoeff,
-    MonoidAlgebra.smul_apply, hcoeff]
+  rw [MonoidAlgebra.coeff_single_mul_apply, one_mul, hcoeff,
+    MonoidAlgebra.coeff_smul, Finsupp.smul_apply, smul_eq_mul, hcoeff]
   change (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
       (↑(chi (gamma⁻¹ * delta)) : ZMod (p : ℕ))⁻¹ =
     (chi gamma : ZMod (p : ℕ)) *
@@ -328,7 +329,7 @@ private theorem intermediateFieldRestrictionHom_apply
     (show AlgebraicClosure F ≃ₐ[F] AlgebraicClosure F from
       intermediateFieldRestrictionHom F E sigma) x =
       intermediateFieldClosureEquiv F E
-        ((show AlgebraicClosure E ≃ₐ[E] AlgebraicClosure E from sigma)
+        ((by exact sigma : AlgebraicClosure E ≃ₐ[E] AlgebraicClosure E)
           ((intermediateFieldClosureEquiv F E).symm x)) := by
   rfl
 
@@ -484,14 +485,14 @@ private theorem localCyclotomic_characterPull_injective
     rw [show c = a - b from rfl, map_sub, hab, sub_self]
   have hfix (tau : E.fixingSubgroup) :
       c (Additive.ofMul
-        (show Field.absoluteGaloisGroup F from tau.1)) = 0 := by
+        (by exact tau.1 : Field.absoluteGaloisGroup F)) = 0 := by
     let sigma : Field.absoluteGaloisGroup E :=
       (localCyclotomicGaloisMulEquiv F p).symm tau
     have hz := DFunLike.congr_fun hpull (Additive.ofMul sigma)
     change c (Additive.ofMul
       (localCyclotomicRestrictionContinuousHom F p sigma)) = 0 at hz
     have hsigma : localCyclotomicRestrictionContinuousHom F p sigma =
-        (show Field.absoluteGaloisGroup F from tau.1) := by
+        (by exact tau.1 : Field.absoluteGaloisGroup F) := by
       change localCyclotomicRestrictionHom F p sigma = tau.1
       change ((localCyclotomicGaloisMulEquiv F p) sigma).1 = tau.1
       rw [(localCyclotomicGaloisMulEquiv F p).apply_symm_apply]
@@ -505,7 +506,8 @@ private theorem localCyclotomic_characterPull_injective
       change c (H.index • Additive.ofMul g) = 0 at hzpow
       rw [map_nsmul, nsmul_eq_mul] at hzpow
       have hindexpos : 0 < H.index := by
-        rw [← IntermediateField.finrank_eq_fixingSubgroup_index E]
+        show 0 < E.fixingSubgroup.index
+        rw [← IntermediateField.finrank_eq_fixingSubgroup_index (E' := AlgebraicClosure F) E]
         exact Module.finrank_pos
       have hcast : ((H.index : ℕ) : ZMod (p : ℕ)) ≠ 0 := by
         intro hz
@@ -981,7 +983,7 @@ private theorem completionResidueFinite
     change Valued.v ((a : K) : F) < 1
     rwa [IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation']
   letI : IsLocalHom f :=
-    ((IsLocalRing.local_hom_TFAE f).out 3 0).mp hfmax
+    ((IsLocalRing.local_hom_TFAE f).out 4 1).mp hfmax
   let rf : IsLocalRing.ResidueField A →+*
       IsLocalRing.ResidueField B := IsLocalRing.ResidueField.map f
   have hrf : Function.Surjective rf := by
@@ -1116,8 +1118,7 @@ private theorem pPowerTorsion_finite_of_isClosed
       ((u : F) ^ ((p : ℕ) ^ a)) =
         ValuativeRel.valuation F (1 : F) at hv
     rw [map_pow, map_one] at hv
-    apply pow_left_injective hN
-    simpa using hv
+    exact (pow_eq_one_iff.mp hv).resolve_right hN
   have hcompact : IsCompact (P : Set (Units F)) :=
     IsCompact.of_isClosed_subset (localField_unitSphere_isCompact F)
       hclosed hsubset
@@ -1352,18 +1353,18 @@ private theorem residueCharacteristic_coprime_norm_sub_one
   letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hnorm : NU.Chebotarev.PrimeIdeal.norm v =
       NU.Chebotarev.PrimeIdeal.norm q ^
-        q.asIdeal.inertiaDeg v.asIdeal := by
+        q.asIdeal.inertiaDeg' v.asIdeal := by
     exact NU.Chebotarev.PrimeIdeal.norm_pow_inertiaDeg
       v q inferInstance
   have hq : NU.Chebotarev.PrimeIdeal.norm q =
       NU.LocalTheory.residueCharacteristic v := by
     rw [rationalPrimeNorm_eq_residueCharacteristic,
       residueCharacteristic_restrictFinitePlace]
-  have hf : 0 < q.asIdeal.inertiaDeg v.asIdeal :=
-    Ideal.inertiaDeg_pos q.asIdeal v.asIdeal
+  have hf : 0 < q.asIdeal.inertiaDeg' v.asIdeal :=
+    Ideal.inertiaDeg'_pos q.asIdeal v.asIdeal
   rw [hnorm, hq, ← hp]
-  have hpow : ((p : ℕ) ^ q.asIdeal.inertiaDeg v.asIdeal).Coprime
-      ((p : ℕ) ^ q.asIdeal.inertiaDeg v.asIdeal - 1) :=
+  have hpow : ((p : ℕ) ^ q.asIdeal.inertiaDeg' v.asIdeal).Coprime
+      ((p : ℕ) ^ q.asIdeal.inertiaDeg' v.asIdeal - 1) :=
     (Nat.coprime_self_sub_right
       (pow_pos p.2.pos _)).2 (Nat.coprime_one_right _)
   exact (Nat.coprime_pow_left_iff hf _ _).mp hpow
@@ -2033,7 +2034,7 @@ private theorem finiteCharacterFamily_card_le_kummerFinrank
         rw [map_mul, map_mul, mul_comm]) }
   let artin : (Units F ⧸ NU.LCFT.normSubgroup F E) ≃* (E ≃ₐ[F] E) :=
     (NU.LCFT.finiteArtin F (AlgebraicClosure F) L).trans
-      Abelianization.equivOfComm.symm
+      Group.Abelianization.equivOfComm.symm
   have htargetPow (z : Multiplicative (ι → R)) :
       z ^ (p : ℕ) = 1 := by
     apply Multiplicative.toAdd.injective
@@ -2239,7 +2240,7 @@ private theorem completionCharacter_finrank_via_finiteLevels
       b j (Additive.ofMul u) = 0 := by
     have hz := congrArg
       (fun z : Multiplicative (J → R) => z.toAdd j) hu
-    simpa [unitEval, characterFamilyMonoidHom] using hz
+    exact hz
   have hkill (chi : CU) (u : Units F) (hu : u ∈ N) :
       chi (Additive.ofMul u) = 0 := by
     let ev : CU →+ R :=
@@ -2301,7 +2302,7 @@ private theorem completionCharacter_finrank_via_finiteLevels
       mul_comm := L.commutative }
   let artin : (Units F ⧸ N) ≃* (L.field ≃ₐ[F] L.field) :=
     (NU.LCFT.finiteArtin F (AlgebraicClosure F) L.field).trans
-      Abelianization.equivOfComm.symm
+      Group.Abelianization.equivOfComm.symm
   let restriction : Field.absoluteGaloisGroup F →*
       (L.field ≃ₐ[F] L.field) := AlgEquiv.restrictNormalHom L.field
   have hrestriction : Function.Surjective restriction :=

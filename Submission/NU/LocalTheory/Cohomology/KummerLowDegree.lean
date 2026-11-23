@@ -13,6 +13,7 @@ cyclic norm criterion of Blueprint Lemma 5.1, and Steinberg cup-zero.  No
 Merkurjev–Suslin theorem is assumed.
 -/
 
+set_option backward.isDefEq.respectTransparency false
 namespace NU.LocalTheory
 
 noncomputable section
@@ -187,7 +188,7 @@ private theorem kummerActionIndex_mul'
     rw [← hστ]
     change σe (τe α) = _
     rw [hτ, map_mul, map_pow]
-    have hfix : σe ζA = ζA := by simp [σe, ζA, A]
+    have hfix : σe ζA = ζA := σe.commutes ζ
     rw [hfix, hσ]
     simp only [pow_add]
     ring
@@ -355,7 +356,7 @@ private theorem rawKummerCharacter_eq_of_definingEquation'
       _ = σe β := (hβeq σ).symm
       _ = σe (ζA ^ j * α) := congrArg (fun y => σe y) hβα
       _ = ζA ^ j * σe α := by
-        have hsζ : σe ζA = ζA := by simp [σe, ζA, A]
+        have hsζ : σe ζA = ζA := σe.commutes ζ
         rw [map_mul, map_pow, hsζ]
       _ = ζA ^ j * (ζA ^ (continuousCharacterValue χ σ).val * α) := by
         have hsα : σe α = ζA ^ (continuousCharacterValue χ σ).val * α := by
@@ -614,8 +615,9 @@ private theorem rawKummerLinear_surjective'
     apply (IntermediateField.mem_fixingSubgroup_iff E σ).2
     intro x hx
     have happ := DFunLike.congr_fun heq ⟨x, hx⟩
-    have happ' := congrArg Subtype.val happ
-    simpa [σEhom, σE, AlgEquiv.restrictNormalHom_apply] using happ'
+    have happ' : ((AlgEquiv.restrictNormalHom E σ ⟨x, hx⟩ : E) : A) = x :=
+      congrArg Subtype.val happ
+    exact (AlgEquiv.restrictNormalHom_apply E σ ⟨x, hx⟩).symm.trans happ'
   let rL : Field.absoluteGaloisGroup M →* (L ≃ₐ[M] L) :=
     AlgEquiv.restrictNormalHom L
   have hrLsurj : Function.Surjective rL :=
@@ -946,7 +948,7 @@ private theorem kummerCharacter_eq_of_definingEquation
       _ = σe β := (hβeq σ).symm
       _ = σe (ζA ^ j * α) := congrArg (fun y => σe y) hβα
       _ = ζA ^ j * σe α := by
-        have hsζ : σe ζA = ζA := by simp [σe, ζA, A]
+        have hsζ : σe ζA = ζA := σe.commutes ζ
         rw [map_mul, map_pow, hsζ]
       _ = ζA ^ j * (ζA ^ (continuousCharacterValue χ σ).val * α) := by
         have hsα : σe α = ζA ^ (continuousCharacterValue χ σ).val * α := by
@@ -1235,7 +1237,7 @@ private theorem kummerCharacter_action_of_root
   obtain ⟨j, _, hj⟩ := hζA.eq_pow_of_pow_eq_one hratio
   have hβr : β = ζA ^ j * r := by
     rw [hj, div_mul_cancel₀ β hr0]
-  have hfixζ : σe (ζA ^ j) = ζA ^ j := by simp [σe, ζA, A]
+  have hfixζ : σe (ζA ^ j) = ζA ^ j := by rw [map_pow]; exact congrArg (· ^ j) (σe.commutes ζ)
   apply mul_left_cancel₀ (pow_ne_zero j
     (hζA.ne_zero (Fact.out : ℓ.Prime).ne_zero))
   calc
@@ -2368,7 +2370,6 @@ private theorem cyclic_norm_criterion_to_norm
         (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ ^ n) zA := by
     dsimp [P, partialConjugateProduct]
     rw [Finset.prod_range_succ]
-    congr 1
   have hTpow_eq_P (n : ℕ) (hn : n < ℓ) : T (ρ ^ n) = P n := by
     induction n with
     | zero =>
@@ -2556,7 +2557,6 @@ private theorem cyclic_norm_criterion_to_norm
         apply Finset.prod_congr rfl
         intro j hj
         rw [hzLA]
-        congr 1
       _ = algebraMap M (AlgebraicClosure M) (b : M) := hPcycle
       _ = L.val (algebraMap M L (b : M)) := rfl
   let autFromFin : Fin ℓ ≃ (L ≃ₐ[M] L) :=

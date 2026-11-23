@@ -360,7 +360,7 @@ private theorem algebraNorm_pos_of_pos_at_real {K : Type*} [Field K] [NumberFiel
     intro w hw
     exact Complex.normSq_pos.mpr ((map_ne_zero w.1.embedding).mpr hx0)
   have hnorm := Algebra.norm_eq_prod_embeddings ℚ ℂ x
-  rw [← Fintype.prod_equiv RingHom.equivRatAlgHom
+  rw [← Fintype.prod_equiv (RingHom.equivRatAlgHom K ℂ)
     (fun f : K →+* ℂ => f x) (fun φ : K →ₐ[ℚ] ℂ => φ x)
     (fun f => by simp [RingHom.equivRatAlgHom_apply]), hprod] at hnorm
   have hrprod :
@@ -567,7 +567,7 @@ private theorem cyclotomicPrimeUnit_eq_norm
   have hcard : Nat.card (NumberField.RingOfIntegers K ⧸
       P.asIdeal.under (NumberField.RingOfIntegers K)) = PrimeIdeal.norm p := by
     rw [← hPp.over]
-    rfl
+    exact (Ideal.absNorm_eq_natCard _).symm
   rw [hcard] at hmain
   have hact : cyclotomicPrimeFrob (F := F) p ζ = ζ ^ PrimeIdeal.norm p := by
     change algebraMap (NumberField.RingOfIntegers F) F
@@ -945,7 +945,7 @@ private theorem cyclotomicWeberAlongOneContinuation {K G : Type*} [Field K] [Num
     intro c hc
     rw [hFeq c s hs]
     simp
-  · have hsum := tendsto_finset_sum Finset.univ (fun c _ => hFres c)
+  · have hsum := tendsto_finsetSum Finset.univ (fun c _ => hFres c)
     convert hsum using 1
     · funext s
       dsimp [W]
@@ -1100,7 +1100,7 @@ private theorem cyclotomicWeberOneContinuation {K : Type*} [Field K] [NumberFiel
     apply Finset.sum_congr rfl
     intro c hc
     rw [hFeq c s hs, MulChar.one_apply (Group.isUnit c), one_mul]
-  · have hsum := tendsto_finset_sum Finset.univ (fun c _ => hFres c)
+  · have hsum := tendsto_finsetSum Finset.univ (fun c _ => hFres c)
     convert hsum using 1
     · funext s
       dsimp [W]
@@ -1238,20 +1238,20 @@ private theorem cyclotomic_prod_characters_one_sub
   classical
   let B := Subgroup.zpowers a
   let b : B := ⟨a, Subgroup.mem_zpowers a⟩
-  let res : UnitCharacter G →* UnitCharacter B := MonoidHom.restrictHom B ℂˣ
+  let res : UnitCharacter G →* UnitCharacter B := MonoidHom.domRestrictHom B ℂˣ
   have hres : Function.Surjective res :=
     MonoidHom.restrict_surjective (M := ℂ) B
   have hcard (ψ : UnitCharacter B) :
       Fintype.card {χ : UnitCharacter G // res χ = ψ} = B.index := by
     obtain ⟨χ₀, hχ₀⟩ := hres ψ
     let E : {χ : UnitCharacter G // res χ = ψ} ≃ res.ker :=
-      (Equiv.setCongr (show {χ : UnitCharacter G | res χ = ψ} =
+      (Set.equivOfEq (show {χ : UnitCharacter G | res χ = ψ} =
           res ⁻¹' {res χ₀} by
         ext χ
         change (res χ = ψ) ↔ (res χ = res χ₀)
         rw [hχ₀])).trans (MonoidHom.fiberEquivKer res χ₀)
     rw [Fintype.card_eq_nat_card, Nat.card_congr E,
-      CommGroup.card_restrictHom_ker, ← Subgroup.index_eq_card]
+      CommGroup.card_domRestrictHom_ker, ← Subgroup.index_eq_card]
   calc
     (∏ χ : UnitCharacter G, (1 - (χ a : ℂ) * z)) =
         ∏ ψ : UnitCharacter B,
@@ -1399,7 +1399,7 @@ private theorem cyclotomicLocalEulerFactor
       exact cyclotomicIdealMap_on_prime
         (M := M) (F := F) n m hn hmod hram p hp c hc Q₀ hQ₀p
     have haorder : orderOf a =
-        (Q₀.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg Q₀.asIdeal := by
+        (Q₀.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' Q₀.asIdeal := by
       rw [← arithFrobAt_order_eq_inertiaDeg Q₀ hQ₀unr, ← ha]
       exact (orderOf_injective A.subtype A.subtype_injective a).symm
     let B := Subgroup.zpowers a
@@ -1440,7 +1440,7 @@ private theorem cyclotomicLocalEulerFactor
             (Ideal.under_ne_bot (NumberField.RingOfIntegers K) Q₀.ne_bot)]
         letI : Algebra.IsUnramifiedAt
             (NumberField.RingOfIntegers K) Q₀.asIdeal := hQ₀unr
-        exact Ideal.ramificationIdx_eq_one_of_isUnramifiedAt Q₀.ne_bot
+        exact Ideal.ramificationIdx'_eq_one_of_isUnramifiedAt Q₀.ne_bot
       have hinertia : p.asIdeal.inertiaDegIn
           (NumberField.RingOfIntegers M) = orderOf a := by
         rw [Ideal.inertiaDegIn_eq_inertiaDeg p.asIdeal Q₀.asIdeal (Gal(M/K)),
@@ -2212,7 +2212,7 @@ theorem cyclotomic_weberL_ne_zero_at_one
       · have ht := (hWfCont η hη).tendsto.comp hcoeNhds
         simp only [V, b, if_neg hη]
         exact ht.congr' (Filter.Eventually.of_forall fun _ => rfl)
-    have hprod := tendsto_finset_prod Finset.univ
+    have hprod := tendsto_finsetProd Finset.univ
       (fun η _ => hV η)
     have hbzero : ∏ η : UnitCharacter A, b η = 0 := by
       apply Finset.prod_eq_zero (Finset.mem_univ χA)
@@ -2497,8 +2497,7 @@ private theorem cyclotomicDensity_weberLogEulerSeries_eq
       dsimp [x]
       rw [mul_pow, ← Complex.ofReal_pow, hreal, Complex.ofReal_inv,
         div_eq_mul_inv]
-      congr 1
-      exact congrArg Inv.inv hcomplex.symm
+      exact congrArg (fun w : ℂ => a ^ (r + 1) * w⁻¹) hcomplex.symm
     have htaylor := Complex.hasSum_taylorSeries_neg_log hx
     have hshift : HasSum (fun r : ℕ => x ^ (r + 1) / (r + 1 : ℂ))
         (-Complex.log (1 - x)) := by
@@ -2626,7 +2625,7 @@ private theorem cyclotomicDensity_normalizer_atTop :
           (continuousAt_const : ContinuousAt (fun _ : ℝ => (1 : ℝ)) 1)).tendsto
       convert h.mono_left nhdsWithin_le_nhds using 1 <;> ext <;> simp
     · filter_upwards [self_mem_nhdsWithin] with s hs
-      exact sub_pos.mpr (show 1 < s from hs)
+      exact sub_pos.mpr (by exact hs : 1 < s)
   convert tendsto_inv_nhdsGT_zero.comp hsub using 1 <;> simp [Function.comp_def]
 
 private theorem cyclotomicDensityLog_continuousOn
@@ -2774,7 +2773,7 @@ private theorem cyclotomicDensity_log_tendsto_of_exp
     intro s hs
     exact (hRcontS s hs).clog (hRslit s hs)
   have hdcont : ContinuousOn d S :=
-    (hD.mono (fun s hs => hs.1)).sub hBcont |>.sub continuousOn_const
+    (hD.mono (by intro s hs; exact hs.1)).sub hBcont |>.sub continuousOn_const
   have hdexp (s : ℝ) (hs : s ∈ S) : Complex.exp (d s) = 1 := by
     have hRne : R s ≠ 0 := Complex.slitPlane_ne_zero (hRslit s hs)
     have hz : Complex.exp z₀ = W 1 := Complex.exp_log hW1

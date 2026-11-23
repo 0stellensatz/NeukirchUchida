@@ -11,6 +11,8 @@ pinned group homomorphisms and coefficient morphisms and are transported through
 `comparisonH2` layer.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace NU.LCFT
 
 noncomputable section
@@ -645,7 +647,7 @@ private theorem carryCocycle_mem
       · rw [if_pos h]
         calc
           _ = 0 := ((MulRep K L).ρ σ).map_zero
-          _ = (carryExponent n s t : ℤ) • u := by rw [h]; simp; rfl
+          _ = (carryExponent n s t : ℤ) • u := by rw [h]; simp
       · have hle : carryExponent n s t ≤ 1 := by
           simp only [carryExponent]
           split_ifs <;> omega
@@ -905,7 +907,7 @@ private noncomputable def cyclicH1EquivHMinusOne_unramified
   let g := (IsCyclic.exists_generator (α := G)).choose
   have hg := (IsCyclic.exists_generator (α := G)).choose_spec
   let e : TateLowDegree.normKernel M ≃+
-      LinearMap.ker M.norm.hom.toLinearMap :=
+      LinearMap.ker M.norm.asHom.hom.toLinearMap :=
     { toFun := fun x => ⟨x, x.2⟩
       invFun := fun x => ⟨x, x.2⟩
       left_inv := fun x => by ext; rfl
@@ -1561,7 +1563,7 @@ private theorem residueFinrank_eq_residueDegree
       IsDiscreteValuationRing.coheight_pow_maximalIdeal] at hc
     have : ramificationIndex K L = ramificationIndex K L + 1 := by exact_mod_cast hc
     omega
-  have hram : p.ramificationIdx P = ramificationIndex K L :=
+  have hram : p.ramificationIdx' P = ramificationIndex K L :=
     Ideal.ramificationIdx_spec hmap.le hnot
   have hdegree := Ideal.ramificationIdx_mul_inertiaDeg_of_isLocalRing
     (S := RingOfIntegers L) K L (p := p) (by
@@ -1569,12 +1571,12 @@ private theorem residueFinrank_eq_residueDegree
       exact hϖKirr.ne_zero)
   rw [hram] at hdegree
   have hselected := finrank_eq_ramificationIndex_mul_residueDegree K L
-  have hinertia : p.inertiaDeg P = residueDegree K L := by
+  have hinertia : p.inertiaDeg' P = residueDegree K L := by
     apply Nat.eq_of_mul_eq_mul_left
       (ramificationInvariants_exists K L).choose_spec.choose_spec.1
     exact hdegree.trans hselected
   calc
-    Module.finrank (LocalResidueField K) (LocalResidueField L) = p.inertiaDeg P := by
+    Module.finrank (LocalResidueField K) (LocalResidueField L) = p.inertiaDeg' P := by
       rw [Ideal.inertiaDeg_algebraMap]
       rfl
     _ = residueDegree K L := hinertia
@@ -2064,7 +2066,7 @@ theorem unramifiedCarryTowerData_exists
     constructor
     · change AlgEquiv.restrictNormalHom L total.frobenius = lower.frobenius
       exact arithmeticFrobenius_restrict lower total
-    · letI : ValuativeExtension M M := ⟨fun _ _ => by rfl⟩
+    · letI : ValuativeExtension M M := ⟨Iff.rfl⟩
       have hsub := arithmeticFrobenius_baseChange
         (K := K) (E := L) (U := M) (W := M) total upper
       have hresLower : residueDegree K L = Module.finrank K L := by
@@ -2257,7 +2259,7 @@ private theorem carryCocycle_inflation_cochain
     calc
       _ = -((s.val / n : ℕ) : ℤ) • ((MulRep K M).ρ σ u) :=
         map_zsmul ((MulRep K M).ρ σ) _ u
-      _ = _ := by rw [hu]; rfl
+      _ = _ := by rw [hu]
   rw [hmap, hind _ u hle1, hind _ u hle2, hact]
   dsimp only [b]
   rw [hsumcoord]
@@ -2360,7 +2362,6 @@ private theorem carryCocycle_restriction_cochain
   rw [hcoord, hcoord, hcarry]
   by_cases h : carryExponent m r s = 0
   · rw [if_pos h, if_pos h, map_zero]
-    rfl
   · rw [if_neg h, if_neg h, T.restrictionCoefficient_apply]
     apply Additive.toMul.injective
     exact hunit

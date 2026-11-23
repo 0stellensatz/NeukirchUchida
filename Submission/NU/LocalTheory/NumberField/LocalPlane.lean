@@ -459,8 +459,8 @@ private noncomputable def quotientEquivResidueFieldAt
   change (𝓞 K ⧸ v.asIdeal) ≃+*
     IsLocalRing.ResidueField
       (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
-  exact IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
-    (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)
+  exact (IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
+    (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime K v)).toRingEquiv
 
 private theorem residueFieldAt_finite
     {K : Type*} [Field K] [NumberField K] (v : FinitePlace K) :

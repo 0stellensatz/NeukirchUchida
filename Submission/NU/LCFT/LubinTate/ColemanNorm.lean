@@ -1357,7 +1357,7 @@ private theorem test_summable
       (PowerSeries.coeff n g).prop
   have hcL : algebraMap K L ((PowerSeries.coeff n g : RingOfIntegers K) : K) ≤ᵥ
       (1 : L) := by
-    simpa using (ValuativeExtension.vle_iff_vle (A := K) (B := L) _ _).mpr hcK
+    simpa using (ValuativeExtension.vle_iff_vle (A := K) (B := L)).mpr hcK
   have hc : algebraMap (RingOfIntegers K) L (PowerSeries.coeff n g) ≤ᵥ (1 : L) := by
     rw [IsScalarTower.algebraMap_apply (RingOfIntegers K) K L]
     exact hcL
@@ -2412,6 +2412,7 @@ private theorem test_fiber_operator_product
     rw [hX] at hexp
     simp_rw [hsubst] at hexp
     have hmap := congrArg (algebraMap (RingOfIntegers level.field) level.field) hexp
+    set_option synthInstance.maxHeartbeats 200000 in
     simp only [map_mul, map_pow, map_sum] at hmap
     simp_rw [hvalueA] at hmap
     rw [hvalueβ] at hmap

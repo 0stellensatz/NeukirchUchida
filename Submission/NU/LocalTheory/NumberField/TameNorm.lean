@@ -605,7 +605,7 @@ private theorem tame_cyclic_norm_factorization_core
             (Valuation.Compatible.vle_iff_le (v := vQ) (x : Q) 1).mpr
               (by simpa only [map_one] using hxprop)
           simpa using
-            (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (x : Q) 1).2 hxQ⟩
+            (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (a := (x : Q)) (b := 1)).2 hxQ⟩
         map_one' := by ext; simp
         map_mul' := by intro x y; ext; simp
         map_zero' := by ext; simp
@@ -627,10 +627,10 @@ private theorem tame_cyclic_norm_factorization_core
           (v := ValuativeRel.valuation R) 1 (algebraMap Q R (x : Q))).mpr
           (by simpa only [map_one] using hxcan.ge)
       have hxleQ : (x : Q) ≤ᵥ (1 : Q) :=
-        (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (x : Q) 1).mp
+        (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (a := (x : Q)) (b := 1)).mp
           (by simpa using hxleR)
       have hxgeQ : (1 : Q) ≤ᵥ (x : Q) :=
-        (ValuativeExtension.vle_iff_vle (A := Q) (B := R) 1 (x : Q)).mp
+        (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (a := 1) (b := (x : Q))).mp
           (by simpa using hxgeR)
       have hxvQ : vQ (x : Q) = 1 := by
         apply le_antisymm
@@ -792,7 +792,7 @@ private theorem tame_cyclic_norm_factorization_core
       rw [show pbar = ∑ i : Fin pbβ.dim,
         Polynomial.C (IsLocalRing.residue A (diA i)) *
           Polynomial.X ^ (i : ℕ) by rfl,
-        Polynomial.eval₂_finset_sum]
+        Polynomial.eval₂_finsetSum]
       rw [map_sum]
       apply Finset.sum_congr rfl
       intro i _
@@ -1252,7 +1252,8 @@ theorem norm_completion_compatibility
     (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdim).2 hφsurj
   let e : K ⊗[M] E ≃ₐ[K] Eᵥ := AlgEquiv.ofBijective φ ⟨hφinj, hφsurj⟩
   have he_apply : e (1 ⊗ₜ[M] (z : E)) = j (z : E) := by
-    simp [e, φ, jAlg]
+    change φ (1 ⊗ₜ[M] (z : E)) = _
+    simp [φ, jAlg]
   have hbase : Algebra.norm K (1 ⊗ₜ[M] (z : E) : K ⊗[M] E) =
       algebraMap M K (Algebra.norm M (z : E)) := by
     rw [Algebra.norm_apply, ← Algebra.baseChange_lmul,
@@ -1365,8 +1366,8 @@ private theorem completionResidueMap_surjective'
 private noncomputable def quotientEquivResidueFieldAt'
     {M : Type*} [Field M] [NumberField M] (v : FinitePlace M) :
     (𝓞 M ⧸ v.asIdeal) ≃+* IsLocalRing.ResidueField (primeValuationSubring v) := by
-  exact IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
-    (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime M v)
+  exact (IsLocalization.AtPrime.equivQuotMaximalIdeal v.asIdeal
+    (IsDedekindDomain.HeightOneSpectrum.valuationSubringAtPrime M v)).toRingEquiv
 
 private theorem residueFieldAt_finite'
     {M : Type*} [Field M] [NumberField M] (v : FinitePlace M) :

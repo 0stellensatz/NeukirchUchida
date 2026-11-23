@@ -44,7 +44,8 @@ private theorem testRestrictSep_bijective
       have hxv := congrArg Subtype.val hx
       change (show A ≃ₐ[M] A from σ) (x : A) =
         (show A ≃ₐ[M] A from τ) (x : A)
-      simpa only [AlgEquiv.restrictNormalHom_apply] using hxv
+      exact (AlgEquiv.restrictNormalHom_apply S _ x).symm.trans
+        (hxv.trans (AlgEquiv.restrictNormalHom_apply S _ x))
     exact DFunLike.congr_fun heq y
   · exact AlgEquiv.restrictNormalHom_surjective (F := M) (K₁ := S) A
 

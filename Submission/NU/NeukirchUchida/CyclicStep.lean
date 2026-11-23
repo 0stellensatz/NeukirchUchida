@@ -1,4 +1,5 @@
 import Submission.NU.NeukirchUchida.RegularKernel
+import Submission.NU.Compat
 
 /-!
 # The cyclic finite-quotient step
@@ -350,7 +351,7 @@ private theorem exists_normalizedArithmeticFrobenius
   letI : Algebra.IsAlgebraic ℤ Omega :=
     (IsFractionRing.comap_isAlgebraic_iff
       (A := ℤ) (K := ℚ) (C := Omega)).mpr
-        (show Algebra.IsAlgebraic ℚ Omega from inferInstance)
+        (by exact inferInstance : Algebra.IsAlgebraic ℚ Omega)
   letI : IsFractionRing B Omega :=
     integralClosure.isFractionRing_of_algebraic
       (A := ℤ) (L := Omega) (fun x hx => by
@@ -566,8 +567,8 @@ private theorem absoluteNorm_eq_of_degreeOne
     refine ⟨absoluteRamificationIndex F v, ?_⟩
     rw [Nat.mul_comm]
     exact hdegree.symm
-  have hf' : v.asIdeal.inertiaDeg' (𝓞 ℚ) = 1 := hf
-  have hf'' : q.asIdeal.inertiaDeg v.asIdeal = 1 := by
+  have hf' : v.asIdeal.inertiaDeg (𝓞 ℚ) = 1 := hf
+  have hf'' : q.asIdeal.inertiaDeg' v.asIdeal = 1 := by
     rw [Ideal.inertiaDeg_eq_inertiaDeg' q.asIdeal v.asIdeal]
     exact hf'
   have hnorm := (Ideal.absNorm_eq_pow_inertiaDeg_of_liesOver
@@ -741,10 +742,10 @@ private theorem finitePrimeFrobeniusLiftingConstruction :
     have hunrF : Algebra.IsUnramifiedAt (𝓞 F.field) w'.asIdeal :=
       Algebra.IsUnramifiedAt.of_restrictScalars (𝓞 ℚ) w'.asIdeal
     letI : Algebra.IsUnramifiedAt (𝓞 F.field) w'.asIdeal := hunrF
-    change w'.asIdeal.ramificationIdx' (𝓞 F.field) = 1
+    change w'.asIdeal.ramificationIdx (𝓞 F.field) = 1
     rw [← Ideal.ramificationIdx_eq_ramificationIdx'
       v.asIdeal w'.asIdeal v.ne_bot]
-    have hu := (Algebra.isUnramifiedAt_iff_of_isDedekindDomain
+    have hu := (Algebra.isUnramifiedAt_iff_of_isDedekindDomain'
       w'.ne_bot).mp hunrF
     simpa [← hover.over] using hu
   have hcard : Nat.card (𝓞 ℚ ⧸ w.asIdeal.under (𝓞 ℚ)) =
@@ -924,12 +925,12 @@ theorem levelKernel_sup_decompositionGroup_eq_top
   have hksup : k ∈
       (absoluteGaloisGroup N).subgroupOf (absoluteGaloisGroup F) ⊔
         decompositionGroup F P :=
-    (show (absoluteGaloisGroup N).subgroupOf (absoluteGaloisGroup F) ≤ _
-      from le_sup_left) hk
+    (by exact le_sup_left : (absoluteGaloisGroup N).subgroupOf (absoluteGaloisGroup F) ≤ _
+     ) hk
   have hdsup : d ∈
       (absoluteGaloisGroup N).subgroupOf (absoluteGaloisGroup F) ⊔
         decompositionGroup F P :=
-    (show decompositionGroup F P ≤ _ from le_sup_right) hd
+    (by exact le_sup_right : decompositionGroup F P ≤ _) hd
   have hmul := ((absoluteGaloisGroup N).subgroupOf
       (absoluteGaloisGroup F) ⊔ decompositionGroup F P).mul_mem hksup hdsup
   simpa [k, d, mul_assoc] using hmul
