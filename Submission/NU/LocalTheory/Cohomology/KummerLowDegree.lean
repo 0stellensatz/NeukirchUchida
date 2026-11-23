@@ -13,6 +13,7 @@ cyclic norm criterion of Blueprint Lemma 5.1, and Steinberg cup-zero.  No
 Merkurjev–Suslin theorem is assumed.
 -/
 
+set_option backward.isDefEq.respectTransparency false
 namespace NU.LocalTheory
 
 noncomputable section
@@ -29,7 +30,7 @@ def IsKummerEquiv {M : Type*} [Field M] {ℓ : ℕ} [Fact ℓ.Prime]
   ∀ a : Mˣ, ∃ α : AlgebraicClosure M,
     α ^ ℓ = algebraMap M (AlgebraicClosure M) (a : M) ∧
     ∀ σ : Field.absoluteGaloisGroup M,
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) α =
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) α =
         (algebraMap M (AlgebraicClosure M) ζ) ^
             (continuousCharacterValue (e (kummerQuotientClass ℓ a)) σ).val * α
 
@@ -103,7 +104,7 @@ private theorem kummerActionRatio_pow'
     {M : Type*} [Field M] {ℓ : ℕ} [Fact ℓ.Prime]
     (ζ : M) (hζ : IsPrimitiveRoot ζ ℓ) (a : Mˣ)
     (σ : Field.absoluteGaloisGroup M) :
-    ((by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)
+    ((show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ)
       (kummerRoot' ζ hζ a) / kummerRoot' ζ hζ a) ^ ℓ =
       (1 : AlgebraicClosure M) := by
   let A := AlgebraicClosure M
@@ -126,7 +127,7 @@ private noncomputable def kummerActionIndex'
   let ζA : A := algebraMap M A ζ
   have hζA : IsPrimitiveRoot ζA ℓ :=
     hζ.map_of_injective (algebraMap M A).injective
-  let ratio : A := (by exact σ : A ≃ₐ[M] A)
+  let ratio : A := (show A ≃ₐ[M] A from σ)
     (kummerRoot' ζ hζ a) / kummerRoot' ζ hζ a
   have hratio : ratio ^ ℓ = 1 := kummerActionRatio_pow' ζ hζ a σ
   haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
@@ -139,13 +140,13 @@ private theorem kummerActionIndex_spec'
     (σ : Field.absoluteGaloisGroup M) :
     (algebraMap M (AlgebraicClosure M) ζ) ^
         (kummerActionIndex' ζ hζ a σ).val =
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ)
         (kummerRoot' ζ hζ a) / kummerRoot' ζ hζ a := by
   let A := AlgebraicClosure M
   let ζA : A := algebraMap M A ζ
   have hζA : IsPrimitiveRoot ζA ℓ :=
     hζ.map_of_injective (algebraMap M A).injective
-  let ratio : A := (by exact σ : A ≃ₐ[M] A)
+  let ratio : A := (show A ≃ₐ[M] A from σ)
     (kummerRoot' ζ hζ a) / kummerRoot' ζ hζ a
   have hratio : ratio ^ ℓ = 1 := kummerActionRatio_pow' ζ hζ a σ
   haveI : NeZero ℓ := ⟨(Fact.out : ℓ.Prime).ne_zero⟩
@@ -155,7 +156,7 @@ private theorem kummerActionEquation'
     {M : Type*} [Field M] {ℓ : ℕ} [Fact ℓ.Prime]
     (ζ : M) (hζ : IsPrimitiveRoot ζ ℓ) (a : Mˣ)
     (σ : Field.absoluteGaloisGroup M) :
-    (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)
+    (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ)
         (kummerRoot' ζ hζ a) =
       (algebraMap M (AlgebraicClosure M) ζ) ^
           (kummerActionIndex' ζ hζ a σ).val * kummerRoot' ζ hζ a := by
@@ -187,7 +188,7 @@ private theorem kummerActionIndex_mul'
     rw [← hστ]
     change σe (τe α) = _
     rw [hτ, map_mul, map_pow]
-    have hfix : σe ζA = ζA := by simp [σe, ζA, A]
+    have hfix : σe ζA = ζA := σe.commutes ζ
     rw [hfix, hσ]
     simp only [pow_add]
     ring
@@ -230,7 +231,7 @@ private theorem rawKummerAddHom_eq_zero_of_fix'
     {M : Type*} [Field M] {ℓ : ℕ} [Fact ℓ.Prime]
     (ζ : M) (hζ : IsPrimitiveRoot ζ ℓ) (a : Mˣ)
     (σ : Field.absoluteGaloisGroup M)
-    (hfix : (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)
+    (hfix : (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ)
       (kummerRoot' ζ hζ a) = kummerRoot' ζ hζ a) :
     rawKummerAddHom' ζ hζ a (Additive.ofMul σ) = 0 := by
   let A := AlgebraicClosure M
@@ -263,7 +264,7 @@ private theorem rawKummerAddHom_continuous'
   have hs0 : (0 : ZMod ℓ) ∈ s := by
     simpa only [map_zero] using mem_of_mem_nhds hs
   let U : Set (Additive (Field.absoluteGaloisGroup M)) :=
-    {x | (by exact Additive.toMul x : A ≃ₐ[M] A) α = α}
+    {x | (show A ≃ₐ[M] A from Additive.toMul x) α = α}
   have hUopen : IsOpen U := by
     change IsOpen {σ : A ≃ₐ[M] A | σ α = α}
     rw [show {σ : A ≃ₐ[M] A | σ α = α} =
@@ -273,7 +274,7 @@ private theorem rawKummerAddHom_continuous'
         simp only [MulAction.mem_stabilizer_iff, AlgEquiv.smul_def]]
     exact @stabilizer_isOpen_of_isIntegral M A _ _ _ this α
   have hUzero : (0 : Additive (Field.absoluteGaloisGroup M)) ∈ U := by
-    change (by exact (1 : Field.absoluteGaloisGroup M) : A ≃ₐ[M] A) α = α
+    change (show A ≃ₐ[M] A from (1 : Field.absoluteGaloisGroup M)) α = α
     rfl
   apply Filter.mem_of_superset (hUopen.mem_nhds hUzero)
   intro x hx
@@ -296,7 +297,7 @@ private theorem rawKummerCharacter_definingEquation'
     ∃ α : AlgebraicClosure M,
       α ^ ℓ = algebraMap M (AlgebraicClosure M) (a : M) ∧
       ∀ σ : Field.absoluteGaloisGroup M,
-        (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) α =
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) α =
           (algebraMap M (AlgebraicClosure M) ζ) ^
               (continuousCharacterValue
                 (rawKummerCharacter' ζ hζ a) σ).val * α := by
@@ -315,7 +316,7 @@ private theorem rawKummerCharacter_eq_of_definingEquation'
     (hχ : ∃ α : AlgebraicClosure M,
       α ^ ℓ = algebraMap M (AlgebraicClosure M) (a : M) ∧
       ∀ σ : Field.absoluteGaloisGroup M,
-        (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) α =
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) α =
           (algebraMap M (AlgebraicClosure M) ζ) ^
               (continuousCharacterValue χ σ).val * α) :
     χ = rawKummerCharacter' ζ hζ a := by
@@ -355,7 +356,7 @@ private theorem rawKummerCharacter_eq_of_definingEquation'
       _ = σe β := (hβeq σ).symm
       _ = σe (ζA ^ j * α) := congrArg (fun y => σe y) hβα
       _ = ζA ^ j * σe α := by
-        have hsζ : σe ζA = ζA := by simp [σe, ζA, A]
+        have hsζ : σe ζA = ζA := σe.commutes ζ
         rw [map_mul, map_pow, hsζ]
       _ = ζA ^ j * (ζA ^ (continuousCharacterValue χ σ).val * α) := by
         have hsα : σe α = ζA ^ (continuousCharacterValue χ σ).val * α := by
@@ -518,7 +519,7 @@ private theorem rawKummerLinear_injective'
     let αS : S := ⟨kummerRoot' ζ hζ a,
       kummerRoot_mem_separableClosure' ζ hζ a⟩
     have hfixedA (σ : Field.absoluteGaloisGroup M) :
-        (by exact σ : A ≃ₐ[M] A) (αS : A) = αS := by
+        (show A ≃ₐ[M] A from σ) (αS : A) = αS := by
       have hv := congrArg (fun χ => continuousCharacterValue χ σ) hchar
       have hact := kummerActionEquation' ζ hζ a σ
       have hz : continuousCharacterValue (rawKummerCharacter' ζ hζ a) σ = 0 := by
@@ -599,7 +600,7 @@ private theorem rawKummerLinear_surjective'
   have hfixE_of_fixL (σ : Field.absoluteGaloisGroup M)
       (hσL : σ ∈ L.fixingSubgroup) : σ ∈ E.fixingSubgroup := by
     let σE : E ≃ₐ[M] E := AlgEquiv.restrictNormalHom E σ
-    have hfixL : ∀ x ∈ L, (by exact σ : A ≃ₐ[M] A) x = x :=
+    have hfixL : ∀ x ∈ L, (show A ≃ₐ[M] A from σ) x = x :=
       (IntermediateField.mem_fixingSubgroup_iff L σ).mp hσL
     have hσEcomm (x : Esep) : σE (algebraMap Esep E x) =
         algebraMap Esep E x := by
@@ -614,8 +615,9 @@ private theorem rawKummerLinear_surjective'
     apply (IntermediateField.mem_fixingSubgroup_iff E σ).2
     intro x hx
     have happ := DFunLike.congr_fun heq ⟨x, hx⟩
-    have happ' := congrArg Subtype.val happ
-    simpa [σEhom, σE, AlgEquiv.restrictNormalHom_apply] using happ'
+    have happ' : ((AlgEquiv.restrictNormalHom E σ ⟨x, hx⟩ : E) : A) = x :=
+      congrArg Subtype.val happ
+    exact (AlgEquiv.restrictNormalHom_apply E σ ⟨x, hx⟩).symm.trans happ'
   let rL : Field.absoluteGaloisGroup M →* (L ≃ₐ[M] L) :=
     AlgEquiv.restrictNormalHom L
   have hrLsurj : Function.Surjective rL :=
@@ -725,13 +727,13 @@ private theorem rawKummerLinear_surjective'
     have hcA := congrArg Subtype.val hc
     simpa [a0] using hcA.symm
   have hactionA (σ : Field.absoluteGaloisGroup M) :
-      (by exact σ : A ≃ₐ[M] A) ((αL : L) : A) =
+      (show A ≃ₐ[M] A from σ) ((αL : L) : A) =
         (algebraMap M A ζ) ^ (continuousCharacterValue χ σ).val *
           ((αL : L) : A) := by
     have he := heigen (rL σ)
     have heA := congrArg Subtype.val he
     have hrapply : (((rL σ) αL : L) : A) =
-        (by exact σ : A ≃ₐ[M] A) (αL : A) := by
+        (show A ≃ₐ[M] A from σ) (αL : A) := by
       dsimp [rL]
       exact AlgEquiv.restrictNormalHom_apply L σ αL
     rw [hrapply] at heA
@@ -825,7 +827,7 @@ theorem kummerCharacter_definingEquation {M : Type*} [Field M] {ℓ : ℕ}
     ∃ α : AlgebraicClosure M,
       α ^ ℓ = algebraMap M (AlgebraicClosure M) (a : M) ∧
       ∀ σ : Field.absoluteGaloisGroup M,
-        (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) α =
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) α =
           (algebraMap M (AlgebraicClosure M) ζ) ^
               (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val * α :=
   (exists_kummerEquiv ζ hζ).choose_spec a
@@ -838,7 +840,7 @@ theorem kummerCharacterValue_eq_of_action
     (α : AlgebraicClosure M)
     (hαpow : α ^ ℓ = algebraMap M (AlgebraicClosure M) (a : M))
     (σ : Field.absoluteGaloisGroup M) (r : ZMod ℓ)
-    (hαact : (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) α =
+    (hαact : (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) α =
       (algebraMap M (AlgebraicClosure M) ζ) ^ r.val * α) :
     continuousCharacterValue (kummerCharacter ζ hζ a) σ = r := by
   obtain ⟨β, hβpow, hβact⟩ := kummerCharacter_definingEquation ζ hζ a
@@ -867,15 +869,15 @@ theorem kummerCharacterValue_eq_of_action
           (ζA ^ j * α) =
         ζA ^ (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val * β := by
           rw [hβα]
-      _ = (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) β :=
+      _ = (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) β :=
         (hβact σ).symm
-      _ = (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)
+      _ = (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ)
           (ζA ^ j * α) := congrArg _ hβα
       _ = ζA ^ j *
-          (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) α := by
+          (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) α := by
         rw [map_mul, map_pow]
         congr 2
-        exact (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M).commutes ζ
+        exact (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ).commutes ζ
       _ = ζA ^ j * (ζA ^ r.val * α) := by rw [hαact]
   have hpowequal : ζA ^
       (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val =
@@ -906,7 +908,7 @@ private theorem kummerCharacter_eq_of_definingEquation
     (hχ : ∃ α : AlgebraicClosure M,
       α ^ ℓ = algebraMap M (AlgebraicClosure M) (a : M) ∧
       ∀ σ : Field.absoluteGaloisGroup M,
-        (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) α =
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) α =
           (algebraMap M (AlgebraicClosure M) ζ) ^
               (continuousCharacterValue χ σ).val * α) :
     χ = kummerCharacter ζ hζ a := by
@@ -946,7 +948,7 @@ private theorem kummerCharacter_eq_of_definingEquation
       _ = σe β := (hβeq σ).symm
       _ = σe (ζA ^ j * α) := congrArg (fun y => σe y) hβα
       _ = ζA ^ j * σe α := by
-        have hsζ : σe ζA = ζA := by simp [σe, ζA, A]
+        have hsζ : σe ζA = ζA := σe.commutes ζ
         rw [map_mul, map_pow, hsζ]
       _ = ζA ^ j * (ζA ^ (continuousCharacterValue χ σ).val * α) := by
         have hsα : σe α = ζA ^ (continuousCharacterValue χ σ).val * α := by
@@ -1089,7 +1091,7 @@ Galois group. -/
 private theorem absoluteGalois_apply_isLocallyConstant
     {M : Type*} [Field M] (v : AlgebraicClosure M) :
     IsLocallyConstant (fun σ : Field.absoluteGaloisGroup M =>
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) v) := by
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) v) := by
   change IsLocallyConstant (fun σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M => σ v)
   let U : Subgroup (AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) :=
     MulAction.stabilizer (AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) v
@@ -1214,7 +1216,7 @@ private theorem kummerCharacter_action_of_root
     (r : AlgebraicClosure M)
     (hrpow : r ^ ℓ = algebraMap M (AlgebraicClosure M) (a : M))
     (σ : Field.absoluteGaloisGroup M) :
-    (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) r =
+    (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) r =
       (algebraMap M (AlgebraicClosure M) ζ) ^
           (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val * r := by
   obtain ⟨β, hβpow, hβeq⟩ := kummerCharacter_definingEquation ζ hζ a
@@ -1235,7 +1237,7 @@ private theorem kummerCharacter_action_of_root
   obtain ⟨j, _, hj⟩ := hζA.eq_pow_of_pow_eq_one hratio
   have hβr : β = ζA ^ j * r := by
     rw [hj, div_mul_cancel₀ β hr0]
-  have hfixζ : σe (ζA ^ j) = ζA ^ j := by simp [σe, ζA, A]
+  have hfixζ : σe (ζA ^ j) = ζA ^ j := by rw [map_pow]; exact congrArg (· ^ j) (σe.commutes ζ)
   apply mul_left_cancel₀ (pow_ne_zero j
     (hζA.ne_zero (Fact.out : ℓ.Prime).ne_zero))
   calc
@@ -1420,7 +1422,7 @@ private theorem cyclic_norm_criterion_of_norm
       ring
   have hrestrict (σ : Field.absoluteGaloisGroup M) :
       AlgEquiv.restrictNormalHom L
-          (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) =
+          (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) =
         s ^ (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val := by
     let σA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := σ
     change AlgEquiv.restrictNormalHom L σA = _
@@ -1618,7 +1620,7 @@ private theorem cyclic_norm_criterion_of_norm
     rw [div_pow, ← pow_mul, Nat.mul_comm n ℓ, pow_mul, hβpow]
     simpa [L] using h.symm
   have hactionL (σ : Field.absoluteGaloisGroup M) (x : L) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ)
           (x : AlgebraicClosure M) =
         ((s ^ (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val) x : L) := by
     let σA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := σ
@@ -1626,7 +1628,7 @@ private theorem cyclic_norm_criterion_of_norm
     rw [hrestrict σ] at hres
     exact hres.symm
   have hRaction (σ : Field.absoluteGaloisGroup M) (j : ℕ) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (R j) *
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (R j) *
           R (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val =
         (algebraMap M (AlgebraicClosure M) ζ) ^
             ((continuousCharacterValue (kummerCharacter ζ hζ b) σ).val * j) *
@@ -1654,13 +1656,13 @@ private theorem cyclic_norm_criterion_of_norm
     field_simp [hPi0, hPj0, hsPj0]
     ring
   let V : Field.absoluteGaloisGroup M → AlgebraicClosure M := fun σ =>
-    (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) v / v
+    (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) v / v
   let T : Field.absoluteGaloisGroup M → AlgebraicClosure M := fun σ =>
     R (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val / V σ
   have hV0 (σ : Field.absoluteGaloisGroup M) : V σ ≠ 0 := by
     dsimp [V]
     exact div_ne_zero
-      ((map_ne_zero (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)).2 hv0) hv0
+      ((map_ne_zero (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ)).2 hv0) hv0
   have hR0 (n : ℕ) : R n ≠ 0 := by
     dsimp [R]
     exact div_ne_zero (pow_ne_zero n hβ0)
@@ -1706,7 +1708,7 @@ private theorem cyclic_norm_criterion_of_norm
     change Continuous ((kummerCharacter ζ hζ a) ∘ Additive.ofMul)
     exact (kummerCharacter ζ hζ a).continuous.comp continuous_ofMul
   have hvloc : IsLocallyConstant (fun σ : Field.absoluteGaloisGroup M =>
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) v) :=
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) v) :=
     absoluteGalois_apply_isLocallyConstant v
   have hTloc : IsLocallyConstant T := by
     exact hxloc.comp₂ hvloc (fun i w => R i / (w / v))
@@ -1716,7 +1718,7 @@ private theorem cyclic_norm_criterion_of_norm
   let cRev : C(Field.absoluteGaloisGroup M, ZMod ℓ) :=
     ⟨c0, hc0loc.continuous⟩
   have hVmul (σ τ : Field.absoluteGaloisGroup M) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (V τ) * V σ =
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (V τ) * V σ =
         V (σ * τ) := by
     let σA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := σ
     let τA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := τ
@@ -1724,7 +1726,7 @@ private theorem cyclic_norm_criterion_of_norm
     rw [map_div₀]
     field_simp [hv0, (map_ne_zero σA).2 hv0]
   have hRstandard (σ τ : Field.absoluteGaloisGroup M) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ)
           (R (continuousCharacterValue (kummerCharacter ζ hζ a) τ).val) *
           R (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val /
           R (continuousCharacterValue (kummerCharacter ζ hζ a) (σ * τ)).val =
@@ -1757,7 +1759,7 @@ private theorem cyclic_norm_criterion_of_norm
     rw [hr]
     exact mul_div_cancel_right₀ _ (hR0 (i + j))
   have hTstandard (σ τ : Field.absoluteGaloisGroup M) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (T τ) *
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (T τ) *
           T σ / T (σ * τ) =
         ζA ^ ((continuousCharacterValue (kummerCharacter ζ hζ b) σ).val *
           (continuousCharacterValue (kummerCharacter ζ hζ a) τ).val) := by
@@ -1780,7 +1782,7 @@ private theorem cyclic_norm_criterion_of_norm
           hR0 i, hR0 j, hR0 k, hTk0]
       _ = _ := by rw [hRstandard, hVmul, div_self (hV0 (σ * τ)), div_one]
   have hTfixed (σ τ : Field.absoluteGaloisGroup M) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (T τ) = T τ := by
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (T τ) = T τ := by
     rw [← hc0root τ]
     dsimp [ζA]
     simp
@@ -1893,7 +1895,7 @@ private theorem cyclic_norm_criterion_to_norm
       ring
   have hrestrict (σ : Field.absoluteGaloisGroup M) :
       AlgEquiv.restrictNormalHom L
-          (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) =
+          (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) =
         s ^ (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val := by
     let σA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := σ
     change AlgEquiv.restrictNormalHom L σA = _
@@ -1919,7 +1921,7 @@ private theorem cyclic_norm_criterion_to_norm
     intro x
     exact DFunLike.congr_fun heq x
   have hfixL_iff (σ : Field.absoluteGaloisGroup M) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) ∈ L.fixingSubgroup ↔
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) ∈ L.fixingSubgroup ↔
         continuousCharacterValue (kummerCharacter ζ hζ a) σ = 0 := by
     rw [← IntermediateField.restrictNormalHom_ker L, MonoidHom.mem_ker,
       hrestrict]
@@ -1972,26 +1974,26 @@ private theorem cyclic_norm_criterion_to_norm
   let H : Subgroup (AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) := L.fixingSubgroup
   let cH : H →* Multiplicative (ZMod ℓ) :=
     { toFun := fun σ => Multiplicative.ofAdd
-        (c (by exact σ.1 : Field.absoluteGaloisGroup M))
+        (c (show Field.absoluteGaloisGroup M from σ.1))
       map_one' := congrArg Multiplicative.ofAdd hc_one
       map_mul' := fun σ τ => by
         apply Multiplicative.toAdd.injective
-        change c (by exact σ.1 * τ.1 : Field.absoluteGaloisGroup M) =
-          c (by exact σ.1 : Field.absoluteGaloisGroup M) +
-            c (by exact τ.1 : Field.absoluteGaloisGroup M)
+        change c (show Field.absoluteGaloisGroup M from σ.1 * τ.1) =
+          c (show Field.absoluteGaloisGroup M from σ.1) +
+            c (show Field.absoluteGaloisGroup M from τ.1)
         have hxτ : continuousCharacterValue (kummerCharacter ζ hζ a)
-            (by exact τ.1 : Field.absoluteGaloisGroup M) = 0 :=
-          (hfixL_iff (by exact τ.1 : Field.absoluteGaloisGroup M)).1 τ.2
-        have hmul : (by exact σ.1 * τ.1 : Field.absoluteGaloisGroup M) =
-            (by exact σ.1 : Field.absoluteGaloisGroup M) *
-              (by exact τ.1 : Field.absoluteGaloisGroup M) := rfl
+            (show Field.absoluteGaloisGroup M from τ.1) = 0 :=
+          (hfixL_iff (show Field.absoluteGaloisGroup M from τ.1)).1 τ.2
+        have hmul : (show Field.absoluteGaloisGroup M from σ.1 * τ.1) =
+            (show Field.absoluteGaloisGroup M from σ.1) *
+              (show Field.absoluteGaloisGroup M from τ.1) := rfl
         rw [hmul]
-        have h := hc (by exact σ.1 : Field.absoluteGaloisGroup M)
-          (by exact τ.1 : Field.absoluteGaloisGroup M)
+        have h := hc (show Field.absoluteGaloisGroup M from σ.1)
+          (show Field.absoluteGaloisGroup M from τ.1)
         rw [hxτ, mul_zero] at h
         linear_combination h }
   let kerSet : Set (Field.absoluteGaloisGroup M) :=
-    {σ | (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) ∈
+    {σ | (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) ∈
         L.fixingSubgroup ∧ c σ = 0}
   have hkerOpen : IsOpen kerSet := by
     have hfixOpen : IsOpen
@@ -2021,7 +2023,7 @@ private theorem cyclic_norm_criterion_to_norm
   letI : IsGalois M F' := ⟨⟩
   have hF'ker : ∀ σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M,
       σ ∈ F'.fixingSubgroup →
-        (by exact σ : Field.absoluteGaloisGroup M) ∈ kerSet := by
+        (show Field.absoluteGaloisGroup M from σ) ∈ kerSet := by
     intro σ hσ
     apply hFker
     apply (IntermediateField.mem_fixingSubgroup_iff F σ).2
@@ -2049,7 +2051,7 @@ private theorem cyclic_norm_criterion_to_norm
   letI : IsGalois M U := ⟨⟩
   have hUker : ∀ σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M,
       σ ∈ U.fixingSubgroup →
-        (by exact σ : Field.absoluteGaloisGroup M) ∈ kerSet := by
+        (show Field.absoluteGaloisGroup M from σ) ∈ kerSet := by
     intro σ hσ
     apply hF'ker σ
     exact IntermediateField.fixingSubgroup_le le_sup_right hσ
@@ -2123,7 +2125,7 @@ private theorem cyclic_norm_criterion_to_norm
       have happ := DFunLike.congr_fun hσ xU
       have happ' := congrArg Subtype.val happ
       simpa [rU, AlgEquiv.restrictNormalHom_apply] using happ'
-    have hcσ : c (by exact σ.1 : Field.absoluteGaloisGroup M) = 0 :=
+    have hcσ : c (show Field.absoluteGaloisGroup M from σ.1) = 0 :=
       (hUker σ.1 hσU).2
     rw [MonoidHom.mem_ker]
     apply Multiplicative.toAdd.injective
@@ -2131,7 +2133,7 @@ private theorem cyclic_norm_criterion_to_norm
   let ψ : (U ≃ₐ[L] U) →* Multiplicative (ZMod ℓ) :=
     rU.liftOfSurjective hrUsurj ⟨cH, hrUker⟩
   have hψ (σ : H) :
-      (ψ (rU σ)).toAdd = c (by exact σ.1 : Field.absoluteGaloisGroup M) := by
+      (ψ (rU σ)).toAdd = c (show Field.absoluteGaloisGroup M from σ.1) := by
     have hcomp : ψ.comp rU = cH := by
       exact congrArg Subtype.val
         ((rU.liftOfSurjective hrUsurj).symm_apply_apply ⟨cH, hrUker⟩)
@@ -2165,7 +2167,7 @@ private theorem cyclic_norm_criterion_to_norm
   have hw0 : (w : U) ≠ 0 := Units.ne_zero w
   have hwH (σ : H) : σ.1 ((w : U) : AlgebraicClosure M) /
       ((w : U) : AlgebraicClosure M) =
-        ζA ^ (-c (by exact σ.1 : Field.absoluteGaloisGroup M)).val := by
+        ζA ^ (-c (show Field.absoluteGaloisGroup M from σ.1)).val := by
     have hwu := hw (rU σ)
     rw [AlgEquiv.smul_units_def] at hwu
     have hwu' := congrArg (fun x : Uˣ => (x : U)) hwu
@@ -2185,13 +2187,13 @@ private theorem cyclic_norm_criterion_to_norm
         (kummerCharacter ζ hζ a) (Additive.ofMul τ)
     exact map_add (kummerCharacter ζ hζ a) (Additive.ofMul σ) (Additive.ofMul τ)
   have hmfixed (σ τ : Field.absoluteGaloisGroup M) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (m τ) = m τ := by
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (m τ) = m τ := by
     dsimp [m, ζA]
     simp
   have htdiff_quotient (σ τ : Field.absoluteGaloisGroup M) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (t τ) * t σ /
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (t τ) * t σ /
           t (σ * τ) =
-        ((by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (q τ) * q σ /
+        ((show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (q τ) * q σ /
           q (σ * τ)) / (m σ * m τ / m (σ * τ)) := by
     let σA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := σ
     change σA (q τ / m τ) * (q σ / m σ) / (q (σ * τ) / m (σ * τ)) = _
@@ -2202,7 +2204,7 @@ private theorem cyclic_norm_criterion_to_norm
   have hqdiff_of_val_add_lt (σ τ : Field.absoluteGaloisGroup M)
       (hsum : (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val +
           (continuousCharacterValue (kummerCharacter ζ hζ a) τ).val < ℓ) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (q τ) * q σ /
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (q τ) * q σ /
           q (σ * τ) =
         ζA ^ (continuousCharacterValue (kummerCharacter ζ hζ b) σ *
           continuousCharacterValue (kummerCharacter ζ hζ a) τ).val := by
@@ -2221,7 +2223,7 @@ private theorem cyclic_norm_criterion_to_norm
   have hqdiff_of_val_add_eq (σ τ : Field.absoluteGaloisGroup M)
       (hsum : (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val +
           (continuousCharacterValue (kummerCharacter ζ hζ a) τ).val = ℓ) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (q τ) * q σ /
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (q τ) * q σ /
           q (σ * τ) =
         ζA ^ (continuousCharacterValue (kummerCharacter ζ hζ b) σ *
           continuousCharacterValue (kummerCharacter ζ hζ a) τ).val *
@@ -2247,7 +2249,7 @@ private theorem cyclic_norm_criterion_to_norm
   have htdiff_of_val_add_lt (σ τ : Field.absoluteGaloisGroup M)
       (hsum : (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val +
           (continuousCharacterValue (kummerCharacter ζ hζ a) τ).val < ℓ) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (t τ) * t σ /
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (t τ) * t σ /
           t (σ * τ) = 1 := by
     rw [htdiff_quotient, hqdiff_of_val_add_lt σ τ hsum, hmdiff,
       div_self]
@@ -2255,7 +2257,7 @@ private theorem cyclic_norm_criterion_to_norm
   have htdiff_of_val_add_eq (σ τ : Field.absoluteGaloisGroup M)
       (hsum : (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val +
           (continuousCharacterValue (kummerCharacter ζ hζ a) τ).val = ℓ) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (t τ) * t σ /
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (t τ) * t σ /
           t (σ * τ) = algebraMap M (AlgebraicClosure M) (b : M) := by
     rw [htdiff_quotient, hqdiff_of_val_add_eq σ τ hsum, hmdiff]
     field_simp [pow_ne_zero _ (hζA.ne_zero (Fact.out : ℓ.Prime).ne_zero)]
@@ -2266,13 +2268,13 @@ private theorem cyclic_norm_criterion_to_norm
     apply Subtype.ext
     exact hwz
   let d : Field.absoluteGaloisGroup M → AlgebraicClosure M := fun σ =>
-    (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) wA / wA
+    (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) wA / wA
   have hd0 (σ : Field.absoluteGaloisGroup M) : d σ ≠ 0 := by
     exact div_ne_zero
-      ((map_ne_zero (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)).2 hwA0)
+      ((map_ne_zero (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ)).2 hwA0)
       hwA0
   have hddiff (σ τ : Field.absoluteGaloisGroup M) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (d τ) * d σ /
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (d τ) * d σ /
           d (σ * τ) = 1 := by
     let σA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := σ
     let τA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := τ
@@ -2285,9 +2287,9 @@ private theorem cyclic_norm_criterion_to_norm
   have hT0 (σ : Field.absoluteGaloisGroup M) : T σ ≠ 0 :=
     div_ne_zero (ht0 σ) (hd0 σ)
   have hTdiff_eq_tdiff (σ τ : Field.absoluteGaloisGroup M) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (T τ) * T σ /
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (T τ) * T σ /
           T (σ * τ) =
-        (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (t τ) * t σ /
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (t τ) * t σ /
           t (σ * τ) := by
     let σA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := σ
     change σA (t τ / d τ) * (t σ / d σ) / (t (σ * τ) / d (σ * τ)) = _
@@ -2304,18 +2306,18 @@ private theorem cyclic_norm_criterion_to_norm
   have hTdiff_of_val_add_lt (σ τ : Field.absoluteGaloisGroup M)
       (hsum : (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val +
           (continuousCharacterValue (kummerCharacter ζ hζ a) τ).val < ℓ) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (T τ) * T σ /
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (T τ) * T σ /
           T (σ * τ) = 1 := by
     rw [hTdiff_eq_tdiff, htdiff_of_val_add_lt σ τ hsum]
   have hTdiff_of_val_add_eq (σ τ : Field.absoluteGaloisGroup M)
       (hsum : (continuousCharacterValue (kummerCharacter ζ hζ a) σ).val +
           (continuousCharacterValue (kummerCharacter ζ hζ a) τ).val = ℓ) :
-      (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) (T τ) * T σ /
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) (T τ) * T σ /
           T (σ * τ) = algebraMap M (AlgebraicClosure M) (b : M) := by
     rw [hTdiff_eq_tdiff, htdiff_of_val_add_eq σ τ hsum]
   have hd_eq_t_of_mem_H (σ : H) :
-      d (by exact σ.1 : Field.absoluteGaloisGroup M) =
-        t (by exact σ.1 : Field.absoluteGaloisGroup M) := by
+      d (show Field.absoluteGaloisGroup M from σ.1) =
+        t (show Field.absoluteGaloisGroup M from σ.1) := by
     let σG : Field.absoluteGaloisGroup M := σ.1
     have hx : continuousCharacterValue (kummerCharacter ζ hζ a) σG = 0 :=
       (hfixL_iff σG).1 σ.2
@@ -2330,7 +2332,7 @@ private theorem cyclic_norm_criterion_to_norm
         rw [hx, ZMod.val_zero, pow_zero]
       _ = t σG := rfl
   have hT_eq_one_of_mem_H (σ : H) :
-      T (by exact σ.1 : Field.absoluteGaloisGroup M) = 1 := by
+      T (show Field.absoluteGaloisGroup M from σ.1) = 1 := by
     dsimp [T]
     rw [hd_eq_t_of_mem_H σ, div_self (ht0 _)]
   have hχa_rho_pow (n : ℕ) :
@@ -2346,10 +2348,10 @@ private theorem cyclic_norm_criterion_to_norm
   let zA : AlgebraicClosure M := T ρ
   let P : ℕ → AlgebraicClosure M := fun n =>
     partialConjugateProduct
-      (by exact ρ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) zA n
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ) zA n
   have hTpow_succ (n : ℕ) (hn : n + 1 < ℓ) :
       T (ρ ^ (n + 1)) =
-        (by exact ρ ^ n : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) zA *
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ ^ n) zA *
           T (ρ ^ n) := by
     have hsum :
         (continuousCharacterValue (kummerCharacter ζ hζ a) (ρ ^ n)).val +
@@ -2365,10 +2367,9 @@ private theorem cyclic_norm_criterion_to_norm
     simp [P, partialConjugateProduct]
   have hPsucc (n : ℕ) :
       P (n + 1) = P n *
-        (by exact ρ ^ n : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) zA := by
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ ^ n) zA := by
     dsimp [P, partialConjugateProduct]
     rw [Finset.prod_range_succ]
-    congr 1
   have hTpow_eq_P (n : ℕ) (hn : n < ℓ) : T (ρ ^ n) = P n := by
     induction n with
     | zero =>
@@ -2383,7 +2384,7 @@ private theorem cyclic_norm_criterion_to_norm
         hPsucc]
       exact mul_comm _ _
   have hρpowℓ_H :
-      (by exact ρ ^ ℓ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) ∈
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ ^ ℓ) ∈
         L.fixingSubgroup := by
     apply (hfixL_iff (ρ ^ ℓ)).2
     rw [hχa_rho_pow, ZMod.natCast_self]
@@ -2403,7 +2404,7 @@ private theorem cyclic_norm_criterion_to_norm
     rw [← hnadd, hPsucc]
     simpa [zA, mul_comm] using hd
   have hT_right_H (γ : Field.absoluteGaloisGroup M) (σ : H) :
-      T (γ * (by exact σ.1 : Field.absoluteGaloisGroup M)) = T γ := by
+      T (γ * (show Field.absoluteGaloisGroup M from σ.1)) = T γ := by
     let σG : Field.absoluteGaloisGroup M := σ.1
     have hxσ : continuousCharacterValue (kummerCharacter ζ hζ a) σG = 0 :=
       (hfixL_iff σG).1 σ.2
@@ -2429,7 +2430,7 @@ private theorem cyclic_norm_criterion_to_norm
       dsimp [κ]
       rw [hχa_mul, hχinv, hγδ, neg_add_cancel]
     have hκH :
-        (by exact κ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) ∈
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from κ) ∈
           L.fixingSubgroup := (hfixL_iff κ).2 hκzero
     have hright := hT_right_H γ (⟨κ, hκH⟩ : H)
     have hγκ : γ * κ = δ := by simp [κ]
@@ -2474,7 +2475,7 @@ private theorem cyclic_norm_criterion_to_norm
     apply hUS
     exact (w : U).2
   have hρwS :
-      (by exact ρ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) wA ∈ S := by
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ) wA ∈ S := by
     let ρA : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M := ρ
     exact (map_mem_separableClosure_iff ρA.toAlgHom).2 hwS
   have hβS : β ∈ S := (mem_separableClosure_iff).2 hβsep
@@ -2526,17 +2527,17 @@ private theorem cyclic_norm_criterion_to_norm
     simpa [hLS_apply, zS] using hzLv
   have hrestrict_pow (n : ℕ) :
       AlgEquiv.restrictNormalHom L
-          (by exact ρ ^ n : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) = s ^ n := by
+          (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ ^ n) = s ^ n := by
     change AlgEquiv.restrictNormalHom L
-        ((by exact ρ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) ^ n) = s ^ n
+        ((show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ) ^ n) = s ^ n
     rw [map_pow]
   have hterm (n : ℕ) :
       (((s ^ n) zL : L) : AlgebraicClosure M) =
-        (by exact ρ ^ n : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ ^ n)
           (zL : AlgebraicClosure M) := by
     rw [← hrestrict_pow n]
     exact AlgEquiv.restrictNormalHom_apply L
-      (by exact ρ ^ n : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) zL
+      (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ ^ n) zL
   have hcycleL : partialConjugateProduct s zL ℓ =
       algebraMap M L (b : M) := by
     apply Subtype.ext
@@ -2546,7 +2547,7 @@ private theorem cyclic_norm_criterion_to_norm
     calc
       (∏ j ∈ Finset.range ℓ, L.val ((s ^ j) zL)) =
           ∏ j ∈ Finset.range ℓ,
-            (by exact ρ ^ j : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M)
+            (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from ρ ^ j)
               (zL : AlgebraicClosure M) := by
         apply Finset.prod_congr rfl
         intro j hj
@@ -2556,7 +2557,6 @@ private theorem cyclic_norm_criterion_to_norm
         apply Finset.prod_congr rfl
         intro j hj
         rw [hzLA]
-        congr 1
       _ = algebraMap M (AlgebraicClosure M) (b : M) := hPcycle
       _ = L.val (algebraMap M L (b : M)) := rfl
   let autFromFin : Fin ℓ ≃ (L ≃ₐ[M] L) :=
@@ -2806,7 +2806,7 @@ theorem kummerCharacter_change_primitiveRoot {M : Type*} [Field M]
   have hscaled : ∃ α : AlgebraicClosure M,
       α ^ ℓ = algebraMap M (AlgebraicClosure M) (a : M) ∧
       ∀ σ : Field.absoluteGaloisGroup M,
-        (by exact σ : AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M) α =
+        (show AlgebraicClosure M ≃ₐ[M] AlgebraicClosure M from σ) α =
           (algebraMap M (AlgebraicClosure M) ζ) ^
               (continuousCharacterValue
                 (d • kummerCharacter ζ' hζ' a) σ).val * α := by

@@ -447,7 +447,7 @@ private noncomputable def fixedFieldLocalData
     intro a b
     rw [← ValuativeExtension.vle_iff_vle (A := E) (B := L)]
     simpa only [IsScalarTower.algebraMap_apply K E L] using
-      (ValuativeExtension.vle_iff_vle (A := K) (B := L) a b)
+      (ValuativeExtension.vle_iff_vle (A := K) (B := L) (a := a) (b := b))
   exact ⟨inferInstance, hlocal, hlower, hupper⟩
 
 /-- Hilbert 90 for the restriction of the unit representation to an arbitrary subgroup. -/
@@ -2419,7 +2419,7 @@ private theorem unramifiedEnvelopeGeometry_exists
     change algebraMap E C (eLE x) ≤ᵥ algebraMap E C (eLE y) ↔ x ≤ᵥ y
     rw [ValuativeExtension.vle_iff_vle (A := E) (B := C)]
     change algebraMap L E x ≤ᵥ algebraMap L E y ↔ x ≤ᵥ y
-    exact ValuativeExtension.vle_iff_vle (A := L) (B := E) x y
+    exact ValuativeExtension.vle_iff_vle (A := L) (B := E) (a := x) (b := y)
   letI : ValuativeExtension L C := hLC
   let hcontLE : Continuous eLE :=
     envelopeAlgEquiv_continuous K L E eLE (fun _ => rfl)

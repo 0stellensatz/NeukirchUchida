@@ -255,7 +255,7 @@ theorem rayClass_admissibleGenerators (m : RayModulus K)
     calc
       _ ≤ (I.1 : FractionalIdeal O⁰ K) *
           (I.1 : FractionalIdeal O⁰ K)⁻¹ :=
-        mul_le_mul_right' hspan_le _
+        mul_le_mul_left hspan_le _
       _ = 1 := mul_inv_cancel₀ I.1.ne_zero
   obtain ⟨b, hb⟩ := FractionalIdeal.le_one_iff_exists_coeIdeal.mp hprod_le
   have hspanα0 : FractionalIdeal.spanSingleton O⁰ (α : K) ≠ 0 :=
@@ -464,7 +464,7 @@ private theorem rayCanonicalGeneratorCounting_eq_mul
     rayCanonicalGeneratorCounting m B x =
       rayRepresentativeCountingNZ m B x * torsionOrder K := by
   rw [rayCanonicalGeneratorCounting, rayRepresentativeCountingNZ, torsionOrder,
-    ← Nat.card_eq_fintype_card, ← Nat.card_prod]
+    ← Nat.card_prod]
   exact Nat.card_congr (rayCanonicalGeneratorEquiv m B x)
 
 private def idealNeEquiv : {a : Ideal O // a ≠ 0} ≃ (Ideal O)⁰ where
@@ -1226,7 +1226,6 @@ private theorem rayIdealSetPrincipalDvdEquiv_fst (B : (Ideal O)⁰) (z : idealSe
   rw [← idealSetEquiv_eq_idealSetMap B z]
   simp [rayIdealSetPrincipalDvdEquiv, Equiv.prodCongrLeft,
     Equiv.subtypeSubtypeEquivSubtypeInter, Equiv.prodSubtypeFstEquivSubtypeProd]
-  rfl
 
 private theorem rayIdealSetMulEquiv_ideal (B : (Ideal O)⁰) (z : idealSet K B) :
     ((B * (rayIdealSetMulEquiv B z).1.1).1 : Ideal O) =
@@ -1366,8 +1365,8 @@ private theorem mixedEmbedding_sub_mem_rayCongruenceLattice_iff
         mixedEmbedding K (algebraMap O K (rayDatumLift m B hB q)) = _
       rw [map_sub, map_sub]
     have hzprod : z ∈ B.1 * m.finite := hz
-    have hzB : z ∈ B.1 := (Ideal.mul_le_right : B.1 * m.finite ≤ B.1) hzprod
-    have hzM : z ∈ m.finite := (Ideal.mul_le_left : B.1 * m.finite ≤ m.finite) hzprod
+    have hzB : z ∈ B.1 := (Ideal.mul_le_left : B.1 * m.finite ≤ B.1) hzprod
+    have hzM : z ∈ m.finite := (Ideal.mul_le_right : B.1 * m.finite ≤ m.finite) hzprod
     have hyB : y ∈ B.1 := by
       rw [hzy] at hzB
       have := B.1.add_mem hzB (rayDatumLift_mem m B hB q)
@@ -1501,11 +1500,11 @@ private theorem exists_integer_of_mem_rayCongruence_affine
   let y := rayDatumLift m B hB q + k
   refine ⟨y, ?_, ?_, ?_⟩
   · exact B.1.add_mem (rayDatumLift_mem m B hB q)
-      ((Ideal.mul_le_right : B.1 * m.finite ≤ B.1) hk)
+      ((Ideal.mul_le_left : B.1 * m.finite ≤ B.1) hk)
   · rw [← rayDatumLift_mod m B hB q]
     apply Ideal.Quotient.eq.mpr
     rw [show y - rayDatumLift m B hB q = k by simp [y]]
-    exact (Ideal.mul_le_left : B.1 * m.finite ≤ m.finite) hk
+    exact (Ideal.mul_le_right : B.1 * m.finite ≤ m.finite) hk
   · apply_fun fun z => z - mixedEmbedding K (rayDatumLift m B hB q)
     · change mixedEmbedding K (algebraMap O K y) - _ = _
       rw [show algebraMap O K y = algebraMap O K (rayDatumLift m B hB q) + a by
@@ -1804,6 +1803,7 @@ private theorem rayCanonicalGeneratorCounting_isBigO (m : RayModulus K)
     (fun q _ => rayDatumFiber_count_isBigO m B hB q)
   apply hsum.congr' _ EventuallyEq.rfl
   filter_upwards [] with x
+  simp only [Finset.sum_apply]
   rw [rayCanonicalGeneratorCounting_eq_sum m B hB x, Nat.cast_sum,
     Finset.sum_sub_distrib]
   simp only [rayTotalCoefficient, Finset.sum_mul]

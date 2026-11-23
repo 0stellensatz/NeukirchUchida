@@ -66,7 +66,7 @@ private theorem character_kills_topologicalCommutator
     Subgroup.topologicalClosure (commutator G) ≤
       (a.toAddMonoidHom.toMultiplicativeRight).ker := by
   apply Subgroup.topologicalClosure_minimal _
-      (Abelianization.commutator_subset_ker
+      (Group.Abelianization.commutator_subset_ker
         a.toAddMonoidHom.toMultiplicativeRight)
   change IsClosed {g : G | a (Additive.ofMul g) = 0}
   exact isClosed_singleton.preimage a.continuous

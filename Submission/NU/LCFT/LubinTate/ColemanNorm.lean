@@ -1357,7 +1357,7 @@ private theorem test_summable
       (PowerSeries.coeff n g).prop
   have hcL : algebraMap K L ((PowerSeries.coeff n g : RingOfIntegers K) : K) ≤ᵥ
       (1 : L) := by
-    simpa using (ValuativeExtension.vle_iff_vle (A := K) (B := L) _ _).mpr hcK
+    simpa using (ValuativeExtension.vle_iff_vle (A := K) (B := L)).mpr hcK
   have hc : algebraMap (RingOfIntegers K) L (PowerSeries.coeff n g) ≤ᵥ (1 : L) := by
     rw [IsScalarTower.algebraMap_apply (RingOfIntegers K) K L]
     exact hcL
@@ -2412,6 +2412,7 @@ private theorem test_fiber_operator_product
     rw [hX] at hexp
     simp_rw [hsubst] at hexp
     have hmap := congrArg (algebraMap (RingOfIntegers level.field) level.field) hexp
+    set_option synthInstance.maxHeartbeats 200000 in
     simp only [map_mul, map_pow, map_sum] at hmap
     simp_rw [hvalueA] at hmap
     rw [hvalueβ] at hmap
@@ -2591,7 +2592,7 @@ private theorem test_operator_iterate_fiber_product
           (hb : b ∈ ((lubinTatePolynomial K π).map φ - Polynomial.C a).roots) :
           ((lubinTateIterate K π (n + 1)).map φ).IsRoot b := by
         have hbroot := (Polynomial.mem_roots
-          (by exact by
+          (show (lubinTatePolynomial K π).map φ - Polynomial.C a ≠ 0 from by
             have hm0 := (test_iterate_monic_natDegree K π 1).1
             have hmF0 : (lubinTatePolynomial K π).Monic := by
               simpa [lubinTateIterate] using hm0
@@ -2601,7 +2602,7 @@ private theorem test_operator_iterate_fiber_product
             apply (hmF.sub_of_left (Polynomial.degree_C_le.trans_lt ?_)).ne_zero
             rw [Polynomial.degree_eq_natDegree hmF.ne_zero,
               hmF0.natDegree_map, hnat]
-            exact_mod_cast (Nat.card_pos : 0 < residueCard K) : (lubinTatePolynomial K π).map φ - Polynomial.C a ≠ 0)).mp hb
+            exact_mod_cast (Nat.card_pos : 0 < residueCard K))).mp hb
         exact hbroot.dvd (test_fiber_dvd_iterate K π φ n a ha)
       have hreplace :
           (((lubinTatePolynomial K π).map φ - Polynomial.C a).roots.map

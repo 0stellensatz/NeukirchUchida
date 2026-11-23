@@ -605,7 +605,7 @@ private theorem tame_cyclic_norm_factorization_core
             (Valuation.Compatible.vle_iff_le (v := vQ) (x : Q) 1).mpr
               (by simpa only [map_one] using hxprop)
           simpa using
-            (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (x : Q) 1).2 hxQ⟩
+            (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (a := (x : Q)) (b := 1)).2 hxQ⟩
         map_one' := by ext; simp
         map_mul' := by intro x y; ext; simp
         map_zero' := by ext; simp
@@ -627,10 +627,10 @@ private theorem tame_cyclic_norm_factorization_core
           (v := ValuativeRel.valuation R) 1 (algebraMap Q R (x : Q))).mpr
           (by simpa only [map_one] using hxcan.ge)
       have hxleQ : (x : Q) ≤ᵥ (1 : Q) :=
-        (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (x : Q) 1).mp
+        (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (a := (x : Q)) (b := 1)).mp
           (by simpa using hxleR)
       have hxgeQ : (1 : Q) ≤ᵥ (x : Q) :=
-        (ValuativeExtension.vle_iff_vle (A := Q) (B := R) 1 (x : Q)).mp
+        (ValuativeExtension.vle_iff_vle (A := Q) (B := R) (a := 1) (b := (x : Q))).mp
           (by simpa using hxgeR)
       have hxvQ : vQ (x : Q) = 1 := by
         apply le_antisymm

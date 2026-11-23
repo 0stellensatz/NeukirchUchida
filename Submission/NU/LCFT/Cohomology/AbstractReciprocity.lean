@@ -1491,8 +1491,8 @@ and therefore factors through `Gᵃᵇ`.
 -/
 theorem rowSum_factors_abelianization (M : Rep ℤ G) (a : Inhomogeneous.C2 M)
     (ha : IsNormalizedCocycle2 M a) :
-    ∃ f : Additive (Abelianization G) →+ TateLowDegree.H0 M,
-      ∀ g, f (Additive.ofMul (Abelianization.of g)) = rowSumClass M a ha g := by
+    ∃ f : Additive (Group.Abelianization G) →+ TateLowDegree.H0 M,
+      ∀ g, f (Additive.ofMul (Group.Abelianization.of g)) = rowSumClass M a ha g := by
   let φ : G →* Multiplicative (TateLowDegree.H0 M) :=
     { toFun := fun g => Multiplicative.ofAdd (rowSumClass M a ha g)
       map_one' := by
@@ -1505,12 +1505,12 @@ theorem rowSum_factors_abelianization (M : Rep ℤ G) (a : Inhomogeneous.C2 M)
       map_mul' := fun g h => by
         apply Multiplicative.toAdd.injective
         exact rowSumClass_mul M a ha g h }
-  let f : Additive (Abelianization G) →+ TateLowDegree.H0 M :=
-    MonoidHom.toAdditiveLeft (Abelianization.lift φ)
+  let f : Additive (Group.Abelianization G) →+ TateLowDegree.H0 M :=
+    MonoidHom.toAdditiveLeft (Group.Abelianization.lift φ)
   refine ⟨f, ?_⟩
   intro g
-  change Multiplicative.toAdd (Abelianization.lift φ (Abelianization.of g)) = _
-  rw [Abelianization.lift_apply_of]
+  change Multiplicative.toAdd (Group.Abelianization.lift φ (Group.Abelianization.of g)) = _
+  rw [Group.Abelianization.lift_apply_of]
   rfl
 
 /-- The hypotheses of Tate's abstract reciprocity theorem, uniformly on subgroups. -/
@@ -2132,12 +2132,12 @@ private theorem twoConnectingMap_isIso
 private theorem abstractReciprocity_of_twoConnecting_isIso
     (M : Rep ℤ G) (a : Inhomogeneous.C2 M) (ha : IsNormalizedCocycle2 M a)
     [IsIso (twoConnectingMap G (barDimensionShiftData G M a ha))] :
-    ∃ e : Additive (Abelianization G) ≃+ TateLowDegree.H0 M,
-      ∀ g, e (Additive.ofMul (Abelianization.of g)) = rowSumClass M a ha g := by
+    ∃ e : Additive (Group.Abelianization G) ≃+ TateLowDegree.H0 M,
+      ∀ g, e (Additive.ofMul (Group.Abelianization.of g)) = rowSumClass M a ha g := by
   let D := barDimensionShiftData G M a ha
   let E : TateLowDegree.HMinusTwo (Rep.trivial ℤ G ℤ) ≅ tateCohomology M 0 :=
     asIso (twoConnectingMap G D)
-  let e : Additive (Abelianization G) ≃+ TateLowDegree.H0 M :=
+  let e : Additive (Group.Abelianization G) ≃+ TateLowDegree.H0 M :=
     (tateMinusTwoComparison G).symm.trans
       (E.toLinearEquiv.toAddEquiv.trans
         ((TateLowDegree.comparisonH0Tate M).symm.trans
@@ -2145,13 +2145,13 @@ private theorem abstractReciprocity_of_twoConnecting_isIso
   refine ⟨e, ?_⟩
   intro g
   have hbar : (tateMinusTwoComparison G).symm
-      (Additive.ofMul (Abelianization.of g)) = tateBarGenerator G g := by
+      (Additive.ofMul (Group.Abelianization.of g)) = tateBarGenerator G g := by
     apply (tateMinusTwoComparison G).injective
     rw [(tateMinusTwoComparison G).apply_symm_apply]
     exact (tateMinusTwoComparison_barGenerator G g).symm
   change -(TateLowDegree.comparisonH0Tate M).symm
       (E.hom ((tateMinusTwoComparison G).symm
-        (Additive.ofMul (Abelianization.of g)))) = rowSumClass M a ha g
+        (Additive.ofMul (Group.Abelianization.of g)))) = rowSumClass M a ha g
   rw [hbar]
   change -(TateLowDegree.comparisonH0Tate M).symm
       (twoConnectingMap G D (tateBarGenerator G g)) = rowSumClass M a ha g
@@ -2169,8 +2169,8 @@ theorem abstractReciprocity_exists (M : Rep ℤ G) (hM : Hypotheses M)
     (α : Inhomogeneous.H2 M) (hα : addOrderOf α = Nat.card G)
     (a : Inhomogeneous.C2 M) (ha : IsNormalizedCocycle2 M a)
     (hrep : cocycleClass2 M a ha = α) :
-    ∃ e : Additive (Abelianization G) ≃+ TateLowDegree.H0 M,
-      ∀ g, e (Additive.ofMul (Abelianization.of g)) = rowSumClass M a ha g := by
+    ∃ e : Additive (Group.Abelianization G) ≃+ TateLowDegree.H0 M,
+      ∀ g, e (Additive.ofMul (Group.Abelianization.of g)) = rowSumClass M a ha g := by
   letI : IsIso (twoConnectingMap G (barDimensionShiftData G M a ha)) :=
     twoConnectingMap_isIso M hM α hα a ha hrep
   exact abstractReciprocity_of_twoConnecting_isIso M a ha
@@ -2180,7 +2180,7 @@ noncomputable def abstractReciprocity (M : Rep ℤ G) (hM : Hypotheses M)
     (α : Inhomogeneous.H2 M) (hα : addOrderOf α = Nat.card G)
     (a : Inhomogeneous.C2 M) (ha : IsNormalizedCocycle2 M a)
     (hrep : cocycleClass2 M a ha = α) :
-    Additive (Abelianization G) ≃+ TateLowDegree.H0 M :=
+    Additive (Group.Abelianization G) ≃+ TateLowDegree.H0 M :=
   (abstractReciprocity_exists M hM α hα a ha hrep).choose
 
 /-- The row-sum formula for `abstractReciprocity`. -/
@@ -2189,7 +2189,7 @@ theorem abstractReciprocity_apply (M : Rep ℤ G) (hM : Hypotheses M)
     (a : Inhomogeneous.C2 M) (ha : IsNormalizedCocycle2 M a)
     (hrep : cocycleClass2 M a ha = α) (g : G) :
     abstractReciprocity M hM α hα a ha hrep
-        (Additive.ofMul (Abelianization.of g)) = rowSumClass M a ha g :=
+        (Additive.ofMul (Group.Abelianization.of g)) = rowSumClass M a ha g :=
   (abstractReciprocity_exists M hM α hα a ha hrep).choose_spec g
 
 /--
@@ -2199,17 +2199,17 @@ squares of the Tate map.
 structure NaturalitySquares
     {G Q S : Type} [Group G] [Group Q] [Group S]
     {TG TQ TS : Type} [AddCommGroup TG] [AddCommGroup TQ] [AddCommGroup TS]
-    (rG : Additive (Abelianization G) ≃+ TG)
-    (rQ : Additive (Abelianization Q) ≃+ TQ)
-    (rS : Additive (Abelianization S) ≃+ TS)
-    (quotientAbMap : Additive (Abelianization G) →+ Additive (Abelianization Q))
+    (rG : Additive (Group.Abelianization G) ≃+ TG)
+    (rQ : Additive (Group.Abelianization Q) ≃+ TQ)
+    (rS : Additive (Group.Abelianization S) ≃+ TS)
+    (quotientAbMap : Additive (Group.Abelianization G) →+ Additive (Group.Abelianization Q))
     (inflationTateMap : TG →+ TQ)
-    (inclusionAbMap : Additive (Abelianization S) →+ Additive (Abelianization G))
+    (inclusionAbMap : Additive (Group.Abelianization S) →+ Additive (Group.Abelianization G))
     (corestrictionTateMap : TS →+ TG)
-    (transferAbMap : Additive (Abelianization G) →+ Additive (Abelianization S))
+    (transferAbMap : Additive (Group.Abelianization G) →+ Additive (Group.Abelianization S))
     (restrictionTateMap : TG →+ TS) where
   /-- Quotient on abelianizations. -/
-  quotientAb : Additive (Abelianization G) →+ Additive (Abelianization Q)
+  quotientAb : Additive (Group.Abelianization G) →+ Additive (Group.Abelianization Q)
   /-- This is the supplied bar-resolution quotient map. -/
   quotientAb_eq_actual : quotientAb = quotientAbMap
   /-- Inflation/quotient on degree-zero Tate groups. -/
@@ -2217,7 +2217,7 @@ structure NaturalitySquares
   /-- This is the supplied inflation map, not an arbitrary replacement. -/
   quotientTate_eq_actual : quotientTate = inflationTateMap
   /-- Subgroup inclusion on abelianizations. -/
-  inclusionAb : Additive (Abelianization S) →+ Additive (Abelianization G)
+  inclusionAb : Additive (Group.Abelianization S) →+ Additive (Group.Abelianization G)
   /-- This is the map induced by the actual subgroup inclusion. -/
   inclusionAb_eq_actual : inclusionAb = inclusionAbMap
   /-- Module norm/corestriction on degree-zero Tate groups. -/
@@ -2225,7 +2225,7 @@ structure NaturalitySquares
   /-- This is the supplied corestriction/norm map. -/
   normTate_eq_actual : normTate = corestrictionTateMap
   /-- Transfer on abelianizations. -/
-  transferAb : Additive (Abelianization G) →+ Additive (Abelianization S)
+  transferAb : Additive (Group.Abelianization G) →+ Additive (Group.Abelianization S)
   /-- This is the supplied bar-resolution transfer. -/
   transferAb_eq_actual : transferAb = transferAbMap
   /-- Inclusion/restriction on degree-zero Tate groups. -/
@@ -2249,14 +2249,14 @@ quotient, subgroup, and transfer maps produce all three named commuting squares.
 theorem naturalitySquares_exists
     {G Q S : Type} [Group G] [Group Q] [Group S]
     {TG TQ TS : Type} [AddCommGroup TG] [AddCommGroup TQ] [AddCommGroup TS]
-    (rG : Additive (Abelianization G) ≃+ TG)
-    (rQ : Additive (Abelianization Q) ≃+ TQ)
-    (rS : Additive (Abelianization S) ≃+ TS)
-    (quotientAbMap : Additive (Abelianization G) →+ Additive (Abelianization Q))
+    (rG : Additive (Group.Abelianization G) ≃+ TG)
+    (rQ : Additive (Group.Abelianization Q) ≃+ TQ)
+    (rS : Additive (Group.Abelianization S) ≃+ TS)
+    (quotientAbMap : Additive (Group.Abelianization G) →+ Additive (Group.Abelianization Q))
     (inflationTateMap : TG →+ TQ)
-    (inclusionAbMap : Additive (Abelianization S) →+ Additive (Abelianization G))
+    (inclusionAbMap : Additive (Group.Abelianization S) →+ Additive (Group.Abelianization G))
     (corestrictionTateMap : TS →+ TG)
-    (transferAbMap : Additive (Abelianization G) →+ Additive (Abelianization S))
+    (transferAbMap : Additive (Group.Abelianization G) →+ Additive (Group.Abelianization S))
     (restrictionTateMap : TG →+ TS)
     (projection_square : inflationTateMap.comp rG.toAddMonoidHom =
       rQ.toAddMonoidHom.comp quotientAbMap)

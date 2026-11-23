@@ -2033,7 +2033,7 @@ private theorem finiteCharacterFamily_card_le_kummerFinrank
         rw [map_mul, map_mul, mul_comm]) }
   let artin : (Units F ⧸ NU.LCFT.normSubgroup F E) ≃* (E ≃ₐ[F] E) :=
     (NU.LCFT.finiteArtin F (AlgebraicClosure F) L).trans
-      Abelianization.equivOfComm.symm
+      Group.Abelianization.equivOfComm.symm
   have htargetPow (z : Multiplicative (ι → R)) :
       z ^ (p : ℕ) = 1 := by
     apply Multiplicative.toAdd.injective
@@ -2301,7 +2301,7 @@ private theorem completionCharacter_finrank_via_finiteLevels
       mul_comm := L.commutative }
   let artin : (Units F ⧸ N) ≃* (L.field ≃ₐ[F] L.field) :=
     (NU.LCFT.finiteArtin F (AlgebraicClosure F) L.field).trans
-      Abelianization.equivOfComm.symm
+      Group.Abelianization.equivOfComm.symm
   let restriction : Field.absoluteGaloisGroup F →*
       (L.field ≃ₐ[F] L.field) := AlgEquiv.restrictNormalHom L.field
   have hrestriction : Function.Surjective restriction :=
