@@ -473,6 +473,8 @@ theorem chebotarev_containment
       (hSU : S ⊆ U) (x : ℝ) :
       NU.Chebotarev.primeCounting S x ≤ NU.Chebotarev.primeCounting U x := by
     unfold NU.Chebotarev.primeCounting
+    change Set.ncard {v | v ∈ S ∧ (v.norm : ℝ) ≤ x} ≤
+      Set.ncard {v | v ∈ U ∧ (v.norm : ℝ) ≤ x}
     apply Set.ncard_le_ncard
     · intro v hv
       exact ⟨hSU hv.1, hv.2⟩
