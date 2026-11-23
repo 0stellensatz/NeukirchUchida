@@ -721,7 +721,8 @@ structure IsCompactOpenLattice (Λ : Submodule (RingOfIntegers K) V) : Prop wher
   /-- Openness of the underlying subset. -/
   isOpen : IsOpen (Λ : Set V)
 
-omit [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ContinuousSMul K V] [FiniteDimensional K V] in
+omit [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ContinuousSMul K V]
+    [FiniteDimensional K V] in
 /--
 **A03**, Lemma `lem:lattices` (Commensurability of lattices): two compact open lattices have
 finite quotients by their intersection.

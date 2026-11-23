@@ -175,7 +175,9 @@ private theorem H2_card_smul_eq_zero
   rw [T.card_index]
   rw [← Inhomogeneous.Transfer.corH2_restriction T M x, hres, map_zero]
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 private theorem local_H2_finrank_smul_eq_zero
     (x : Inhomogeneous.H2 (MulRep K L)) :
     Module.finrank K L • x = 0 := by
@@ -463,7 +465,9 @@ private theorem restricted_H1_subsingleton
     hilbert90_mulRep_inhomogeneous E L
   exact ⟨fun x y => (restrictedH1Equiv H).injective (h.elim _ _)⟩
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 private theorem local_H2_inflation_restriction_exact
     (H : Subgroup (L ≃ₐ[K] L)) [H.Normal] :
     Function.Exact
@@ -883,7 +887,10 @@ structure UnramifiedEnvelopeData (π : Uniformizer K) where
     transportedH2 descentQuotient descentCoefficient α = psi →
       transportedH2 descentQuotient descentCoefficient β = psi → α = β
 
-omit [IsGalois K L] [ContinuousSMul K L] [IsScalarTower K L M] [IsScalarTower K U M] [FiniteDimensional K M] [FiniteDimensional U M] [IsGalois K M] [IsGalois L M] [ValuativeExtension K M] [ValuativeExtension U M] [ContinuousSMul K M] [ContinuousSMul L M] [ContinuousSMul U M] in
+omit [IsGalois K L] [ContinuousSMul K L] [IsScalarTower K L M] [IsScalarTower K U M]
+    [FiniteDimensional K M] [FiniteDimensional U M] [IsGalois K M] [IsGalois L M]
+    [ValuativeExtension K M] [ValuativeExtension U M] [ContinuousSMul K M] [ContinuousSMul L M]
+    [ContinuousSMul U M] in
 omit [ContinuousSMul K U] in
 private theorem envelope_preimage_existsUnique (π : Uniformizer K)
     (D : UnramifiedEnvelopeData K L U M π) :
@@ -900,7 +907,10 @@ noncomputable def unramifiedEnvelopePreimage (π : Uniformizer K)
     Inhomogeneous.H2 (MulRep K L) :=
   (envelope_preimage_existsUnique K L U M π D).choose
 
-omit [IsGalois K L] [ContinuousSMul K L] [IsScalarTower K L M] [IsScalarTower K U M] [FiniteDimensional K M] [FiniteDimensional U M] [IsGalois K M] [IsGalois L M] [ValuativeExtension K M] [ValuativeExtension U M] [ContinuousSMul K M] [ContinuousSMul L M] [ContinuousSMul U M] in
+omit [IsGalois K L] [ContinuousSMul K L] [IsScalarTower K L M] [IsScalarTower K U M]
+    [FiniteDimensional K M] [FiniteDimensional U M] [IsGalois K M] [IsGalois L M]
+    [ValuativeExtension K M] [ValuativeExtension U M] [ContinuousSMul K M] [ContinuousSMul L M]
+    [ContinuousSMul U M] in
 omit [ContinuousSMul K U] in
 /-- The chosen envelope preimage has the required inflated image. -/
 theorem unramifiedEnvelopePreimage_spec (π : Uniformizer K)
@@ -909,7 +919,10 @@ theorem unramifiedEnvelopePreimage_spec (π : Uniformizer K)
         (unramifiedEnvelopePreimage K L U M π D) = D.psi :=
   (envelope_preimage_existsUnique K L U M π D).choose_spec.1
 
-omit [IsGalois K L] [ContinuousSMul K L] [IsScalarTower K L M] [IsScalarTower K U M] [FiniteDimensional K M] [FiniteDimensional U M] [IsGalois K M] [IsGalois L M] [ValuativeExtension K M] [ValuativeExtension U M] [ContinuousSMul K M] [ContinuousSMul L M] [ContinuousSMul U M] in
+omit [IsGalois K L] [ContinuousSMul K L] [IsScalarTower K L M] [IsScalarTower K U M]
+    [FiniteDimensional K M] [FiniteDimensional U M] [IsGalois K M] [IsGalois L M]
+    [ValuativeExtension K M] [ValuativeExtension U M] [ContinuousSMul K M] [ContinuousSMul L M]
+    [ContinuousSMul U M] in
 omit [ContinuousSMul K U] in
 private theorem envelope_preimage_order (π : Uniformizer K)
     (D : UnramifiedEnvelopeData K L U M π)
@@ -3628,7 +3641,9 @@ noncomputable def fundamentalClass : LocalFundamentalClass K L :=
 abbrev fundamentalClassValue : Inhomogeneous.H2 (MulRep K L) :=
   (fundamentalClass K L).class
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 omit [IsGalois K L] in
 /--
 **F08**, Theorem `thm:local-fundamental-class`: Hilbert 90 supplies the degree-one vanishing in

@@ -6,7 +6,9 @@ import Mathlib
 Mathlib swapped `Ideal.ramificationIdx` (now the localization-length definition) with
 `Ideal.ramificationIdx'` (the classical `sSup {n | map p ≤ P ^ n}` definition), and restated
 some lemmas for the new definition. This file restores the pre-v4.36 statements that the
-development relies on, for the classical index `Ideal.ramificationIdx'`.
+development relies on, for the classical index `Ideal.ramificationIdx'`, and restates the
+corollaries of the fundamental identity `∑ e f = [L : K]` that mathlib deprecated, using the
+new inertia degree `Ideal.inertiaDeg`.
 -/
 
 /-- The pre-v4.36 statement of `Ideal.ramificationIdx_eq_one_of_isUnramifiedAt`, for the

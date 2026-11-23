@@ -764,7 +764,9 @@ private noncomputable def explicitMulRepInvariantsEquiv :
     exact hy
   exact (AddEquiv.ofBijective f ⟨hf_inj, hf_surj⟩).symm
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 private theorem explicitMulRepInvariantsEquiv_baseUnit (x : Units K) :
     explicitMulRepInvariantsEquiv K L (baseUnitInvariant K L x) = Additive.ofMul x := by
   let e := explicitMulRepInvariantsEquiv K L
@@ -779,7 +781,9 @@ private def tateNormQuotientHom :
   (QuotientGroup.mk' (normSubgroup K L)).toAdditive.comp
     (explicitMulRepInvariantsEquiv K L).toAddMonoidHom
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 private theorem mem_tateNormRange_iff (x : Inhomogeneous.invariants0 (MulRep K L)) :
     x ∈ TateLowDegree.normRangeInInvariants (MulRep K L) ↔
       Additive.toMul (explicitMulRepInvariantsEquiv K L x) ∈ normSubgroup K L := by
@@ -814,13 +818,17 @@ private theorem mem_tateNormRange_iff (x : Inhomogeneous.invariants0 (MulRep K L
     exact hbaseval.trans (congrArg
       (fun z : Inhomogeneous.invariants0 (MulRep K L) => Additive.toMul z.1) hxbase)
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 private theorem tateNormQuotientHom_surjective :
     Function.Surjective (tateNormQuotientHom K L) :=
   (QuotientGroup.mk'_surjective (normSubgroup K L)).comp
     (explicitMulRepInvariantsEquiv K L).surjective
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 private theorem tateNormQuotientHom_ker :
     (tateNormQuotientHom K L).ker =
       TateLowDegree.normRangeInInvariants (MulRep K L) := by
@@ -833,7 +841,9 @@ private theorem tateNormQuotientHom_ker :
   rw [QuotientGroup.eq_one_iff]
   exact (mem_tateNormRange_iff K L x).symm
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 private theorem tateNormRange_le_ker :
     TateLowDegree.normRangeInInvariants (MulRep K L) ≤
       (tateNormQuotientHom K L).ker := by
@@ -848,7 +858,9 @@ private def tateQuotientAddHom :
     (TateLowDegree.normRangeInInvariants (MulRep K L)) inferInstance
     (tateNormQuotientHom K L) (tateNormRange_le_ker K L)
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 private theorem tateQuotientAddHom_bijective :
     Function.Bijective (tateQuotientAddHom K L) := by
   constructor
@@ -873,7 +885,9 @@ private noncomputable def localTateQuotientEquiv :
     TateLowDegree.H0 (MulRep K L) ≃+ Additive (Units K ⧸ normSubgroup K L) :=
   AddEquiv.ofBijective (tateQuotientAddHom K L) (tateQuotientAddHom_bijective K L)
 
-omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel L]
+    [TopologicalSpace L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L]
+    [ContinuousSMul K L] in
 private theorem localTateQuotientEquiv_apply (x : Units K) :
     localTateQuotientEquiv K L (tateClassOfBaseUnit K L x) =
       Additive.ofMul (QuotientGroup.mk x : Units K ⧸ normSubgroup K L) := by
@@ -2969,7 +2983,11 @@ variable (K : Type u) (E : Type v) (M : Type w)
   [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M]
   [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M]
 
-omit [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
+omit [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K]
+    [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E]
+    [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M]
+    [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M]
+    [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
 /-- The field norm sends `N(M/E)` into `N(M/K)`, by the literal tower formula. -/
 theorem normSubgroup_le_comap_norm :
     normSubgroup E M ≤ (normSubgroup K M).comap (normUnitsHom K E) := by
@@ -2982,7 +3000,11 @@ noncomputable def normOnQuotient :
   QuotientGroup.map (normSubgroup E M) (normSubgroup K M)
     (normUnitsHom K E) (normSubgroup_le_comap_norm K E M)
 
-omit [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
+omit [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K]
+    [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E]
+    [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M]
+    [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M]
+    [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
 /-- Pointwise defining equation for the quotient norm. -/
 @[simp] theorem normOnQuotient_mk (x : Units E) :
     normOnQuotient K E M (QuotientGroup.mk x) =
@@ -2993,7 +3015,12 @@ omit [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [Top
 def galoisInclusion : (M ≃ₐ[E] M) →* (M ≃ₐ[K] M) :=
   AlgEquiv.restrictScalarsHom K
 
-omit [FiniteDimensional K E] [FiniteDimensional E M] [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
+omit [FiniteDimensional K E] [FiniteDimensional E M] [FiniteDimensional K M] [IsGalois K M]
+    [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
+    [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M]
+    [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E]
+    [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M]
+    [ContinuousSMul K M] in
 /-- Pointwise defining equation for subgroup inclusion. -/
 @[simp] theorem galoisInclusion_apply (σ : M ≃ₐ[E] M) (x : M) :
     galoisInclusion K E M σ x = σ x := rfl
@@ -3002,7 +3029,12 @@ omit [FiniteDimensional K E] [FiniteDimensional E M] [FiniteDimensional K M] [Is
 def inclusionAb : Group.Abelianization (M ≃ₐ[E] M) →* Group.Abelianization (M ≃ₐ[K] M) :=
   Group.Abelianization.map (galoisInclusion K E M)
 
-omit [FiniteDimensional K E] [FiniteDimensional E M] [FiniteDimensional K M] [IsGalois K M] [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M] [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E] [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M] [ContinuousSMul K M] in
+omit [FiniteDimensional K E] [FiniteDimensional E M] [FiniteDimensional K M] [IsGalois K M]
+    [IsGalois E M] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
+    [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E] [ValuativeRel M]
+    [TopologicalSpace M] [IsNonarchimedeanLocalField M] [ValuativeExtension K E]
+    [ValuativeExtension E M] [ValuativeExtension K M] [ContinuousSMul K E] [ContinuousSMul E M]
+    [ContinuousSMul K M] in
 /-- Pointwise defining equation for inclusion on abelianizations. -/
 @[simp] theorem inclusionAb_of (σ : M ≃ₐ[E] M) :
     inclusionAb K E M (Group.Abelianization.of σ) =

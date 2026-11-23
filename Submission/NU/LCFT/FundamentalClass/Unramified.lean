@@ -2598,7 +2598,11 @@ private theorem baseChange_valuation_classes_eq_of_coboundary
   rw [hp]
   abel
 
-omit [IsScalarTower K E W] [IsScalarTower K U W] [IsScalarTower E R W] [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois K U] [IsGalois E R] [IsGalois E W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K U] [ContinuousSMul K W] [ContinuousSMul E R] [ContinuousSMul E W] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [IsScalarTower K E W] [IsScalarTower K U W] [IsScalarTower E R W] [FiniteDimensional K W]
+    [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois K U] [IsGalois E R] [IsGalois E W]
+    [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W]
+    [ContinuousSMul K E] [ContinuousSMul K U] [ContinuousSMul K W] [ContinuousSMul E R]
+    [ContinuousSMul E W] [ContinuousSMul U W] [ContinuousSMul R W] in
 private theorem baseChange_degrees (B : CarryBaseChangeData K E U R W) :
     Module.finrank E W = Module.finrank E R * ramificationIndex K E := by
   let f := residueDegree K E
@@ -2619,7 +2623,10 @@ private theorem baseChange_degrees (B : CarryBaseChangeData K E U R W) :
       _ = _ := by rw [Nat.mul_assoc]
   exact Nat.mul_right_cancel hf hmul
 
-omit [IsScalarTower E R W] [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois E R] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul E R] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [IsScalarTower E R W] [FiniteDimensional K W] [FiniteDimensional U W]
+    [FiniteDimensional R W] [IsGalois E R] [ValuativeExtension K W] [ValuativeExtension U W]
+    [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul E R]
+    [ContinuousSMul U W] [ContinuousSMul R W] in
 omit [IsGalois E W] [ContinuousSMul E W] in
 omit [ContinuousSMul K U] in
 private theorem baseChange_source_valuation_cochain
@@ -2729,7 +2736,10 @@ private theorem baseChange_source_valuation_cochain
       _ = (ramificationIndex K E : ℤ) * (carryExponent m a b : ℤ) := by
         rw [hone, Int.natCast_one, mul_one]
 
-omit [IsScalarTower K E W] [IsScalarTower K U W] [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois K U] [IsGalois E W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K U] [ContinuousSMul K W] [ContinuousSMul E W] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [IsScalarTower K E W] [IsScalarTower K U W] [FiniteDimensional K W] [FiniteDimensional U W]
+    [FiniteDimensional R W] [IsGalois K U] [IsGalois E W] [ValuativeExtension K W]
+    [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K U]
+    [ContinuousSMul K W] [ContinuousSMul E W] [ContinuousSMul U W] [ContinuousSMul R W] in
 omit [ContinuousSMul E R] in
 private theorem baseChange_target_valuation_cochain
     (B : CarryBaseChangeData K E U R W) (πE : Uniformizer E)
@@ -2891,7 +2901,9 @@ private theorem baseChange_target_valuation_cochain
 
 set_option maxHeartbeats 800000 in
 -- The two nested transported cocycle proofs need extra elaboration budget.
-omit [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W]
+    [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W]
+    [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul U W] [ContinuousSMul R W] in
 omit [ContinuousSMul K U] [ContinuousSMul E R] in
 private theorem baseChange_class_eq
     (B : CarryBaseChangeData K E U R W) (πK : Uniformizer K) (πE : Uniformizer E)
@@ -2930,7 +2942,10 @@ private theorem baseChange_class_eq
   exact hsclass.trans
     ((CW.valuation_h2_bijective.1 hval).trans htclass.symm)
 
-omit [IsScalarTower K E W] [IsScalarTower K U W] [IsScalarTower E R W] [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois E W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul E W] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [IsScalarTower K E W] [IsScalarTower K U W] [IsScalarTower E R W] [FiniteDimensional K W]
+    [FiniteDimensional U W] [FiniteDimensional R W] [IsGalois E W] [ValuativeExtension K W]
+    [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W]
+    [ContinuousSMul E W] [ContinuousSMul U W] [ContinuousSMul R W] in
 omit [ContinuousSMul K U] [ContinuousSMul E R] in
 private theorem baseChange_coboundary
     (B : CarryBaseChangeData K E U R W) (πK : Uniformizer K) (πE : Uniformizer E)
@@ -2965,7 +2980,9 @@ private theorem baseChange_coboundary
     hsclass.symm.trans (hclass.trans htclass)
   exact exists_d1_of_cocycleClass_eq (MulRep E W) sC tC hs ht hcoc
 
-omit [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W] [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W] [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul U W] [ContinuousSMul R W] in
+omit [FiniteDimensional K W] [FiniteDimensional U W] [FiniteDimensional R W]
+    [ValuativeExtension K W] [ValuativeExtension U W] [ValuativeExtension R W]
+    [ContinuousSMul K E] [ContinuousSMul K W] [ContinuousSMul U W] [ContinuousSMul R W] in
 omit [ContinuousSMul K U] [ContinuousSMul E R] in
 /--
 **F07**, Proposition `prop:fundamental-restriction` (base-change carry lemma): restriction of the

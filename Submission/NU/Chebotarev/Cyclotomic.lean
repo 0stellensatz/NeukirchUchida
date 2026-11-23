@@ -390,7 +390,9 @@ private theorem algebraNorm_pos_of_pos_at_real {K : Type*} [Field K] [NumberFiel
             ((InfinitePlace.embedding_of_isReal w.2) x : ℂ)) *
           ∏ w : {w : InfinitePlace K // InfinitePlace.IsComplex w},
             (Complex.normSq (w.1.embedding x) : ℂ)).re := hre
-      _ = _ := by rw [hrprod, hcprod]; simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, mul_zero, sub_zero]
+      _ = _ := by
+        rw [hrprod, hcprod]
+        simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, mul_zero, sub_zero]
   apply (Rat.cast_pos (K := ℝ)).mp
   rw [hre']
   exact mul_pos hreal hcomp

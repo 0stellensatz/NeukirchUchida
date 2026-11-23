@@ -461,12 +461,16 @@ private noncomputable def cyclicPeriodicHom
       rintro i j ⟨rfl⟩
       by_cases hi : Even i
       · simp only [Rep.FiniteCyclicGroup.moduleCatCochainComplex,
-          HomologicalComplex.alternatingConst, ite_eq_left (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
+          HomologicalComplex.alternatingConst,
+          ite_eq_left (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte,
+          dite_eq_ite]
         ext x
         change B.ρ g (f.hom x) - f.hom x = f.hom (A.ρ g x - x)
         rw [map_sub, Rep.hom_comm_apply]
       · simp only [Rep.FiniteCyclicGroup.moduleCatCochainComplex,
-          HomologicalComplex.alternatingConst, ite_eq_left (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte, dite_eq_ite]
+          HomologicalComplex.alternatingConst,
+          ite_eq_left (by exact rfl : (ComplexShape.up ℕ).Rel i (i + 1)), hi, ↓reduceIte,
+          dite_eq_ite]
         ext x
         exact Rep.norm_comm_apply f x }
 
@@ -1277,7 +1281,8 @@ private theorem valuationSequence_cyclic_shortExact :
 
 variable [IsCyclic (L ≃ₐ[K] L)]
 
-omit [FiniteDimensional K L] [IsGalois K L] [ValuativeExtension K L] [ContinuousSMul K L] [IsCyclic Gal(L/K)] in
+omit [FiniteDimensional K L] [IsGalois K L] [ValuativeExtension K L] [ContinuousSMul K L]
+    [IsCyclic Gal(L/K)] in
 private theorem deepUnitQuotient_finite (π : Uniformizer K) (D : DeepUnitFiltrationData K L π) :
     Finite ((unitSubgroup L) ⧸ (D.V 0).comap (unitSubgroup L).subtype) := by
   let U := unitSubgroup L

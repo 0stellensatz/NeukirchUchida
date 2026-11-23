@@ -50,7 +50,8 @@ def affineLatticePointEquiv (v : E) (S : Set E) :
     apply Subtype.ext
     simp
 
-omit [NormedSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [DiscreteTopology ↥L] [IsZLattice ℝ L] in
+omit [NormedSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    [DiscreteTopology ↥L] [IsZLattice ℝ L] in
 /-- `affineLatticePointCount` is literally the cardinality of the ambient
 intersection of `S` with the affine lattice `v + L`. -/
 theorem affineLatticePointCount_eq_natCard (v : E) (S : Set E) :

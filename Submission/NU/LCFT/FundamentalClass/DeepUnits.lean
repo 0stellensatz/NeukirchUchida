@@ -1689,7 +1689,8 @@ private def deepRepEquiv :
   right_inv x := by apply Additive.toMul.injective; apply Subtype.ext; rfl
   map_add' _ _ := rfl
 
-omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L]
+    [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem deepRepEquiv_equivariant
     (g : L ≃ₐ[K] L) (x : stableUnitSubgroupRep K L (D.V 0) (D.V_stable 0)) :
     deepRepEquiv K L π D
@@ -1772,7 +1773,8 @@ private def filtrationComap
     rw [map_sub, e.apply_symm_apply]
     exact ha n
 
-omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L]
+    [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem gradeMapData :
     let M := stableUnitSubgroupRep K L (D.V 0) (D.V_stable 0)
     let Ψ := filtrationFromInverseLimit D.within D.within_zero D.within_succ_le
@@ -2041,7 +2043,8 @@ private theorem gradedStepH2
   simp
 
 
-omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L]
+    [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem gradedH1Subsingleton (S : Subgroup (L ≃ₐ[K] L)) [Fintype S] (n : ℕ) :
     Subsingleton (Inhomogeneous.H1 (Rep.res S.subtype (D.gradedRep n))) := by
   let ei := (Rep.resFunctor S.subtype).mapIso (D.gradedInducedIso n)
@@ -2057,7 +2060,8 @@ private theorem gradedH1Subsingleton (S : Subgroup (L ≃ₐ[K] L)) [Fintype S] 
     ⟨fun x y => (ModuleCat.mono_iff_injective ec.inv).1 inferInstance (ht.elim _ _)⟩
   exact ⟨fun x y => (comparisonH1 _).injective (hc.elim _ _)⟩
 
-omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L]
+    [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem gradedH2Subsingleton (S : Subgroup (L ≃ₐ[K] L)) [Fintype S] (n : ℕ) :
     Subsingleton (Inhomogeneous.H2 (Rep.res S.subtype (D.gradedRep n))) := by
   let ei := (Rep.resFunctor S.subtype).mapIso (D.gradedInducedIso n)
@@ -2074,7 +2078,8 @@ private theorem gradedH2Subsingleton (S : Subgroup (L ≃ₐ[K] L)) [Fintype S] 
   exact ⟨fun x y => (comparisonH2 _).injective (hc.elim _ _)⟩
 
 
-omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L] [ValuativeExtension K L] [ContinuousSMul K L] in
+omit [FiniteDimensional K L] [IsGalois K L] [IsNonarchimedeanLocalField L]
+    [ValuativeExtension K L] [ContinuousSMul K L] in
 private theorem assembleDeep (D : DeepUnitFiltrationData K L π) :
     AbstractReciprocity.CohomologicallyTrivial
       (stableUnitSubgroupRep K L (D.V 0) (D.V_stable 0)) := by
