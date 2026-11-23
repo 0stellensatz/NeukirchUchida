@@ -3129,10 +3129,7 @@ private theorem deepUnitFiltration_pPowerTorsion_spec
     have hvpow : w (u : F) ^ N = 1 := by
       simpa only [map_pow, map_one] using congrArg w hpowF
     have hv : w (u : F) = 1 := by
-      first
-        | exact (pow_eq_one_iff hN).mp hvpow
-        | exact (pow_eq_one_iff_of_nonneg zero_le' hN).mp hvpow
-        | exact pow_left_injective₀ zero_le' zero_le' hN (by simpa using hvpow)
+      exact (pow_eq_one_iff.mp hvpow).resolve_right hN
     have huA : u ∈ A.unitGroup := by
       rw [A.mem_unitGroup_iff]
       exact (Valuation.isEquiv_valuation_valuationSubring w).eq_one_iff_eq_one.mp hv

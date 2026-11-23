@@ -11,6 +11,8 @@ by local character-rank recovery.  It can be proved without editing
 `NU.NeukirchUchida.LocalInvariants`.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 open scoped NumberField
 
 namespace NU.NeukirchUchida.Bridges
@@ -79,14 +81,13 @@ private theorem maschkeCyclotomicProjector_translate
   classical
   letI := Fintype.ofFinite Delta
   have hcoeff (d : Delta) :
-      maschkeCyclotomicProjector p hcard chi d =
+      (maschkeCyclotomicProjector p hcard chi).coeff d =
         (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
-          ((chi d)⁻¹ : ZMod (p : ℕ)) := by
-    simpa only [MonoidAlgebra.coeff] using
-      maschkeCyclotomicProjector_coeff p hcard chi d
+          ((chi d)⁻¹ : ZMod (p : ℕ)) :=
+    maschkeCyclotomicProjector_coeff p hcard chi d
   ext delta
-  rw [MonoidAlgebra.single_mul_apply, one_mul, hcoeff,
-    MonoidAlgebra.smul_apply, hcoeff]
+  rw [MonoidAlgebra.coeff_single_mul_apply, one_mul, hcoeff,
+    MonoidAlgebra.coeff_smul, Finsupp.smul_apply, smul_eq_mul, hcoeff]
   change (Nat.card Delta : ZMod (p : ℕ))⁻¹ *
       (↑(chi (gamma⁻¹ * delta)) : ZMod (p : ℕ))⁻¹ =
     (chi gamma : ZMod (p : ℕ)) *
@@ -505,7 +506,8 @@ private theorem localCyclotomic_characterPull_injective
       change c (H.index • Additive.ofMul g) = 0 at hzpow
       rw [map_nsmul, nsmul_eq_mul] at hzpow
       have hindexpos : 0 < H.index := by
-        rw [← IntermediateField.finrank_eq_fixingSubgroup_index E]
+        show 0 < E.fixingSubgroup.index
+        rw [← IntermediateField.finrank_eq_fixingSubgroup_index (E' := AlgebraicClosure F) E]
         exact Module.finrank_pos
       have hcast : ((H.index : ℕ) : ZMod (p : ℕ)) ≠ 0 := by
         intro hz
@@ -1116,8 +1118,7 @@ private theorem pPowerTorsion_finite_of_isClosed
       ((u : F) ^ ((p : ℕ) ^ a)) =
         ValuativeRel.valuation F (1 : F) at hv
     rw [map_pow, map_one] at hv
-    apply pow_left_injective hN
-    simpa using hv
+    exact (pow_eq_one_iff.mp hv).resolve_right hN
   have hcompact : IsCompact (P : Set (Units F)) :=
     IsCompact.of_isClosed_subset (localField_unitSphere_isCompact F)
       hclosed hsubset
@@ -2239,7 +2240,7 @@ private theorem completionCharacter_finrank_via_finiteLevels
       b j (Additive.ofMul u) = 0 := by
     have hz := congrArg
       (fun z : Multiplicative (J → R) => z.toAdd j) hu
-    simpa [unitEval, characterFamilyMonoidHom] using hz
+    exact hz
   have hkill (chi : CU) (u : Units F) (hu : u ∈ N) :
       chi (Additive.ofMul u) = 0 := by
     let ev : CU →+ R :=
