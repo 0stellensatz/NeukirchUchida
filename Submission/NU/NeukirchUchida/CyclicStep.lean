@@ -566,8 +566,8 @@ private theorem absoluteNorm_eq_of_degreeOne
     refine ⟨absoluteRamificationIndex F v, ?_⟩
     rw [Nat.mul_comm]
     exact hdegree.symm
-  have hf' : v.asIdeal.inertiaDeg' (𝓞 ℚ) = 1 := hf
-  have hf'' : q.asIdeal.inertiaDeg v.asIdeal = 1 := by
+  have hf' : v.asIdeal.inertiaDeg (𝓞 ℚ) = 1 := hf
+  have hf'' : q.asIdeal.inertiaDeg' v.asIdeal = 1 := by
     rw [Ideal.inertiaDeg_eq_inertiaDeg' q.asIdeal v.asIdeal]
     exact hf'
   have hnorm := (Ideal.absNorm_eq_pow_inertiaDeg_of_liesOver
@@ -741,7 +741,7 @@ private theorem finitePrimeFrobeniusLiftingConstruction :
     have hunrF : Algebra.IsUnramifiedAt (𝓞 F.field) w'.asIdeal :=
       Algebra.IsUnramifiedAt.of_restrictScalars (𝓞 ℚ) w'.asIdeal
     letI : Algebra.IsUnramifiedAt (𝓞 F.field) w'.asIdeal := hunrF
-    change w'.asIdeal.ramificationIdx' (𝓞 F.field) = 1
+    change w'.asIdeal.ramificationIdx (𝓞 F.field) = 1
     rw [← Ideal.ramificationIdx_eq_ramificationIdx'
       v.asIdeal w'.asIdeal v.ne_bot]
     have hu := (Algebra.isUnramifiedAt_iff_of_isDedekindDomain

@@ -232,12 +232,12 @@ noncomputable def rationalPrime
 /-- The ramification index of a finite prime over its rational prime. -/
 noncomputable def absoluteRamificationIndex
     (F : NumberFieldInOmega) (v : NU.LocalTheory.FinitePlace F.field) : ℕ :=
-  v.asIdeal.ramificationIdx' (NumberField.RingOfIntegers ℚ)
+  v.asIdeal.ramificationIdx (NumberField.RingOfIntegers ℚ)
 
 /-- The residue degree of a finite prime over its rational prime. -/
 noncomputable def absoluteResidueDegree
     (F : NumberFieldInOmega) (v : NU.LocalTheory.FinitePlace F.field) : ℕ :=
-  v.asIdeal.inertiaDeg' (NumberField.RingOfIntegers ℚ)
+  v.asIdeal.inertiaDeg (NumberField.RingOfIntegers ℚ)
 
 /-- The absolute local degree `e(v/q) f(v/q)`. -/
 noncomputable def absoluteLocalDegree

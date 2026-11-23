@@ -945,7 +945,7 @@ private theorem cyclotomicWeberAlongOneContinuation {K G : Type*} [Field K] [Num
     intro c hc
     rw [hFeq c s hs]
     simp
-  · have hsum := tendsto_finset_sum Finset.univ (fun c _ => hFres c)
+  · have hsum := tendsto_finsetSum Finset.univ (fun c _ => hFres c)
     convert hsum using 1
     · funext s
       dsimp [W]
@@ -1100,7 +1100,7 @@ private theorem cyclotomicWeberOneContinuation {K : Type*} [Field K] [NumberFiel
     apply Finset.sum_congr rfl
     intro c hc
     rw [hFeq c s hs, MulChar.one_apply (Group.isUnit c), one_mul]
-  · have hsum := tendsto_finset_sum Finset.univ (fun c _ => hFres c)
+  · have hsum := tendsto_finsetSum Finset.univ (fun c _ => hFres c)
     convert hsum using 1
     · funext s
       dsimp [W]
@@ -1399,7 +1399,7 @@ private theorem cyclotomicLocalEulerFactor
       exact cyclotomicIdealMap_on_prime
         (M := M) (F := F) n m hn hmod hram p hp c hc Q₀ hQ₀p
     have haorder : orderOf a =
-        (Q₀.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg Q₀.asIdeal := by
+        (Q₀.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' Q₀.asIdeal := by
       rw [← arithFrobAt_order_eq_inertiaDeg Q₀ hQ₀unr, ← ha]
       exact (orderOf_injective A.subtype A.subtype_injective a).symm
     let B := Subgroup.zpowers a

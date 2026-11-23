@@ -20,29 +20,6 @@ open CategoryTheory CategoryTheory.Limits
 
 universe u v w
 
-/-- Compatibility shim for the restriction exactness API added after the pinned Mathlib commit. -/
-lemma _root_.Rep.shortExact_res
-    {H G : Type} [Group H] [Group G] (φ : H →* G)
-    {X : ShortComplex (Rep ℤ G)} :
-    (X.map (Rep.resFunctor φ)).ShortExact ↔ X.ShortExact := by
-  constructor
-  · intro h
-    have h₁ := h.1
-    have h₂ := h.2
-    have h₃ := h.3
-    rw [ShortComplex.exact_map_iff_of_faithful] at h₁
-    simp only [ShortComplex.map_f, Rep.mono_iff_injective, ShortComplex.map_g,
-      Rep.epi_iff_surjective] at h₂ h₃
-    exact { exact := h₁
-            mono_f := (Rep.mono_iff_injective _).2 h₂
-            epi_g := (Rep.epi_iff_surjective _).2 h₃ }
-  · rintro @⟨_, mono_f, epi_g⟩
-    exact {
-      exact := by rwa [ShortComplex.exact_map_iff_of_faithful]
-      mono_f := by simpa [Rep.mono_iff_injective] using! mono_f
-      epi_g := by simpa [Rep.epi_iff_surjective] using! epi_g
-    }
-
 private noncomputable def precompLinearYonedaObj
     {k : Type u} {C : Type v} [Ring k] [Category C] [Abelian C] [Linear k C]
     {P Q : ChainComplex C ℕ} (q : P ⟶ Q) (A : C) :

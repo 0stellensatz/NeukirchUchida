@@ -168,7 +168,6 @@ theorem ideal_linear_bound :
         a ≠ 0 ∧ (Ideal.absNorm a : ℝ) ≤ x} : ℝ) ≤
         Nat.card {I : Ideal (NumberField.RingOfIntegers K) //
           (Ideal.absNorm I : ℝ) ≤ x} := by exact_mod_cast hsub
-    norm_cast
     exact (hsubR.trans hall.le).trans (by
       have hN : 0 ≤ N := Nat.cast_nonneg _
       nlinarith)
@@ -192,7 +191,6 @@ theorem ideal_linear_bound :
       change _ ≤ (Nat.card {I : Ideal (NumberField.RingOfIntegers K) //
         (Ideal.absNorm I : ℝ) ≤ t} : ℝ)
       exact_mod_cast hsub
-    norm_cast
     exact hsubR.trans (by
       have hN : 0 ≤ N := Nat.cast_nonneg _
       nlinarith)
@@ -293,7 +291,7 @@ theorem PrimeIdeal.norm_pow_inertiaDeg
     (q : PrimeIdeal E) (p : PrimeIdeal K)
     (hqp : q.asIdeal.LiesOver p.asIdeal) :
     PrimeIdeal.norm q = PrimeIdeal.norm p ^
-      p.asIdeal.inertiaDeg q.asIdeal := by
+      p.asIdeal.inertiaDeg' q.asIdeal := by
   letI : q.asIdeal.LiesOver p.asIdeal := hqp
   exact Ideal.absNorm_eq_pow_inertiaDeg_of_liesOver q.asIdeal p.asIdeal
     (inferInstance : p.asIdeal.IsPrime) p.ne_bot
@@ -308,7 +306,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
       (fun x : ℝ =>
         (primeCounting
           {q : PrimeIdeal E |
-            2 ≤ (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg q.asIdeal} x : ℝ))
+            2 ≤ (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal} x : ℝ))
       (fun x : ℝ => Real.sqrt x) := by
   classical
   let contract : PrimeIdeal E → PrimeIdeal K := fun q =>
@@ -324,7 +322,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
   rw [Real.norm_eq_abs, abs_of_nonneg (Nat.cast_nonneg _), Real.norm_eq_abs,
     abs_of_nonneg (Real.sqrt_nonneg _)]
   let Q : Set (PrimeIdeal E) := {q |
-      2 ≤ (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg q.asIdeal ∧
+      2 ≤ (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal ∧
         (PrimeIdeal.norm q : ℝ) ≤ x}
   let P : Set (PrimeIdeal K) := {p | (PrimeIdeal.norm p : ℝ) ≤ Real.sqrt x}
   have hQfin : Q.Finite := by
@@ -354,7 +352,7 @@ theorem PrimeIdeal.count_residueDegree_ge_two
       Nat.one_le_iff_ne_zero.mpr ((Ideal.absNorm_eq_zero_iff).not.mpr (contract q).ne_bot)
     have hpows : PrimeIdeal.norm (contract q) ^ 2 ≤
         PrimeIdeal.norm (contract q) ^
-          (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg q.asIdeal :=
+          (q.asIdeal.under (NumberField.RingOfIntegers K)).inertiaDeg' q.asIdeal :=
       Nat.pow_le_pow_right (Nat.zero_lt_of_lt hone) hq.1
     apply (Real.le_sqrt (Nat.cast_nonneg _) (by linarith : 0 ≤ x)).2
     rw [← Nat.cast_pow]
@@ -473,7 +471,7 @@ theorem finite_primeSet_hasDirichletDensity_zero
   have hnum : Tendsto (fun s : ℝ => dirichletPrimeSum S s)
       (𝓝[>] (1 : ℝ))
       (𝓝 (∑ p ∈ t, if p ∈ S then Real.rpow (PrimeIdeal.norm p : ℝ) (-1) else 0)) := by
-    apply (tendsto_finset_sum t fun p _ => hterm p).congr'
+    apply (tendsto_finsetSum t fun p _ => hterm p).congr'
     filter_upwards with s
     simp_rw [hsum s]
   unfold HasDirichletDensity

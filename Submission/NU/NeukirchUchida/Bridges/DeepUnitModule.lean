@@ -32,8 +32,8 @@ instance natPrimesFact (p : Nat.Primes) : Fact (p : ℕ).Prime :=
 noncomputable def finitePlaceLocalDegree
     {K : Type*} [Field K] [NumberField K]
     (v : NU.LocalTheory.FinitePlace K) : ℕ :=
-  v.asIdeal.ramificationIdx' (NumberField.RingOfIntegers ℚ) *
-    v.asIdeal.inertiaDeg' (NumberField.RingOfIntegers ℚ)
+  v.asIdeal.ramificationIdx (NumberField.RingOfIntegers ℚ) *
+    v.asIdeal.inertiaDeg (NumberField.RingOfIntegers ℚ)
 
 /-- Density identifies the residue field of a number-field completion with
 the residue field at the original finite prime. -/
@@ -350,18 +350,18 @@ private theorem residueCharacteristic_coprime_norm_sub_one
   letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hnorm : NU.Chebotarev.PrimeIdeal.norm v =
       NU.Chebotarev.PrimeIdeal.norm q ^
-        q.asIdeal.inertiaDeg v.asIdeal := by
+        q.asIdeal.inertiaDeg' v.asIdeal := by
     exact NU.Chebotarev.PrimeIdeal.norm_pow_inertiaDeg
       v q inferInstance
   have hq : NU.Chebotarev.PrimeIdeal.norm q =
       NU.LocalTheory.residueCharacteristic v := by
     rw [← rational_residueCharacteristic_eq_norm,
       residueCharacteristic_restrictFinitePlace]
-  have hf : 0 < q.asIdeal.inertiaDeg v.asIdeal :=
-    Ideal.inertiaDeg_pos q.asIdeal v.asIdeal
+  have hf : 0 < q.asIdeal.inertiaDeg' v.asIdeal :=
+    Ideal.inertiaDeg'_pos q.asIdeal v.asIdeal
   rw [hnorm, hq, ← hp]
-  have hpow : ((p : ℕ) ^ q.asIdeal.inertiaDeg v.asIdeal).Coprime
-      ((p : ℕ) ^ q.asIdeal.inertiaDeg v.asIdeal - 1) :=
+  have hpow : ((p : ℕ) ^ q.asIdeal.inertiaDeg' v.asIdeal).Coprime
+      ((p : ℕ) ^ q.asIdeal.inertiaDeg' v.asIdeal - 1) :=
     (Nat.coprime_self_sub_right (pow_pos p.2.pos _)).2
       (Nat.coprime_one_right _)
   exact (Nat.coprime_pow_left_iff hf _ _).mp hpow
@@ -672,12 +672,12 @@ private theorem rationalCompletion_finrank_eq_localDegree
   have hlocalCard :=
     Module.natCard_eq_pow_finrank (K := A ⧸ pA) (V := B ⧸ pB)
   have hlocalPow : NU.Chebotarev.PrimeIdeal.norm q ^
-        pA.inertiaDeg pB = NU.Chebotarev.PrimeIdeal.norm v := by
+        pA.inertiaDeg' pB = NU.Chebotarev.PrimeIdeal.norm v := by
     rw [← hcardA, ← hcardB, Ideal.inertiaDeg_algebraMap]
     exact hlocalCard.symm
   letI : v.asIdeal.LiesOver q.asIdeal := ⟨rfl⟩
   have hglobalPow : NU.Chebotarev.PrimeIdeal.norm q ^
-        q.asIdeal.inertiaDeg v.asIdeal =
+        q.asIdeal.inertiaDeg' v.asIdeal =
       NU.Chebotarev.PrimeIdeal.norm v := by
     exact (NU.Chebotarev.PrimeIdeal.norm_pow_inertiaDeg
       v q inferInstance).symm
@@ -689,8 +689,8 @@ private theorem rationalCompletion_finrank_eq_localDegree
         (rational_residueCharacteristic_eq_norm q).symm
       _ = NU.LocalTheory.residueCharacteristic v :=
         residueCharacteristic_restrictFinitePlace ℚ v
-  have hinertia : pA.inertiaDeg pB =
-      q.asIdeal.inertiaDeg v.asIdeal := by
+  have hinertia : pA.inertiaDeg' pB =
+      q.asIdeal.inertiaDeg' v.asIdeal := by
     apply Nat.pow_right_injective
       (show 2 ≤ NU.Chebotarev.PrimeIdeal.norm q by
         rw [← rational_residueCharacteristic_eq_norm,
@@ -765,9 +765,9 @@ private theorem rationalCompletion_finrank_eq_localDegree
     rw [map_zero, show vFb (πA : Fb) = WithZero.exp (-1 : ℤ) from hπFb]
       at hz
     exact WithZero.exp_ne_zero hz
-  have hramification : pA.ramificationIdx pB =
-      q.asIdeal.ramificationIdx v.asIdeal := by
-    let e := q.asIdeal.ramificationIdx v.asIdeal
+  have hramification : pA.ramificationIdx' pB =
+      q.asIdeal.ramificationIdx' v.asIdeal := by
+    let e := q.asIdeal.ramificationIdx' v.asIdeal
     let mπ : B := algebraMap A B πA
     have hmπF : (mπ : F) = rationalCompletionMap v πFb := by
       change ((algebraMap A B πA : B) : F) = _

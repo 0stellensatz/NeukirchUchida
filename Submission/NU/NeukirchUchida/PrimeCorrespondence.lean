@@ -1139,12 +1139,12 @@ theorem degreeOne_iff_rationalDecompositionGroup_le
   let Dq := MulAction.stabilizer (N.field ≃ₐ[ℚ] N.field) w.asIdeal
   let Df := MulAction.stabilizer (N.field ≃ₐ[F.field] N.field) w.asIdeal
   have he : absoluteRamificationIndex F v =
-      v.asIdeal.ramificationIdx' (NumberField.RingOfIntegers ℚ) := rfl
+      v.asIdeal.ramificationIdx (NumberField.RingOfIntegers ℚ) := rfl
   have hf : absoluteResidueDegree F v =
-      v.asIdeal.inertiaDeg' (NumberField.RingOfIntegers ℚ) := rfl
+      v.asIdeal.inertiaDeg (NumberField.RingOfIntegers ℚ) := rfl
   have hcardq : Nat.card Dq =
-      w.asIdeal.ramificationIdx' (NumberField.RingOfIntegers ℚ) *
-        w.asIdeal.inertiaDeg' (NumberField.RingOfIntegers ℚ) := by
+      w.asIdeal.ramificationIdx (NumberField.RingOfIntegers ℚ) *
+        w.asIdeal.inertiaDeg (NumberField.RingOfIntegers ℚ) := by
     calc
       Nat.card Dq = q.asIdeal.ramificationIdxIn
           (NumberField.RingOfIntegers N.field) *
@@ -1156,8 +1156,8 @@ theorem degreeOne_iff_rationalDecompositionGroup_le
           Ideal.inertiaDegIn_eq_inertiaDeg q.asIdeal w.asIdeal
             (N.field ≃ₐ[ℚ] N.field)]
   have hcardf : Nat.card Df =
-      w.asIdeal.ramificationIdx' (NumberField.RingOfIntegers F.field) *
-        w.asIdeal.inertiaDeg' (NumberField.RingOfIntegers F.field) := by
+      w.asIdeal.ramificationIdx (NumberField.RingOfIntegers F.field) *
+        w.asIdeal.inertiaDeg (NumberField.RingOfIntegers F.field) := by
     calc
       Nat.card Df = v.asIdeal.ramificationIdxIn
           (NumberField.RingOfIntegers N.field) *
