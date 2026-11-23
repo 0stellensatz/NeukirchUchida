@@ -1,4 +1,5 @@
 import Submission.NU.LocalTheory.FiniteLevel.Recover
+import Submission.NU.Compat
 
 /-!
 # Finite witnesses in a cofinal Galois system
@@ -9,6 +10,8 @@ over the finite ramification locus; hence all witness sets above the anchor
 are finite.  It ends with the compactness theorem for finite inverse systems,
 without a surjectivity hypothesis.
 -/
+
+set_option backward.isDefEq.respectTransparency false
 
 open IsDedekindDomain
 open scoped NumberField
@@ -214,7 +217,7 @@ theorem noncyclic_decompositionGroup_ramified
     rw [Ideal.ramificationIdx_eq_ramificationIdx'
       (w.asIdeal.under (𝓞 K)) w.asIdeal
       (Ideal.under_ne_bot (𝓞 K) w.ne_bot)]
-    exact Ideal.ramificationIdx'_pos w.asIdeal (𝓞 K)
+    exact Ideal.ramificationIdx_pos (q := w.asIdeal) (𝓞 K)
   let G := L ≃ₐ[K] L
   let R := 𝓞 K
   let S := 𝓞 L
@@ -341,7 +344,7 @@ theorem restrictLevelPlace_mem_finiteWitnesses
           _ = ((absoluteRestriction M g
                 (algebraMap L.field M.field x) : M.field) :
                   AlgebraicClosure K) := hr'
-          _ = (by exact g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+          _ = (show AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K from g)
                 (x : AlgebraicClosure K) := by
             rw [absoluteRestriction_apply]
             rfl

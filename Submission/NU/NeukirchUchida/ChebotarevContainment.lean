@@ -1,4 +1,5 @@
 import Submission.NU.NeukirchUchida.PrimeCorrespondence
+import Submission.NU.Compat
 
 /-!
 # Chebotarev containment and normal-field rigidity

@@ -3,6 +3,7 @@ import Mathlib.GroupTheory.SchurZassenhaus
 import Mathlib.NumberTheory.KummerDedekind
 import Mathlib.NumberTheory.RamificationInertia.Valuation
 import Mathlib.Algebra.Polynomial.FieldDivision
+import Submission.NU.Compat
 
 /-!
 # The regular-kernel auxiliary extension
@@ -4486,7 +4487,7 @@ private theorem transportRadicalRamificationToDescent
     · exact Or.inr hx⟩
   refine ⟨w, hwv, ?_⟩
   have hewpos : 0 < w.asIdeal.ramificationIdx (𝓞 N.field) :=
-    Ideal.ramificationIdx'_pos w.asIdeal (𝓞 N.field)
+    Ideal.ramificationIdx_pos (q := w.asIdeal) (𝓞 N.field)
   by_contra hnotRamified
   have hewle : w.asIdeal.ramificationIdx (𝓞 N.field) ≤ 1 :=
     Nat.le_of_not_gt hnotRamified
@@ -5920,7 +5921,7 @@ private theorem regularRawFactorEvaluation_surjective
     have heTower := Ideal.ramificationIdx'_tower'
       (R := 𝓞 N.field) w.asIdeal W.asIdeal
     have hrelativePos : 0 < W.asIdeal.ramificationIdx (𝓞 F) :=
-      Ideal.ramificationIdx'_pos W.asIdeal (𝓞 F)
+      Ideal.ramificationIdx_pos (q := W.asIdeal) (𝓞 F)
     have hWram : 1 < W.asIdeal.ramificationIdx (𝓞 N.field) := by
       rw [heTower]
       exact Nat.lt_of_lt_of_le hwram

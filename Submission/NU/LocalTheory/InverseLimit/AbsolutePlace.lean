@@ -8,6 +8,8 @@ fixed algebraic closure.  Absolute decomposition groups are stabilizers of
 that valuation subring.  The terminal theorem is Blueprint Theorem 8.7.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 open scoped NumberField Pointwise
 
 namespace NU.LocalTheory
@@ -1138,14 +1140,14 @@ private theorem exists_local_klein_level
       exact he
     have hπw : w.valuation E (algebraMap K E πK) =
         WithZero.exp (-1 : ℤ) := by
-      rw [he', pow_one, hπK] at hlie
+      rw [he, pow_one, hπK] at hlie
       exact hlie.symm
     have hαval : (w.valuation E αE) ^ 2 = WithZero.exp (-1 : ℤ) := by
       rw [← hπw, ← hαE]
       exact (map_pow (w.valuation E) αE 2).symm
     exact square_ne_exp_neg_one (w.valuation E αE) hαval
   have he_pos : 0 < w.asIdeal.ramificationIdx (𝓞 K) :=
-    Ideal.ramificationIdx'_pos w.asIdeal (𝓞 K)
+    Ideal.ramificationIdx_pos (q := w.asIdeal) (𝓞 K)
   have he : 2 ≤ w.asIdeal.ramificationIdx (𝓞 K) := by
     omega
   let βE : E :=

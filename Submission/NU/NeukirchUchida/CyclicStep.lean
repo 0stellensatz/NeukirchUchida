@@ -1,4 +1,5 @@
 import Submission.NU.NeukirchUchida.RegularKernel
+import Submission.NU.Compat
 
 /-!
 # The cyclic finite-quotient step

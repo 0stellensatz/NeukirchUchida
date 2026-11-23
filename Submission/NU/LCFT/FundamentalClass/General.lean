@@ -11,6 +11,8 @@ restriction, and the injective descent map.  Thus the descent and functoriality 
 be witnessed by zero or otherwise unrelated homomorphisms.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace NU.LCFT
 
 noncomputable section
@@ -1035,7 +1037,7 @@ private theorem transportedH2_comp
 /-- The tautological valuative extension used for the degree-one carry class. -/
 private theorem selfValuativeExtension
     (F : Type) [Field F] [ValuativeRel F] : ValuativeExtension F F :=
-  ⟨fun _ _ => Iff.rfl⟩
+  ⟨Iff.rfl⟩
 
 private theorem self_ramificationIndex
     (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
@@ -3166,9 +3168,9 @@ private theorem unramifiedSourceClass_transport
     (he : ∀ x : U₁, algebraMap U₁ U₂ x = e x) :
     transportedH2 (envelopeConjHom K U₁ U₂ e)
       (envelopeConjCoefficient K U₁ U₂ e) C₁.class = C₂.class := by
-  letI : ValuativeExtension K K := ⟨fun _ _ => Iff.rfl⟩
+  letI : ValuativeExtension K K := ⟨Iff.rfl⟩
   letI : ContinuousSMul K K := inferInstance
-  letI : ValuativeExtension U₂ U₂ := ⟨fun _ _ => Iff.rfl⟩
+  letI : ValuativeExtension U₂ U₂ := ⟨Iff.rfl⟩
   letI : ContinuousSMul U₂ U₂ := inferInstance
   letI : IsScalarTower K K U₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl
   letI : IsScalarTower K U₂ U₂ := IsScalarTower.of_algebraMap_eq fun _ => rfl

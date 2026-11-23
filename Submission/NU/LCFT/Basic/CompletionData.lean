@@ -2281,7 +2281,7 @@ private theorem finiteReciprocity_fundamentalClass_eq_unramifiedClass
     (D : UnramifiedCyclicExtensionData K L) (π : Uniformizer K)
     (C : UnramifiedClassData K L D π) :
     fundamentalClassValue K L = C.class := by
-  letI veLL : ValuativeExtension L L := ⟨fun _ _ => Iff.rfl⟩
+  letI veLL : ValuativeExtension L L := ⟨Iff.rfl⟩
   letI csLL : ContinuousSMul L L := inferInstance
   letI stKLL : IsScalarTower K L L :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl

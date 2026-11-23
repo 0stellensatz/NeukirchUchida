@@ -11,6 +11,8 @@ pinned group homomorphisms and coefficient morphisms and are transported through
 `comparisonH2` layer.
 -/
 
+set_option backward.isDefEq.respectTransparency false
+
 namespace NU.LCFT
 
 noncomputable section
@@ -624,8 +626,8 @@ private theorem carryCocycle_mem
         carryExponent n r (s + t) - carryExponent n r s = 0 := by omega
     simp only [Inhomogeneous.d2, carryCocycle, AddMonoidHom.coe_mk,
       ZeroHom.coe_mk, Pi.zero_apply, map_mul, hmul]
-    change (by exact ((MulRep K L).ρ σ)
-          (if carryExponent n s t = 0 then (0 : Additive (Units L)) else u) : Additive (Units L)) -
+    change (show Additive (Units L) from ((MulRep K L).ρ σ)
+          (if carryExponent n s t = 0 then (0 : Additive (Units L)) else u)) -
         (if carryExponent n (r + s) t = 0 then 0 else u) +
         (if carryExponent n r (s + t) = 0 then 0 else u) -
         (if carryExponent n r s = 0 then 0 else u) = 0
@@ -645,7 +647,7 @@ private theorem carryCocycle_mem
       · rw [if_pos h]
         calc
           _ = 0 := ((MulRep K L).ρ σ).map_zero
-          _ = (carryExponent n s t : ℤ) • u := by rw [h]; simp; rfl
+          _ = (carryExponent n s t : ℤ) • u := by rw [h]; simp
       · have hle : carryExponent n s t ≤ 1 := by
           simp only [carryExponent]
           split_ifs <;> omega
@@ -2064,7 +2066,7 @@ theorem unramifiedCarryTowerData_exists
     constructor
     · change AlgEquiv.restrictNormalHom L total.frobenius = lower.frobenius
       exact arithmeticFrobenius_restrict lower total
-    · letI : ValuativeExtension M M := ⟨fun _ _ => by rfl⟩
+    · letI : ValuativeExtension M M := ⟨Iff.rfl⟩
       have hsub := arithmeticFrobenius_baseChange
         (K := K) (E := L) (U := M) (W := M) total upper
       have hresLower : residueDegree K L = Module.finrank K L := by
@@ -2213,18 +2215,18 @@ private theorem carryCocycle_inflation_cochain
           (T.lower.frobeniusEquiv.symm (T.quotientHom τ)).toAdd = 0 then 0
         else Additive.ofMul (Units.map (algebraMap K L) π.val)) =
     (d : ℤ) • (if carryExponent N r s = 0 then 0 else u) +
-      ((by exact (MulRep K M).ρ σ (b τ) : Additive (Units M)) -
-        (by exact b (σ * τ) : Additive (Units M)) +
-        (by exact b σ : Additive (Units M)))
+      ((show Additive (Units M) from (MulRep K M).ρ σ (b τ)) -
+        (show Additive (Units M) from b (σ * τ)) +
+        (show Additive (Units M) from b σ))
   rw [hcoord, hcoord]
   change T.inflationCoefficient.hom
       (if carryExponent n (r.val : ℕ) (s.val : ℕ) = 0 then
         (0 : Additive (Units L))
       else Additive.ofMul (Units.map (algebraMap K L) π.val)) =
     (d : ℤ) • (if carryExponent N r s = 0 then (0 : Additive (Units M)) else u) +
-      ((by exact (MulRep K M).ρ σ (b τ) : Additive (Units M)) -
-        (by exact b (σ * τ) : Additive (Units M)) +
-        (by exact b σ : Additive (Units M)))
+      ((show Additive (Units M) from (MulRep K M).ρ σ (b τ)) -
+        (show Additive (Units M) from b (σ * τ)) +
+        (show Additive (Units M) from b σ))
   have hcoeff : T.inflationCoefficient.hom
       (Additive.ofMul (Units.map (algebraMap K L) π.val)) = u := by
     apply Additive.toMul.injective
@@ -2257,7 +2259,7 @@ private theorem carryCocycle_inflation_cochain
     calc
       _ = -((s.val / n : ℕ) : ℤ) • ((MulRep K M).ρ σ u) :=
         map_zsmul ((MulRep K M).ρ σ) _ u
-      _ = _ := by rw [hu]; rfl
+      _ = _ := by rw [hu]
   rw [hmap, hind _ u hle1, hind _ u hle2, hact]
   dsimp only [b]
   rw [hsumcoord]
@@ -2360,7 +2362,6 @@ private theorem carryCocycle_restriction_cochain
   rw [hcoord, hcoord, hcarry]
   by_cases h : carryExponent m r s = 0
   · rw [if_pos h, if_pos h, map_zero]
-    rfl
   · rw [if_neg h, if_neg h, T.restrictionCoefficient_apply]
     apply Additive.toMul.injective
     exact hunit
