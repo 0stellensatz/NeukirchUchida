@@ -1901,7 +1901,7 @@ theorem finite_reconstruction
       orientation L p hp
 
 /-- Exact one-prime specialization used by marked-level correctness
-(`cofinal_descent_orientation_free.tex`, `prop:marked-correct`).  If the
+(blueprint `prop:marked-correct`).  If the
 finite level lies below the marked kernel, its marked group is `G_L` itself.
 The proof specializes the existing cyclotomic comparison, packet theorem,
 stabilizer identification, and tower-surjectivity interfaces; it introduces

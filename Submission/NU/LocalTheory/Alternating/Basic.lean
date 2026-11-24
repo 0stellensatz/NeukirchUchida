@@ -8,8 +8,7 @@ the multiplicative mod-`ℓ` quotient, its additive characters, annihilators,
 the alternating determinant relation, and the two valuation subspaces
 `𝔇_v^ℓ` and `𝕀_v^ℓ`.
 
-Only Mathlib and `NU.AEJ` are imported, as required by the campaign trust
-contract.
+Only Mathlib and `NU.AEJ` are imported.
 -/
 
 open scoped Pointwise

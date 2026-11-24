@@ -163,7 +163,7 @@ theorem lemma_3_1 (T H : Set F) (hT : IsMulSubgroup T)
     subst d
     exact hΔ.one_mem
 
--- TODO(value-group quotient): Mathlib v4.32.0 has no convex-subgroup quotient
+-- Implementation note: Mathlib has no convex-subgroup quotient
 -- or coarsening/composite-valuation correspondence.  The next statement uses
 -- the equivalent overring characterization: the units of the coarsening have
 -- exactly the greatest convex value subgroup contained in `v_A(H)`.

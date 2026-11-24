@@ -5,8 +5,8 @@ import Submission.NU.LocalTheory.ValuationConjugacy
 /-!
 # Orientation-free recovery by cofinal descent
 
-This module implements the bare terminal layer of
-`cofinal_descent_orientation_free.tex`, version 3.  The predicate at a level
+This module implements the bare terminal layer of the orientation-free
+cofinal-descent blueprint.  The predicate at a level
 uses only the elementary quotient of that level, packets, and conjugation.
 Cyclotomic kernels occur only later, in arithmetic correctness proofs after
 cofinal descent; they are not data of `bareCrit`, `bareRecoveredAtPrime`, or
@@ -3187,7 +3187,7 @@ private theorem henselianBridge_unique_valuationSubring_extension
 
 /-- Residual representation bridge: a nontrivial Henselian valuation ring on
 an algebraic extension of `ℚ` admits a normalized real-valued presentation.
-This is the sole fallback obligation in the arithmetic tail. -/
+-/
 private theorem exists_henselian_realValuation_of_subring
     {Ω : Type*} [Field Ω] [Algebra ℚ Ω]
     [Algebra.IsAlgebraic ℚ Ω] [IsAlgClosed Ω]
@@ -3278,8 +3278,7 @@ private theorem exists_henselian_realValuation_of_subring
     wB w (algebraMap Z E π) ((map_ne_zero (algebraMap Z E)).2 hπ0)
     hring.symm (hwBπ.trans hwπ.symm) horder).symm
 
-/-- **F. K. Schmidt, exact consumed form**
-(`fk_schmidt_two_henselian_valuations.tex`, `cor:consumed`).
+/-- **F. K. Schmidt, in the form used here** (blueprint `cor:consumed`).
 
 If `Z` is a subfield of an algebraic closure `Ω` of `ℚ` and its absolute
 Galois group `G_Z` is nontrivial, then `Z` cannot carry two inequivalent
@@ -3287,8 +3286,7 @@ nontrivial nonarchimedean valuations for which it is Henselian.
 
 A `ValuationSubring` is the valuation-ring presentation of a
 nonarchimedean valuation; inequivalence is therefore literal inequality.
-This named obligation is intentionally ready to move unchanged to the
-independent `FKSchmidt.lean` development. -/
+It is deduced from the F. K. Schmidt theorem proved in `FKSchmidt.lean`. -/
 theorem fkSchmidt_two_henselian_valuations
     {Ω : Type*} [Field Ω] [Algebra ℚ Ω]
     [Algebra.IsAlgebraic ℚ Ω] [IsAlgClosed Ω]
@@ -3314,7 +3312,7 @@ theorem fkSchmidt_two_henselian_valuations
 /-- Distinct absolute finite places have distinct decomposition groups.
 The proof passes to their common decomposition field.  Equality of the
 restricted places contradicts unique prolongation; inequality supplies the
-two valuations in the exact consumed F. K. Schmidt theorem. -/
+two valuations in the F. K. Schmidt theorem. -/
 theorem absoluteDecompositionGroup_ne_of_ne
     (K : Type*) [Field K] [NumberField K]
     (P Q : ValuationSubring (AlgebraicClosure K))
@@ -3667,7 +3665,7 @@ private theorem primeValuationSubring_comap_restrict
 /-- Finite-place status in a common algebraic closure is unchanged after a
 finite extension of number-field bases.  This is the lying-over/restriction
 adapter used when downstream represents every absolute prime over `ℚ`.
-See `cofinal_descent_orientation_free.tex`, `cor:L1`. -/
+Blueprint `cor:L1`. -/
 theorem isAbsoluteFinitePlaceIn_iff_of_finite_extension
     (K L Ω : Type*) [Field K] [NumberField K]
     [Field L] [NumberField L] [Field Ω]
@@ -3725,7 +3723,7 @@ theorem ambientAbsoluteFinitePlaceRebaseEquiv_val
 
 /-- Direct common-ambient adapter: an absolute place over `L` is transported
 to `Ω` and then viewed over the lower number field `K`.  With `K = ℚ`, this
-is the place equivalence required by the NU campaign's `AbsolutePrime`. -/
+is the place equivalence used by `NU.NeukirchUchida.AbsolutePrime`. -/
 noncomputable def ambientAbsoluteFinitePlaceEquivOfFiniteExtension
     (K L Ω : Type*) [Field K] [NumberField K]
     [Field L] [NumberField L] [Field Ω]
@@ -3797,7 +3795,7 @@ def ambientDecompositionGroup
 
 /-- Transport of absolute decomposition groups to a common ambient closure.
 The compatibility equation is exactly the defining equation provided by a
-closure/Galois-group comparison such as the NU campaign's
+closure/Galois-group comparison such as
 `ambientClosureEquiv` and `ambientAbsoluteGaloisEquiv_spec`. -/
 theorem map_absoluteDecompositionGroup_ambient
     {K Ω G : Type*} [Field K] [NumberField K]
@@ -3910,8 +3908,8 @@ theorem ambientAbsoluteFinitePlaceEquiv_conjugate_val
   rfl
 
 /-- Direct decomposition-group wrapper for the common-ambient/lower-base
-adapter.  Taking the lower base to be `ℚ` matches the NU campaign's ambient
-`AbsolutePrime` representation. -/
+adapter.  Taking the lower base to be `ℚ` matches the ambient
+`NU.NeukirchUchida.AbsolutePrime` representation. -/
 theorem map_absoluteDecompositionGroup_ambientOfFiniteExtension
     (K L Ω G : Type*) [Field K] [NumberField K]
     [Field L] [NumberField L] [Field Ω]

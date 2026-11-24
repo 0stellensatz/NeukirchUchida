@@ -4,11 +4,15 @@ import Mathlib.RingTheory.RootsOfUnity.AlgebraicallyClosed
 import Mathlib.RingTheory.ZMod.UnitsCyclic
 
 /-!
-# Maschke descent after adjoining roots of unity
+# Local character ranks (Maschke descent)
 
-This standalone bridge exposes the inflation--restriction/Maschke input used
-by local character-rank recovery.  It can be proved without editing
-`NU.NeukirchUchida.LocalInvariants`.
+This file proves the local character-rank formula used by local invariant
+recovery: for a finite place `v` above `p`, the continuous mod-`p` characters
+of the absolute Galois group of the completion `K_v` form a space of dimension
+`1 + [K_v : ℚ_p] + δ`, where `δ = 1` exactly when `μ_p ⊂ K_v`
+(`completionCharacterRank_maschkeDescent`).  The rank is computed from the
+structure of the local unit group and finite local Artin maps, by descent
+from `K_v(μ_p)` when `μ_p ⊄ K_v`.
 -/
 
 set_option backward.isDefEq.respectTransparency false
@@ -2368,16 +2372,13 @@ structure RootAbsentMaschkeDescentData
     Module.finrank (ZMod (p : ℕ)) eigenspace = rank
 
 /-- **Root-absent inflation--restriction/Maschke bridge (Blueprint
-`lem:dim-at`; nu-inv12 blocker report: "the Maschke/normal-basis calculation
-after quotienting p-power torsion and adjoining mu_p").**  If `F` does not
+`lem:dim-at`).**  If `F` does not
 contain `μ_p`, restriction to `F(μ_p)` and Maschke descent identify
 `ContinuousCharacter G_F p` with the cyclotomic eigenspace of the
 `kummerEquiv` quotient, of rank `1 + [F : ℚ_p]`.
 
 For local invariant recovery `F` is the completion at `v`; the supplied deep
-unit package is exactly the output of `DeepUnitModule.lean`.  See
-`local_invariants_recovery.tex`, `lem:dim-at`, and the nu-inv12 blocker
-report. -/
+unit package is exactly the output of `DeepUnitModule.lean`. -/
 private theorem rootAbsent_inflationRestriction_maschkeRank_residual
     {K : Type*} [Field K] [NumberField K]
     (v : NU.LocalTheory.FinitePlace K)
@@ -2446,16 +2447,10 @@ theorem rootAbsent_inflationRestriction_maschkeRank
         (1 + finitePlaceLocalDegree v)) := by
   exact rootAbsent_inflationRestriction_maschkeRank_residual v p hp units hroots
 
-/-- **Completion character-rank bridge (Blueprint `lem:dim-at`; nu-inv12
-blocker report: "the root-absent inflation-restriction/Maschke rank
-bridge").**  Combining the root-absent eigenspace theorem above with the
-root-present Kummer equivalence gives the uniform correction-term formula
-consumed by `LocalInvariants.completePIDClassification`.
-
-The proof must quotient `μ_{p^∞}` before reducing modulo `p`, then use
-inflation--restriction, Maschke, normal basis, and integral character
-idempotents, exactly as prescribed by `local_invariants_recovery.tex` and the
-nu-inv12 blocker report. -/
+/-- **Completion character-rank formula (Blueprint `lem:dim-at`).**
+Combining the root-absent eigenspace theorem above with the root-present
+Kummer equivalence gives the uniform correction-term formula used by
+`LocalInvariants`. -/
 private theorem completionCharacterRank_maschkeDescent_residual
     {K : Type*} [Field K] [NumberField K]
     (v : NU.LocalTheory.FinitePlace K)

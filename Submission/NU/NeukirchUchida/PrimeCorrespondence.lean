@@ -948,7 +948,7 @@ private theorem finitePrime_absolutePrimeLift
 
 /-- The finite-prime bijection descended from (L2), blueprint
 `eq:finite-prime-bijection`.  The defining restriction equation below is the
-prime-orbit descent obligation; no global choice of a prolongation for each
+prime-orbit descent; no global choice of a prolongation for each
 finite prime appears in the interface. -/
 noncomputable def finitePrimeCorrespondence
     {F₁ F₂ : NumberFieldInOmega}

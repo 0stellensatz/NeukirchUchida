@@ -2257,7 +2257,7 @@ private theorem kummerRadicalRamifiedAt
     show P.asIdeal.ramificationIdx' W.asIdeal = e from rfl, heq]
   exact p.1.2.one_lt
 
-/-! ### Rung A: an asymmetric projected Kummer element -/
+/-! ### Step A: an asymmetric projected Kummer element -/
 
 /-- Restriction from the cyclotomic compositum, with its canonical inclusion
 made explicit rather than left to instance search. -/
@@ -2619,7 +2619,7 @@ private theorem projectedKummerRepresentative_valuation
       congr 1
       simp
 
-/-- Identity-place rung: rescale the projector by a nonzero scalar and then
+/-- Identity place: rescale the projector by a nonzero scalar and then
 by a global `p`-th power so that the represented eigenclass has valuation
 exactly one. -/
 private theorem asymmetricProjectedKummerData_exists
@@ -2805,7 +2805,7 @@ private theorem kummerClass_ne_one_of_valuation_not_dvd
     exact_mod_cast hdZ
   exact hk hd
 
-/-! ### Rung B: tame local Kummer criteria -/
+/-! ### Step B: tame local Kummer criteria -/
 
 /-- The radical field, bundled as an extension of its Kummer base. -/
 private noncomputable def radicalNumberFieldExtension
@@ -3494,7 +3494,7 @@ private theorem AsymmetricApproximationData.conjugate_integer_one_mod_away
   rw [hinv] at hmod
   simpa only [smul_sub, smul_one] using hmod
 
-/- Other-place rung: principal units are `p`-divisible because the auxiliary
+/- Other places: principal units are `p`-divisible because the auxiliary
 residue characteristic is different from `p`. -/
 set_option maxHeartbeats 1000000 in
 set_option synthInstance.maxHeartbeats 200000 in
@@ -4298,7 +4298,7 @@ private theorem regularKernel_cancel_tower_degrees
   apply Nat.eq_of_mul_eq_mul_left hp
   simpa [Nat.mul_comm] using heq
 
-/-! ### Rung C: transport through cyclotomic Kummer descent -/
+/-! ### Step C: transport through cyclotomic Kummer descent -/
 
 private theorem regularKernel_liesOver_of_restrict_eq
     {K L : Type*} [Field K] [Field L] [NumberField K] [NumberField L]
@@ -4641,7 +4641,7 @@ private theorem transportRadicalSplittingToDescent
       exact Nat.eq_one_of_dvd_one ⟨_, hfTowerLW⟩
     exact ⟨hwe, hwf⟩
 
-/-- Assembly of rungs A--C into the exact asymmetric-cyclic seam. -/
+/-- Assembly of steps A--C into the exact asymmetric-cyclic seam. -/
 private theorem asymmetricCyclicConstruction : AsymmetricCyclicConstruction := by
   intro N _ p
   obtain ⟨D⟩ := asymmetricPrimeData_exists N p
@@ -4703,7 +4703,7 @@ private theorem asymmetricCyclicConstruction : AsymmetricCyclicConstruction := b
     hclassNontrivial, L, hLgal, hLdegree, hLcyclic, hLram, hLsplit,
     hcompositum⟩
 
-/-! ### Rung D: conjugate compositum and regular coordinates -/
+/-! ### Step D: conjugate compositum and regular coordinates -/
 
 /-- A chosen family of Galois conjugates of one cyclic extension and its
 literal finite compositum `iSup_g L_g`. -/
@@ -6475,8 +6475,8 @@ extension, ramified at the identity-labelled prime and completely split at
 all its other Galois conjugates.  The labeling is explicitly a simply
 transitive `Gal(N/ℚ)`-orbit.
 
-The witnesses `b` and `a` expose the construction omitted by the earlier
-skeleton: `[a] = e_chi[b]` is nontrivial, and the descended extension becomes
+The witnesses `b` and `a` record the construction: `[a] = e_chi[b]` is
+nontrivial, and the descended extension becomes
 the radical extension defined by `a` after adjoining `mu_p`. -/
 theorem exists_asymmetricCyclicExtension
     (N : NumberFieldInOmega) [IsGalois ℚ N.field]

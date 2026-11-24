@@ -12,17 +12,22 @@ import Mathlib.RingTheory.ZMod.UnitsCyclic
 /-!
 # Local arithmetic invariants from recovered decomposition groups
 
-This file is the construction-level bridge between `NU.LocalTheory` and the
-Neukirch--Uchida local interface.  Its primary input is not an abstractly
-postulated local-field invariant: it is the one-prime family
-`bareRecoveredAtPrime`, whose finite quotients are built from packet
-stabilizers and whose soundness is proved with the finite witness systems.
+This file proves the local interface statements (L3) and (L4): a profinite
+isomorphism matching two absolute decomposition groups preserves the residue
+characteristic, the absolute ramification index and residue degree, and the
+residue action (hence normalized arithmetic Frobenius lifts).  The input is the
+packet reconstruction `bareRecoveredAtPrime` of `NU.LocalTheory`:
 
-The easy bookkeeping rungs (restriction of an ambient place, the odd-prime
-packet profile, detection of residue characteristic, and consequences of
-residue-norm equality) are proved here.  The genuinely local-anabelian rungs
-are isolated under descriptive names and documented at their exact intended
-mathematical strength.
+* the residue characteristic `p` is read off from the odd-prime packet profile
+  (an odd prime `ℓ` lies in it exactly when `ℓ ≠ p`);
+* the mod-`ℓ` cyclotomic character is the determinant of the packet action on a
+  local packet plane, hence is preserved pointwise on decomposition groups;
+* inertia and the residue action are characterized by these characters together
+  with the Chebotarev-based order-divisibility principle, which gives `f` and
+  the residue norm `q = p^f`;
+* the local degree `[K_v : ℚ_p]` is recovered from mod-`p` character ranks of
+  corresponding open subgroups (computed with local class field theory), which
+  gives `e`.
 -/
 
 set_option backward.isDefEq.respectTransparency false
@@ -309,7 +314,7 @@ theorem residueCharacteristic_prime
     Finite.of_equiv (𝓞 K ⧸ v.asIdeal) e.toEquiv
   exact CharP.prime_ringChar _
 
-/-- **Proved recovery rung (residue characteristic).**  Any profinite
+/-- **Recovery of the residue characteristic.**  Any profinite
 isomorphism carrying one absolute decomposition group to another preserves
 residue characteristic.  The proof uses only the fixed-prime packet recovery
 sets and their finite-witness correctness, including the exceptional
@@ -472,7 +477,7 @@ theorem ambientFinitePlace_abstractPlace
   rw [hplace] at htransport
   exact htransport.symm
 
-/-- **Proved common-ambient residue-characteristic rung.**  This is the form
+/-- **Residue characteristic, common-ambient form.**  This is the form
 consumed by `LocalInterface`: packet-profile recovery is transported through
 the explicitly compatible closure and Galois-action realizations. -/
 theorem ambientResidueCharacteristic_preserved
@@ -647,10 +652,9 @@ theorem rationalFinitePlace_eq_of_residueCharacteristic_eq
   exact Ideal.comap_injective_of_surjective
     (algebraMap ℤ (𝓞 ℚ)) hsurj hunder
 
-/-! ## Certified local-invariant recovery ladder
+/-! ## Local-invariant recovery
 
-The declarations below follow the obligation groups in the certified
-`local_invariants_recovery.tex` blueprint.  Arithmetic inputs are isolated as
+The declarations below follow the local-invariant recovery blueprint.  Arithmetic inputs are isolated as
 named lemmas; the finite-level, profinite-linear, and final assembly steps are
 kept separate so that replacing any arithmetic input does not change the
 three public theorem statements at the end of the file. -/
@@ -1158,7 +1162,7 @@ private theorem localI_pullback_fixed
       hp_mul, hp_mul, hp_zpow, hp_zpow, hpeu, hpu,
       zero_add, zero_add, hpepi]
 
-/-- **Arithmetic obligation, Blueprint `lem:matrix`.**  On a local packet
+/-- **Blueprint `lem:matrix`.**  On a local packet
 plane the twisted-dual packet action has triangular matrix with diagonal
 `(1, chi_ell(sigma))`.  Its proof chooses a uniformizer and a Teichmüller
 unit, uses the residue action `x ↦ x^(p^a)`, and invokes
@@ -1764,7 +1768,7 @@ private theorem planeBasis_map_linearEquiv
           (NU.LocalTheory.pairSpan x y) := rfl
 
 set_option maxHeartbeats 1200000 in
-/-- **Arithmetic obligation, Blueprint `lem:matrix` + `def:marked`.**  The
+/-- **Blueprint `lem:matrix` + `def:marked`.**  The
 finite image of a decomposition group supplies a source packet at one
 simultaneously marked level, and the local triangular calculation identifies
 its determinant with the source cyclotomic scalar. -/
@@ -2141,7 +2145,7 @@ private theorem planeActionDeterminant_unique
         a₂ b₂ c₂ e₂ hx₂ hy₂).symm
     _ = d₂ := hd₂.symm
 
-/-- **Finite transport obligation, Blueprint `thm:det`.**  T2 transports a
+/-- **Blueprint `thm:det`.**  T2 transports a
 packet plane and conjugates its action, so its determinant is unchanged. -/
 private theorem packetDeterminant_transport_at_markedLevel
     {K₁ K₂ : Type*} [Field K₁] [Field K₂]
@@ -2201,7 +2205,7 @@ private theorem packetDeterminant_transport_at_markedLevel
         _ = b • E x + r • E y := by simp [E]
 
 set_option maxHeartbeats 1200000 in
-/-- **Arithmetic obligation, Blueprint `cor:chi`.**  The target packet is
+/-- **Blueprint `cor:chi`.**  The target packet is
 identified only existentially: `packet_theorem` supplies some finite place
 `z` prime to `ell`, and `lem:matrix` computes its determinant as the global
 target cyclotomic scalar.  No identification of `z` with the designated
@@ -2832,7 +2836,7 @@ private theorem henselianCompletion_finiteExtensionEquivalence
   exact decompositionCompletionBridge_of_comparison
     (completionEquiv.trans (decompositionFieldGaloisEquiv K P))
 
-/-- **Standard completion obligation, Blueprint T5.**  A Henselian
+/-- **Blueprint T5.**  A Henselian
 rank-one decomposition field has the same finite extensions as the completion,
 compatibly with the chosen prolongation.  This is the only missing standard
 step between BareRecovery's Henselian layer and the explicit T5 comparison. -/
@@ -5030,13 +5034,14 @@ private theorem localUnitDecomposition_kummerQuotient_finrank_le_two
         (S.toAddSubgroup.nsmul_mem ht nt)) S.zero_mem
   exact finrank_le_of_span_eq_top hspan
 
-/-- **Residual for `ambientKummerOpenSubgroupTransport`.**  Construct the
+/-- **Principal-unit decomposition for `ambientKummerOpenSubgroupTransport`.**
+Construct the
 continuous `ℤ_p`-module structure on the full principal-unit group of a
 number-field completion from the cofinal deep-unit filtration, identify its
 torsion with the `p`-power roots of unity, and prove that the torsion-free
-quotient has rank `[K_v : ℚ_p]`.  The standalone
-`deepUnitModule_localUnitDecomposition` supplies precisely this
-filtration-to-module package. -/
+quotient has rank `[K_v : ℚ_p]`.
+`deepUnitModule_localUnitDecomposition` supplies this filtration-to-module
+package. -/
 private theorem ambientKummerPrincipalUnitDecomposition_residual
     {K : Type*} [Field K] [NumberField K]
     (v : NU.LocalTheory.FinitePlace K) :
@@ -5063,7 +5068,7 @@ private theorem localUnitDecomposition_torsionLatticeSplit
     Nonempty (LocalUnitDecompositionData v) := by
   exact localUnitDecomposition_completePIDClassification v
 
-/-- **Arithmetic obligation, Blueprint `lem:units`.**  Derive the displayed
+/-- **Blueprint `lem:units`.**  Derive the displayed
 unit decomposition from the cofinal deep-unit filtration in
 `NU.LCFT.FundamentalClass.DeepUnits`: quotient prime-to-`p` Teichmüller
 torsion first, then split finite `p`-power torsion from the free
@@ -5126,7 +5131,7 @@ private theorem pKummerDimension_maschkeNormalBasis
       (NU.NeukirchUchida.Bridges.completionCharacterRank_maschkeDescent
         v (residuePrime v) rfl units)
 
-/-- **Arithmetic obligation, Blueprint `lem:dim-at`.**  Kummer theory,
+/-- **Blueprint `lem:dim-at`.**  Kummer theory,
 inflation--restriction and the three-summand Delta-decomposition give
 `1 + n + delta`.  The proof must quotient `mu_{p^infty}` before reducing
 modulo `p`, then use Maschke, normal basis and integral character
@@ -5209,7 +5214,7 @@ private theorem kummerDimension_away_without_roots
       (NU.LocalTheory.kummerEquiv zeta hzeta).finrank_eq.symm
     _ ≤ 2 := localField_tameKummerQuotient_finrank_le_two E ell hcharE
 
-/-- **Arithmetic obligation, Blueprint `lem:dim-away`.**  Away from the
+/-- **Blueprint `lem:dim-away`.**  Away from the
 residue prime the principal units are `ell`-divisible, leaving at most the
 valuation and residue-unit lines. -/
 private theorem kummerDimension_away_from_completion
@@ -7232,7 +7237,7 @@ private theorem twoPrime_exceptional_orderPrimes
   rw [hy] at hresult
   exact ⟨hell, hresult⟩
 
-/-- **Arithmetic obligation, Blueprint `lem:order`.**  The certified
+/-- **Blueprint `lem:order`.**  The certified
 three-case Chebotarev--Kummer proof of `OrderDivisibilityPrinciple`. -/
 private theorem orderDivisibility : OrderDivisibilityPrinciple := by
   intro q hq lambda m
@@ -7362,7 +7367,7 @@ private theorem profiniteIntegerOfNat_mul_injective
   change (n : ℤ_[p]) * x p = (n : ℤ_[p]) * y p at hp
   exact mul_left_cancel₀ (Nat.cast_ne_zero.mpr hn) hp
 
-/-- **Arithmetic micro-obligation, Blueprint `lem:bridge`.**  This is the
+/-- **Blueprint `lem:bridge`.**  This is the
 intersection identity `b zhat ∩ Z = b Z`: if a diagonal natural number lies
 in the principal ideal generated by `b`, then `b ∣ a` in `Z`. -/
 private theorem profiniteInteger_nat_dvd_of_eq_mul
@@ -8966,7 +8971,7 @@ private theorem ambientKummerOpenSubgroupTransport
     R₁ R₂ theta P₁ P₂ hmap
   exact ⟨D.toBracketComparison⟩
 
-/-- **T5/dimension transport obligation.**  Using
+/-- **.**  Using
 `decompositionCompletionBridge`, `localUnitDecomposition_from_deepUnits`,
 `pKummerDimension_at_completion`, and
 `kummerDimension_away_from_completion`, transport one open subgroup of index
@@ -9224,7 +9229,7 @@ private theorem ambientCyclotomicScalar_eq_one_of_inertia
     _ = R.closureEquiv zeta := hrootfix _ (by
       rw [← map_pow, hpow, map_one])
 
-/-- **Arithmetic obligation, Blueprint `prop:inertia`.**  T5 and
+/-- **Blueprint `prop:inertia`.**  T5 and
 `lem:unram-cyc`, together with `orderDivisibility`, identify inertia with the
 intersection of the kernels of all odd away-from-`p` cyclotomic characters. -/
 private theorem ambientInertia_iff_cyclotomic
@@ -10406,7 +10411,7 @@ private theorem additive_power_exponent_eq_primePower
   rw [ha, Nat.multiplicity_eq_factorization hp, Nat.factorization_pow]
   simp [hp.factorization]
 
-/-- **Arithmetic micro-obligation, Blueprint `lem:bridge`.**  On the actual
+/-- **Blueprint `lem:bridge`.**  On the actual
 absolute residue tower, additivity of the power map (equivalently Lucas's
 theorem) forces every nonzero exponent to be a power of the residue
 characteristic.  Stabilizer membership and the `Fbar_p` residue facts are
@@ -10441,7 +10446,7 @@ private def ResidueFrobeniusInjectivity : Prop :=
       Nat.ModEq ((p : ℕ) ^ n - 1) ((p : ℕ) ^ a) ((p : ℕ) ^ b)) →
     a = b
 
-/-- **Arithmetic micro-obligation, Blueprint `lem:bridge`.**  The map
+/-- **Blueprint `lem:bridge`.**  The map
 `zhat → Aut(Fbar_p)` is injective. -/
 private theorem residueFrobenius_injective :
     ResidueFrobeniusInjectivity := by
@@ -10542,7 +10547,7 @@ private theorem ambientResidueCoordinate_frobeniusClassification
     (ambientAlgebraicResidueTowerData R P)
     (ambientResidueNorm_eq_residueCharacteristic_pow P) hinjective
 
-/-- **T5/residue compatibility obligation, Blueprint T5 + `lem:bridge`.**
+/-- **Blueprint T5 + `lem:bridge`.**
 Construct the unramified `zhat` coordinate and compare its Frobenius action
 with the actual ambient residue action.  The injectivity input is explicit. -/
 private theorem ambientResidueCoordinateData_exists
@@ -10799,7 +10804,7 @@ private theorem ambientUnramifiedTransport_from_localData
     coordinate_transport := D.coordinate_transport
     residueDegree_relation := D.cyclotomic_rigidity hchi }⟩
 
-/-- **Arithmetic/procyclic obligation, Blueprint `prop:q`.**  After
+/-- **Blueprint `prop:q`.**  After
 `cor:chi` and `prop:inertia`, identify both unramified quotients with
 `zhat`, obtain the orientation unit `u`, and use `lem:order` one modulus at a
 time to prove the displayed relation `f = f' u`. -/
@@ -10962,7 +10967,7 @@ private theorem ambientResidueNorm_orientation_from_transport
     rw [D.coordinate_transport g hg, hrigid.2]
     simp
 
-/-- Formal assembly of the residue-norm rung from `cor:chi`,
+/-- Formal assembly of residue-norm preservation from `cor:chi`,
 `prop:inertia`, and `prop:q`. -/
 private theorem ambientResidueNorm_assembly
     (R₁ : AbsoluteGaloisActionRealization K₁ Omega G₁)
@@ -11054,17 +11059,11 @@ private theorem residuePowerAction_assembly
     · simpa [hq.2.1] using hN
     · exact (hq.2.2.2 g hg).symm.trans hcoordinate
 
-/-- **Hard rung: residue-field cardinality.**  The common-ambient
-isomorphism preserves `|k_v|`.
-
-Intended proof: at every auxiliary odd `ell` different from the recovered
-residue characteristic, use the actual packet plane and its stabilizer at a
-cofinal finite witness level.  On the tame inertia line, conjugation by an
-unramified generator is multiplication by `|k_v|` modulo `ell`.  Transport of
-`barePacketAction`, followed by variation of `ell` (and sufficiently deep
-finite witnesses), identifies the positive integer `|k_v|`.  This is the
-missing tame/unramified action calculation; it is not an appeal to an
-unstructured profinite invariant. -/
+/-- **Residue-field cardinality.**  The common-ambient isomorphism preserves
+`|k_v|`.  The proof combines pointwise preservation of the odd mod-`ell`
+cyclotomic characters on decomposition groups (`cor:chi`) with the
+characterization of inertia and of the residue action by these characters
+(`prop:inertia`, `prop:q`). -/
 theorem ambientResidueNorm_preserved
     (R₁ : AbsoluteGaloisActionRealization K₁ Omega G₁)
     (R₂ : AbsoluteGaloisActionRealization K₂ Omega G₂)
@@ -11108,15 +11107,9 @@ theorem ambientResidueDegree_preserved
     _ = NU.Chebotarev.PrimeIdeal.norm q₁ ^ ambientResidueDegree P₂ := by
       rw [hq]
 
-/-- **Hard rung: inertia, wild inertia, and ramification index.**  The
-absolute ramification index is preserved.
-
-Intended proof: use the same cofinal packet witnesses to recover the inertia
-kernel of the unramified procyclic quotient.  The already recovered residue
-prime singles out wild inertia as the maximal normal pro-`p` part; the tame
-cyclic quotient gives the prime-to-`p` part.  Comparing the finite inertia
-images with the valuation-theoretic inertia groups, and then their indices,
-recovers the full ramification index (including its wild factor). -/
+/-- **Ramification index.**  The absolute ramification index is preserved:
+the local degree `[K_v : ℚ_p] = e f` is recovered from mod-`p` character ranks
+of corresponding open subgroups (`prop:p-n`), and `f` is preserved. -/
 theorem ambientRamificationIndex_preserved
     (R₁ : AbsoluteGaloisActionRealization K₁ Omega G₁)
     (R₂ : AbsoluteGaloisActionRealization K₂ Omega G₂)
@@ -11129,19 +11122,11 @@ theorem ambientRamificationIndex_preserved
     ambientRamificationIndex P₁ = ambientRamificationIndex P₂ := by
   exact ambientRamificationIndex_assembly R₁ R₂ theta P₁ P₂ hmap
 
-/-- **Hard rung: inertia/wild-inertia recovery and residue action.**  After
-transporting corresponding decomposition groups, the exact power by which an
-element acts on residue classes is preserved.
-
-Intended proof: the case `n = 1` first identifies inertia as the kernel of
-the recovered unramified quotient.  The packet profile identifies the residue
-prime; finite witness quotients then isolate wild inertia and the tame inertia
-line.  The conjugation action on that line recovers the residue action, while
-the compatible unramified cyclic quotients fix its orientation.  The final
-normalization is the local-reciprocity convention uniformizer `↦` arithmetic
-Frobenius.  No LCFT theorem is used in the present skeleton proof term: this
-single rung is where a proved normalization bridge must eventually be
-inserted. -/
+/-- **Residue action.**  After transporting corresponding decomposition
+groups, the exact power by which an element acts on residue classes is
+preserved.  Any such power is a power of the residue characteristic `p`, and
+the action `x ↦ x^(p^A)` is characterized by the values of the odd mod-`ell`
+cyclotomic characters (`lem:bridge`), which are preserved pointwise. -/
 theorem residuePowerAction_preserved
     (R₁ : AbsoluteGaloisActionRealization K₁ Omega G₁)
     (R₂ : AbsoluteGaloisActionRealization K₂ Omega G₂)
@@ -11193,9 +11178,9 @@ theorem arithmeticFrobeniusPower_preserved
   rw [ambientResidueNorm_preserved R₁ R₂ theta P₁ P₂ hmap]
   exact residuePowerAction_preserved R₁ R₂ theta P₁ P₂ hmap g hg _
 
-/-- The complete invariant package required by interface (L3).  Its rational
-prime component and the reduction from residue norm to residue degree are
-proved; only the two explicitly named local-anabelian rungs above remain. -/
+/-- The complete invariant package required by interface (L3): the rational
+prime, the absolute ramification index and the residue degree are
+preserved. -/
 theorem ambientInvariants_preserved
     (R₁ : AbsoluteGaloisActionRealization K₁ Omega G₁)
     (R₂ : AbsoluteGaloisActionRealization K₂ Omega G₂)

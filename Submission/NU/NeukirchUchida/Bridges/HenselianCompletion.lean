@@ -4,9 +4,9 @@ import Submission.NU.LocalTheory.Main
 # Henselian fields and their completions
 
 This file isolates the standard completion bridge used by the local-invariant
-recovery argument.  It is deliberately independent of
-`NU.NeukirchUchida.LocalInvariants`, so the valuation-theoretic theorem can be
-proved in a separate worktree.
+recovery argument: the decomposition group of an absolute finite place is
+identified, as a topological group, with the absolute Galois group of the
+completion.
 -/
 
 set_option backward.isDefEq.respectTransparency false
@@ -964,19 +964,15 @@ private theorem completionGaloisEquivDecomposition
   exact ⟨(absoluteGaloisCongr eD).trans
     ((absoluteGaloisOfAlgClosure D E).trans er)⟩
 
-/-- **Henselian completion bridge (Blueprint T5; nu-inv12 blocker report:
-"the remaining standard completion theorem").**  Finite separable extensions
+/-- **Henselian completion bridge (Blueprint T5).**  Finite separable extensions
 of a rank-one Henselian valued field correspond to finite separable extensions
 of its completion.  Applied to the decomposition field selected by an
 absolute place, that correspondence induces the displayed topological
 absolute-Galois equivalence.
 
-This is the standalone form of the blocked core formerly called
-`henselianCompletion_absoluteGaloisEquiv` in `LocalInvariants.lean`.  The
-hypothesis `hv` pins the number-field completion to the restriction of the
-same ambient valuation; `hhens` and `hrank` use exactly the Henselian and
-rank-one vocabulary of `NU.LocalTheory`.  See
-`local_invariants_recovery.tex`, T5, and the nu-inv12 blocker report. -/
+The hypothesis `hv` pins the number-field completion to the restriction of
+the same ambient valuation; `hhens` and `hrank` use exactly the Henselian and
+rank-one vocabulary of `NU.LocalTheory`. -/
 theorem henselianCompletion_absoluteGaloisEquiv
     (K : Type*) [Field K] [NumberField K]
     (P : NU.LocalTheory.AbsoluteFinitePlaceOf K)

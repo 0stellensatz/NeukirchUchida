@@ -4,9 +4,9 @@ import Submission.NU.LCFT.LubinTate.ColemanNorm
 /-!
 # Completion data used by Neukirch--Uchida
 
-This file isolates the proved finite-level and completion data needed by the
-Neukirch--Uchida Maschke bridge.  In particular, its import closure does not
-contain the unfinished finite-projection theorem.
+This file isolates the finite-level and completion data needed by the
+Neukirch--Uchida local character-rank computation: finite local Artin maps and
+explicit class fields for the cofinal norm subgroups.
 -/
 
 set_option backward.isDefEq.respectTransparency false

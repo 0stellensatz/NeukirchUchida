@@ -11,9 +11,10 @@ import Mathlib.NumberTheory.Padics.AddChar
 /-!
 # Deep principal units as a finite-rank `Z_p`-module
 
-This file is a standalone proving target for the complete-PID/deep-unit input
-to local invariant recovery.  In particular, it does not import
-`NU.NeukirchUchida.LocalInvariants`.
+This file proves the deep-unit input to local invariant recovery: on a small
+lattice the exponential is an injective `Z_p`-linear map with open image, so the
+unit group of a `p`-adic completion `K_v` decomposes as
+`ℤ × μ_{q-1} × μ_{p^∞} × Z_p^{[K_v:ℚ_p]}`.
 -/
 
 open scoped NumberField ValuativeRel WithZero
@@ -3284,18 +3285,14 @@ private theorem localUnitDecomposition_completePIDClassification
     pPowerTorsion_spec := principal.pPowerTorsion_spec
     freePrincipalUnitsEquiv := principal.freePrincipalUnitsEquiv }⟩
 
-/-- **Deep-unit complete-PID bridge (Blueprint `lem:units`; nu-inv12 blocker
-report: "the complete-PID classification step for principal units").**
+/-- **Deep-unit bridge (Blueprint `lem:units`).**
 For the residue prime `p`, the cofinal deep principal units of the local
 completion form a profinite `ℤ_p`-module with finite torsion and finite-rank
 free quotient.  Splitting that module and adjoining the valuation and
 prime-to-`p` Teichmüller factors gives `LocalUnitDecompositionData`.
 
-This is the public standalone form of the blocked core formerly called
-`localUnitDecomposition_completePIDClassification`.  The equality `hp` pins
-`p` to the residue characteristic and prevents the module structure from
-being chosen at an unrelated prime.  See `local_invariants_recovery.tex`,
-`lem:units`, and the nu-inv12 blocker report. -/
+The equality `hp` pins `p` to the residue characteristic and prevents the
+module structure from being chosen at an unrelated prime. -/
 theorem deepUnitModule_localUnitDecomposition
     {K : Type*} [Field K] [NumberField K]
     (v : NU.LocalTheory.FinitePlace K)
